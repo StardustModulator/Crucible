@@ -1,0 +1,4441 @@
+{
+ "id": "appA",
+ "title": "Lie Groups and Robot Kinematics",
+ "pdfPages": [
+  421,
+  452
+ ],
+ "sections": [
+  {
+   "id": "A.1",
+   "title": "Differentiable Manifolds",
+   "book": 403
+  },
+  {
+   "id": "A.1.1",
+   "title": "Manifolds and maps",
+   "book": 403
+  },
+  {
+   "id": "A.1.2",
+   "title": "Tangent spaces and tangent maps",
+   "book": 404
+  },
+  {
+   "id": "A.1.3",
+   "title": "Cotangent spaces and cotangent maps",
+   "book": 405
+  },
+  {
+   "id": "A.1.4",
+   "title": "Vector fields",
+   "book": 406
+  },
+  {
+   "id": "A.1.5",
+   "title": "Differential forms",
+   "book": 408
+  },
+  {
+   "id": "A.2",
+   "title": "Lie Groups",
+   "book": 408
+  },
+  {
+   "id": "A.2.1",
+   "title": "Definition and examples",
+   "book": 408
+  },
+  {
+   "id": "A.2.2",
+   "title": "The Lie algebra associated with a Lie group",
+   "book": 409
+  },
+  {
+   "id": "A.2.3",
+   "title": "The exponential map",
+   "book": 412
+  },
+  {
+   "id": "A.2.4",
+   "title": "Canonical coordinates on a Lie group",
+   "book": 414
+  },
+  {
+   "id": "A.2.5",
+   "title": "Actions of Lie groups",
+   "book": 415
+  },
+  {
+   "id": "A.3",
+   "title": "The Geometry of the Euclidean Group",
+   "book": 416
+  },
+  {
+   "id": "A.3.1",
+   "title": "Basic properties",
+   "book": 416
+  },
+  {
+   "id": "A.3.2",
+   "title": "Metric properties of SE(3)",
+   "book": 422
+  },
+  {
+   "id": "A.3.3",
+   "title": "Volume forms on SE(3)",
+   "book": 430
+  }
+ ],
+ "scenes": [
+  {
+   "id": "mls-appa-manifold-charts",
+   "title": "Paper-Map Globe",
+   "icon": "🌍",
+   "section": "A.1.1",
+   "pages": [
+    403,
+    404
+   ],
+   "uses": [
+    "vectors",
+    "derivative",
+    "rotation"
+   ],
+   "beats": [
+    "🌍 a globe of flat maps",
+    "🧈 smooth: no creases",
+    "🔁 overlaps agree",
+    "🗺️ maps between worlds"
+   ],
+   "brief": "A slate globe hovering in 3D with 4–6 translucent flat paper maps (blue) that each cover a cap. Hover any point: its dot lights up on every map that covers it. Where two maps overlap, a purple \"translation arrow\" shows the change-of-map function ψ∘φ⁻¹ as a warped grid; a smoothness meter stays lime (no creases, derivatives continuous). Toggle a \"bad map\" with a crease: the meter flashes coral. Final beat: an orange map F from the globe to a donut, read through charts as an ordinary function between two flat grids."
+  },
+  {
+   "id": "mls-appa-tangent-space",
+   "title": "Touching Sheet",
+   "icon": "📄",
+   "section": "A.1.2",
+   "pages": [
+    404,
+    405
+   ],
+   "uses": [
+    "derivative",
+    "chain-rule",
+    "linearize"
+   ],
+   "exists": "linearize",
+   "brief": "A ball (blue) with a flat translucent sheet resting on it at a draggable teal point p. An orange arrow on the sheet; a gold \"temperature\" field painted on the ball as color; the arrow's readout is the rate the temperature changes when you walk that way (a derivation). Two basis arrows ∂/∂x₁, ∂/∂x₂ (red, green) show coordinates. A smooth map F (ball → stretched egg) carries the sheet and its arrow: the pink pushed arrow appears on the egg's sheet; composing two maps multiplies their arrow-pushers (chain rule). Finally, all sheets at all points are stacked into a hairy \"bundle\" view with a projection back down.",
+   "beats": [
+    "📄 the sheet touching the ball",
+    "🧭 arrow = how fast things change",
+    "🔗 push arrows through a map",
+    "🧶 all sheets together"
+   ]
+  },
+  {
+   "id": "mls-appa-covector-stacks",
+   "title": "Covector Stacks",
+   "icon": "🥞",
+   "section": "A.1.3",
+   "pages": [
+    405,
+    408
+   ],
+   "uses": [
+    "vectors",
+    "derivative",
+    "statics"
+   ],
+   "exists": "statics",
+   "brief": "Covectors drawn as stacks of parallel purple lines (planes in 3D) with spacing = 1/size. An orange arrow (tangent vector) is dropped on a stack: the readout counts lines crossed = ⟨ω, X⟩, linear in the arrow. dx₁, dx₂ appear as the stacks of the grid lines. A gold hill f with its contour lines: zooming in at p, the contours become a straight stack = df(p). A map F sends arrows forward (pink) while covector stacks are pulled back (purple) so that \"lines crossed\" matches on both sides.",
+   "beats": [
+    "🥞 a covector = stacked lines",
+    "🔢 pairing = lines crossed",
+    "⛰️ df from contour lines",
+    "↩️ pull a stack back"
+   ]
+  },
+  {
+   "id": "mls-appa-flows-brackets",
+   "title": "Flows & Brackets",
+   "icon": "🌊",
+   "section": "A.1.4",
+   "pages": [
+    406,
+    408
+   ],
+   "uses": [
+    "ode",
+    "derivative",
+    "screw-exp"
+   ],
+   "exists": "ode",
+   "brief": "A plane (or sphere) filled with small orange arrows of a vector field X. Drop teal leaves: they float along integral curves (computed by RK4), and the whole sheet of dots flows as Φ_t. A gold scalar field shows Xf as a colored readout of its rate along the flow. Second field Y in blue: the bracket beat runs \"flow X for ε, Y for ε, X back, Y back\" and the coral gap from start, divided by ε², converges to the pink arrow [X,Y]. A final panel verifies skew-symmetry and Jacobi as three arrows summing to zero.",
+   "beats": [
+    "🌊 an arrow at every spot",
+    "🍃 float a leaf: the flow",
+    "📈 rate of change along the flow",
+    "🔄 go-go-back-back gap",
+    "🧩 bracket rules"
+   ]
+  },
+  {
+   "id": "mls-appa-lie-group-zoo",
+   "title": "Lie Group Zoo",
+   "icon": "🦁",
+   "section": "A.2.1",
+   "pages": [
+    403,
+    409
+   ],
+   "uses": [
+    "matrix",
+    "rotation",
+    "rigid-transform"
+   ],
+   "exists": "rigid-transform",
+   "brief": "A zoo of cages, each holding a smooth group shown as a surface: a line/plane (Rⁿ, sliding), a circle (SO(2)), a ball-ish shape for SO(3) (pick a rotation by axis-angle point), SE(3) as a frame floating in space, and GL(2) as a squishing grid. In each, grab element g (orange) and h (blue); the product gh (pink) moves smoothly as you drag; inverse is a mirror ghost. A left-vs-right toggle shows L_g (move the whole picture in world coords) vs R_g (move it in body coords); a lime readout shows L_g∘R_h = R_h∘L_g.",
+   "beats": [
+    "🧸 a smooth group",
+    "⬅️➡️ left vs right shifts",
+    "➕ sliding: Rⁿ",
+    "🔲 matrix groups GL · SO · SE"
+   ]
+  },
+  {
+   "id": "mls-appa-lie-algebra",
+   "title": "Velocity at Home",
+   "icon": "🏠",
+   "section": "A.2.2",
+   "pages": [
+    409,
+    411
+   ],
+   "uses": [
+    "screw-exp",
+    "rotation",
+    "vectors",
+    "matrix"
+   ],
+   "exists": "screw-exp",
+   "brief": "The identity e is a gold \"home\" dot on the group surface with its tangent sheet. Drag an orange arrow ξ at home; tapping \"copy\" left-translates it to every point so the group fills with a left-invariant field (arrows move rigidly with g). Two such fields, X_ξ and X_η, run the go-go-back-back loop; the gap at home is [ξ,η]. For SO(3): ω arrows in 3D and the hat matrix lit entry by entry; the bracket readout equals the cross product arrow ω₁×ω₂ (pink). For SE(3): two screws; the bracket's (ω, v) parts appear as arrows.",
+   "beats": [
+    "🏠 one arrow at home",
+    "🧲 copy it everywhere",
+    "🔄 bracket at home",
+    "✖️ so(3): bracket = cross",
+    "🔩 se(3) bracket"
+   ]
+  },
+  {
+   "id": "mls-appa-exp-log",
+   "title": "Keep Stepping",
+   "icon": "♾️",
+   "section": "A.2.3",
+   "pages": [
+    412,
+    414
+   ],
+   "uses": [
+    "screw-exp",
+    "ode",
+    "rotation",
+    "rigid-transform"
+   ],
+   "exists": "screw-exp",
+   "brief": "Start at gold home e with an orange velocity ξ. Slider n: take n equal small steps (I + ξ/n)ⁿ, each drawn as a ghost frame; as n grows the ghosts merge into a smooth curve that equals exp(ξ) (lime match readout). A series panel adds Aᵏ/k! terms one by one as stacked bars converging. Spin mode: a frame turning about ω (Rodrigues, sin/cos dials). Screw mode: a frame corkscrewing along an axis (rotation + slide). Log mode: drag a pink target frame; the scene finds the ξ that reaches it and shows a second ghost path (−ω, 2π−θ) landing on the same target.",
+   "beats": [
+    "🚶 straight lines in a group",
+    "♾️ exp = many tiny steps",
+    "🌀 spin formula",
+    "🔩 screw formula",
+    "↩️ log: read it back"
+   ]
+  },
+  {
+   "id": "mls-appa-canonical-coords",
+   "title": "Exp Coordinates",
+   "icon": "🧭",
+   "section": "A.2.4",
+   "pages": [
+    414,
+    415
+   ],
+   "uses": [
+    "screw-exp",
+    "poe",
+    "euler-angles"
+   ],
+   "exists": "poe",
+   "brief": "Two ways to give a rotation (or rigid motion) numbers. First kind: three orange sliders σ blend axes into one arrow and take a single exp — one straight path from home. Second kind: three sliders θ each spin about a fixed axis in turn — a three-segment path (like Euler angles or a robot arm's joints) reaching the same pink frame. Then a \"tile\" beat: the small patch of coordinates around home is copied to other places by left-shifting, covering the whole group like the paper-map globe.",
+   "beats": [
+    "🧭 one blended exp",
+    "⛓️ a chain of exps",
+    "🧩 tile the group"
+   ]
+  },
+  {
+   "id": "mls-appa-group-actions",
+   "title": "Dance Rules",
+   "icon": "💃",
+   "section": "A.2.5",
+   "pages": [
+    415,
+    416
+   ],
+   "uses": [
+    "rigid-transform",
+    "screw-exp",
+    "statics",
+    "matrix"
+   ],
+   "exists": "rigid-transform",
+   "brief": "A dance floor of teal points. Pick a group element g (orange knob): every point moves by the same rule Φ_g (a crowd dancing in sync). Identity leaves all still; doing h then g equals doing gh (lime check). Tracing one dancer under all g paints its orbit. Conjugation: watch a motion h from a moved viewpoint g → ghg⁻¹. Ad: a twist arrow is re-expressed in the moved frame; coadjoint: a wrench (purple) re-expressed so that pairing stays fixed. Lifted action: each dancer carries a small velocity arrow that turns along with it.",
+   "beats": [
+    "💃 everyone follows one rule",
+    "🪐 orbits",
+    "🪞 conjugate = change viewpoint",
+    "🔁 Ad and its dual",
+    "🏹 carry the arrows along"
+   ]
+  },
+  {
+   "id": "mls-appa-se3-body-space",
+   "title": "Body vs Space",
+   "icon": "🚀",
+   "section": "A.3.1",
+   "pages": [
+    416,
+    422
+   ],
+   "uses": [
+    "rigid-transform",
+    "screw-exp",
+    "statics",
+    "jacobian"
+   ],
+   "exists": "rigid-transform",
+   "brief": "A slate fixed frame A and a blue body with frame B moving along a curve g_ab(t). Points (teal) carry a 1 in their 4th slot and translate; free arrows carry 0 and only rotate. Any start-to-end placement is reached by one screw (gold axis, pitch dial). Velocity panel: the body twist V^b drawn at B and the spatial twist V^s drawn at A's origin, linked by Ad_g (6×6 matrix tiles light up). A purple wrench and orange twist show a work readout that stays the same in every frame. Frame-change sliders show which velocity changes (coral) and which is unaffected (lime), and that chained velocities add only after Ad.",
+   "beats": [
+    "📦 points get 1, arrows get 0",
+    "🔩 every motion is a screw",
+    "🚀 body vs space velocity",
+    "⚖️ wrench · twist = work",
+    "🔁 changing frames"
+   ]
+  },
+  {
+   "id": "mls-appa-se3-no-fair-ruler",
+   "title": "No Fair Ruler",
+   "icon": "📏",
+   "section": "A.3.2",
+   "pages": [
+    422,
+    430
+   ],
+   "uses": [
+    "rigid-transform",
+    "manipulability",
+    "svd",
+    "statics",
+    "eigen"
+   ],
+   "exists": "manipulability",
+   "brief": "Two twists (orange, blue) look perpendicular (lime right-angle badge) in frame A; drag the reference frame origin and the badge turns coral as the R⁶ dot product changes. Rⁿ panel: a ruler-ellipse Ψ survives every rotation only when it is a circle (αI). SE(3) panel: a 6×6 grid of block tiles; spinning random h through Adᵀ Ψ Ad shows only the [[0,β],[β,γ]] pattern survives, and the top-left block is forced to zero, so pure-translation twists have zero \"length\" — no fair ruler. Constraint panel: a pink tool pushing on a slate wall: free motions (lime) and constraint wrenches (purple) keep zero work under any frame change, while \"dot-product orthogonal\" twists fail. Manipulability panel: the same arm with two tool frames shows different σmin readouts.",
+   "beats": [
+    "📐 the dot product cheats",
+    "⚪ only round rulers survive",
+    "🔀 the only fair forms",
+    "🚫 no fair SE(3) ruler",
+    "🧱 constraints are covectors",
+    "📉 σmin depends on the frame"
+   ]
+  },
+  {
+   "id": "mls-appa-se3-fair-volume",
+   "title": "Fair Volume",
+   "icon": "🧊",
+   "section": "A.3.3",
+   "pages": [
+    430,
+    433
+   ],
+   "uses": [
+    "matrix",
+    "manipulability",
+    "forward-kinematics",
+    "poe"
+   ],
+   "exists": "manipulability",
+   "brief": "A box spanned by n orange arrows; its gold volume readout = det. A map with Jacobian J scales the box by det J (pull-back). For SE(3): apply Ad_h to a 6-arrow box — the 6D volume meter stays exactly 1× however you drag h (lime), unlike the metric panel. SO(3) panel: fill a ball of radius π with rotation vectors; total volume counter → 8π³. Arm panel: a 6R arm sweeps its reachable poses; a work-volume bar compares against the bound (4/3)π L³ · 8π³; morph through designs — elbow arms with the elbow midway hit the bound (gold crown), others leave a hole.",
+   "beats": [
+    "🧊 volume = determinant",
+    "⚖️ det Ad = 1",
+    "🌐 SO(3) has volume 8π³",
+    "🦾 det J is fair",
+    "🏆 the best 6R arm"
+   ]
+  }
+ ],
+ "pages": [
+  {
+   "pdf": 421,
+   "book": 403,
+   "lines": 26,
+   "section": "A.1",
+   "summary": "Appendix A introduces Lie groups as the hidden backbone of the book's rigid-body tools, starting with smooth maps, diffeomorphisms, charts and atlases.",
+   "atoms": [
+    {
+     "id": "A-403-a",
+     "lines": [
+      1,
+      3
+     ],
+     "kind": "heading",
+     "idea": "Appendix A title: Lie groups and robot kinematics."
+    },
+    {
+     "id": "A-403-b",
+     "lines": [
+      4,
+      8
+     ],
+     "kind": "prose",
+     "idea": "Most analytic tools of the book come from Lie group theory and Riemannian geometry; this appendix gives the basics and ties them to rigid-body kinematics.",
+     "feynman": "The tricks you learned for spinning and sliding objects all come from one toolbox, like recipes that all start from the same dough.",
+     "visual": "Zoo entrance: a gold arch with chapter-2/3 icons (rotation, twist, Jacobian) as lanterns; tapping each lights the cage of the group it lives in.",
+     "scene": "mls-appa-lie-group-zoo",
+     "beat": "🧸 a smooth group",
+     "math": [
+      "rigid-transform",
+      "screw-exp"
+     ],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "A-403-c",
+     "lines": [
+      9,
+      9
+     ],
+     "kind": "heading",
+     "idea": "Section A.1: differentiable manifolds."
+    },
+    {
+     "id": "A-403-d",
+     "lines": [
+      10,
+      12
+     ],
+     "kind": "prose",
+     "idea": "A short review of differential geometry, following a standard text [9], mainly to set notation.",
+     "feynman": "Before a trip we agree on what \"north\" and \"a mile\" mean.",
+     "visual": "The paper-map globe fades in with an empty legend; each notation symbol later added to the legend glows when used.",
+     "scene": "mls-appa-manifold-charts",
+     "beat": "🌍 a globe of flat maps",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "A-403-e",
+     "lines": [
+      13,
+      13
+     ],
+     "kind": "heading",
+     "idea": "Subsection A.1.1: manifolds and maps."
+    },
+    {
+     "id": "A-403-f",
+     "lines": [
+      14,
+      17
+     ],
+     "kind": "definition",
+     "idea": "A map between open subsets of Euclidean spaces is smooth if all partial derivatives of every order exist and are continuous; a diffeomorphism is a smooth bijection with smooth inverse (same dimension).",
+     "feynman": "Stretching a rubber sheet without tearing or creasing, and being able to un-stretch it the same way.",
+     "visual": "A flat orange grid gets warped by a draggable smooth map into a pink grid; a lime \"smooth\" badge stays on; an \"undo\" arrow maps it back exactly. Add a fold: the badge turns coral (not invertible).",
+     "scene": "mls-appa-manifold-charts",
+     "beat": "🧈 smooth: no creases",
+     "math": [
+      "derivative",
+      "matrix"
+     ],
+     "engine": [
+      "NEW: warpGrid"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "A-403-g",
+     "lines": [
+      18,
+      25
+     ],
+     "kind": "definition",
+     "idea": "An n-dimensional manifold looks locally like Rⁿ; charts (φ,U) send pieces to open sets of Rⁿ; two overlapping charts are compatible when the overlap (change-of-map) function between them is a diffeomorphism; an atlas of compatible charts covering M makes it a smooth manifold.",
+     "feynman": "A globe covered by flat paper maps: every spot is on some map, and where two maps overlap you can translate between them smoothly.",
+     "visual": "Globe with 4–6 blue paper caps. Hover a teal point: its image lights on every map containing it. In an overlap, a purple warped mini-grid shows the transition map; a lime smoothness meter confirms compatibility. Remove a cap: an uncovered coral hole appears (not an atlas).",
+     "scene": "mls-appa-manifold-charts",
+     "beat": "🌍 a globe of flat maps",
+     "math": [
+      "vectors"
+     ],
+     "engine": [
+      "NEW: sphereCharts"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "A-403-h",
+     "lines": [
+      26,
+      26
+     ],
+     "kind": "page-number",
+     "idea": "Page 403"
+    }
+   ]
+  },
+  {
+   "pdf": 422,
+   "book": 404,
+   "lines": 40,
+   "section": "A.1.2",
+   "summary": "Smooth maps between manifolds via charts; tangent vectors as derivations with a coordinate basis; the tangent map and its chain rule.",
+   "atoms": [
+    {
+     "id": "A-404-a",
+     "lines": [
+      1,
+      7
+     ],
+     "kind": "definition",
+     "idea": "A map F between manifolds is smooth (or a diffeomorphism) when, read through any charts, ψ∘F∘φ⁻¹ is smooth (or a diffeomorphism) between flat sets.",
+     "feynman": "To check a road trip between two planets is smooth, read it on the flat maps of each planet; if the map-to-map drawing has no jumps, the trip is smooth.",
+     "visual": "Globe → donut with an orange map F; side panels show the two flat charts and the induced flat-to-flat warp; dragging a point traces matched dots in all four views.",
+     "scene": "mls-appa-manifold-charts",
+     "beat": "🗺️ maps between worlds",
+     "math": [
+      "derivative"
+     ],
+     "engine": [
+      "NEW: sphereCharts"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "A-404-b",
+     "lines": [
+      8,
+      8
+     ],
+     "kind": "heading",
+     "idea": "Subsection A.1.2: tangent spaces and tangent maps."
+    },
+    {
+     "id": "A-404-c",
+     "lines": [
+      9,
+      15
+     ],
+     "kind": "definition",
+     "idea": "A derivation at p is a real-valued operator on functions smooth near p that is linear and satisfies the product (Leibniz) rule X(fg) = (Xf)g(p) + f(p)(Xg).",
+     "feynman": "Asking \"how fast does the temperature rise if I walk this way?\" — double the heat, double the answer; for a product of two things, each one's change counts weighted by the other.",
+     "visual": "Ball with a gold temperature map and a second teal humidity map; an orange arrow at p; readouts Xf, Xg, X(fg) and a lime check showing X(fg) = Xf·g + f·Xg live as the arrow is dragged.",
+     "scene": "mls-appa-tangent-space",
+     "beat": "🧭 arrow = how fast things change",
+     "math": [
+      "derivative",
+      "chain-rule"
+     ],
+     "engine": [
+      "NEW: directionalDerivative"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-404-d",
+     "lines": [
+      16,
+      19
+     ],
+     "kind": "prose",
+     "idea": "Derivations at p can be added and scaled, so they form a real vector space.",
+     "feynman": "Two walking directions can be combined into one, and the rates of change add up the same way.",
+     "visual": "Two orange arrows on the touching sheet; their sum (pink, tip-to-tail) has readout equal to the sum of readouts.",
+     "scene": "mls-appa-tangent-space",
+     "beat": "🧭 arrow = how fast things change",
+     "math": [
+      "vectors"
+     ],
+     "engine": [],
+     "difficulty": 2
+    },
+    {
+     "id": "A-404-e",
+     "lines": [
+      20,
+      31
+     ],
+     "kind": "definition",
+     "idea": "The tangent space T_pM is the set of all derivations at p (tangent vectors); in a chart, the partials ∂/∂xᵢ form a basis, so each tangent vector has coordinates (X₁,…,Xₙ).",
+     "feynman": "The flat sheet of paper that touches a ball at one point: every way you could start rolling from that point is an arrow on the sheet.",
+     "visual": "Touching sheet on the ball at a draggable p; red ∂/∂x₁ and green ∂/∂x₂ arrows along the chart grid lines; an orange arrow X decomposes into X₁, X₂ with two number readouts that change when you switch charts while the arrow stays put.",
+     "scene": "mls-appa-tangent-space",
+     "beat": "📄 the sheet touching the ball",
+     "math": [
+      "vectors",
+      "derivative"
+     ],
+     "engine": [
+      "NEW: sphereTangentBasis"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "A-404-f",
+     "lines": [
+      32,
+      37
+     ],
+     "kind": "definition",
+     "idea": "The tangent map F_* (also T_pF) of a smooth F sends a tangent vector at p to one at F(p) by F_*X(f) = X(f∘F); in coordinates it is the Jacobian matrix.",
+     "feynman": "Push a toy boat along a stretchy river: where the river is stretched, the boat's speed arrow gets longer.",
+     "visual": "Ball → egg map; an orange arrow at p is carried to a pink arrow at F(p); the 2×2 Jacobian tiles beside it multiply the coordinates live.",
+     "scene": "mls-appa-tangent-space",
+     "beat": "🔗 push arrows through a map",
+     "math": [
+      "jacobian",
+      "linearize"
+     ],
+     "engine": [
+      "NEW: pushForward"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-404-g",
+     "lines": [
+      38,
+      39
+     ],
+     "kind": "proposition",
+     "idea": "Tangent maps obey the chain rule: the tangent map of F∘G is the tangent map of F (at G(p)) after that of G.",
+     "feynman": "Two zoom lenses in a row magnify by the product of their zooms.",
+     "visual": "Two maps G then F; the arrow is pushed twice (orange → blue → pink); a lime check shows it matches pushing once through F∘G; Jacobian tiles multiply.",
+     "scene": "mls-appa-tangent-space",
+     "beat": "🔗 push arrows through a map",
+     "math": [
+      "chain-rule",
+      "jacobian"
+     ],
+     "engine": [
+      "linalg.mmul"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "A-404-h",
+     "lines": [
+      40,
+      40
+     ],
+     "kind": "page-number",
+     "idea": "Page 404"
+    }
+   ]
+  },
+  {
+   "pdf": 423,
+   "book": 405,
+   "lines": 43,
+   "section": "A.1.3",
+   "summary": "Diffeomorphisms give invertible tangent maps; tangent maps via curves; the tangent bundle; cotangent vectors, differentials and cotangent maps.",
+   "atoms": [
+    {
+     "id": "A-405-a",
+     "lines": [
+      1,
+      2
+     ],
+     "kind": "proposition",
+     "idea": "If F is a diffeomorphism, each tangent map is an invertible linear map whose inverse is the tangent map of F⁻¹.",
+     "feynman": "If you can un-stretch the rubber, you can also un-stretch every arrow drawn on it.",
+     "visual": "Ball ↔ egg with a reverse arrow; push an arrow forward then back; it returns to its exact start (lime) and the Jacobian tiles × inverse tiles = identity.",
+     "scene": "mls-appa-tangent-space",
+     "beat": "🔗 push arrows through a map",
+     "math": [
+      "matrix"
+     ],
+     "engine": [
+      "linalg.inv"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "A-405-b",
+     "lines": [
+      3,
+      6
+     ],
+     "kind": "equation",
+     "idea": "If a curve c through p has velocity X at time 0, then the pushed vector is the time derivative of F(c(t)) at 0.",
+     "feynman": "An ant walks on the balloon; its speed on the inflated balloon is its speed seen after inflation.",
+     "visual": "A teal ant walks a curve through p; the same ant drawn on the egg; both velocity arrows are shown, the pink one equals the pushed orange one.",
+     "scene": "mls-appa-tangent-space",
+     "beat": "🔗 push arrows through a map",
+     "math": [
+      "derivative",
+      "chain-rule"
+     ],
+     "engine": [
+      "NEW: pushForward"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "A-405-c",
+     "lines": [
+      7,
+      14
+     ],
+     "kind": "definition",
+     "idea": "The tangent bundle TM is the 2n-dimensional manifold of all pairs (p, X_p), with projection π back to the base point.",
+     "feynman": "A hairbrush: the handle is the manifold and every bristle is the sheet of possible velocities at that spot.",
+     "visual": "Circle manifold with a tangent line at each point stood up vertically, forming a cylinder (TS¹); dragging a (point, arrow) pair moves on the cylinder and a dashed π line drops to the base circle.",
+     "scene": "mls-appa-tangent-space",
+     "beat": "🧶 all sheets together",
+     "math": [
+      "vectors"
+     ],
+     "engine": [],
+     "difficulty": 3
+    },
+    {
+     "id": "A-405-d",
+     "lines": [
+      15,
+      15
+     ],
+     "kind": "heading",
+     "idea": "Subsection A.1.3: cotangent spaces and cotangent maps."
+    },
+    {
+     "id": "A-405-e",
+     "lines": [
+      16,
+      28
+     ],
+     "kind": "definition",
+     "idea": "The cotangent space T*_pM is the dual of T_pM: linear functions ω eating tangent vectors; the dual basis dxᵢ satisfies ⟨dxᵢ, ∂/∂xⱼ⟩ = δᵢⱼ.",
+     "feynman": "A price list: a cart of groceries (vector) goes in, a total price (number) comes out; the price of \"one apple\" is the dual basis item.",
+     "visual": "Purple stacks of parallel lines on the touching sheet; drop an orange arrow — the lines-crossed counter shows ⟨ω, X⟩. Basis stacks dx₁, dx₂ cross the red/green basis arrows exactly once each (1/0 badges).",
+     "scene": "mls-appa-covector-stacks",
+     "beat": "🥞 a covector = stacked lines",
+     "math": [
+      "vectors",
+      "matrix"
+     ],
+     "engine": [
+      "linalg.vdot"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-405-f",
+     "lines": [
+      29,
+      37
+     ],
+     "kind": "definition",
+     "idea": "The differential df(p) of a function f is the covector with ⟨df, X⟩ = Xf; in coordinates df = Σ ∂f/∂xᵢ dxᵢ.",
+     "feynman": "On a hiking map, the contour lines near you tell how many height steps you cross for any short walk.",
+     "visual": "Gold hill with contour lines; zoom at p until contours become a straight purple stack = df(p); an orange walking arrow's crossing count equals the height change readout.",
+     "scene": "mls-appa-covector-stacks",
+     "beat": "⛰️ df from contour lines",
+     "math": [
+      "derivative",
+      "optimization"
+     ],
+     "engine": [
+      "NEW: gradientStack"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "A-405-g",
+     "lines": [
+      38,
+      42
+     ],
+     "kind": "definition",
+     "idea": "The cotangent map F^* goes backward: it pulls a covector at F(p) to one at p by ⟨F^*α, X⟩ = ⟨α, F_*X⟩ (transpose of the Jacobian).",
+     "feynman": "Translate a foreign price list into your home currency so totals agree whichever side you compute them on.",
+     "visual": "Arrow pushed forward (orange→pink) while a purple stack on the target is pulled back to the source; the two crossing counters stay equal (lime). Jacobian tiles flip to their transpose.",
+     "scene": "mls-appa-covector-stacks",
+     "beat": "↩️ pull a stack back",
+     "math": [
+      "matrix",
+      "statics"
+     ],
+     "engine": [
+      "linalg.T"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-405-h",
+     "lines": [
+      43,
+      43
+     ],
+     "kind": "page-number",
+     "idea": "Page 405"
+    }
+   ]
+  },
+  {
+   "pdf": 424,
+   "book": 406,
+   "lines": 40,
+   "section": "A.1.4",
+   "summary": "The cotangent bundle; vector fields as sections and as differential equations; integral curves and flows; the Lie derivative of a function.",
+   "atoms": [
+    {
+     "id": "A-406-a",
+     "lines": [
+      1,
+      6
+     ],
+     "kind": "definition",
+     "idea": "The cotangent bundle T*M collects all cotangent spaces into a 2n-dimensional manifold of pairs (p, α_p).",
+     "feynman": "A hairbrush again, but each bristle now holds price lists instead of arrows.",
+     "visual": "The TS¹ cylinder recolored purple: each vertical line now holds covector stacks; a dragged (p, α) pair slides on it.",
+     "scene": "mls-appa-covector-stacks",
+     "beat": "🥞 a covector = stacked lines",
+     "math": [
+      "vectors"
+     ],
+     "engine": [],
+     "difficulty": 3
+    },
+    {
+     "id": "A-406-b",
+     "lines": [
+      7,
+      7
+     ],
+     "kind": "heading",
+     "idea": "Subsection A.1.4: vector fields."
+    },
+    {
+     "id": "A-406-c",
+     "lines": [
+      8,
+      22
+     ],
+     "kind": "definition",
+     "idea": "A smooth vector field assigns smoothly to each point p a tangent vector at p (a section with π∘X = id); in coordinates it is a column of n smooth functions.",
+     "feynman": "A weather map with a wind arrow at every town, and nearby towns have similar winds.",
+     "visual": "A plane or sphere filled with orange arrows; hovering a point shows its column (X₁(x), X₂(x)) readout; a smoothness slider blends neighboring arrows.",
+     "scene": "mls-appa-flows-brackets",
+     "beat": "🌊 an arrow at every spot",
+     "math": [
+      "vectors",
+      "ode"
+     ],
+     "engine": [
+      "control.vectorField"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "A-406-d",
+     "lines": [
+      23,
+      26
+     ],
+     "kind": "definition",
+     "idea": "A vector field is a differential equation: a curve is an integral curve if its velocity always equals the field at its position.",
+     "feynman": "A leaf dropped on a stream goes wherever the water under it points.",
+     "visual": "Drop a teal leaf; it follows the arrows by RK4, leaving a trail; its velocity arrow (pink) always overlaps the field arrow under it.",
+     "scene": "mls-appa-flows-brackets",
+     "beat": "🍃 float a leaf: the flow",
+     "math": [
+      "ode"
+     ],
+     "engine": [
+      "dynamics.rk4"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "A-406-e",
+     "lines": [
+      27,
+      35
+     ],
+     "kind": "prose",
+     "idea": "ODE theory gives local integral curves; if they exist for all time the field is complete and they define a flow Φ_t, a one-parameter family of diffeomorphisms.",
+     "feynman": "Pour a sheet of glitter onto the river: after t seconds every speck has moved, and the whole pattern moved together without tearing.",
+     "visual": "A grid of teal dots flows as a time slider runs; the deformed grid stays untorn; Φ_s then Φ_t equals Φ_{s+t} (lime check). A field that blows up in finite time shows dots escaping off-screen (coral, not complete).",
+     "scene": "mls-appa-flows-brackets",
+     "beat": "🍃 float a leaf: the flow",
+     "math": [
+      "ode"
+     ],
+     "engine": [
+      "dynamics.rk4"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-406-f",
+     "lines": [
+      36,
+      39
+     ],
+     "kind": "definition",
+     "idea": "The Lie derivative of a function f along X is the new function Xf(p) = X_p f: the rate of change of f as you drift with the field.",
+     "feynman": "Riding the wind in a balloon, how fast does the temperature you feel change?",
+     "visual": "Gold temperature colors on the plane; riding leaf shows a thermometer readout and its rate bar; the rate bar matches the color of Xf painted as a second layer.",
+     "scene": "mls-appa-flows-brackets",
+     "beat": "📈 rate of change along the flow",
+     "math": [
+      "derivative"
+     ],
+     "engine": [
+      "NEW: lieDerivative"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "A-406-g",
+     "lines": [
+      40,
+      40
+     ],
+     "kind": "page-number",
+     "idea": "Page 406"
+    }
+   ]
+  },
+  {
+   "pdf": 425,
+   "book": 407,
+   "lines": 43,
+   "section": "A.1.4",
+   "summary": "Lie derivative in coordinates; the Lie bracket of vector fields and its coordinate formula; F-related fields, push forward and pull back; brackets are preserved; Lie algebra axioms begin.",
+   "atoms": [
+    {
+     "id": "A-407-a",
+     "lines": [
+      1,
+      8
+     ],
+     "kind": "equation",
+     "idea": "In coordinates, Xf = Σᵢ (∂f/∂xᵢ) Xᵢ: gradient of f dotted with the field.",
+     "feynman": "How fast your height changes = how steep each direction is × how fast you go that way, added up.",
+     "visual": "Readout panel: gradient arrow of f (gold) and field arrow (orange) at the leaf; their dot product bar equals the rate bar from the previous beat.",
+     "scene": "mls-appa-flows-brackets",
+     "beat": "📈 rate of change along the flow",
+     "math": [
+      "derivative",
+      "vectors"
+     ],
+     "engine": [
+      "linalg.vdot"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "A-407-b",
+     "lines": [
+      9,
+      11
+     ],
+     "kind": "definition",
+     "idea": "The Lie bracket [X,Y] is the vector field acting on functions by X(Yf) − Y(Xf).",
+     "feynman": "Put on socks then shoes vs. shoes then socks: the difference in outcome measures how much the order matters.",
+     "visual": "Two fields X (orange) and Y (blue); flow X·ε, Y·ε, −X·ε, −Y·ε from a point; a coral gap vector remains; ÷ε² it converges to a pink arrow = [X,Y].",
+     "scene": "mls-appa-flows-brackets",
+     "beat": "🔄 go-go-back-back gap",
+     "math": [
+      "ode",
+      "derivative"
+     ],
+     "engine": [
+      "dynamics.rk4",
+      "NEW: lieBracketVF"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-407-c",
+     "lines": [
+      12,
+      23
+     ],
+     "kind": "equation",
+     "idea": "The bracket is again a derivation, and in coordinates [X,Y]ⱼ = Σᵢ (∂Yⱼ/∂xᵢ Xᵢ − ∂Xⱼ/∂xᵢ Yᵢ), i.e. (DY)X − (DX)Y.",
+     "feynman": "How much Y's arrows change as you move along X, minus how much X's arrows change along Y.",
+     "visual": "At a point, the two Jacobian tile grids DX, DY; arrows DY·X and DX·Y drawn; their difference (pink) overlays the loop-gap arrow from the previous beat (lime match).",
+     "scene": "mls-appa-flows-brackets",
+     "beat": "🔄 go-go-back-back gap",
+     "math": [
+      "jacobian",
+      "derivative"
+     ],
+     "engine": [
+      "dynamics.numJacobian",
+      "NEW: lieBracketVF"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-407-d",
+     "lines": [
+      24,
+      27
+     ],
+     "kind": "definition",
+     "idea": "Fields X on M and Y on N are F-related if pushing X at p by F gives Y at F(p).",
+     "feynman": "A shadow puppet: the hand's motion and the shadow's motion match through the lamp's projection.",
+     "visual": "Left plane with field X, right plane with field Y; F maps between; at sample points pushed orange arrows overlay blue Y arrows (lime) or not (coral).",
+     "scene": "mls-appa-flows-brackets",
+     "beat": "🌊 an arrow at every spot",
+     "math": [
+      "jacobian"
+     ],
+     "engine": [
+      "NEW: pushForward"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-407-e",
+     "lines": [
+      28,
+      36
+     ],
+     "kind": "definition",
+     "idea": "A diffeomorphism F pushes a whole field forward, (F_*X)_q = F_* X at F⁻¹(q); the pull back F^* = (F⁻¹)_* goes the other way.",
+     "feynman": "Redraw the wind map after the continents are stretched: every arrow is carried to the new spot and stretched with the land.",
+     "visual": "Orange field on a grid; an F warp slider deforms the grid and the arrows ride along (pink); reverse slider pulls them back identically.",
+     "scene": "mls-appa-flows-brackets",
+     "beat": "🌊 an arrow at every spot",
+     "math": [
+      "jacobian"
+     ],
+     "engine": [
+      "NEW: pushForward"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-407-f",
+     "lines": [
+      37,
+      39
+     ],
+     "kind": "proposition",
+     "label": "Prop A.1",
+     "idea": "Pushing forward respects brackets: F_*[X,Y] = [F_*X, F_*Y].",
+     "feynman": "If you rename the streets of a town, the shortcut you find by going around a block is the same shortcut under the new names.",
+     "visual": "Compute the bracket loop on the original grid and on the warped grid; the warped pink gap arrow equals the pushed original (lime check).",
+     "scene": "mls-appa-flows-brackets",
+     "beat": "🧩 bracket rules",
+     "math": [
+      "jacobian"
+     ],
+     "engine": [
+      "NEW: lieBracketVF"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "A-407-g",
+     "lines": [
+      40,
+      42
+     ],
+     "kind": "definition",
+     "idea": "A Lie algebra is a vector space with a bilinear bracket that is skew-symmetric ([v,w] = −[w,v]) and satisfies Jacobi (next page).",
+     "feynman": "Swapping the order of two moves flips the leftover gap to point the opposite way.",
+     "visual": "Bracket panel: swap X and Y and the pink gap arrow flips 180°.",
+     "scene": "mls-appa-flows-brackets",
+     "beat": "🧩 bracket rules",
+     "math": [
+      "vectors"
+     ],
+     "engine": [
+      "NEW: lieBracketVF"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-407-h",
+     "lines": [
+      43,
+      43
+     ],
+     "kind": "page-number",
+     "idea": "Page 407"
+    }
+   ]
+  },
+  {
+   "pdf": 426,
+   "book": 408,
+   "lines": 34,
+   "section": "A.2.1",
+   "summary": "Jacobi identity, Lie subalgebras, one-forms and their pull back; Lie groups defined, with left and right translations.",
+   "atoms": [
+    {
+     "id": "A-408-a",
+     "lines": [
+      1,
+      3
+     ],
+     "kind": "definition",
+     "idea": "Jacobi identity: [[v,w],z] + [[z,v],w] + [[w,z],v] = 0.",
+     "feynman": "Three kids pass a ball in a circle in three orders; the leftover wobbles cancel out perfectly.",
+     "visual": "Three cross-product arrows in 3D (cyclic double brackets) placed tip-to-tail close into a triangle; a lime \"0\" readout; dragging v, w, z keeps it closed.",
+     "scene": "mls-appa-flows-brackets",
+     "beat": "🧩 bracket rules",
+     "math": [
+      "vectors"
+     ],
+     "engine": [
+      "linalg.cross"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-408-b",
+     "lines": [
+      4,
+      7
+     ],
+     "kind": "prose",
+     "idea": "A subalgebra is closed under bracket; smooth vector fields on M form an infinite-dimensional Lie algebra.",
+     "feynman": "A club whose members' handshakes only ever introduce other members.",
+     "visual": "A family of fields shown as cards; bracketing two cards produces a card that lands inside (lime ring) or outside (coral) the chosen family.",
+     "scene": "mls-appa-flows-brackets",
+     "beat": "🧩 bracket rules",
+     "math": [],
+     "engine": [],
+     "difficulty": 3
+    },
+    {
+     "id": "A-408-c",
+     "lines": [
+      8,
+      8
+     ],
+     "kind": "heading",
+     "idea": "Subsection A.1.5: differential forms."
+    },
+    {
+     "id": "A-408-d",
+     "lines": [
+      9,
+      14
+     ],
+     "kind": "definition",
+     "idea": "A one-form assigns smoothly to each point a covector: α = Σ αᵢ(x) dxᵢ.",
+     "feynman": "A field of price lists, one at every shop, changing gently from shop to shop.",
+     "visual": "Purple covector stacks drawn at grid points, their spacing and tilt varying smoothly.",
+     "scene": "mls-appa-covector-stacks",
+     "beat": "🥞 a covector = stacked lines",
+     "math": [
+      "vectors"
+     ],
+     "engine": [],
+     "difficulty": 3
+    },
+    {
+     "id": "A-408-e",
+     "lines": [
+      15,
+      21
+     ],
+     "kind": "definition",
+     "idea": "Any smooth map F (not necessarily invertible) pulls a one-form β on N back to F^*β on M by ⟨F^*β, X⟩ = ⟨β, F_*X⟩.",
+     "feynman": "You can always ask \"what does this walk cost on the far map?\" even if the map squashes many places onto one.",
+     "visual": "A non-invertible map (plane → line squash); pulled-back purple stacks appear on the source; crossing counters match on both sides.",
+     "scene": "mls-appa-covector-stacks",
+     "beat": "↩️ pull a stack back",
+     "math": [
+      "matrix"
+     ],
+     "engine": [
+      "linalg.T"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-408-f",
+     "lines": [
+      22,
+      22
+     ],
+     "kind": "heading",
+     "idea": "Section A.2: Lie groups."
+    },
+    {
+     "id": "A-408-g",
+     "lines": [
+      23,
+      26
+     ],
+     "kind": "prose",
+     "idea": "Lie-group basics for kinematics; further detail in [108], explicit SO(3)/SE(3) formulas in [88].",
+     "feynman": "A quick tour with pointers to bigger guidebooks.",
+     "visual": "Zoo map with signposts to the cages for SO(3) and SE(3).",
+     "scene": "mls-appa-lie-group-zoo",
+     "beat": "🧸 a smooth group",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "A-408-h",
+     "lines": [
+      27,
+      27
+     ],
+     "kind": "heading",
+     "idea": "Subsection A.2.1: definition and examples."
+    },
+    {
+     "id": "A-408-i",
+     "lines": [
+      28,
+      31
+     ],
+     "kind": "definition",
+     "idea": "A Lie group is a group that is also a smooth manifold with smooth multiplication and inversion; abelian if order never matters; e is the identity.",
+     "feynman": "Turns of a steering wheel: you can combine turns, undo them, and nudge them a tiny bit smoothly.",
+     "visual": "Circle cage: drag g and h; gh moves smoothly as you drag; an inverse ghost mirrors g; e is a gold dot. An abelian badge is lime here, coral in the SO(3) cage (gh ≠ hg).",
+     "scene": "mls-appa-lie-group-zoo",
+     "beat": "🧸 a smooth group",
+     "math": [
+      "rotation",
+      "matrix"
+     ],
+     "engine": [
+      "linalg.mmul",
+      "linalg.inv"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "A-408-j",
+     "lines": [
+      32,
+      33
+     ],
+     "kind": "definition",
+     "idea": "Left translation L_g(h) = gh and right translation R_g(h) = hg.",
+     "feynman": "Moving a chess piece by the board's directions (left) vs. by the piece's own facing (right).",
+     "visual": "SE(2) cage: a car-shaped frame h; L_g moves it by world arrows, R_g moves it along its own nose; two ghosts show both results.",
+     "scene": "mls-appa-lie-group-zoo",
+     "beat": "⬅️➡️ left vs right shifts",
+     "math": [
+      "rigid-transform"
+     ],
+     "engine": [
+      "lie.homog",
+      "linalg.mmul"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "A-408-k",
+     "lines": [
+      34,
+      34
+     ],
+     "kind": "page-number",
+     "idea": "Page 408"
+    }
+   ]
+  },
+  {
+   "pdf": 427,
+   "book": 409,
+   "lines": 41,
+   "section": "A.2.1",
+   "summary": "Translations are commuting diffeomorphisms; examples Rⁿ, GL(n), SO(n) (dimension n(n−1)/2) and SE(3) (dimension 6); left-invariant vector fields.",
+   "atoms": [
+    {
+     "id": "A-409-a",
+     "lines": [
+      1,
+      5
+     ],
+     "kind": "prose",
+     "idea": "Translations compose into translations (L_g∘L_h = L_gh), so each has an inverse translation and is a diffeomorphism; left and right translations commute; in abelian groups they coincide.",
+     "feynman": "Rearranging the room by world directions and rearranging each chair by its own facing don't interfere with each other.",
+     "visual": "SE(2) cage: apply L_g then R_h, and R_h then L_g; two ghost frames land on the same spot (lime); in the Rⁿ cage the two buttons do identical things.",
+     "scene": "mls-appa-lie-group-zoo",
+     "beat": "⬅️➡️ left vs right shifts",
+     "math": [
+      "rigid-transform"
+     ],
+     "engine": [
+      "linalg.mmul"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "A-409-b",
+     "lines": [
+      6,
+      9
+     ],
+     "kind": "example",
+     "label": "Ex A.1",
+     "idea": "Rⁿ with addition is an abelian Lie group (identity 0, inverse −x).",
+     "feynman": "Sliding a book across a table: slides add, and order never matters.",
+     "visual": "Plane cage: two orange slide arrows added in either order reach the same pink spot.",
+     "scene": "mls-appa-lie-group-zoo",
+     "beat": "➕ sliding: Rⁿ",
+     "math": [
+      "vectors"
+     ],
+     "engine": [
+      "linalg.vadd"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "A-409-c",
+     "lines": [
+      10,
+      21
+     ],
+     "kind": "example",
+     "label": "Ex A.2",
+     "idea": "GL(n,R), invertible n×n matrices under multiplication, is an open subset of R^{n²} with smooth product and inverse.",
+     "feynman": "All the ways to stretch, shear and turn a rubber grid without squashing it flat.",
+     "visual": "GL(2) cage: drag î, ĵ columns; the grid deforms; a det readout; at det = 0 the grid collapses to a line and the cage bars turn coral (left the group).",
+     "scene": "mls-appa-lie-group-zoo",
+     "beat": "🔲 matrix groups GL · SO · SE",
+     "math": [
+      "matrix"
+     ],
+     "engine": [
+      "linalg.det",
+      "linalg.inv"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "A-409-d",
+     "lines": [
+      22,
+      27
+     ],
+     "kind": "example",
+     "label": "Ex A.3",
+     "idea": "SO(n) = orthogonal matrices with det +1, a subgroup of dimension n(n−1)/2; SO(3) is the rotation group.",
+     "feynman": "All the ways to turn a ball without denting or mirroring it: three turning knobs for 3D.",
+     "visual": "SO(3) cage: a blue ball with red/green/blue axes; dimension counter shows 3 for n=3, 1 for n=2, 6 for n=4 (number of planes of turning).",
+     "scene": "mls-appa-lie-group-zoo",
+     "beat": "🔲 matrix groups GL · SO · SE",
+     "math": [
+      "rotation"
+     ],
+     "engine": [
+      "lie.expSO3"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "A-409-e",
+     "lines": [
+      28,
+      37
+     ],
+     "kind": "example",
+     "label": "Ex A.4",
+     "idea": "SE(3): maps x ↦ Rx + p, written as 4×4 matrices [[R,p],[0,1]]; a 6-dimensional Lie group.",
+     "feynman": "Picking up a mug and putting it down somewhere else, turned: three ways to turn plus three ways to slide.",
+     "visual": "SE(3) cage: a floating frame; 4×4 tiles (R block blue, p column teal); drag to move; dimension counter 3+3 = 6.",
+     "scene": "mls-appa-lie-group-zoo",
+     "beat": "🔲 matrix groups GL · SO · SE",
+     "math": [
+      "rigid-transform"
+     ],
+     "engine": [
+      "lie.homog"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "A-409-f",
+     "lines": [
+      38,
+      38
+     ],
+     "kind": "heading",
+     "idea": "Subsection A.2.2: the Lie algebra of a Lie group."
+    },
+    {
+     "id": "A-409-g",
+     "lines": [
+      39,
+      40
+     ],
+     "kind": "definition",
+     "idea": "A vector field X on G is left invariant if pushing it by any left translation leaves it unchanged: T_hL_g X(h) = X(gh).",
+     "feynman": "A marching band where everyone takes the same step relative to themselves: if you shift the whole band, the step pattern looks the same.",
+     "visual": "Group surface with orange arrows; applying L_g moves every arrow to a new spot and it lands exactly on the arrow already there (lime overlap).",
+     "scene": "mls-appa-lie-algebra",
+     "beat": "🧲 copy it everywhere",
+     "math": [
+      "rigid-transform"
+     ],
+     "engine": [
+      "NEW: leftInvariantField"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-409-h",
+     "lines": [
+      41,
+      41
+     ],
+     "kind": "page-number",
+     "idea": "Page 409"
+    }
+   ]
+  },
+  {
+   "pdf": 428,
+   "book": 410,
+   "lines": 40,
+   "section": "A.2.2",
+   "summary": "Left-invariant fields form a subalgebra isomorphic to the tangent space at the identity, which becomes the Lie algebra; Rⁿ has the trivial bracket; GL(n) begins.",
+   "atoms": [
+    {
+     "id": "A-410-a",
+     "lines": [
+      1,
+      5
+     ],
+     "kind": "prose",
+     "idea": "Brackets of left-invariant fields are left invariant, so they form a Lie subalgebra of all vector fields.",
+     "feynman": "Two marching patterns that look the same from every spot produce a leftover drift that also looks the same from every spot.",
+     "visual": "Run the bracket loop at several points of the left-invariant fields; the pink gap arrows are copies of one another under L_g.",
+     "scene": "mls-appa-lie-algebra",
+     "beat": "🔄 bracket at home",
+     "math": [
+      "vectors"
+     ],
+     "engine": [
+      "NEW: lieBracketVF"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-410-b",
+     "lines": [
+      6,
+      10
+     ],
+     "kind": "equation",
+     "idea": "Each vector ξ at the identity defines X_ξ(g) = T_eL_g ξ, which is left invariant because L_gh = L_g∘L_h.",
+     "feynman": "Decide one dance step at home, then everyone copies it relative to where they stand.",
+     "visual": "Gold home e with an orange arrow ξ; \"copy\" button sweeps the arrow over the group by left translation, painting a full field.",
+     "scene": "mls-appa-lie-algebra",
+     "beat": "🧲 copy it everywhere",
+     "math": [
+      "rigid-transform"
+     ],
+     "engine": [
+      "NEW: leftInvariantField"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-410-c",
+     "lines": [
+      11,
+      19
+     ],
+     "kind": "definition",
+     "label": "Eq (A.1)",
+     "idea": "Evaluating at e and copying from e are inverse linear maps, so left-invariant fields ≅ T_eG; defining [ξ₁,ξ₂] = [X_ξ₁, X_ξ₂](e) makes T_eG the Lie algebra 𝔤.",
+     "feynman": "A whole wind pattern is decided by one arrow at home; the twist you get by mixing two patterns is also read off at home.",
+     "visual": "Split view: the full field and the single home arrow, linked by two buttons (restrict ↔ copy) that undo each other; the bracket gap at home is pinned as a pink arrow in the home sheet.",
+     "scene": "mls-appa-lie-algebra",
+     "beat": "🔄 bracket at home",
+     "math": [
+      "vectors"
+     ],
+     "engine": [
+      "NEW: leftInvariantField"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-410-d",
+     "lines": [
+      20,
+      22
+     ],
+     "kind": "prose",
+     "idea": "A Lie subgroup H has a Lie algebra that is a subalgebra of 𝔤.",
+     "feynman": "The turns that keep the floor flat (spinning about vertical) are a smaller club, and mixing them never takes you out of the club.",
+     "visual": "In SO(3), restrict arrows to the z-axis line; brackets stay on that line (lime).",
+     "scene": "mls-appa-lie-algebra",
+     "beat": "🔄 bracket at home",
+     "math": [
+      "rotation"
+     ],
+     "engine": [
+      "linalg.cross"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-410-e",
+     "lines": [
+      23,
+      28
+     ],
+     "kind": "example",
+     "label": "Ex A.5",
+     "idea": "For Rⁿ, left-invariant fields are constant fields and the bracket is identically zero.",
+     "feynman": "Sliding moves never interfere: slide east then north = north then east.",
+     "visual": "Plane cage: uniform arrow field; the bracket loop closes exactly, gap readout 0 (lime).",
+     "scene": "mls-appa-lie-algebra",
+     "beat": "🔄 bracket at home",
+     "math": [
+      "vectors"
+     ],
+     "engine": [],
+     "difficulty": 2
+    },
+    {
+     "id": "A-410-f",
+     "lines": [
+      29,
+      39
+     ],
+     "kind": "example",
+     "label": "Ex A.6",
+     "idea": "The Lie algebra of GL(n) is all n×n matrices with bracket [A,B] = AB − BA; it comes from coordinates xᵢⱼ on the open set GL ⊂ R^{n×n}.",
+     "feynman": "Order of two shears matters, and the commutator measures exactly by how much.",
+     "visual": "GL(2) cage: two small orange matrices A, B as grid nudges; AB and BA results side by side; their difference AB−BA drawn as a pink grid nudge.",
+     "scene": "mls-appa-lie-algebra",
+     "beat": "🔄 bracket at home",
+     "math": [
+      "matrix"
+     ],
+     "engine": [
+      "linalg.mmul",
+      "linalg.msub"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-410-g",
+     "lines": [
+      40,
+      40
+     ],
+     "kind": "page-number",
+     "idea": "Page 410"
+    }
+   ]
+  },
+  {
+   "pdf": 429,
+   "book": 411,
+   "lines": 49,
+   "section": "A.2.2",
+   "summary": "so(3) as skew matrices whose bracket is the cross product; se(3) as 4×4 twist matrices with an explicit bracket, identified with R⁶.",
+   "atoms": [
+    {
+     "id": "A-411-a",
+     "lines": [
+      1,
+      4
+     ],
+     "kind": "example",
+     "label": "Ex A.6",
+     "idea": "The commutator formula follows from computing left-invariant fields on GL and applying (A.1); details in [108].",
+     "feynman": "The rule was found by actually running the go-go-back-back loop on matrices.",
+     "visual": "Bracket loop on GL(2) with tiny ε: (e^{εA}e^{εB}e^{−εA}e^{−εB} − I)/ε² converges to AB − BA (lime match readout).",
+     "scene": "mls-appa-lie-algebra",
+     "beat": "🔄 bracket at home",
+     "math": [
+      "matrix"
+     ],
+     "engine": [
+      "NEW: expm"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-411-b",
+     "lines": [
+      5,
+      27
+     ],
+     "kind": "example",
+     "label": "Ex A.7, Eq (A.2)",
+     "idea": "so(3) = 3×3 skew-symmetric matrices ω̂ (Eq A.2) with commutator bracket; the hat map makes (R³, ×) and (so(3), [·,·]) isomorphic: [ω̂₁, ω̂₂] = (ω₁×ω₂)^.",
+     "feynman": "Tilt a phone forward then roll it, and undo in the other order: the leftover is a small turn about the third axis — exactly the cross product.",
+     "visual": "Two orange ω arrows in 3D; the 3×3 hat tiles light up entry by entry; commutator tiles shown next to the hat of the pink ω₁×ω₂ arrow — identical (lime).",
+     "scene": "mls-appa-lie-algebra",
+     "beat": "✖️ so(3): bracket = cross",
+     "math": [
+      "rotation",
+      "vectors",
+      "matrix"
+     ],
+     "engine": [
+      "lie.hat",
+      "lie.vee",
+      "linalg.cross"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-411-c",
+     "lines": [
+      28,
+      48
+     ],
+     "kind": "example",
+     "label": "Ex A.8",
+     "idea": "se(3) = 4×4 matrices [[ω̂, v],[0,0]] with commutator bracket [ξ₁,ξ₂] = ((ω₁×ω₂)^, ω₁×v₂ − ω₂×v₁); isomorphic to R⁶ via (v, ω).",
+     "feynman": "Two screwdriver twists done in a loop leave a leftover screw whose spin is the cross of spins and whose slide mixes each spin with the other's slide.",
+     "visual": "Two gold screw axes with pitch; bracket loop runs; the leftover screw (pink) axis plus readouts for its ω and v parts match the formula tiles.",
+     "scene": "mls-appa-lie-algebra",
+     "beat": "🔩 se(3) bracket",
+     "math": [
+      "screw-exp",
+      "vectors"
+     ],
+     "engine": [
+      "lie.expSE3",
+      "NEW: bracketSE3"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "A-411-d",
+     "lines": [
+      49,
+      49
+     ],
+     "kind": "page-number",
+     "idea": "Page 411"
+    }
+   ]
+  },
+  {
+   "pdf": 430,
+   "book": 412,
+   "lines": 45,
+   "section": "A.2.3",
+   "summary": "Integral curves of left-invariant fields are one-parameter subgroups; the exponential map, its rescaling property and local invertibility; exp on Rⁿ and on GL(n).",
+   "atoms": [
+    {
+     "id": "A-412-a",
+     "lines": [
+      1,
+      1
+     ],
+     "kind": "heading",
+     "idea": "Subsection A.2.3: the exponential map."
+    },
+    {
+     "id": "A-412-b",
+     "lines": [
+      2,
+      7
+     ],
+     "kind": "proposition",
+     "idea": "The integral curve φ_ξ of X_ξ through e satisfies φ_ξ(s+t) = φ_ξ(s)φ_ξ(t): a one-parameter subgroup.",
+     "feynman": "Turning a knob steadily: 2 seconds then 3 seconds of turning equals 5 seconds of turning.",
+     "visual": "Home e, arrow ξ; the curve φ_ξ grows; add-times widget: pick s and t; ghost frames at φ(s)φ(t) and φ(s+t) coincide (lime).",
+     "scene": "mls-appa-exp-log",
+     "beat": "🚶 straight lines in a group",
+     "math": [
+      "ode",
+      "rotation"
+     ],
+     "engine": [
+      "lie.expSE3"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-412-c",
+     "lines": [
+      8,
+      11
+     ],
+     "kind": "proof",
+     "idea": "Proof: both sides start equal at t=0 and solve the same left-invariant ODE, so uniqueness forces equality; the same property extends the curve to all t.",
+     "feynman": "Two leaves dropped at the same spot on the same stream must follow the same path.",
+     "visual": "Staircase: (1) two curves start at the same dot; (2) both obey the same arrows (field shown); (3) they overlap forever (lime); (4) chain copies to extend the curve without end.",
+     "scene": "mls-appa-exp-log",
+     "beat": "🚶 straight lines in a group",
+     "math": [
+      "ode"
+     ],
+     "engine": [
+      "dynamics.rk4"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-412-d",
+     "lines": [
+      12,
+      15
+     ],
+     "kind": "definition",
+     "idea": "exp(ξ) = φ_ξ(1); it sends the line ξs in 𝔤 onto the one-parameter subgroup: exp(ξs) = φ_ξ(s).",
+     "feynman": "Hold the throttle at setting ξ for exactly one second: where you land is exp(ξ).",
+     "visual": "Slider s scales the orange arrow; the pink endpoint frame exp(ξs) slides along the same curve.",
+     "scene": "mls-appa-exp-log",
+     "beat": "♾️ exp = many tiny steps",
+     "math": [
+      "screw-exp"
+     ],
+     "engine": [
+      "lie.expSO3",
+      "lie.expSE3"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-412-e",
+     "lines": [
+      16,
+      24
+     ],
+     "kind": "proof",
+     "idea": "Rescaling: t ↦ φ_ξ(ts) solves the ODE of sξ, so φ_{sξ}(t) = φ_ξ(ts); set t=1. All connected one-parameter subgroups arise this way.",
+     "feynman": "Driving twice as fast for one hour lands you where driving normal speed for two hours does.",
+     "visual": "Two ghosts: speed 2ξ for t=1 and speed ξ for t=2 trace the same curve; badge lime.",
+     "scene": "mls-appa-exp-log",
+     "beat": "🚶 straight lines in a group",
+     "math": [
+      "ode"
+     ],
+     "engine": [
+      "lie.expSE3"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-412-f",
+     "lines": [
+      25,
+      29
+     ],
+     "kind": "proposition",
+     "idea": "The derivative of exp at 0 is the identity, so exp is a local diffeomorphism near 0 → near e (inverse function theorem); for compact groups exp is onto.",
+     "feynman": "Very small throttle settings land very close to home, one-to-one; and for a spinning ball you can reach every orientation.",
+     "visual": "Small disc of arrows near 0 maps onto a small patch around e with no overlaps (grid stays a grid); for SO(3) a sweep of all ξ fills every orientation (coverage meter 100%).",
+     "scene": "mls-appa-exp-log",
+     "beat": "♾️ exp = many tiny steps",
+     "math": [
+      "linearize",
+      "rotation"
+     ],
+     "engine": [
+      "lie.expSO3"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-412-g",
+     "lines": [
+      30,
+      35
+     ],
+     "kind": "example",
+     "label": "Ex A.9",
+     "idea": "For Rⁿ the integral curve is x + vt, so exp is the identity map.",
+     "feynman": "In a flat parking lot, driving straight at velocity v for one second just adds v.",
+     "visual": "Plane cage: arrow v and its exp endpoint coincide (lime).",
+     "scene": "mls-appa-exp-log",
+     "beat": "♾️ exp = many tiny steps",
+     "math": [
+      "vectors"
+     ],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "A-412-h",
+     "lines": [
+      36,
+      44
+     ],
+     "kind": "example",
+     "label": "Ex A.10",
+     "idea": "For GL(n), Φ_A(t) = Σ tⁿAⁿ/n! is a one-parameter subgroup (starts at I).",
+     "feynman": "Compound interest done continuously: tiny growths on growths add up to an exponential.",
+     "visual": "Series panel: stacked bars for terms tᵏAᵏ/k! appear one by one and their sum converges (bar heights shrink).",
+     "scene": "mls-appa-exp-log",
+     "beat": "♾️ exp = many tiny steps",
+     "math": [
+      "matrix",
+      "ode"
+     ],
+     "engine": [
+      "NEW: expm"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-412-i",
+     "lines": [
+      45,
+      45
+     ],
+     "kind": "page-number",
+     "idea": "Page 412"
+    }
+   ]
+  },
+  {
+   "pdf": 431,
+   "book": 413,
+   "lines": 60,
+   "section": "A.2.3",
+   "summary": "Matrix exponential series; Rodrigues formula on SO(3) (A.3); exponential on SE(3); local log; log series on GL(n).",
+   "atoms": [
+    {
+     "id": "A-413-a",
+     "lines": [
+      1,
+      14
+     ],
+     "kind": "example",
+     "label": "Ex A.10",
+     "idea": "Differentiating the series gives Φ̇ = Φ A, so Φ_A is the integral curve of the left-invariant field; hence exp(A) = Σ Aⁿ/n!.",
+     "feynman": "Your growth rate is always \"current amount × A\", the defining habit of an exponential.",
+     "visual": "n small steps (I + A/n)ⁿ drawn as ghost grids converging to the series result; a lime error bar shrinks as n grows.",
+     "scene": "mls-appa-exp-log",
+     "beat": "♾️ exp = many tiny steps",
+     "math": [
+      "matrix",
+      "ode"
+     ],
+     "engine": [
+      "NEW: expm"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-413-b",
+     "lines": [
+      15,
+      25
+     ],
+     "kind": "example",
+     "label": "Ex A.11, Eq (A.3)",
+     "idea": "On SO(3), exp(ω̂) rotates by angle ‖ω‖ about ω, with the closed Rodrigues formula I + sin‖ω‖ ω̂/‖ω‖ + (1−cos‖ω‖) ω̂²/‖ω‖².",
+     "feynman": "A sticker on a spinning top: its path is a circle, so all you need is a sine and a cosine.",
+     "visual": "Spin mode: orange ω arrow; a blue body rotates; sin and cos dials feed the formula tiles; the result matches the many-step product (lime).",
+     "scene": "mls-appa-exp-log",
+     "beat": "🌀 spin formula",
+     "math": [
+      "rotation",
+      "screw-exp"
+     ],
+     "engine": [
+      "lie.expSO3"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "A-413-c",
+     "lines": [
+      26,
+      44
+     ],
+     "kind": "example",
+     "label": "Ex A.12",
+     "idea": "On SE(3), exp of [[ω̂, v],[0,0]] is [[I, v],[0,1]] if ω = 0, otherwise [[e^{ω̂}, A v],[0,1]] with A = I + (1−cos‖ω‖) ω̂/‖ω‖² + (‖ω‖ − sin‖ω‖) ω̂²/‖ω‖³.",
+     "feynman": "A screw: turning while advancing; the advance is bent along the turn, which is what matrix A accounts for.",
+     "visual": "Screw mode: a frame corkscrews along a gold axis; the A·v translation drawn as a curved teal path; ω→0 slider shows the path straighten into pure slide.",
+     "scene": "mls-appa-exp-log",
+     "beat": "🔩 screw formula",
+     "math": [
+      "screw-exp",
+      "rigid-transform"
+     ],
+     "engine": [
+      "lie.expSE3"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-413-d",
+     "lines": [
+      45,
+      50
+     ],
+     "kind": "definition",
+     "idea": "Since exp is a local diffeomorphism, there is a local inverse log near e with exp(log g) = g; for GL(n) it can be written explicitly.",
+     "feynman": "Rewind: given where you ended up, find which steady throttle setting got you there.",
+     "visual": "Log mode: drag a pink target frame near home; the scene solves for ξ and replays exp(ξ) landing on it.",
+     "scene": "mls-appa-exp-log",
+     "beat": "↩️ log: read it back",
+     "math": [
+      "screw-exp"
+     ],
+     "engine": [
+      "lie.logSE3"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-413-e",
+     "lines": [
+      51,
+      59
+     ],
+     "kind": "example",
+     "label": "Ex A.13",
+     "idea": "For GL(n), log A = Σ (−1)^{n+1}(A − I)ⁿ/n, converging when ‖A − I‖ < 1.",
+     "feynman": "Undo compound interest by a series that works only when the growth was not too big.",
+     "visual": "Series bars for log converge for targets inside a lime disc around I and blow up (coral) outside.",
+     "scene": "mls-appa-exp-log",
+     "beat": "↩️ log: read it back",
+     "math": [
+      "matrix"
+     ],
+     "engine": [
+      "NEW: logm"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-413-f",
+     "lines": [
+      60,
+      60
+     ],
+     "kind": "page-number",
+     "idea": "Page 413"
+    }
+   ]
+  },
+  {
+   "pdf": 432,
+   "book": 414,
+   "lines": 45,
+   "section": "A.2.4",
+   "summary": "Log formulas on SO(3) and SE(3), both multi-valued; canonical coordinates of the first kind and an atlas built by left translation.",
+   "atoms": [
+    {
+     "id": "A-414-a",
+     "lines": [
+      1,
+      12
+     ],
+     "kind": "example",
+     "label": "Ex A.14",
+     "idea": "On SO(3), log R = θω̂ with 2cosθ + 1 = trace R and ω̂ = (R − Rᵀ)/(2 sinθ) for R ≠ I; at R = I any axis works and θ = 2πk: log is multi-valued.",
+     "feynman": "Read how far a wheel turned from where the valve ended up — but an extra full turn looks identical.",
+     "visual": "Pink target rotation; θ read from a trace gauge; ω axis appears; ghost solutions at θ+2π and (−ω, 2π−θ) land on the same orientation.",
+     "scene": "mls-appa-exp-log",
+     "beat": "↩️ log: read it back",
+     "math": [
+      "rotation"
+     ],
+     "engine": [
+      "lie.logSO3",
+      "lie.rotationAngle"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-414-b",
+     "lines": [
+      13,
+      26
+     ],
+     "kind": "example",
+     "label": "Ex A.15",
+     "idea": "On SE(3), log [[R,p],[0,1]] = [[ω̂, A⁻¹p],[0,0]] with ω̂ = log R and a closed form for A⁻¹; also multi-valued.",
+     "feynman": "Find the single screw that moves the mug from here to there; there may be several equivalent screws.",
+     "visual": "Drag the pink target frame; the solved gold screw axis appears with its pitch; a second solution ghost path also lands on target.",
+     "scene": "mls-appa-exp-log",
+     "beat": "↩️ log: read it back",
+     "math": [
+      "screw-exp",
+      "rigid-transform"
+     ],
+     "engine": [
+      "lie.logSE3"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-414-c",
+     "lines": [
+      27,
+      27
+     ],
+     "kind": "heading",
+     "idea": "Subsection A.2.4: canonical coordinates on a Lie group."
+    },
+    {
+     "id": "A-414-d",
+     "lines": [
+      28,
+      35
+     ],
+     "kind": "definition",
+     "label": "Eq (A.4)",
+     "idea": "With a basis X₁..Xₙ of 𝔤, g = exp(Σ σᵢXᵢ) gives local coordinates σ near e (canonical coordinates of the first kind).",
+     "feynman": "Describe any nearby orientation by one combined \"turn this much about this blended axis\" instruction.",
+     "visual": "Three orange σ sliders build a blended arrow; one straight exp path from home reaches the pink frame; a small coordinate grid around home warps onto the group.",
+     "scene": "mls-appa-canonical-coords",
+     "beat": "🧭 one blended exp",
+     "math": [
+      "screw-exp",
+      "rotation"
+     ],
+     "engine": [
+      "lie.expSO3",
+      "lie.logSO3"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-414-e",
+     "lines": [
+      36,
+      44
+     ],
+     "kind": "definition",
+     "idea": "Left-translating that chart gives charts ψ_g(h) = σ(g⁻¹h) around every g, forming an atlas; σ are the canonical coordinates of the first kind.",
+     "feynman": "Carry your home neighborhood map with you: wherever you stand, measure from there.",
+     "visual": "Tile beat: the coordinate patch at home is copied by L_g to several places on the SO(3) ball until patches cover it (paper-map globe callback).",
+     "scene": "mls-appa-canonical-coords",
+     "beat": "🧩 tile the group",
+     "math": [
+      "rotation"
+     ],
+     "engine": [
+      "lie.logSO3",
+      "linalg.mmul"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-414-f",
+     "lines": [
+      45,
+      45
+     ],
+     "kind": "page-number",
+     "idea": "Page 414"
+    }
+   ]
+  },
+  {
+   "pdf": 433,
+   "book": 415,
+   "lines": 37,
+   "section": "A.2.5",
+   "summary": "Canonical coordinates of the second kind (POE, Euler angles); left actions, orbits; GL acting on Rⁿ, conjugation and the adjoint action.",
+   "atoms": [
+    {
+     "id": "A-415-a",
+     "lines": [
+      1,
+      6
+     ],
+     "kind": "definition",
+     "label": "Eq (A.5)",
+     "idea": "Writing g = e^{X₁θ₁}⋯e^{Xₙθₙ} near e gives canonical coordinates of the second kind; examples are the product-of-exponentials formula and Euler angles.",
+     "feynman": "A robot arm: each joint turns about its own fixed axis one after another, and the list of joint angles describes where the hand is.",
+     "visual": "Second-kind mode: three θ sliders each spin about a fixed axis in turn; the three-segment path lands on the same pink frame as the first-kind straight path; a robot-arm skin can be toggled on.",
+     "scene": "mls-appa-canonical-coords",
+     "beat": "⛓️ a chain of exps",
+     "math": [
+      "poe",
+      "euler-angles"
+     ],
+     "engine": [
+      "kinematics.poeFK",
+      "lie.eulerZYX"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-415-b",
+     "lines": [
+      7,
+      7
+     ],
+     "kind": "heading",
+     "idea": "Subsection A.2.5: actions of Lie groups."
+    },
+    {
+     "id": "A-415-c",
+     "lines": [
+      8,
+      14
+     ],
+     "kind": "prose",
+     "idea": "All chapter-2 transformations of points, vectors, twists and wrenches are left actions of SE(3) on suitable spaces.",
+     "feynman": "One choreographer (the rigid motion), many dancers of different kinds — dots, arrows, screws, pushes — each following the matching rule.",
+     "visual": "Dance floor with four dancer kinds (teal points, orange arrows, gold screws, purple wrenches); one g knob moves all of them by their own rules.",
+     "scene": "mls-appa-group-actions",
+     "beat": "💃 everyone follows one rule",
+     "math": [
+      "rigid-transform",
+      "screw-exp",
+      "statics"
+     ],
+     "engine": [
+      "lie.applySE3",
+      "lie.adjoint"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "A-415-d",
+     "lines": [
+      15,
+      21
+     ],
+     "kind": "definition",
+     "idea": "A left action Φ: G×M → M satisfies Φ(e,x) = x and Φ(g,Φ(h,x)) = Φ(gh,x); the orbit of x is everything it can be moved to.",
+     "feynman": "Everyone in a dance moves by the same rule; doing two moves in a row equals the combined move; all spots one dancer can reach form its orbit.",
+     "visual": "Teal points on the floor; identity knob leaves them still; \"h then g\" vs \"gh\" buttons land on identical spots (lime). Sweep g: one dancer paints its orbit (a circle for rotations).",
+     "scene": "mls-appa-group-actions",
+     "beat": "🪐 orbits",
+     "math": [
+      "rigid-transform"
+     ],
+     "engine": [
+      "lie.applySE3"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "A-415-e",
+     "lines": [
+      22,
+      24
+     ],
+     "kind": "example",
+     "label": "Ex A.16",
+     "idea": "GL(n) acts on Rⁿ by matrix-vector product; the orbit of any nonzero x is Rⁿ minus the origin.",
+     "feynman": "Stretch and turn a rubber sheet every possible way: a dot can be sent anywhere except the pinned center.",
+     "visual": "Plane with a teal dot; random GL(2) samples scatter it everywhere (orbit fills plane) while the origin stays fixed (slate pin).",
+     "scene": "mls-appa-group-actions",
+     "beat": "🪐 orbits",
+     "math": [
+      "matrix"
+     ],
+     "engine": [
+      "linalg.mvec"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "A-415-f",
+     "lines": [
+      25,
+      30
+     ],
+     "kind": "example",
+     "label": "Ex A.17",
+     "idea": "Conjugation I_g(h) = ghg⁻¹ is an action of G on itself; its orbits are similarity classes.",
+     "feynman": "Describe a dance move from a friend's seat: same move, seen from another viewpoint.",
+     "visual": "A motion h shown as a gold screw; move the viewer with g; the conjugated screw ghg⁻¹ is the same screw moved by g (pitch and angle readouts unchanged).",
+     "scene": "mls-appa-group-actions",
+     "beat": "🪞 conjugate = change viewpoint",
+     "math": [
+      "rigid-transform",
+      "screw-exp"
+     ],
+     "engine": [
+      "lie.invSE3",
+      "linalg.mmul"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-415-g",
+     "lines": [
+      31,
+      36
+     ],
+     "kind": "example",
+     "label": "Ex A.18",
+     "idea": "Differentiating conjugation at e gives the adjoint action Ad_g on 𝔤; for matrix groups Ad_g ξ = gξg⁻¹.",
+     "feynman": "Re-describe an instruction like \"twist here\" from a different person's point of view.",
+     "visual": "An orange twist arrow at home; moving the viewpoint g re-expresses it; 6×6 Ad tiles light up and multiply the twist coordinates.",
+     "scene": "mls-appa-group-actions",
+     "beat": "🔁 Ad and its dual",
+     "math": [
+      "screw-exp",
+      "matrix"
+     ],
+     "engine": [
+      "lie.adjoint"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-415-h",
+     "lines": [
+      37,
+      37
+     ],
+     "kind": "page-number",
+     "idea": "Page 415"
+    }
+   ]
+  },
+  {
+   "pdf": 434,
+   "book": 416,
+   "lines": 35,
+   "section": "A.3.1",
+   "summary": "Coadjoint and lifted actions; the Euclidean group section begins: rigid configurations compose by the group product.",
+   "atoms": [
+    {
+     "id": "A-416-a",
+     "lines": [
+      1,
+      8
+     ],
+     "kind": "example",
+     "label": "Ex A.19",
+     "idea": "The coadjoint action on the dual 𝔤*: Ad*_g is the transpose of Ad_g, and g acts on covectors by Ad*_{g⁻¹} so pairings are preserved.",
+     "feynman": "If prices are re-labelled when goods are re-labelled, the bill total stays the same.",
+     "visual": "A purple wrench and an orange twist; move the viewpoint g: the twist transforms by Ad, the wrench by the inverse-transpose; a work readout ⟨F, V⟩ stays frozen (lime).",
+     "scene": "mls-appa-group-actions",
+     "beat": "🔁 Ad and its dual",
+     "math": [
+      "statics",
+      "matrix"
+     ],
+     "engine": [
+      "lie.adjoint",
+      "linalg.T",
+      "linalg.inv"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-416-b",
+     "lines": [
+      9,
+      14
+     ],
+     "kind": "example",
+     "label": "Ex A.20",
+     "idea": "An action on M lifts to TM: a point moves by Φ_g and its tangent arrow by the tangent map of Φ_g.",
+     "feynman": "When dancers turn, the direction each one is walking turns with them.",
+     "visual": "Each teal dancer carries a small orange velocity arrow; turning the g knob rotates and carries the arrows along (pink).",
+     "scene": "mls-appa-group-actions",
+     "beat": "🏹 carry the arrows along",
+     "math": [
+      "rigid-transform",
+      "vectors"
+     ],
+     "engine": [
+      "lie.applySE3",
+      "lie.rotOf"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "A-416-c",
+     "lines": [
+      15,
+      15
+     ],
+     "kind": "heading",
+     "idea": "Section A.3: the geometry of the Euclidean group."
+    },
+    {
+     "id": "A-416-d",
+     "lines": [
+      16,
+      19
+     ],
+     "kind": "prose",
+     "idea": "This section studies SE(3)'s geometry and what it means for kinematics and control, drawing on [63] and [59, 77, 86].",
+     "feynman": "Now we zoom into the one cage of the zoo that robots live in.",
+     "visual": "Zoo camera flies into the SE(3) cage, which fills the screen.",
+     "scene": "mls-appa-se3-body-space",
+     "beat": "📦 points get 1, arrows get 0",
+     "math": [
+      "rigid-transform"
+     ],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "A-416-e",
+     "lines": [
+      20,
+      20
+     ],
+     "kind": "heading",
+     "idea": "Subsection A.3.1: basic properties."
+    },
+    {
+     "id": "A-416-f",
+     "lines": [
+      21,
+      24
+     ],
+     "kind": "prose",
+     "idea": "Chapter-2 rigid-motion tools (homogeneous matrices, screws) are special cases of general Lie-group tools.",
+     "feynman": "The special kitchen gadgets you used turn out to be one universal tool with different attachments.",
+     "visual": "Chapter-2 icons (4×4 matrix, screw, twist) slide into labelled slots of the general Lie-group machine diagram (group, algebra, exp, Ad).",
+     "scene": "mls-appa-se3-body-space",
+     "beat": "📦 points get 1, arrows get 0",
+     "math": [
+      "rigid-transform",
+      "screw-exp"
+     ],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "A-416-g",
+     "lines": [
+      25,
+      25
+     ],
+     "kind": "heading",
+     "idea": "Subheading: rigid body kinematics."
+    },
+    {
+     "id": "A-416-h",
+     "lines": [
+      26,
+      34
+     ],
+     "kind": "equation",
+     "idea": "A configuration g_ab = (p_ab, R_ab) gives frame B relative to A; composing through an intermediate frame: g_ac = g_ab g_bc = (p_ab + R_ab p_bc, R_ab R_bc).",
+     "feynman": "Directions from home to the park, then from the park to the shop, add up to directions from home to the shop.",
+     "visual": "Three frames A (slate), B, C (blue); drag B and C; the composed arrow chain A→B→C equals the direct pink A→C frame; formula tiles update.",
+     "scene": "mls-appa-se3-body-space",
+     "beat": "📦 points get 1, arrows get 0",
+     "math": [
+      "rigid-transform"
+     ],
+     "engine": [
+      "lie.homog",
+      "linalg.mmul"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "A-416-i",
+     "lines": [
+      35,
+      35
+     ],
+     "kind": "page-number",
+     "idea": "Page 416"
+    }
+   ]
+  },
+  {
+   "pdf": 435,
+   "book": 417,
+   "lines": 50,
+   "section": "A.3.1",
+   "summary": "SE(3) as a subgroup of GL(4); actions on points (homogeneous 1) and on velocities (homogeneous 0); twists as the Lie algebra se(3).",
+   "atoms": [
+    {
+     "id": "A-417-a",
+     "lines": [
+      1,
+      7
+     ],
+     "kind": "equation",
+     "idea": "As 4×4 homogeneous matrices, SE(3) composition is matrix multiplication, making it a subgroup of GL(4).",
+     "feynman": "Stacking transparencies: each sheet is a move, and laying them on top of each other multiplies them.",
+     "visual": "4×4 tile matrices multiply as you chain frames; the bottom row stays [0 0 0 1] (lime lock icon).",
+     "scene": "mls-appa-se3-body-space",
+     "beat": "📦 points get 1, arrows get 0",
+     "math": [
+      "rigid-transform",
+      "matrix"
+     ],
+     "engine": [
+      "lie.homog",
+      "linalg.mmul"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "A-417-b",
+     "lines": [
+      8,
+      20
+     ],
+     "kind": "equation",
+     "idea": "g_ab also converts point coordinates from B to A: q_a = p + R q_b; in homogeneous form (q,1) this is a matrix-vector product, and associativity makes it an action.",
+     "feynman": "The same lamp described from two corners of the room: different numbers, same lamp.",
+     "visual": "A teal point on the body, with its B-coordinates and A-coordinates shown; appending a \"1\" slot lets the 4×4 matrix move it — translation applies.",
+     "scene": "mls-appa-se3-body-space",
+     "beat": "📦 points get 1, arrows get 0",
+     "math": [
+      "rigid-transform"
+     ],
+     "engine": [
+      "lie.applySE3"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "A-417-c",
+     "lines": [
+      21,
+      34
+     ],
+     "kind": "equation",
+     "idea": "Velocities of points are tangent vectors; SE(3) acts on them by the lifted action (rotate only), written in homogeneous form with a 0 in the last slot.",
+     "feynman": "An arrow painted on a moving cart turns with the cart but does not get carried off by the cart's slide.",
+     "visual": "Toggle the 4th slot of an orange arrow between 1 and 0: with 1 it gets translated (wrong for a velocity, coral), with 0 it only rotates (lime).",
+     "scene": "mls-appa-se3-body-space",
+     "beat": "📦 points get 1, arrows get 0",
+     "math": [
+      "rigid-transform",
+      "vectors"
+     ],
+     "engine": [
+      "lie.rotOf",
+      "linalg.mvec"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "A-417-d",
+     "lines": [
+      35,
+      46
+     ],
+     "kind": "definition",
+     "idea": "se(3) is the subalgebra of gl(4) of matrices [[ω̂, v],[0,0]] with commutator bracket; its elements are twists, a 6-dimensional space ≅ R⁶.",
+     "feynman": "A twist is a \"how fast and which way\" instruction for a rigid body: three turning rates and three sliding rates.",
+     "visual": "4×4 twist tiles (ω̂ in red/green/blue skew block, v in teal column, zero bottom row); six sliders drive them; exp sends it to a moving frame.",
+     "scene": "mls-appa-se3-body-space",
+     "beat": "🔩 every motion is a screw",
+     "math": [
+      "screw-exp"
+     ],
+     "engine": [
+      "lie.hat",
+      "lie.expSE3"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "A-417-e",
+     "lines": [
+      47,
+      49
+     ],
+     "kind": "prose",
+     "idea": "Twists have a screw interpretation: rotating and translating simultaneously about an axis through q in direction ω.",
+     "feynman": "A bolt being screwed in: it turns and advances along one line at the same time.",
+     "visual": "A gold axis through a draggable point q with direction ω; a bolt mesh rides it.",
+     "scene": "mls-appa-se3-body-space",
+     "beat": "🔩 every motion is a screw",
+     "math": [
+      "screw-exp"
+     ],
+     "engine": [
+      "lie.screwAxis"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "A-417-f",
+     "lines": [
+      50,
+      50
+     ],
+     "kind": "page-number",
+     "idea": "Page 417"
+    }
+   ]
+  },
+  {
+   "pdf": 436,
+   "book": 418,
+   "lines": 44,
+   "section": "A.3.1",
+   "summary": "Twists from screw axis and pitch; exp onto SE(3) restates Chasles; exp is not one-to-one; velocities on a Lie group translate to the Lie algebra; tangent map of left translation is matrix multiplication.",
+   "atoms": [
+    {
+     "id": "A-418-a",
+     "lines": [
+      1,
+      10
+     ],
+     "kind": "equation",
+     "idea": "With pitch h, the screw twist is [[ω̂, −ω×q + hω],[0,0]]; exp(ξθ) rotates about the axis and translates along it: a screw motion.",
+     "feynman": "A drill bit going into wood: how far it advances per turn is the pitch.",
+     "visual": "Pitch slider (h): the bolt mesh advances h per radian; at h=0 pure spin, large h nearly pure slide; the twist tiles update.",
+     "scene": "mls-appa-se3-body-space",
+     "beat": "🔩 every motion is a screw",
+     "math": [
+      "screw-exp"
+     ],
+     "engine": [
+      "lie.screwAxis",
+      "lie.expSE3"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "A-418-b",
+     "lines": [
+      11,
+      17
+     ],
+     "kind": "theorem",
+     "idea": "Near e every element is exp of a twist; for SE(3) exp is in fact onto, so every rigid motion is a screw motion (Chasles).",
+     "feynman": "Any way you move a book from one place to another could also be done by a single corkscrew motion.",
+     "visual": "Drag a pink target placement of a book anywhere; the gold screw axis that does it in one smooth corkscrew appears and animates.",
+     "scene": "mls-appa-se3-body-space",
+     "beat": "🔩 every motion is a screw",
+     "math": [
+      "screw-exp",
+      "rigid-transform"
+     ],
+     "engine": [
+      "lie.logSE3",
+      "lie.expSE3"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-418-c",
+     "lines": [
+      18,
+      24
+     ],
+     "kind": "remark",
+     "idea": "exp is not one-to-one, so twists don't parameterize SE(3): e.g. angle θ about ω equals 2π−θ about −ω.",
+     "feynman": "Turning a doorknob 270° right lands where 90° left does.",
+     "visual": "Two ghost screws (orange θ about ω, blue 2π−θ about −ω) both end on the same pink frame.",
+     "scene": "mls-appa-se3-body-space",
+     "beat": "🔩 every motion is a screw",
+     "math": [
+      "rotation",
+      "screw-exp"
+     ],
+     "engine": [
+      "lie.expSO3"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "A-418-d",
+     "lines": [
+      25,
+      25
+     ],
+     "kind": "heading",
+     "idea": "Subheading: velocities and forces."
+    },
+    {
+     "id": "A-418-e",
+     "lines": [
+      26,
+      31
+     ],
+     "kind": "prose",
+     "idea": "A curve's velocity lives in the tangent space at its current point; on a Lie group it can be translated back to the identity, giving a Lie-algebra element.",
+     "feynman": "Describe a moving car's speed by imagining it was parked at home and given the same push.",
+     "visual": "Moving frame g(t) with its tangent arrow; a \"bring home\" button left-translates the arrow to the gold home sheet as a twist.",
+     "scene": "mls-appa-se3-body-space",
+     "beat": "🚀 body vs space velocity",
+     "math": [
+      "rigid-transform",
+      "screw-exp"
+     ],
+     "engine": [
+      "NEW: bodyTwist"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-418-f",
+     "lines": [
+      32,
+      43
+     ],
+     "kind": "equation",
+     "idea": "On matrix groups, the tangent map of L_h is left multiplication: T_gL_h X_g = hX_g (via d/dt of h·g(t)).",
+     "feynman": "Moving the whole film reel doesn't change the movie's speed, it just relocates it.",
+     "visual": "Curve g(t) and its moved copy h·g(t); the velocity tiles of the copy equal h × velocity tiles of the original (lime).",
+     "scene": "mls-appa-se3-body-space",
+     "beat": "🚀 body vs space velocity",
+     "math": [
+      "matrix",
+      "derivative"
+     ],
+     "engine": [
+      "linalg.mmul"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-418-g",
+     "lines": [
+      44,
+      44
+     ],
+     "kind": "page-number",
+     "idea": "Page 418"
+    }
+   ]
+  },
+  {
+   "pdf": 437,
+   "book": 419,
+   "lines": 30,
+   "section": "A.3.1",
+   "summary": "Figure of a body frame moving relative to a fixed frame; body velocity g⁻¹ġ (left translation) and spatial velocity ġg⁻¹ (right translation); point velocity in terms of body coordinates.",
+   "atoms": [
+    {
+     "id": "A-419-a",
+     "lines": [
+      1,
+      8
+     ],
+     "kind": "figure",
+     "label": "Fig A.1",
+     "idea": "Figure: body frame B moving along g_ab(t) relative to fixed frame A, carrying a point q from q(0) to q(t).",
+     "feynman": "A sticker on a toy car rolling across a fixed floor grid.",
+     "visual": "Slate frame A; blue body with frame B sliding/rotating along a path; a teal point q on it leaves a trail; scrub time.",
+     "scene": "mls-appa-se3-body-space",
+     "beat": "🚀 body vs space velocity",
+     "math": [
+      "rigid-transform"
+     ],
+     "engine": [
+      "lie.applySE3"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "A-419-b",
+     "lines": [
+      9,
+      12
+     ],
+     "kind": "equation",
+     "idea": "Left-translating with h = g⁻¹ gives the body velocity V̂^b = g⁻¹ġ, as in Chapter 2.",
+     "feynman": "The car's speedometer and steering, felt from the driver's seat.",
+     "visual": "Body view: the twist arrow drawn in B's frame (pink, rides along); 4×4 tiles of g⁻¹ġ.",
+     "scene": "mls-appa-se3-body-space",
+     "beat": "🚀 body vs space velocity",
+     "math": [
+      "rigid-transform",
+      "screw-exp"
+     ],
+     "engine": [
+      "lie.invSE3",
+      "NEW: bodyTwist"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-419-c",
+     "lines": [
+      13,
+      17
+     ],
+     "kind": "equation",
+     "idea": "Right-translating gives the spatial velocity V̂^s = ġg⁻¹.",
+     "feynman": "The same car's motion described by a camera fixed on the ceiling.",
+     "visual": "Spatial view: the twist drawn at A's origin (gold, stays put) — it is the velocity of the imaginary body point passing through A's origin.",
+     "scene": "mls-appa-se3-body-space",
+     "beat": "🚀 body vs space velocity",
+     "math": [
+      "rigid-transform",
+      "screw-exp"
+     ],
+     "engine": [
+      "NEW: spatialTwist"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-419-d",
+     "lines": [
+      18,
+      29
+     ],
+     "kind": "prose",
+     "idea": "For a body-fixed point, q_a(t) = g_ab(t) q_b, so v_a = ġ_ab q_b (A.6): ġ maps body coordinates of a point to its spatial velocity.",
+     "feynman": "Where the sticker is on the car never changes; how fast it moves depends only on how the car moves.",
+     "visual": "Teal point with fixed body coordinates; its velocity arrow computed as ġ·q_b updates as you move the point on the body.",
+     "scene": "mls-appa-se3-body-space",
+     "beat": "🚀 body vs space velocity",
+     "math": [
+      "rigid-transform",
+      "derivative"
+     ],
+     "engine": [
+      "linalg.mvec"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-419-e",
+     "lines": [
+      30,
+      30
+     ],
+     "kind": "page-number",
+     "idea": "Page 419"
+    }
+   ]
+  },
+  {
+   "pdf": 438,
+   "book": 420,
+   "lines": 44,
+   "section": "A.3.1",
+   "summary": "Spatial and body velocities map point coordinates to velocities in one frame; they are related by Ad_g; forces are covectors whose translated versions are wrenches pairing with twists to give work.",
+   "atoms": [
+    {
+     "id": "A-420-a",
+     "lines": [
+      1,
+      2
+     ],
+     "kind": "prose",
+     "idea": "Continuation: ġ maps body point coordinates to spatial velocities.",
+     "feynman": "The recipe from sticker position to sticker speed.",
+     "visual": "Same teal point/arrow pair as before.",
+     "scene": "mls-appa-se3-body-space",
+     "beat": "🚀 body vs space velocity",
+     "math": [
+      "rigid-transform"
+     ],
+     "engine": [],
+     "difficulty": 2
+    },
+    {
+     "id": "A-420-b",
+     "lines": [
+      3,
+      15
+     ],
+     "kind": "prose",
+     "idea": "To relate a point and its velocity in one frame: v_a = (ġg⁻¹) q_a, so the spatial velocity maps spatial coordinates to spatial velocity; similarly g⁻¹ġ maps body coordinates to body velocity.",
+     "feynman": "Use one language for both \"where\" and \"how fast\", so you don't have to translate mid-sentence.",
+     "visual": "Toggle \"all in A\" / \"all in B\": both the point and its arrow switch frames together, and the matrix used switches between V̂^s and V̂^b.",
+     "scene": "mls-appa-se3-body-space",
+     "beat": "🚀 body vs space velocity",
+     "math": [
+      "rigid-transform"
+     ],
+     "engine": [
+      "linalg.mvec"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-420-c",
+     "lines": [
+      16,
+      22
+     ],
+     "kind": "equation",
+     "idea": "Body and spatial velocities are the same instantaneous motion in two frames, related by V^s = Ad_g V^b.",
+     "feynman": "The ceiling camera and the driver describe the same swerve with different numbers.",
+     "visual": "Body twist (pink, at B) and spatial twist (gold, at A) with the 6×6 Ad tiles between them; a lime equality readout as you drag the body.",
+     "scene": "mls-appa-se3-body-space",
+     "beat": "🚀 body vs space velocity",
+     "math": [
+      "rigid-transform",
+      "screw-exp"
+     ],
+     "engine": [
+      "lie.adjoint"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-420-d",
+     "lines": [
+      23,
+      31
+     ],
+     "kind": "definition",
+     "idea": "A generalized force is a covector on SE(3); translating it to the dual Lie algebra (left = body frame, right = spatial frame) gives a wrench; its pairing with a twist is instantaneous work.",
+     "feynman": "A push on a door: how much work it does depends on how the door moves, nothing more.",
+     "visual": "Purple wrench (force arrow + torque curl) on the body, orange twist; a work meter shows ⟨F, V⟩ as a bar.",
+     "scene": "mls-appa-se3-body-space",
+     "beat": "⚖️ wrench · twist = work",
+     "math": [
+      "statics"
+     ],
+     "engine": [
+      "linalg.vdot"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-420-e",
+     "lines": [
+      32,
+      43
+     ],
+     "kind": "equation",
+     "idea": "Identifying se(3)* with R⁶, a wrench is F = (f, τ); the work is the R⁶ product F·V, but it is the natural covector–vector pairing, not an inner product.",
+     "feynman": "A price list times a grocery list gives a bill, even though \"price\" and \"apple\" are different kinds of things.",
+     "visual": "Six-slot bars for F (purple) and V (orange) side by side; matching slots multiply into a work total; a coral badge warns \"not a ruler\" if you try to measure F·F.",
+     "scene": "mls-appa-se3-body-space",
+     "beat": "⚖️ wrench · twist = work",
+     "math": [
+      "statics",
+      "vectors"
+     ],
+     "engine": [
+      "linalg.vdot"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-420-f",
+     "lines": [
+      44,
+      44
+     ],
+     "kind": "page-number",
+     "idea": "Page 420"
+    }
+   ]
+  },
+  {
+   "pdf": 439,
+   "book": 421,
+   "lines": 59,
+   "section": "A.3.1",
+   "summary": "Wrench notation and same-frame pairing; transformation laws: spatial velocities change by Ad under change of inertial frame and are unaffected by change of body frame, and vice versa for body velocities.",
+   "atoms": [
+    {
+     "id": "A-421-a",
+     "lines": [
+      1,
+      13
+     ],
+     "kind": "remark",
+     "idea": "Wrenches are always written as R⁶ vectors with one subscript for their frame (F_a spatial, F_b body); work needs twist and wrench in the same frame: V^s_ab·F_a or V^b_ab·F_b.",
+     "feynman": "You can only add up a bill when prices and quantities are in the same currency.",
+     "visual": "Mismatch game: pair a body twist with a spatial wrench → coral wrong-work readout; switch both to the same frame → lime, and both choices give the same number.",
+     "scene": "mls-appa-se3-body-space",
+     "beat": "⚖️ wrench · twist = work",
+     "math": [
+      "statics"
+     ],
+     "engine": [
+      "lie.adjoint"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "A-421-b",
+     "lines": [
+      14,
+      14
+     ],
+     "kind": "heading",
+     "idea": "Subheading: transformation laws."
+    },
+    {
+     "id": "A-421-c",
+     "lines": [
+      15,
+      35
+     ],
+     "kind": "equation",
+     "idea": "Changing the inertial frame from B to A: V^s_ac = Ad_{g_ab} V^s_bc, with the 6×6 matrix Ad_g = [[R, p̂R],[0, R]].",
+     "feynman": "Re-describe a swerve from a different fixed camera: rotate the description, and the camera's offset adds extra apparent sideways speed.",
+     "visual": "Two fixed cameras A and B; the spatial twist of C in each; the 6×6 Ad tiles (R blocks blue, p̂R block teal) transform one into the other live as you drag camera B.",
+     "scene": "mls-appa-se3-body-space",
+     "beat": "🔁 changing frames",
+     "math": [
+      "rigid-transform",
+      "screw-exp"
+     ],
+     "engine": [
+      "lie.adjoint"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-421-d",
+     "lines": [
+      36,
+      47
+     ],
+     "kind": "prose",
+     "idea": "Changing to a new body frame rigidly attached (fixed g_bc) leaves the spatial velocity unchanged.",
+     "feynman": "Moving the sticker you watch to another spot on the same car doesn't change how the ceiling camera describes the car's motion.",
+     "visual": "Drag the body frame to a new spot on the body; the spatial twist readout stays frozen (lime).",
+     "scene": "mls-appa-se3-body-space",
+     "beat": "🔁 changing frames",
+     "math": [
+      "rigid-transform"
+     ],
+     "engine": [
+      "lie.adjoint"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-421-e",
+     "lines": [
+      48,
+      58
+     ],
+     "kind": "prose",
+     "idea": "Body velocity is unaffected by changing the inertial frame, but changing the body frame transforms it by Ad_{g_bc⁻¹}.",
+     "feynman": "The driver's feel doesn't care where the ceiling camera is, but a passenger seated elsewhere feels a different sideways sway.",
+     "visual": "Drag camera A: body twist frozen (lime). Drag the body frame: body twist changes by Ad of the inverse offset (tiles light).",
+     "scene": "mls-appa-se3-body-space",
+     "beat": "🔁 changing frames",
+     "math": [
+      "rigid-transform"
+     ],
+     "engine": [
+      "lie.adjoint",
+      "lie.invSE3"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-421-f",
+     "lines": [
+      59,
+      59
+     ],
+     "kind": "page-number",
+     "idea": "Page 421"
+    }
+   ]
+  },
+  {
+   "pdf": 440,
+   "book": 422,
+   "lines": 45,
+   "section": "A.3.2",
+   "summary": "Velocities of chained motions add after Ad; wrenches transform by the transposed inverse adjoint; the R⁶ dot product of twists is not frame invariant.",
+   "atoms": [
+    {
+     "id": "A-422-a",
+     "lines": [
+      1,
+      2
+     ],
+     "kind": "prose",
+     "idea": "So Ad expresses a change of body frame on body velocities.",
+     "feynman": "Re-seating the passenger changes their felt sway by a fixed rule.",
+     "visual": "Same Ad tiles as before.",
+     "scene": "mls-appa-se3-body-space",
+     "beat": "🔁 changing frames",
+     "math": [
+      "rigid-transform"
+     ],
+     "engine": [
+      "lie.adjoint"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-422-b",
+     "lines": [
+      3,
+      15
+     ],
+     "kind": "equation",
+     "idea": "When both g_ab(t) and g_bc(t) move, velocities add only in a common frame: V^s_ac = V^s_ab + Ad_{g_ab} V^s_bc.",
+     "feynman": "Walking on a moving train: your speed relative to the ground is the train's speed plus your walking speed turned into ground directions.",
+     "visual": "Two-link chain A→B→C both moving; orange V_ab and blue V_bc (re-expressed by Ad into A) add tip-to-tail into the pink V_ac.",
+     "scene": "mls-appa-se3-body-space",
+     "beat": "🔁 changing frames",
+     "math": [
+      "rigid-transform",
+      "jacobian"
+     ],
+     "engine": [
+      "lie.adjoint",
+      "linalg.vadd"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-422-c",
+     "lines": [
+      16,
+      24
+     ],
+     "kind": "equation",
+     "idea": "Wrenches change fixed frames by the coadjoint rule F_b = Ad_{g_ab⁻¹}ᵀ F_a.",
+     "feynman": "Re-label the price list the opposite way to the goods, so the bill stays right.",
+     "visual": "Purple wrench in frame A and frame B; Ad-inverse-transpose tiles between them; work with a twist stays frozen.",
+     "scene": "mls-appa-se3-body-space",
+     "beat": "🔁 changing frames",
+     "math": [
+      "statics"
+     ],
+     "engine": [
+      "lie.adjoint",
+      "linalg.T",
+      "linalg.inv"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-422-d",
+     "lines": [
+      25,
+      25
+     ],
+     "kind": "heading",
+     "idea": "Subsection A.3.2: metric properties of SE(3)."
+    },
+    {
+     "id": "A-422-e",
+     "lines": [
+      26,
+      41
+     ],
+     "kind": "equation",
+     "idea": "The R⁶ dot product on twists is not frame invariant: ξ₁′·ξ₂′ = ξ₁ᵀ Ad_gᵀAd_g ξ₂ ≠ ξ₁·ξ₂ when p ≠ 0, so orthogonal twists can stop being orthogonal.",
+     "feynman": "Two hallways that meet at a right angle on one floor plan look skewed in a plan drawn from another corner — if your ruler secretly mixes turning with sliding.",
+     "visual": "Two twists with a lime right-angle badge; drag the frame origin p; the dot-product readout drifts from 0 and the badge turns coral; at p=0 (pure rotation of frame) it stays lime.",
+     "scene": "mls-appa-se3-no-fair-ruler",
+     "beat": "📐 the dot product cheats",
+     "math": [
+      "rigid-transform",
+      "matrix"
+     ],
+     "engine": [
+      "lie.adjoint",
+      "linalg.vdot"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-422-f",
+     "lines": [
+      42,
+      44
+     ],
+     "kind": "prose",
+     "idea": "Misusing the R⁶ inner product caused confusion in the literature; the section shows no frame-invariant inner product on se(3) exists.",
+     "feynman": "People argued about distances measured with a ruler that changes when you walk around it.",
+     "visual": "A short \"myth\" card stack: the R⁶ ruler stamped coral, flipping to the next beats.",
+     "scene": "mls-appa-se3-no-fair-ruler",
+     "beat": "📐 the dot product cheats",
+     "math": [],
+     "engine": [],
+     "difficulty": 2
+    },
+    {
+     "id": "A-422-g",
+     "lines": [
+      45,
+      45
+     ],
+     "kind": "page-number",
+     "idea": "Page 422"
+    }
+   ]
+  },
+  {
+   "pdf": 441,
+   "book": 423,
+   "lines": 38,
+   "section": "A.3.2",
+   "summary": "Metrics and pseudo-metrics on Rⁿ; invariance under rotations forces commuting with all rotations; Lemma A.2: then the metric is a multiple of the identity.",
+   "atoms": [
+    {
+     "id": "A-423-a",
+     "lines": [
+      1,
+      2
+     ],
+     "kind": "prose",
+     "idea": "Continuation: no invariant inner product on se(3), and its consequences.",
+     "feynman": "The ruler question will be settled.",
+     "visual": "Card stack continues.",
+     "scene": "mls-appa-se3-no-fair-ruler",
+     "beat": "📐 the dot product cheats",
+     "math": [],
+     "engine": [],
+     "difficulty": 2
+    },
+    {
+     "id": "A-423-b",
+     "lines": [
+      3,
+      3
+     ],
+     "kind": "heading",
+     "idea": "Subheading: invariant metrics on Rⁿ."
+    },
+    {
+     "id": "A-423-c",
+     "lines": [
+      4,
+      14
+     ],
+     "kind": "definition",
+     "idea": "A metric Ψ on Rⁿ is a symmetric, positive-definite bilinear form; in an orthonormal basis it is a matrix with Ψ(v,w) = vᵀΨw.",
+     "feynman": "A ruler that might be stretchy in some directions but never gives a negative or zero length to a real arrow.",
+     "visual": "Ruler-ellipse: the unit ball of Ψ drawn as an ellipse; drag its axes; lengths of an orange arrow read off by Ψ.",
+     "scene": "mls-appa-se3-no-fair-ruler",
+     "beat": "⚪ only round rulers survive",
+     "math": [
+      "matrix",
+      "eigen"
+     ],
+     "engine": [
+      "linalg.symEig"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "A-423-d",
+     "lines": [
+      15,
+      21
+     ],
+     "kind": "definition",
+     "idea": "Positive definite implies invertible; a symmetric nondegenerate form that may be indefinite is a pseudo-metric.",
+     "feynman": "A \"ruler\" that can give some arrows negative length, but never ignores an arrow completely.",
+     "visual": "Ellipse morphs into a hyperbola (pseudo-metric, purple) when one eigenvalue slider crosses zero; at exactly zero it collapses to parallel lines (degenerate, coral).",
+     "scene": "mls-appa-se3-no-fair-ruler",
+     "beat": "⚪ only round rulers survive",
+     "math": [
+      "eigen"
+     ],
+     "engine": [
+      "linalg.symEig"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-423-e",
+     "lines": [
+      22,
+      32
+     ],
+     "kind": "equation",
+     "label": "Eqs (A.7)–(A.9)",
+     "idea": "Vectors change frames by v_a = R v_b; a metric is frame-invariant if Ψ(Rv₁, Rv₂) = Ψ(v₁,v₂) for all rotations, i.e. ΨR = RΨ.",
+     "feynman": "A ruler is fair if turning your head doesn't change the lengths you measure.",
+     "visual": "Spin the frame with a rotation knob; the ruler-ellipse is redrawn in the new frame; a mismatch meter compares lengths before/after.",
+     "scene": "mls-appa-se3-no-fair-ruler",
+     "beat": "⚪ only round rulers survive",
+     "math": [
+      "rotation",
+      "matrix"
+     ],
+     "engine": [
+      "lie.expSO3",
+      "linalg.mmul"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-423-f",
+     "lines": [
+      33,
+      37
+     ],
+     "kind": "lemma",
+     "label": "Lemma A.2",
+     "idea": "A symmetric matrix commuting with every rotation is a multiple of the identity.",
+     "feynman": "The only shape that looks the same no matter how you turn it is a perfect circle.",
+     "visual": "Try ellipses: spinning a non-circular one makes the mismatch meter flash coral; only when both axes are equal does it stay lime for all spins.",
+     "scene": "mls-appa-se3-no-fair-ruler",
+     "beat": "⚪ only round rulers survive",
+     "math": [
+      "eigen",
+      "rotation"
+     ],
+     "engine": [
+      "linalg.symEig"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-423-g",
+     "lines": [
+      38,
+      38
+     ],
+     "kind": "page-number",
+     "idea": "Page 423"
+    }
+   ]
+  },
+  {
+   "pdf": 442,
+   "book": 424,
+   "lines": 39,
+   "section": "A.3.2",
+   "summary": "Proof of Lemma A.2; invariant metric on Rⁿ is unique up to length scale; metrics and pull backs on manifolds; left, right and bi-invariant metrics via conjugation.",
+   "atoms": [
+    {
+     "id": "A-424-a",
+     "lines": [
+      1,
+      6
+     ],
+     "kind": "proof",
+     "idea": "Proof: if v is an eigenvector with eigenvalue λ, then Rv is too for every rotation, so every unit vector is an eigenvector with λ, hence Ψ = λI.",
+     "feynman": "If one direction is \"long\", turning it shows every direction must be equally long.",
+     "visual": "Staircase: (1) one eigen-arrow with its stretch λ; (2) rotate it — the arrow still stretches by λ; (3) sweep all rotations: arrows cover the circle, all stretched equally → circle.",
+     "scene": "mls-appa-se3-no-fair-ruler",
+     "beat": "⚪ only round rulers survive",
+     "math": [
+      "eigen",
+      "rotation"
+     ],
+     "engine": [
+      "linalg.symEig"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-424-b",
+     "lines": [
+      7,
+      10
+     ],
+     "kind": "remark",
+     "idea": "The scalar α picks a unit of length (meters, feet); with it fixed, the invariant metric on R³ is unique.",
+     "feynman": "The circle's size just says whether you measure in centimeters or inches.",
+     "visual": "A unit slider rescales the circle; the lime \"invariant\" badge stays on for every size.",
+     "scene": "mls-appa-se3-no-fair-ruler",
+     "beat": "⚪ only round rulers survive",
+     "math": [
+      "vectors"
+     ],
+     "engine": [],
+     "difficulty": 2
+    },
+    {
+     "id": "A-424-c",
+     "lines": [
+      11,
+      13
+     ],
+     "kind": "proposition",
+     "label": "Prop A.3",
+     "idea": "Up to scale, Rⁿ has exactly one frame-invariant positive-definite metric.",
+     "feynman": "Every fair ruler in flat space is the ordinary ruler with some unit.",
+     "visual": "Summary card: a single circle with a scale knob, lime crown.",
+     "scene": "mls-appa-se3-no-fair-ruler",
+     "beat": "⚪ only round rulers survive",
+     "math": [
+      "vectors"
+     ],
+     "engine": [],
+     "difficulty": 2
+    },
+    {
+     "id": "A-424-d",
+     "lines": [
+      14,
+      14
+     ],
+     "kind": "heading",
+     "idea": "Subheading: invariant metrics on SE(3)."
+    },
+    {
+     "id": "A-424-e",
+     "lines": [
+      15,
+      19
+     ],
+     "kind": "prose",
+     "idea": "Does SE(3) have a frame-invariant metric, giving twists a fair \"speed\"? Since SE(3) is a manifold, metrics must be defined on tangent spaces.",
+     "feynman": "Can we build a fair speedometer for a tumbling, sliding box?",
+     "visual": "A box both spinning and sliding with a blank speedometer dial; a question-mark wobble.",
+     "scene": "mls-appa-se3-no-fair-ruler",
+     "beat": "🔀 the only fair forms",
+     "math": [
+      "rigid-transform"
+     ],
+     "engine": [],
+     "difficulty": 3
+    },
+    {
+     "id": "A-424-f",
+     "lines": [
+      20,
+      27
+     ],
+     "kind": "definition",
+     "idea": "A quadratic form on M is a smoothly varying symmetric bilinear form on each tangent space (metric if positive definite, pseudo-metric if nondegenerate); its pull back by F is F^*Ψ(v,w) = Ψ(TF v, TF w); Ψ is F-invariant if F^*Ψ = Ψ.",
+     "feynman": "A ruler glued at every spot of a curved world, and a map is fair if it never changes what the rulers read.",
+     "visual": "Small ruler-ellipses drawn on tangent sheets across a surface; apply a map F: the pulled-back ellipses either coincide with the originals (lime) or not (coral).",
+     "scene": "mls-appa-se3-no-fair-ruler",
+     "beat": "🔀 the only fair forms",
+     "math": [
+      "matrix",
+      "jacobian"
+     ],
+     "engine": [
+      "NEW: pullbackForm"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "A-424-g",
+     "lines": [
+      28,
+      38
+     ],
+     "kind": "definition",
+     "idea": "Define a metric at e and spread it by left (or right) translation to get a left (right) invariant metric; bi-invariant means both, equivalently invariant under every conjugation I_h(g) = hgh⁻¹.",
+     "feynman": "Copy one ruler everywhere by walking in body directions, or by world directions; a perfect ruler would agree either way.",
+     "visual": "Home ellipse copied by L_g (orange copies) and by R_g (blue copies); where they disagree, coral; bi-invariant would make all copies overlap.",
+     "scene": "mls-appa-se3-no-fair-ruler",
+     "beat": "🔀 the only fair forms",
+     "math": [
+      "rigid-transform"
+     ],
+     "engine": [
+      "lie.adjoint"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "A-424-h",
+     "lines": [
+      39,
+      39
+     ],
+     "kind": "page-number",
+     "idea": "Page 424"
+    }
+   ]
+  },
+  {
+   "pdf": 443,
+   "book": 425,
+   "lines": 50,
+   "section": "A.3.2",
+   "summary": "Lemma A.4 reduces bi-invariance to Ad-invariance at the identity; Proposition A.5 characterizes bi-invariant forms; first proof step sets up the block equation.",
+   "atoms": [
+    {
+     "id": "A-425-a",
+     "lines": [
+      1,
+      2
+     ],
+     "kind": "remark",
+     "idea": "The same definitions apply to indefinite quadratic forms.",
+     "feynman": "The rules hold for funny rulers too.",
+     "visual": "Hyperbola-shaped rulers also allowed in the panel (purple).",
+     "scene": "mls-appa-se3-no-fair-ruler",
+     "beat": "🔀 the only fair forms",
+     "math": [],
+     "engine": [],
+     "difficulty": 3
+    },
+    {
+     "id": "A-425-b",
+     "lines": [
+      3,
+      9
+     ],
+     "kind": "lemma",
+     "label": "Lemma A.4",
+     "idea": "A left- (or right-) invariant form is conjugation-invariant iff at the identity Ψ_e(Ad_h ξ, Ad_h η) = Ψ_e(ξ, η) for all h.",
+     "feynman": "To check fairness everywhere, it's enough to check at home that re-describing from any viewpoint keeps the reading.",
+     "visual": "Home tangent sheet with two twists; random h buttons apply Ad_h to both; a Ψ readout must stay constant (lime) for the form to pass.",
+     "scene": "mls-appa-se3-no-fair-ruler",
+     "beat": "🔀 the only fair forms",
+     "math": [
+      "matrix"
+     ],
+     "engine": [
+      "lie.adjoint"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "A-425-c",
+     "lines": [
+      10,
+      25
+     ],
+     "kind": "proof",
+     "idea": "Proof: necessity is immediate; for sufficiency, write T_eI_h via L_h and R_{h⁻¹}, use Ad-invariance at e and left invariance to show right invariance, hence bi-invariance.",
+     "feynman": "If the ruler is fair at home and copies fairly by walking, then it also copies fairly by world moves.",
+     "visual": "Staircase of four frames: (1) Ad-invariant at e; (2) split conjugation into a left and a right move; (3) cancel the left move by left invariance; (4) what remains is right invariance (lime).",
+     "scene": "mls-appa-se3-no-fair-ruler",
+     "beat": "🔀 the only fair forms",
+     "math": [
+      "matrix"
+     ],
+     "engine": [
+      "lie.adjoint"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "A-425-d",
+     "lines": [
+      26,
+      33
+     ],
+     "kind": "proposition",
+     "label": "Prop A.5",
+     "idea": "A left-invariant form on SE(3) is bi-invariant iff, at e (with se(3) ≅ R⁶ as (v,ω)), its matrix is [[0, βI],[βI, γI]].",
+     "feynman": "The only fair \"speed scores\" for a tumbling box ignore pure sliding on its own and only see sliding-times-spinning and spinning-times-spinning.",
+     "visual": "A 6×6 tile grid in four 3×3 blocks; only the off-diagonal β blocks and the lower γ block may light; the upper-left block is pinned dark.",
+     "scene": "mls-appa-se3-no-fair-ruler",
+     "beat": "🔀 the only fair forms",
+     "math": [
+      "matrix"
+     ],
+     "engine": [
+      "lie.adjoint"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "A-425-e",
+     "lines": [
+      34,
+      49
+     ],
+     "kind": "proof",
+     "idea": "Proof step 1: by Lemma A.4, bi-invariance means AdᵀΨ_eAd = Ψ_e for all h (A.10–A.11), with Ψ_e = [[A, B],[Bᵀ, C]].",
+     "feynman": "Write the unknown ruler as four tiles and demand that every viewpoint change leaves the tiles the same.",
+     "visual": "A random-h shaker applies AdᵀΨAd to a user-filled 6×6 grid; tiles that change flash coral.",
+     "scene": "mls-appa-se3-no-fair-ruler",
+     "beat": "🔀 the only fair forms",
+     "math": [
+      "matrix"
+     ],
+     "engine": [
+      "lie.adjoint",
+      "linalg.mmul"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "A-425-f",
+     "lines": [
+      50,
+      50
+     ],
+     "kind": "page-number",
+     "idea": "Page 425"
+    }
+   ]
+  },
+  {
+   "pdf": 444,
+   "book": 426,
+   "lines": 42,
+   "section": "A.3.2",
+   "summary": "Proof of Prop A.5 via block equations and Lemma A.2; the hyperbolic metric (reciprocal product) as a pseudo-metric depending on length scale.",
+   "atoms": [
+    {
+     "id": "A-426-a",
+     "lines": [
+      1,
+      12
+     ],
+     "kind": "proof",
+     "idea": "Proof step 2: expanding with Ad_h = [[R, p̂R],[0, R]] gives three block equations (A.12) for A, B, C.",
+     "feynman": "Spell out what each tile must satisfy.",
+     "visual": "The three block equations appear as three rows of tile pictures, each tile colored by which of A, B, C feeds it.",
+     "scene": "mls-appa-se3-no-fair-ruler",
+     "beat": "🔀 the only fair forms",
+     "math": [
+      "matrix"
+     ],
+     "engine": [
+      "lie.adjoint"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "A-426-b",
+     "lines": [
+      13,
+      19
+     ],
+     "kind": "proof",
+     "idea": "Proof step 3: Lemma A.2 makes A = αI; setting p = 0 makes B = βI, C = γI; then the p-dependent terms force α = 0.",
+     "feynman": "Rotations make each tile round; then sliding the viewpoint shows the slide-slide tile must be empty.",
+     "visual": "Staircase: (1) spin-only shaker: tiles become multiples of I; (2) add slide p: the A tile leaks into the C tile through p̂ (coral) unless α = 0; (3) α slider snaps to 0, everything lime.",
+     "scene": "mls-appa-se3-no-fair-ruler",
+     "beat": "🔀 the only fair forms",
+     "math": [
+      "matrix",
+      "eigen"
+     ],
+     "engine": [
+      "lie.adjoint"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "A-426-c",
+     "lines": [
+      20,
+      21
+     ],
+     "kind": "prose",
+     "idea": "Two special bi-invariant forms follow.",
+     "feynman": "Two famous fair-ish speed scores.",
+     "visual": "β, γ plane with two marked points: (1,0) and (0,−4).",
+     "scene": "mls-appa-se3-no-fair-ruler",
+     "beat": "🚫 no fair SE(3) ruler",
+     "math": [],
+     "engine": [],
+     "difficulty": 3
+    },
+    {
+     "id": "A-426-d",
+     "lines": [
+      22,
+      31
+     ],
+     "kind": "example",
+     "label": "Ex A.21, Eq (A.13)",
+     "idea": "The hyperbolic metric (β=1, γ=0): ⟨(v₁,ω₁),(v₂,ω₂)⟩_H = v₁ᵀω₂ + v₂ᵀω₁; eigenvalues ±1 in pairs, so some twists have negative \"length\".",
+     "feynman": "A score that multiplies sliding by spinning: a twist that slides one way while spinning the other scores negative, like a left-handed vs right-handed screw.",
+     "visual": "Screw with pitch slider; H-score readout = 2·(v·ω) changes sign as pitch passes 0 (right-handed lime, left-handed coral); eigenvalue bars ±1.",
+     "scene": "mls-appa-se3-no-fair-ruler",
+     "beat": "🚫 no fair SE(3) ruler",
+     "math": [
+      "screw-exp",
+      "eigen"
+     ],
+     "engine": [
+      "linalg.symEig",
+      "linalg.vdot"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "A-426-e",
+     "lines": [
+      32,
+      41
+     ],
+     "kind": "remark",
+     "idea": "The hyperbolic form depends on length scale (fixes the ratio of unit slide to unit turn); it is nondegenerate, so a pseudo-metric; it equals the reciprocal product of Chapter 2 and is a case of the Klein form [13].",
+     "feynman": "Changing from meters to millimeters multiplies the score by 1000, though signs and zeros stay.",
+     "visual": "Unit slider rescales the H-readout linearly; zero crossings stay at the same pitch.",
+     "scene": "mls-appa-se3-no-fair-ruler",
+     "beat": "🚫 no fair SE(3) ruler",
+     "math": [
+      "screw-exp",
+      "statics"
+     ],
+     "engine": [],
+     "difficulty": 3
+    },
+    {
+     "id": "A-426-f",
+     "lines": [
+      42,
+      42
+     ],
+     "kind": "page-number",
+     "idea": "Page 426"
+    }
+   ]
+  },
+  {
+   "pdf": 445,
+   "book": 427,
+   "lines": 40,
+   "section": "A.3.2",
+   "summary": "The Killing form is degenerate and scale-free; no bi-invariant positive-definite metric exists on SE(3); left-invariant metrics depend on frame origin and length scale; twist magnitude and pitch are invariants.",
+   "atoms": [
+    {
+     "id": "A-427-a",
+     "lines": [
+      1,
+      9
+     ],
+     "kind": "example",
+     "label": "Ex A.22, Eq (A.14)",
+     "idea": "The Killing form (β=0, γ=−4): ⟨ξ₁,ξ₂⟩_K = −4ω₁ᵀω₂; degenerate (ignores translation), so neither metric nor pseudo-metric, and independent of length scale.",
+     "feynman": "A score that only counts spinning and is blind to sliding.",
+     "visual": "K-readout bar: pure-slide twists read 0 (coral \"blind\" eye icon); scaling units leaves the bar unchanged.",
+     "scene": "mls-appa-se3-no-fair-ruler",
+     "beat": "🚫 no fair SE(3) ruler",
+     "math": [
+      "rotation"
+     ],
+     "engine": [
+      "linalg.vdot"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "A-427-b",
+     "lines": [
+      10,
+      15
+     ],
+     "kind": "equation",
+     "idea": "The general Killing form is trace(ad_ξ₁ ad_ξ₂) with ad_ξ(η) = [ξ, η]; the −4 matches this definition.",
+     "feynman": "Measure a twist by how strongly its bracket stirs up all other twists.",
+     "visual": "6×6 ad-matrices of two twists multiply; their trace tile sum equals −4ω₁·ω₂ readout (lime).",
+     "scene": "mls-appa-se3-no-fair-ruler",
+     "beat": "🚫 no fair SE(3) ruler",
+     "math": [
+      "matrix"
+     ],
+     "engine": [
+      "NEW: adMatrix",
+      "linalg.trace"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "A-427-c",
+     "lines": [
+      16,
+      20
+     ],
+     "kind": "corollary",
+     "label": "Cor A.5.1",
+     "idea": "Every bi-invariant form gives pure translations zero length, so no bi-invariant positive-definite metric exists on SE(3).",
+     "feynman": "There is no fair speedometer for a box that both spins and slides: any fair one goes blind to sliding.",
+     "visual": "Set ω=0 and slide: every bi-invariant (β, γ) choice reads 0 → coral 🚫 over the \"metric\" crown.",
+     "scene": "mls-appa-se3-no-fair-ruler",
+     "beat": "🚫 no fair SE(3) ruler",
+     "math": [
+      "rigid-transform"
+     ],
+     "engine": [],
+     "difficulty": 4
+    },
+    {
+     "id": "A-427-d",
+     "lines": [
+      21,
+      26
+     ],
+     "kind": "remark",
+     "idea": "Lengths on SE(3) are still possible but require a choice; restricting to left (or right) invariant metrics gives the next result.",
+     "feynman": "You can still build a speedometer; you just have to decide where your \"center\" is and how to trade meters for radians.",
+     "visual": "Two dials appear: frame-origin picker and meters-per-radian knob.",
+     "scene": "mls-appa-se3-no-fair-ruler",
+     "beat": "🚫 no fair SE(3) ruler",
+     "math": [],
+     "engine": [],
+     "difficulty": 3
+    },
+    {
+     "id": "A-427-e",
+     "lines": [
+      27,
+      34
+     ],
+     "kind": "proposition",
+     "label": "Prop A.6",
+     "idea": "Left- (right-) invariant metrics on SE(3) are parameterized by a choice of reference-frame origin and length scale [63].",
+     "feynman": "A speedometer for a tumbling box is fixed once you pick the reference point and how many meters equal one radian.",
+     "visual": "Move the origin dot and turn the scale knob: the twist-length readouts of a fixed motion change; with both fixed, readouts become stable.",
+     "scene": "mls-appa-se3-no-fair-ruler",
+     "beat": "🚫 no fair SE(3) ruler",
+     "math": [
+      "rigid-transform"
+     ],
+     "engine": [
+      "lie.adjoint"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "A-427-f",
+     "lines": [
+      35,
+      36
+     ],
+     "kind": "prose",
+     "idea": "Examples show the consequences for kinematics and control.",
+     "feynman": "Now see why this matters for real robots.",
+     "visual": "Panel tabs: twists, constraints, manipulability.",
+     "scene": "mls-appa-se3-no-fair-ruler",
+     "beat": "🧱 constraints are covectors",
+     "math": [],
+     "engine": [],
+     "difficulty": 2
+    },
+    {
+     "id": "A-427-g",
+     "lines": [
+      37,
+      39
+     ],
+     "kind": "example",
+     "label": "Ex A.23",
+     "idea": "For twists with ω ≠ 0 (proper screws), magnitude and pitch can be rewritten via the Killing and hyperbolic forms.",
+     "feynman": "Two facts about a screw — how hard it spins and how far it advances per turn — can be read with fair tools.",
+     "visual": "Gold screw with M and h dials; the dials are computed from K and H readouts.",
+     "scene": "mls-appa-se3-no-fair-ruler",
+     "beat": "🚫 no fair SE(3) ruler",
+     "math": [
+      "screw-exp"
+     ],
+     "engine": [],
+     "difficulty": 3
+    },
+    {
+     "id": "A-427-h",
+     "lines": [
+      40,
+      40
+     ],
+     "kind": "page-number",
+     "idea": "Page 427"
+    }
+   ]
+  },
+  {
+   "pdf": 446,
+   "book": 428,
+   "lines": 40,
+   "section": "A.3.2",
+   "summary": "Magnitude and pitch as invariant ratios; constraints on SE(3) give covectors pulled back to se(3)*: constraint forces and free motions annihilate regardless of frame; treating constraints as twists is a mistake.",
+   "atoms": [
+    {
+     "id": "A-428-a",
+     "lines": [
+      1,
+      7
+     ],
+     "kind": "equation",
+     "idea": "M = −¼⟨ξ,ξ⟩_K and h = −2⟨ξ,ξ⟩_H/⟨ξ,ξ⟩_K, so both are frame-independent for screws with nonzero rotation.",
+     "feynman": "A bolt's turn rate and thread pitch don't depend on where you stand.",
+     "visual": "Drag the reference frame anywhere: twist coordinates change wildly, but M and h dials stay frozen (lime).",
+     "scene": "mls-appa-se3-no-fair-ruler",
+     "beat": "🚫 no fair SE(3) ruler",
+     "math": [
+      "screw-exp"
+     ],
+     "engine": [
+      "lie.adjoint"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-428-b",
+     "lines": [
+      8,
+      11
+     ],
+     "kind": "remark",
+     "idea": "Pitch depends on the length scale (a ratio of translation to rotation), matching the scale choice needed by the hyperbolic metric.",
+     "feynman": "Thread pitch in millimeters per turn becomes a different number in inches per turn.",
+     "visual": "Unit knob rescales only the h dial; M stays put.",
+     "scene": "mls-appa-se3-no-fair-ruler",
+     "beat": "🚫 no fair SE(3) ruler",
+     "math": [
+      "screw-exp"
+     ],
+     "engine": [],
+     "difficulty": 2
+    },
+    {
+     "id": "A-428-c",
+     "lines": [
+      12,
+      26
+     ],
+     "kind": "example",
+     "label": "Ex A.24, Eq (A.15)",
+     "idea": "Hybrid force control: contact constraints fᵢ(g) = 0 differentiate to ⟨dfᵢ(g), ġ⟩ = 0; translating to the identity gives ⟨L_g^* dfᵢ, ξ⟩ = 0 with ξ = g⁻¹ġ and L_g^*dfᵢ ∈ se(3)*.",
+     "feynman": "A hand sliding on a tabletop: its allowed motions are \"anything that doesn't push into the table\".",
+     "visual": "Pink tool tip on a slate table; constraint covector shown as a purple stack of planes parallel to the table; any orange twist crossing zero planes is allowed (lime), others coral.",
+     "scene": "mls-appa-se3-no-fair-ruler",
+     "beat": "🧱 constraints are covectors",
+     "math": [
+      "statics",
+      "jacobian"
+     ],
+     "engine": [
+      "NEW: constraintCovector"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "A-428-d",
+     "lines": [
+      27,
+      35
+     ],
+     "kind": "prose",
+     "idea": "These covectors span the constraint forces; their annihilator in se(3) is the space of free motions; the two annihilate (zero work) in every frame, though each subspace's coordinates change.",
+     "feynman": "The table pushes straight up; you slide sideways; the push does no work on the slide, from anyone's viewpoint.",
+     "visual": "Purple constraint wrenches and lime free twists; a work meter reads 0 for every pair; dragging the frame origin changes all numbers but the meter stays 0.",
+     "scene": "mls-appa-se3-no-fair-ruler",
+     "beat": "🧱 constraints are covectors",
+     "math": [
+      "statics"
+     ],
+     "engine": [
+      "lie.adjoint",
+      "linalg.vdot"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-428-e",
+     "lines": [
+      36,
+      39
+     ],
+     "kind": "remark",
+     "idea": "A common mistake treats constraint directions as twists and uses the R⁶ dot product to decide orthogonality to free motions.",
+     "feynman": "Using a crooked ruler to decide which pushes are \"perpendicular\" to sliding.",
+     "visual": "Toggle \"mistake mode\": constraints drawn as orange twists with right-angle badges based on R⁶ dot product.",
+     "scene": "mls-appa-se3-no-fair-ruler",
+     "beat": "🧱 constraints are covectors",
+     "math": [
+      "statics"
+     ],
+     "engine": [
+      "linalg.vdot"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-428-f",
+     "lines": [
+      40,
+      40
+     ],
+     "kind": "page-number",
+     "idea": "Page 428"
+    }
+   ]
+  },
+  {
+   "pdf": 447,
+   "book": 429,
+   "lines": 42,
+   "section": "A.3.2",
+   "summary": "Twist-based constraint descriptions break under frame change; the covector description is invariant; left-invariant constraints are subgroups (Loncaric); manipulability measures based on R⁶ norms need care.",
+   "atoms": [
+    {
+     "id": "A-429-a",
+     "lines": [
+      1,
+      5
+     ],
+     "kind": "remark",
+     "idea": "That twist-based description is not frame invariant because SE(3) has no invariant metric, hence no invariant orthogonality.",
+     "feynman": "The crooked ruler gives different answers from different seats.",
+     "visual": "In mistake mode, drag the frame origin: the right-angle badges flip coral although the physical contact is unchanged.",
+     "scene": "mls-appa-se3-no-fair-ruler",
+     "beat": "🧱 constraints are covectors",
+     "math": [
+      "rigid-transform"
+     ],
+     "engine": [
+      "lie.adjoint"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-429-b",
+     "lines": [
+      6,
+      17
+     ],
+     "kind": "equation",
+     "idea": "Fix: constraints are covectors; under a frame change V′ = Ad_g V and F′ = Ad_{g⁻¹}ᵀ F, so F′·V′ = F·V; the pairing also scales correctly with units.",
+     "feynman": "Pushes and motions change in opposite ways when you switch viewpoint, so the work they share never changes.",
+     "visual": "Correct mode: twists transform by Ad tiles, wrenches by inverse-transpose tiles; the work readout stays exactly 0 for every frame and every unit choice (lime).",
+     "scene": "mls-appa-se3-no-fair-ruler",
+     "beat": "🧱 constraints are covectors",
+     "math": [
+      "statics",
+      "matrix"
+     ],
+     "engine": [
+      "lie.adjoint",
+      "linalg.inv",
+      "linalg.T"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-429-c",
+     "lines": [
+      18,
+      31
+     ],
+     "kind": "example",
+     "label": "Ex A.25",
+     "idea": "Constraint covectors pulled to se(3)* can vary with g; a constraint is left invariant if L_g^*df(g) = df(e), i.e. free directions are constant in the body frame — e.g. sliding on a flat surface.",
+     "feynman": "An ice skater on a flat rink: whichever way she faces, \"forward-sideways-and-spin\" are always allowed, measured from her own body.",
+     "visual": "Puck on a flat slate plane: body-frame free directions (lime arrows) stay constant as it moves; on a bumpy surface they tilt with g (coral).",
+     "scene": "mls-appa-se3-no-fair-ruler",
+     "beat": "🧱 constraints are covectors",
+     "math": [
+      "statics",
+      "rigid-transform"
+     ],
+     "engine": [
+      "NEW: constraintCovector"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "A-429-d",
+     "lines": [
+      32,
+      33
+     ],
+     "kind": "proposition",
+     "label": "Prop A.7",
+     "idea": "A constraint f(g) = 0 is left (or right) invariant iff its zero set is a subgroup of SE(3) [63].",
+     "feynman": "The moves that keep a puck on a flat table can be combined and undone and still keep it on the table: they form their own club.",
+     "visual": "Compose two allowed puck motions (lime) → result is allowed; on a curved bowl the composition leaves the surface (coral).",
+     "scene": "mls-appa-se3-no-fair-ruler",
+     "beat": "🧱 constraints are covectors",
+     "math": [
+      "rigid-transform"
+     ],
+     "engine": [
+      "linalg.mmul"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "A-429-e",
+     "lines": [
+      34,
+      41
+     ],
+     "kind": "example",
+     "label": "Ex A.26",
+     "idea": "Manipulability measures from Chapter 3 that use the Euclidean metric on R⁶ ≅ se(3) are not frame invariant, so use them with care.",
+     "feynman": "Grading how nimble a hand is with a crooked ruler gives grades that depend on where you put the measuring tape.",
+     "visual": "Arm with its twist manipulability ellipsoid; a \"tool frame\" handle on the end-effector.",
+     "scene": "mls-appa-se3-no-fair-ruler",
+     "beat": "📉 σmin depends on the frame",
+     "math": [
+      "manipulability",
+      "jacobian"
+     ],
+     "engine": [
+      "kinematics.manipulability"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-429-f",
+     "lines": [
+      42,
+      42
+     ],
+     "kind": "page-number",
+     "idea": "Page 429"
+    }
+   ]
+  },
+  {
+   "pdf": 448,
+   "book": 430,
+   "lines": 39,
+   "section": "A.3.3",
+   "summary": "Two tool frames give Jacobians related by Ad, so σmin and condition number depend on frame choice; volume forms and the determinant.",
+   "atoms": [
+    {
+     "id": "A-430-a",
+     "lines": [
+      1,
+      15
+     ],
+     "kind": "example",
+     "label": "Ex A.26",
+     "idea": "With tool frames T1, T2, J₁ = Ad_h J₂; Ad_h does not preserve the R⁶ norm, so σmin(J₁) ≠ σmin(J₂) and even its maximizing posture differs: maximizing σmin (or condition number) is ill-posed.",
+     "feynman": "Judging a hand's weakest direction depends on whether you hold the ruler at the wrist or at the fingertip.",
+     "visual": "Same 6-DOF arm, two tool-frame handles; side-by-side σmin bars and condition-number bars differ; scanning a joint slider, the best posture marker (gold) sits at different angles for T1 and T2.",
+     "scene": "mls-appa-se3-no-fair-ruler",
+     "beat": "📉 σmin depends on the frame",
+     "math": [
+      "manipulability",
+      "svd",
+      "jacobian"
+     ],
+     "engine": [
+      "linalg.svd",
+      "lie.adjoint",
+      "kinematics.spaceJacobian"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "A-430-b",
+     "lines": [
+      16,
+      16
+     ],
+     "kind": "heading",
+     "idea": "Subsection A.3.3: volume forms on SE(3)."
+    },
+    {
+     "id": "A-430-c",
+     "lines": [
+      17,
+      25
+     ],
+     "kind": "prose",
+     "idea": "Since lengths need choices, how much does volume on SE(3) depend on frame and scale? This matters for measuring workspace size [9].",
+     "feynman": "Even if we can't agree on a ruler, can we agree on how big a closet is?",
+     "visual": "A robot's reachable cloud of poses glows; a volume meter with a question mark.",
+     "scene": "mls-appa-se3-fair-volume",
+     "beat": "🧊 volume = determinant",
+     "math": [
+      "forward-kinematics"
+     ],
+     "engine": [],
+     "difficulty": 3
+    },
+    {
+     "id": "A-430-d",
+     "lines": [
+      26,
+      38
+     ],
+     "kind": "definition",
+     "idea": "A volume form is a nowhere-zero skew multilinear map of n tangent vectors; it gives the volume of their parallelepiped and integrates to volumes; on Rⁿ it is det[V₁ … Vₙ].",
+     "feynman": "The space inside a box built from three sticks: swap two sticks and it flips sign; squash them flat and it's zero.",
+     "visual": "Three orange arrows span a blue box; gold volume readout = det; swapping two arrows flips the sign (handedness color flip); dragging one into the plane of the others → 0.",
+     "scene": "mls-appa-se3-fair-volume",
+     "beat": "🧊 volume = determinant",
+     "math": [
+      "matrix"
+     ],
+     "engine": [
+      "linalg.det"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "A-430-e",
+     "lines": [
+      39,
+      39
+     ],
+     "kind": "page-number",
+     "idea": "Page 430"
+    }
+   ]
+  },
+  {
+   "pdf": 449,
+   "book": 431,
+   "lines": 43,
+   "section": "A.3.3",
+   "summary": "Pulled-back volume forms scale by det J; Theorem A.8: left-invariant volume forms on SE(3) are bi-invariant because det Ad = 1; a product volume form using the triple product on so(3) gives SO(3) volume 8π³.",
+   "atoms": [
+    {
+     "id": "A-431-a",
+     "lines": [
+      1,
+      10
+     ],
+     "kind": "equation",
+     "label": "Eq (A.16)",
+     "idea": "Pulling back a volume form by F multiplies it by det J (change of variables); left, right, bi-invariant volume forms are defined as for metrics.",
+     "feynman": "Squeeze a sponge: every small cube's volume changes by the same squeeze factor at that spot.",
+     "visual": "A grid of tiny boxes deformed by a map F; each box's volume ratio colored; readout equals det J at that point.",
+     "scene": "mls-appa-se3-fair-volume",
+     "beat": "🧊 volume = determinant",
+     "math": [
+      "jacobian",
+      "matrix"
+     ],
+     "engine": [
+      "linalg.det"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-431-b",
+     "lines": [
+      11,
+      13
+     ],
+     "kind": "theorem",
+     "label": "Thm A.8",
+     "idea": "Every left-invariant volume form on SE(3) is also right invariant, hence bi-invariant.",
+     "feynman": "Even though no ruler is fair, every fair-by-walking measuring cup is fair from every viewpoint.",
+     "visual": "6D box meter: apply random left moves and conjugations; the volume readout stays at exactly 1× (lime crown).",
+     "scene": "mls-appa-se3-fair-volume",
+     "beat": "⚖️ det Ad = 1",
+     "math": [
+      "rigid-transform"
+     ],
+     "engine": [
+      "lie.adjoint",
+      "linalg.det"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "A-431-c",
+     "lines": [
+      14,
+      23
+     ],
+     "kind": "proof",
+     "idea": "Sketch: it suffices that det(T_eI_h) = 1; the Jacobian of conjugation at e is Ad_h, and det [[R, p̂R],[0, R]] = det R · det R = 1.",
+     "feynman": "The viewpoint change may shear the box but never grows or shrinks it — like sliding a deck of cards sideways.",
+     "visual": "Staircase: (1) conjugation's Jacobian = Ad tiles; (2) block-triangular → det = det R × det R; (3) each = 1; (4) the 6D box shears (teal) but its volume bar stays 1.",
+     "scene": "mls-appa-se3-fair-volume",
+     "beat": "⚖️ det Ad = 1",
+     "math": [
+      "matrix",
+      "rotation"
+     ],
+     "engine": [
+      "lie.adjoint",
+      "linalg.det"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "A-431-d",
+     "lines": [
+      24,
+      40
+     ],
+     "kind": "prose",
+     "idea": "So SE(3) has a bi-invariant volume form, e.g. standard volume on R³ times a volume on so(3) given by −¼⟨ω₁,[ω₂,ω₃]⟩_K = ω₁·(ω₂×ω₃) (the triple product); with it SO(3) has volume 8π³.",
+     "feynman": "Measure a closet of poses as \"how much space to stand in\" times \"how many ways to face\"; facing-space totals 8π³.",
+     "visual": "SO(3) as a ball of rotation vectors of radius π; a fill animation counts volume; triple-product box of three ω arrows; final readout 8π³ ≈ 248 (with the antipodal-identification shell explained by a coral shimmer).",
+     "scene": "mls-appa-se3-fair-volume",
+     "beat": "🌐 SO(3) has volume 8π³",
+     "math": [
+      "rotation",
+      "vectors"
+     ],
+     "engine": [
+      "linalg.cross",
+      "linalg.vdot",
+      "NEW: haarSO3"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "A-431-e",
+     "lines": [
+      41,
+      42
+     ],
+     "kind": "prose",
+     "idea": "This product volume form depends on the length scale (continued).",
+     "feynman": "Change meters to centimeters and the standing-space part grows.",
+     "visual": "Unit knob rescales the R³ factor of the volume meter.",
+     "scene": "mls-appa-se3-fair-volume",
+     "beat": "🌐 SO(3) has volume 8π³",
+     "math": [],
+     "engine": [],
+     "difficulty": 3
+    },
+    {
+     "id": "A-431-f",
+     "lines": [
+      43,
+      43
+     ],
+     "kind": "page-number",
+     "idea": "Page 431"
+    }
+   ]
+  },
+  {
+   "pdf": 450,
+   "book": 432,
+   "lines": 47,
+   "section": "A.3.3",
+   "summary": "Volume trades translation vs rotation through the length scale but comparisons are scale-free; det J manipulability is frame-independent; manipulator length and a work-volume bound for 6R arms.",
+   "atoms": [
+    {
+     "id": "A-432-a",
+     "lines": [
+      1,
+      6
+     ],
+     "kind": "prose",
+     "idea": "The scale sets the trade-off between translational and angular volume; once fixed, volume is frame-independent, and since scale changes multiply all volumes equally, \"which is bigger\" is scale-free.",
+     "feynman": "Measuring two closets in inches or centimeters gives different numbers but the same winner.",
+     "visual": "Two workspace clouds with volume bars; turn the unit knob: both bars scale together and the gold \"bigger\" crown never moves.",
+     "scene": "mls-appa-se3-fair-volume",
+     "beat": "🌐 SO(3) has volume 8π³",
+     "math": [],
+     "engine": [],
+     "difficulty": 3
+    },
+    {
+     "id": "A-432-b",
+     "lines": [
+      7,
+      13
+     ],
+     "kind": "example",
+     "label": "Ex A.27",
+     "idea": "det J manipulability uses the standard R⁶ volume; it is frame-independent since det(Ad_h J₂) = det Ad_h · det J₂ = det J₂.",
+     "feynman": "The ruler was crooked, but the measuring cup is honest: the hand's \"volume of nimbleness\" is the same from any tool frame.",
+     "visual": "Same two-tool-frame arm from the metric scene: σmin bars disagree (coral) while det J bars agree exactly (lime).",
+     "scene": "mls-appa-se3-fair-volume",
+     "beat": "🦾 det J is fair",
+     "math": [
+      "manipulability",
+      "jacobian"
+     ],
+     "engine": [
+      "linalg.det",
+      "lie.adjoint",
+      "kinematics.spaceJacobian"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-432-c",
+     "lines": [
+      14,
+      34
+     ],
+     "kind": "example",
+     "label": "Ex A.28",
+     "idea": "Optimal 6R design [85, 86]: with POE kinematics, the manipulator length L_M is the shortest total length of a chain of segments linking the six joint axes; it does not depend on the reference configuration (an exercise).",
+     "feynman": "The shortest string you could tie between six rods hung in the air.",
+     "visual": "Six gold joint-axis lines in 3D; a teal string with beads sliding on each axis; drag beads and watch the total length bar; an \"optimize\" button shrinks it to L_M.",
+     "scene": "mls-appa-se3-fair-volume",
+     "beat": "🏆 the best 6R arm",
+     "math": [
+      "poe",
+      "optimization"
+     ],
+     "engine": [
+      "kinematics.poeFK",
+      "NEW: axisChainLength"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "A-432-d",
+     "lines": [
+      35,
+      46
+     ],
+     "kind": "equation",
+     "idea": "Work volume V_M = ∫ over g(Q) of a bi-invariant volume form (Q = 6-torus of joints); with the product form, V_M ≤ (4/3)π L_M³ · 8π³.",
+     "feynman": "The most closet space an arm of total length L can cover is a full ball of radius L, with every facing direction at every point.",
+     "visual": "Monte-Carlo fill: sampled joint angles map to poses that splat into a position cloud colored by orientation coverage; a bar fills toward the bound (4/3)πL³·8π³.",
+     "scene": "mls-appa-se3-fair-volume",
+     "beat": "🏆 the best 6R arm",
+     "math": [
+      "forward-kinematics",
+      "sampling"
+     ],
+     "engine": [
+      "kinematics.poeFK",
+      "random.rng"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "A-432-e",
+     "lines": [
+      47,
+      47
+     ],
+     "kind": "page-number",
+     "idea": "Page 432"
+    }
+   ]
+  },
+  {
+   "pdf": 451,
+   "book": 433,
+   "lines": 32,
+   "section": "A.3.3",
+   "summary": "Figure of an elbow manipulator; the volume bound is frame-free; elbow and inverse-elbow arms; Theorem A.9: maximal work volume iff elbow (or inverse) with elbow at the midpoint.",
+   "atoms": [
+    {
+     "id": "A-433-a",
+     "lines": [
+      1,
+      8
+     ],
+     "kind": "figure",
+     "label": "Fig A.2",
+     "idea": "Figure: an elbow manipulator — two-axis shoulder, elbow, and three-axis wrist with intersecting orthogonal axes, link lengths l₀, l₁, l₂.",
+     "feynman": "A human arm: shoulder that swings two ways, an elbow hinge, and a wrist that can point any way.",
+     "visual": "3D elbow arm: six orange joint cylinders labelled only by axis arrows; shoulder axes meet at q₁ and the three wrist axes meet at one point (gold dot).",
+     "scene": "mls-appa-se3-fair-volume",
+     "beat": "🏆 the best 6R arm",
+     "math": [
+      "forward-kinematics",
+      "poe"
+     ],
+     "engine": [
+      "kinematics.poeFK"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "A-433-b",
+     "lines": [
+      9,
+      14
+     ],
+     "kind": "prose",
+     "idea": "A 6R arm achieving the bound has maximal work volume; the bound is independent of base/tool frames but depends on scale, which doesn't affect comparisons — so it defines an optimal manipulator.",
+     "feynman": "A fair contest: arms of the same total length compete for the most closet space.",
+     "visual": "Leaderboard of arm designs with work-volume bars normalized by the bound.",
+     "scene": "mls-appa-se3-fair-volume",
+     "beat": "🏆 the best 6R arm",
+     "math": [
+      "forward-kinematics"
+     ],
+     "engine": [],
+     "difficulty": 3
+    },
+    {
+     "id": "A-433-c",
+     "lines": [
+      15,
+      22
+     ],
+     "kind": "definition",
+     "idea": "An elbow manipulator has a shoulder and wrist each with mutually orthogonal intersecting axes, plus an elbow; its inverse swaps wrist and shoulder.",
+     "feynman": "Your arm, or your arm flipped so the wrist is at the shoulder.",
+     "visual": "Toggle between elbow arm and its inverse (wrist at the base); both drawn in orange/pink.",
+     "scene": "mls-appa-se3-fair-volume",
+     "beat": "🏆 the best 6R arm",
+     "math": [
+      "forward-kinematics"
+     ],
+     "engine": [
+      "kinematics.poeFK"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "A-433-d",
+     "lines": [
+      23,
+      26
+     ],
+     "kind": "theorem",
+     "label": "Thm A.9",
+     "idea": "A 6R arm of given length has maximal work volume iff it is an elbow manipulator (or its inverse) with the elbow midway between shoulder and wrist [85, 86].",
+     "feynman": "The best arm is like yours, with upper arm and forearm the same length.",
+     "visual": "Elbow-position slider along the arm: work-volume bar peaks exactly at the midpoint (gold crown); off-center, a coral hole opens in the middle of the position cloud.",
+     "scene": "mls-appa-se3-fair-volume",
+     "beat": "🏆 the best 6R arm",
+     "math": [
+      "forward-kinematics",
+      "optimization"
+     ],
+     "engine": [
+      "kinematics.poeFK"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "A-433-e",
+     "lines": [
+      27,
+      31
+     ],
+     "kind": "remark",
+     "idea": "Why: the end wrist reaches every orientation everywhere, and the midway elbow leaves no hole at the workspace center.",
+     "feynman": "With equal upper and forearm you can touch your own shoulder; with a short forearm you can't reach close in.",
+     "visual": "Cross-section of the reachable disc for unequal links shows an empty coral inner ring; equal links fill to the center (lime).",
+     "scene": "mls-appa-se3-fair-volume",
+     "beat": "🏆 the best 6R arm",
+     "math": [
+      "forward-kinematics"
+     ],
+     "engine": [
+      "kinematics.planarFK"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "A-433-f",
+     "lines": [
+      32,
+      32
+     ],
+     "kind": "page-number",
+     "idea": "Page 433"
+    }
+   ]
+  },
+  {
+   "pdf": 452,
+   "book": 434,
+   "lines": 1,
+   "section": "A.3.3",
+   "summary": "Blank page carrying only its page number.",
+   "atoms": [
+    {
+     "id": "A-434-a",
+     "lines": [
+      1,
+      1
+     ],
+     "kind": "page-number",
+     "idea": "Page 434"
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,734 @@
+{
+ "id": "appB",
+ "title": "A Mathematica Package for Screw Calculus",
+ "pdfPages": [
+  453,
+  458
+ ],
+ "sections": [
+  {
+   "id": "B",
+   "title": "A Mathematica Package for Screw Calculus",
+   "book": 435
+  },
+  {
+   "id": "B.1",
+   "title": "Using the Screws package",
+   "book": 435
+  },
+  {
+   "id": "B.2",
+   "title": "Manipulator kinematics",
+   "book": 437
+  }
+ ],
+ "scenes": [
+  {
+   "id": "mls-appb-screw-toolkit",
+   "title": "Screw Toolkit",
+   "icon": "🧰",
+   "section": "B.1",
+   "pages": [
+    435,
+    437
+   ],
+   "uses": [
+    "rotation",
+    "screw-exp",
+    "rigid-transform"
+   ],
+   "exists": "screw-exp",
+   "beats": [
+    "🧰 one toolbox for screws",
+    "🔄 SO(3) tools",
+    "🔩 SE(3) tools",
+    "📏 reading a twist"
+   ],
+   "brief": "A workbench of function \"machines\" — each a box with an input slot and output slot, drawn as icons (no words). SO(3) row: drop an orange ω arrow into the hat box → 3×3 skew tiles come out; vee box reverses it; exp box + θ slider outputs a spinning blue frame (lie.expSO3); axis box reads ω back from a frame (lie.logSO3). SE(3) row: R + p → 4×4 tiles (lie.homog); 4×4 → R and p (rotOf/transOf); twist ↔ 4×4 (hat/vee for twists); ad box → 6×6 tiles (lie.adjoint); screw box (pitch h, point q, direction ω) → twist (lie.screwAxis), with h = ∞ giving a pure slide; axis/pitch/magnitude boxes read a twist back into a gold axis line, pitch dial and magnitude bar. Point vs vector boxes append 1 or 0. Chaining boxes and seeing round-trips land back on the input (lime) is the game. Note: Crucible stores twists as (ω, v) while the book uses (v, ω); a swap toggle shows the reorder."
+  },
+  {
+   "id": "mls-appb-robot-from-twists",
+   "title": "Robot From Twists",
+   "icon": "🦾",
+   "section": "B.2",
+   "pages": [
+    437,
+    439
+   ],
+   "uses": [
+    "poe",
+    "forward-kinematics",
+    "jacobian"
+   ],
+   "exists": "poe",
+   "beats": [
+    "🦾 joints as twists",
+    "🔗 chain the exps",
+    "🧪 SCARA in four twists",
+    "📐 the Jacobian falls out"
+   ],
+   "brief": "Build an arm by dropping joint tokens onto a slate base: a revolute token needs a point q and an axis ω (gold line), a prismatic token needs a direction. Each token becomes a unit twist. Set the tool frame at home (pink). Joint sliders θᵢ (orange) drive the product of exponentials (kinematics.poeFK) and the pink tool moves; a Jacobian panel shows 6×n tile columns, each the current Ad-transformed joint twist (kinematics.spaceJacobian). Preset: a SCARA arm built from three vertical revolute axes at 0, l₁, l₁+l₂ and one vertical slide; its Jacobian shows the zero rows that reveal it can only yaw and move in x, y, z."
+  }
+ ],
+ "pages": [
+  {
+   "pdf": 453,
+   "book": 435,
+   "lines": 29,
+   "section": "B.1",
+   "summary": "Appendix B describes a symbolic package implementing the screw calculus of Chapter 2, plus a companion for open-chain kinematics; availability notes; it uses homogeneous coordinates in R³.",
+   "atoms": [
+    {
+     "id": "B-435-a",
+     "lines": [
+      1,
+      3
+     ],
+     "kind": "heading",
+     "idea": "Appendix B title: a symbolic-math package for screw calculus."
+    },
+    {
+     "id": "B-435-b",
+     "lines": [
+      4,
+      10
+     ],
+     "kind": "prose",
+     "idea": "A symbolic package implements every Chapter-2 operation on screws, twists and wrenches; with a companion package it computes open-chain manipulator kinematics symbolically and numerically [121].",
+     "feynman": "A toolbox where every Chapter-2 trick is a ready-made gadget, plus an add-on kit for building arms.",
+     "visual": "The workbench appears with two drawers: SO(3)/SE(3) gadgets (left) and arm-building gadgets (right); hovering a drawer shows thumbnails of the scenes each gadget powers.",
+     "scene": "mls-appb-screw-toolkit",
+     "beat": "🧰 one toolbox for screws",
+     "math": [
+      "screw-exp",
+      "rigid-transform"
+     ],
+     "engine": [
+      "lie.expSE3",
+      "kinematics.poeFK"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "B-435-c",
+     "lines": [
+      11,
+      19
+     ],
+     "kind": "prose",
+     "idea": "Availability notes: the source was distributed freely by file transfer with documentation; the authors disclaim responsibility for correctness or maintenance.",
+     "feynman": "A free recipe card handed around, with a note saying \"test the cake yourself\".",
+     "visual": "A small download badge on the workbench; Crucible's own src/core gadgets glow next to it with a lime \"tested\" check (the engine has its own test suite).",
+     "scene": "mls-appb-screw-toolkit",
+     "beat": "🧰 one toolbox for screws",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "B-435-d",
+     "lines": [
+      20,
+      25
+     ],
+     "kind": "prose",
+     "idea": "The rest lists the functions and their arguments; it can double as a guide to writing a screw package in any language.",
+     "feynman": "A parts list detailed enough to rebuild the machine in your own workshop.",
+     "visual": "A side-by-side table view of gadget icons: left column the package gadget icon, right column the matching Crucible function chip (lie.hat, lie.expSO3, …); unmatched ones show a \"NEW\" chip.",
+     "scene": "mls-appb-screw-toolkit",
+     "beat": "🧰 one toolbox for screws",
+     "math": [],
+     "engine": [
+      "lie.hat",
+      "lie.expSO3",
+      "lie.expSE3",
+      "lie.adjoint"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "B-435-e",
+     "lines": [
+      26,
+      26
+     ],
+     "kind": "heading",
+     "idea": "Subheading: using the package."
+    },
+    {
+     "id": "B-435-f",
+     "lines": [
+      27,
+      28
+     ],
+     "kind": "prose",
+     "idea": "The package works in R³ and represents points, vectors and rigid motions in homogeneous coordinates (continues).",
+     "feynman": "Every object gets an extra slot so one multiplication rule can move all of them.",
+     "visual": "A teal point with a fourth slot \"1\" and an orange arrow with \"0\" sit on the bench next to a 4×4 tile matrix.",
+     "scene": "mls-appb-screw-toolkit",
+     "beat": "🔩 SE(3) tools",
+     "math": [
+      "rigid-transform"
+     ],
+     "engine": [
+      "lie.homog",
+      "lie.applySE3"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "B-435-g",
+     "lines": [
+      29,
+      29
+     ],
+     "kind": "page-number",
+     "idea": "Page 435"
+    }
+   ]
+  },
+  {
+   "pdf": 454,
+   "book": 436,
+   "lines": 39,
+   "section": "B.1",
+   "summary": "The package has two groups: SO(3) functions (hat, axis, skew exponential, vee) and SE(3) functions for homogeneous transforms, twists, adjoints and extraction of R and p.",
+   "atoms": [
+    {
+     "id": "B-436-a",
+     "lines": [
+      1,
+      2
+     ],
+     "kind": "prose",
+     "idea": "Homogeneous representation makes the package easy to combine with other symbolic tools.",
+     "feynman": "Standard-size plugs fit every socket.",
+     "visual": "Bench gadgets snap together by matching 4-slot connectors.",
+     "scene": "mls-appb-screw-toolkit",
+     "beat": "🔩 SE(3) tools",
+     "math": [
+      "rigid-transform"
+     ],
+     "engine": [
+      "lie.homog"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "B-436-b",
+     "lines": [
+      3,
+      6
+     ],
+     "kind": "prose",
+     "idea": "Group one covers rotation matrices: all operations of Chapter 2 §2 on SO(3).",
+     "feynman": "The first drawer holds everything for spinning things.",
+     "visual": "SO(3) drawer opens: a row of four gadget boxes with spin icons.",
+     "scene": "mls-appb-screw-toolkit",
+     "beat": "🔄 SO(3) tools",
+     "math": [
+      "rotation"
+     ],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "B-436-c",
+     "lines": [
+      7,
+      17
+     ],
+     "kind": "definition",
+     "idea": "SO(3) functions: vector → skew matrix (hat); rotation matrix → its rotation axis; exponential of a skew matrix with optional angle (default 1; accepts a vector directly); skew matrix → vector (vee).",
+     "feynman": "Four gadgets: turn an arrow into a spin-maker, find the spin axis of a turned ball, spin by an amount, and turn a spin-maker back into an arrow.",
+     "visual": "Drop an orange ω into hat → 3×3 skew tiles; feed tiles + θ slider into exp → a blue frame spins (Rodrigues); feed the frame into axis → the gold axis arrow returns; vee turns tiles back into ω (lime round-trip). Crucible: lie.hat, lie.logSO3 (axis = normalized log), lie.expSO3(ω·θ), lie.vee.",
+     "scene": "mls-appb-screw-toolkit",
+     "beat": "🔄 SO(3) tools",
+     "math": [
+      "rotation",
+      "screw-exp"
+     ],
+     "engine": [
+      "lie.hat",
+      "lie.vee",
+      "lie.expSO3",
+      "lie.logSO3"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "B-436-d",
+     "lines": [
+      18,
+      19
+     ],
+     "kind": "remark",
+     "idea": "Only light argument checking is performed.",
+     "feynman": "The gadgets trust you to put in the right shape of thing.",
+     "visual": "Feeding a non-skew matrix into vee shows a coral warning shake; Crucible scenes guard inputs by construction.",
+     "scene": "mls-appb-screw-toolkit",
+     "beat": "🔄 SO(3) tools",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "B-436-e",
+     "lines": [
+      20,
+      25
+     ],
+     "kind": "prose",
+     "idea": "Group two handles SE(3) with 4×4 matrices: converting points and vectors to/from homogeneous form and building a matrix from (R, p).",
+     "feynman": "The second drawer holds everything for picking things up and putting them somewhere else.",
+     "visual": "SE(3) drawer opens: gadget boxes with move icons; R and p pieces snap into a 4×4 frame.",
+     "scene": "mls-appb-screw-toolkit",
+     "beat": "🔩 SE(3) tools",
+     "math": [
+      "rigid-transform"
+     ],
+     "engine": [
+      "lie.homog"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "B-436-f",
+     "lines": [
+      26,
+      38
+     ],
+     "kind": "definition",
+     "idea": "SE(3) functions (part 1): 4×4 twist matrix → 6-vector; point → homogeneous (append 1); g → 6×6 adjoint; extract R from g; extract p from g; twist generating a given g (matrix log).",
+     "feynman": "Gadgets that take a \"move\" apart: which way it turns, where it ends up, its 6-number recipe, and how it re-describes other twists.",
+     "visual": "Feed a pink frame g in: outputs R (blue block), p (teal arrow), the twist ξ (gold screw, via log) and the 6×6 Ad tiles. Crucible: twist vee (NEW: twistVee), point→[q,1], lie.adjoint, lie.rotOf, lie.transOf, lie.logSE3.",
+     "scene": "mls-appb-screw-toolkit",
+     "beat": "🔩 SE(3) tools",
+     "math": [
+      "rigid-transform",
+      "screw-exp"
+     ],
+     "engine": [
+      "lie.adjoint",
+      "lie.rotOf",
+      "lie.transOf",
+      "lie.logSE3",
+      "NEW: twistVee"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "B-436-g",
+     "lines": [
+      39,
+      39
+     ],
+     "kind": "page-number",
+     "idea": "Page 436"
+    }
+   ]
+  },
+  {
+   "pdf": 455,
+   "book": 437,
+   "lines": 37,
+   "section": "B.2",
+   "summary": "Remaining SE(3) functions: (R,p) → matrix, screw → twist (with infinite pitch), twist axis, twist exponential, pitch, magnitude, conversions; then the companion package for manipulator kinematics via product of exponentials.",
+   "atoms": [
+    {
+     "id": "B-437-a",
+     "lines": [
+      1,
+      3
+     ],
+     "kind": "definition",
+     "idea": "Build a 4×4 homogeneous matrix from R and p.",
+     "feynman": "Snap a turn and a shift together into one move card.",
+     "visual": "Blue R block + teal p arrow slide into the 4×4 frame (lie.homog).",
+     "scene": "mls-appb-screw-toolkit",
+     "beat": "🔩 SE(3) tools",
+     "math": [
+      "rigid-transform"
+     ],
+     "engine": [
+      "lie.homog"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "B-437-b",
+     "lines": [
+      4,
+      8
+     ],
+     "kind": "definition",
+     "idea": "Screw (pitch h, point q, direction ω) → twist coordinates; infinite pitch gives a pure translation along ω, ignoring q.",
+     "feynman": "Describe a bolt by where its axis is and how coarse its thread is; an infinitely coarse thread just slides.",
+     "visual": "Gold axis through draggable q with ω; pitch dial; output twist bars. Turning the dial to ∞ morphs the motion to pure slide and q's handle greys out. Crucible: lie.screwAxis(ω, q, h); pure slide as [0,0,0,ω].",
+     "scene": "mls-appb-screw-toolkit",
+     "beat": "📏 reading a twist",
+     "math": [
+      "screw-exp"
+     ],
+     "engine": [
+      "lie.screwAxis"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "B-437-c",
+     "lines": [
+      9,
+      13
+     ],
+     "kind": "definition",
+     "idea": "Twist → its screw axis as (point q, unit direction ω); accepts a 6-vector or a 4×4.",
+     "feynman": "Given how a bolt is moving, find the line it is turning around.",
+     "visual": "Feed a twist; the gold axis line and a teal foot point q (closest to origin, q = ω×v/‖ω‖²) appear.",
+     "scene": "mls-appb-screw-toolkit",
+     "beat": "📏 reading a twist",
+     "math": [
+      "screw-exp"
+     ],
+     "engine": [
+      "NEW: twistAxis"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "B-437-d",
+     "lines": [
+      14,
+      17
+     ],
+     "kind": "definition",
+     "idea": "Matrix exponential of a twist with optional θ (default 1), accepting 6-vectors.",
+     "feynman": "Run the bolt-turning motion for θ seconds and see where the part ends up.",
+     "visual": "Twist + θ slider → a frame corkscrews along the axis (lie.expSE3(ξ·θ)).",
+     "scene": "mls-appb-screw-toolkit",
+     "beat": "🔩 SE(3) tools",
+     "math": [
+      "screw-exp"
+     ],
+     "engine": [
+      "lie.expSE3"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "B-437-e",
+     "lines": [
+      18,
+      21
+     ],
+     "kind": "definition",
+     "idea": "Pitch of a twist (ωᵀv/‖ω‖²) and magnitude (‖ω‖, or ‖v‖ for pure translation).",
+     "feynman": "How far the bolt advances per turn, and how fast it turns.",
+     "visual": "Pitch dial and magnitude bar read off any twist dropped in (NEW: twistPitch, twistMagnitude).",
+     "scene": "mls-appb-screw-toolkit",
+     "beat": "📏 reading a twist",
+     "math": [
+      "screw-exp"
+     ],
+     "engine": [
+      "NEW: twistPitch",
+      "NEW: twistMagnitude"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "B-437-f",
+     "lines": [
+      22,
+      25
+     ],
+     "kind": "definition",
+     "idea": "Twist 6-vector → 4×4 matrix; vector → homogeneous (append 0).",
+     "feynman": "Write the bolt recipe in matrix form; arrows get a 0 so they don't get shifted.",
+     "visual": "6 twist bars fold into 4×4 tiles (NEW: twistHat); an orange arrow gets a 0 slot and only rotates when multiplied.",
+     "scene": "mls-appb-screw-toolkit",
+     "beat": "🔩 SE(3) tools",
+     "math": [
+      "screw-exp",
+      "rigid-transform"
+     ],
+     "engine": [
+      "lie.hat",
+      "NEW: twistHat"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "B-437-g",
+     "lines": [
+      26,
+      27
+     ],
+     "kind": "remark",
+     "idea": "Again only light argument checking.",
+     "feynman": "Same trust rule for the second drawer.",
+     "visual": "Coral shake on a mis-shaped input.",
+     "scene": "mls-appb-screw-toolkit",
+     "beat": "🔩 SE(3) tools",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "B-437-h",
+     "lines": [
+      28,
+      28
+     ],
+     "kind": "heading",
+     "idea": "Subheading: manipulator kinematics."
+    },
+    {
+     "id": "B-437-i",
+     "lines": [
+      29,
+      33
+     ],
+     "kind": "prose",
+     "idea": "The screw tools can analyze manipulators; a companion package adds helpers that streamline it.",
+     "feynman": "With the screw gadgets you can now assemble whole robot arms.",
+     "visual": "Bench switches to the arm-building drawer.",
+     "scene": "mls-appb-robot-from-twists",
+     "beat": "🦾 joints as twists",
+     "math": [
+      "poe"
+     ],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "B-437-j",
+     "lines": [
+      34,
+      36
+     ],
+     "kind": "prose",
+     "idea": "Forward kinematics is a product of exponentials of joint twists; helpers create those twists.",
+     "feynman": "Each joint adds its own twist, one after another, like turning dials in a row.",
+     "visual": "An empty slate base with a tray of joint tokens.",
+     "scene": "mls-appb-robot-from-twists",
+     "beat": "🦾 joints as twists",
+     "math": [
+      "poe"
+     ],
+     "engine": [
+      "kinematics.poeFK"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "B-437-k",
+     "lines": [
+      37,
+      37
+     ],
+     "kind": "page-number",
+     "idea": "Page 437"
+    }
+   ]
+  },
+  {
+   "pdf": 456,
+   "book": 438,
+   "lines": 39,
+   "section": "B.2",
+   "summary": "Helpers for revolute and prismatic joint twists; forward kinematics and spatial Jacobian functions; a SCARA example builds four joint twists and a tool frame and computes the forward kinematics.",
+   "atoms": [
+    {
+     "id": "B-438-a",
+     "lines": [
+      1,
+      7
+     ],
+     "kind": "definition",
+     "idea": "Unit twists for a revolute joint (axis ω through q: (−ω×q, ω)) and a prismatic joint (direction ω: (ω, 0)), built from the screw-to-twist function.",
+     "feynman": "A hinge is a bolt with zero thread; a sliding drawer is a bolt with infinite thread.",
+     "visual": "Drop a revolute token: place q and ω → gold axis, twist bars appear (lie.screwAxis with h=0). Drop a prismatic token: an arrow → twist bars with zero spin.",
+     "scene": "mls-appb-robot-from-twists",
+     "beat": "🦾 joints as twists",
+     "math": [
+      "poe",
+      "screw-exp"
+     ],
+     "engine": [
+      "lie.screwAxis"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "B-438-b",
+     "lines": [
+      8,
+      11
+     ],
+     "kind": "prose",
+     "idea": "Given the twists, forward kinematics and the Jacobian follow from multiplying twist exponentials and applying adjoints; helper functions automate this.",
+     "feynman": "Once each dial is labelled, the hand's place is just all dial turns applied in order.",
+     "visual": "Joint sliders appear under the tokens; frames of each link appear as the exps are multiplied left to right.",
+     "scene": "mls-appb-robot-from-twists",
+     "beat": "🔗 chain the exps",
+     "math": [
+      "poe",
+      "jacobian"
+     ],
+     "engine": [
+      "kinematics.poeFrames"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "B-438-c",
+     "lines": [
+      12,
+      15
+     ],
+     "kind": "definition",
+     "idea": "Forward kinematics from a list of (twist, angle) pairs and the home tool frame by the product of exponentials.",
+     "feynman": "Turn every dial by its amount, in order, then put the hand where it sits at home and see where it ends up.",
+     "visual": "Drag θ sliders (orange); the pink tool frame moves; a ghost of the home configuration stays visible (kinematics.poeFK(screws, M, θ)).",
+     "scene": "mls-appb-robot-from-twists",
+     "beat": "🔗 chain the exps",
+     "math": [
+      "poe",
+      "forward-kinematics"
+     ],
+     "engine": [
+      "kinematics.poeFK"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "B-438-d",
+     "lines": [
+      16,
+      19
+     ],
+     "kind": "definition",
+     "idea": "Spatial manipulator Jacobian from the same inputs.",
+     "feynman": "For each dial, how the hand would start moving if only that dial turned.",
+     "visual": "6×n tile panel: column i lights up as the current (Ad-transformed) twist of joint i; wiggling one slider shows that column's motion (kinematics.spaceJacobian).",
+     "scene": "mls-appb-robot-from-twists",
+     "beat": "📐 the Jacobian falls out",
+     "math": [
+      "jacobian"
+     ],
+     "engine": [
+      "kinematics.spaceJacobian",
+      "lie.adjoint"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "B-438-e",
+     "lines": [
+      20,
+      23
+     ],
+     "kind": "example",
+     "idea": "A worked example computes SCARA kinematics with Chapter-2 notation.",
+     "feynman": "Let's build the classic pick-and-place table robot.",
+     "visual": "Preset button loads the SCARA arm onto the base.",
+     "scene": "mls-appb-robot-from-twists",
+     "beat": "🧪 SCARA in four twists",
+     "math": [
+      "poe"
+     ],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "B-438-f",
+     "lines": [
+      24,
+      38
+     ],
+     "kind": "example",
+     "idea": "The example loads both packages, defines three vertical revolute twists through (0,0,0), (0,l₁,0), (0,l₁+l₂,0) and one vertical prismatic twist, places the tool at (0, l₁+l₂, 0) with identity orientation, and simplifies the product-of-exponentials forward map.",
+     "feynman": "Three hinges standing upright in a row along the arm, plus a vertical slider at the end, like a desk lamp that can only swing flat and drop down.",
+     "visual": "SCARA preset: three gold vertical axes at 0, l₁, l₁+l₂ and a vertical slide; pink tool at the arm tip; dragging θ₁–θ₃ sweeps the tool in a horizontal plane and θ₄ lowers it; the 4×4 readout shows the symbolic pattern (cos/sin of summed angles).",
+     "scene": "mls-appb-robot-from-twists",
+     "beat": "🧪 SCARA in four twists",
+     "math": [
+      "poe",
+      "forward-kinematics"
+     ],
+     "engine": [
+      "lie.screwAxis",
+      "kinematics.poeFK"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "B-438-g",
+     "lines": [
+      39,
+      39
+     ],
+     "kind": "page-number",
+     "idea": "Page 438"
+    }
+   ]
+  },
+  {
+   "pdf": 457,
+   "book": 439,
+   "lines": 5,
+   "section": "B.2",
+   "summary": "The SCARA example ends by computing and simplifying the spatial Jacobian.",
+   "atoms": [
+    {
+     "id": "B-439-a",
+     "lines": [
+      1,
+      4
+     ],
+     "kind": "example",
+     "idea": "The example then computes and simplifies the SCARA spatial Jacobian from the same joint list.",
+     "feynman": "Ask each of the four dials how it nudges the hand right now.",
+     "visual": "SCARA Jacobian panel: four columns; the rows for tilting about x and y stay dark (zero), showing SCARA can only yaw and move in x, y, z.",
+     "scene": "mls-appb-robot-from-twists",
+     "beat": "📐 the Jacobian falls out",
+     "math": [
+      "jacobian"
+     ],
+     "engine": [
+      "kinematics.spaceJacobian"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "B-439-b",
+     "lines": [
+      5,
+      5
+     ],
+     "kind": "page-number",
+     "idea": "Page 439"
+    }
+   ]
+  },
+  {
+   "pdf": 458,
+   "book": 440,
+   "lines": 1,
+   "section": "B",
+   "summary": "Blank page carrying only its page number.",
+   "atoms": [
+    {
+     "id": "B-440-a",
+     "lines": [
+      1,
+      1
+     ],
+     "kind": "page-number",
+     "idea": "Page 440"
+    }
+   ]
+  }
+ ]
+}
