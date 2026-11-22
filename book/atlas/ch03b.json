@@ -1,0 +1,4970 @@
+{
+ "id": "ch03b",
+ "title": "Manipulator Kinematics §4–8 (Jacobian, redundant & parallel)",
+ "pdfPages": [
+  133,
+  172
+ ],
+ "sections": [
+  {
+   "id": "3.4",
+   "title": "The Manipulator Jacobian",
+   "book": 115
+  },
+  {
+   "id": "3.4.1",
+   "title": "End-effector velocity",
+   "book": 115
+  },
+  {
+   "id": "3.4.2",
+   "title": "End-effector forces",
+   "book": 121
+  },
+  {
+   "id": "3.4.3",
+   "title": "Singularities",
+   "book": 123
+  },
+  {
+   "id": "3.4.4",
+   "title": "Manipulability",
+   "book": 127
+  },
+  {
+   "id": "3.5",
+   "title": "Redundant and Parallel Manipulators",
+   "book": 129
+  },
+  {
+   "id": "3.5.1",
+   "title": "Redundant manipulators",
+   "book": 129
+  },
+  {
+   "id": "3.5.2",
+   "title": "Parallel manipulators",
+   "book": 132
+  },
+  {
+   "id": "3.5.3",
+   "title": "Four-bar linkage",
+   "book": 135
+  },
+  {
+   "id": "3.5.4",
+   "title": "Stewart platform",
+   "book": 138
+  },
+  {
+   "id": "3.6",
+   "title": "Summary",
+   "book": 143
+  },
+  {
+   "id": "3.7",
+   "title": "Bibliography",
+   "book": 144
+  },
+  {
+   "id": "3.8",
+   "title": "Exercises",
+   "book": 146
+  }
+ ],
+ "scenes": [
+  {
+   "id": "mls-twist-jacobian",
+   "title": "Twist Jacobian",
+   "icon": "🦾",
+   "section": "3.4.1",
+   "pages": [
+    115,
+    118
+   ],
+   "uses": [
+    "jacobian",
+    "poe",
+    "screw-exp",
+    "rigid-transform",
+    "chain-rule",
+    "ode"
+   ],
+   "exists": "jacobian",
+   "beats": [
+    "🦾 wiggle one joint",
+    "🧲 column = twist moved into place",
+    "🔁 spatial ↔ body by adjoint",
+    "📍 speed of a hand point",
+    "🧭 steer without IK"
+   ],
+   "brief": "A 3D open-chain arm (orange joint cylinders, blue links, pink gripper with frame T) over a slate floor with base frame S. Each joint carries a faint orange screw axis line in its home pose and a bright orange copy where it sits now. Twiddle one joint slider at a time: the pink hand leaves a short pink velocity screw arrow, and the matching column of a 6×n grid lights up. A toggle swaps between spatial (axes drawn in S) and body (axes drawn in T); an adjoint \"lens\" animates one column morphing into the other. Final beat: drop a gold target pose, draw a gold path to it, and watch joint rates integrate (RK4) so the pink hand rides the path with no IK solve."
+  },
+  {
+   "id": "mls-jacobian-by-eye",
+   "title": "Jacobian by eye",
+   "icon": "👀",
+   "section": "3.4.1",
+   "pages": [
+    118,
+    121
+   ],
+   "uses": [
+    "jacobian",
+    "poe",
+    "forward-kinematics"
+   ],
+   "exists": "poe",
+   "beats": [
+    "🔍 SCARA columns by eye",
+    "🦿 boom-arm axes in flight",
+    "🎭 ∂f/∂θ is an impostor"
+   ],
+   "brief": "Two arms side by side: a SCARA (four orange joints, all vertical axes plus one prismatic) and a telescoping boom arm (two base revolutes, a sliding prismatic boom, a three-axis wrist). Grab any joint and every LATER orange axis line visibly swings to its new place; each axis line is mirrored as a column chip (ω on bottom half, -ω×q on top half) in a growing matrix. Readout compares the column-built Jacobian with a numeric finite-difference one (lime check when they agree). Last beat: overlay a fake \"Euler-angle\" Jacobian; at certain poses it flashes 🚫 while the true twist Jacobian ellipse stays fat — the coral flash is the coordinates lying, not the robot."
+  },
+  {
+   "id": "mls-wrench-to-torque",
+   "title": "Push = Jᵀ",
+   "icon": "⚖️",
+   "section": "3.4.2",
+   "pages": [
+    121,
+    123
+   ],
+   "uses": [
+    "statics",
+    "jacobian",
+    "energy",
+    "vectors"
+   ],
+   "exists": "statics",
+   "beats": [
+    "⚡ work in = work out",
+    "🔁 τ = Jᵀ F",
+    "❓ resist or apply",
+    "🧱 the frame carries it"
+   ],
+   "brief": "A planar/SCARA arm whose pink hand presses on a teal contact plate. Drag a pink force arrow at the hand: orange torque dials at each joint swing to hold it (τ = Jᵀ F), and a work meter shows hand power F·V equals joint power τ·θ̇ (two bars that always match). A toggle flips the question: crank orange torques and see which pink wrench appears. Push the SCARA hand sideways-twisting (about x or y): every orange dial stays at zero and purple structural-force arrows appear in the links — the frame, not the motors, holds the load."
+  },
+  {
+   "id": "mls-singular-axes",
+   "title": "Singular axes",
+   "icon": "🚫",
+   "section": "3.4.3",
+   "pages": [
+    123,
+    127
+   ],
+   "uses": [
+    "jacobian",
+    "manipulability",
+    "svd",
+    "statics"
+   ],
+   "exists": "jacobian",
+   "beats": [
+    "🚫 rank drops, speeds explode",
+    "💪 forces at a singularity",
+    "🪢 two axes collinear",
+    "📏 three parallel in a plane",
+    "✳️ four through a point",
+    "🧱 stacked & joint limits"
+   ],
+   "brief": "A 6-DOF elbow arm with orange axis lines. A pink velocity ellipsoid at the hand and a bar of joint-speed meters. Drive toward a pose and watch the ellipsoid flatten, then 🚫 flash while required joint speeds shoot off the chart. Three \"geometry detectors\" glow when the pattern appears: two orange axes merge into one line (wrist flip), three parallel axes lie in one slate plane (straight elbow), four axes pass through one gold dot (wrist centre on shoulder). For each, a staircase animation does the proof: column subtract → zero column; re-frame → identical rows; reciprocal purple forces through the dot fill 3 dims. A joint-limit stop (coral bumper) shows the other way to lose a direction."
+  },
+  {
+   "id": "mls-dexterity-meters",
+   "title": "Dexterity meters",
+   "icon": "🥚",
+   "section": "3.4.4",
+   "pages": [
+    127,
+    129
+   ],
+   "uses": [
+    "manipulability",
+    "svd",
+    "jacobian",
+    "eigen"
+   ],
+   "exists": "manipulability",
+   "beats": [
+    "🗺️ reach vs wiggle room",
+    "🥚 ellipse axes = σ",
+    "📉 thinnest axis σmin",
+    "⚖️ roundness σmin/σmax",
+    "📦 volume det J",
+    "🌍 the dexterous set"
+   ],
+   "brief": "A planar 2–3 link arm. An orange unit circle of joint speeds is pushed through J into a pink velocity ellipse at the hand; its semi-axes are labelled σ1, σ2 with SVD arrows. Three gauges beside it: μ1 = shortest axis, μ2 = shortest/longest (roundness), μ3 = area (det). Drag the hand around: gauges update; a heat-map of the workspace paints where each meter is nonzero (lime) and zero (coral rim). A trick pose shows det large while σmin tiny — a long skinny ellipse scores big on area but is nearly singular."
+  },
+  {
+   "id": "mls-redundant-arm",
+   "title": "Spare joints",
+   "icon": "🐍",
+   "section": "3.5.1",
+   "pages": [
+    129,
+    132
+   ],
+   "uses": [
+    "jacobian",
+    "ik",
+    "svd",
+    "least-squares",
+    "statics",
+    "cspace"
+   ],
+   "exists": "ik",
+   "beats": [
+    "🐍 more joints than needed",
+    "🔄 hand frozen, elbow free",
+    "➖ null space of J",
+    "✨ pseudo-inverse: least effort",
+    "⚖️ still τ = Jᵀ F at rest"
+   ],
+   "brief": "A planar 3-link arm whose pink hand is pinned to a gold dot. A side panel shows joint space (θ1,θ2,θ3) as a 3D box; the set of poses that keep the hand on the gold dot draws as a teal closed curve (the self-motion manifold). Drag the elbow: the arm slides along the curve while the hand never moves, and an orange arrow V_N (null vector) is drawn tangent to the curve. Then move the gold dot: the pseudo-inverse picks the shortest joint-speed arrow (lime) among a fan of valid ones (faint orange)."
+  },
+  {
+   "id": "mls-closed-chains",
+   "title": "Closed chains",
+   "icon": "🤝",
+   "section": "3.5.2",
+   "pages": [
+    132,
+    135
+   ],
+   "uses": [
+    "jacobian",
+    "poe",
+    "ik",
+    "statics",
+    "rigid-transform"
+   ],
+   "exists": "forward-kinematics",
+   "beats": [
+    "🤝 many chains, one hand",
+    "🔗 the loop equation",
+    "🧮 Gruebler head count",
+    "🔄 inverse: solve each leg",
+    "⚡ velocities must agree",
+    "🚫 admissible set shrinks"
+   ],
+   "brief": "Three serial legs (blue links, orange joints) all grasping one pink platform. Only the first joint of each leg is a filled orange motor; the rest are hollow passive joints. Drag the platform: each leg solves its own IK and snaps into place. A counter does Gruebler bookkeeping: +6 (or +3 planar) per link, −constraint per joint, ending at the DOF number. Velocity view: each leg draws its reachable-velocity fan (range of Jᵢ); the admissible platform velocities are where all fans overlap (lime); when overlap thins, 🚫."
+  },
+  {
+   "id": "mls-four-bar",
+   "title": "Four-bar",
+   "icon": "⚙️",
+   "section": "3.5.3",
+   "pages": [
+    135,
+    138
+   ],
+   "uses": [
+    "jacobian",
+    "poe",
+    "forward-kinematics",
+    "svd"
+   ],
+   "beats": [
+    "⚙️ crank, coupler, rocker",
+    "🧮 one DOF (and the −2 riddle)",
+    "🔗 two chains glued at the tool",
+    "⚡ drive one, solve the rest",
+    "🚫 passives in a line jam",
+    "🎲 uncertainty: two ways at once"
+   ],
+   "brief": "Planar four-bar: slate ground bar, orange input crank (filled motor), blue coupler with a pink tool frame and a pink tracer dot, orange output rocker. Turn the crank dial: the coupler curve is traced in pink. The loop can be \"cut\" at the tool to show two two-link chains whose tool frames must coincide (gold ghost). A velocity panel solves passive rates from the input rate; when the three passive joints line up (lime → coral line), the solve blows up and the crank locks. Switch which link is input and the jam pose moves. Perfect-alignment pose shows two orange null-velocity arrows at once."
+  },
+  {
+   "id": "mls-stewart-platform",
+   "title": "Stewart platform",
+   "icon": "🛸",
+   "section": "3.5.4",
+   "pages": [
+    138,
+    142
+   ],
+   "uses": [
+    "ik",
+    "jacobian",
+    "statics",
+    "rigid-transform",
+    "svd"
+   ],
+   "beats": [
+    "🛸 six legs, one deck",
+    "⚪ passive ball joints never jam",
+    "📏 inverse = six tape measures",
+    "⚡ every velocity allowed",
+    "🫓 flat deck can't push up",
+    "🔺 planar: lines meet, torque lost"
+   ],
+   "brief": "A slate base hexagon and a blue top deck (with a pink tool frame) joined by six orange telescoping legs through passive ball joints (teal spheres). Drag/rotate the deck with a 6-DOF gizmo: each leg length readout is just a distance between two pivots. Wrench view: each leg pushes a purple force along its own line; the reachable wrench set is the span of six lines. Squash the deck flat onto the base: all purple lines lie in a plane, and a gold \"lift\" wrench turns coral 🚫. Planar version: three legs whose lines meet at one gold dot — no torque about that dot."
+  },
+  {
+   "id": "mls-ch3-map",
+   "title": "Chapter 3 map",
+   "icon": "🗺️",
+   "section": "3.6",
+   "pages": [
+    143,
+    145
+   ],
+   "uses": [
+    "forward-kinematics",
+    "ik",
+    "jacobian",
+    "manipulability",
+    "statics",
+    "poe"
+   ],
+   "beats": [
+    "🦾 pose from joints",
+    "🧩 joints from pose",
+    "📐 speeds & pushes",
+    "🚫 where it breaks",
+    "🤝 extra & parallel arms",
+    "📚 who found what"
+   ],
+   "brief": "A subway-style map of the chapter: stations are mini-scenes (an arm posing its hand, a hand dragging joints back, an ellipse at the hand, a flattened ellipse, a snake arm and a hexapod deck). Tap a station to replay a 3-second loop of its picture. A thin timeline strip along the bottom places the cited results (POE, IK solution bounds, parallel mechanisms) as dots by year."
+  }
+ ],
+ "pages": [
+  {
+   "pdf": 133,
+   "book": 115,
+   "lines": 48,
+   "section": "3.4.1",
+   "summary": "The Jacobian is built from twists rather than by differentiating a matrix: spatial end-effector velocity is ġg⁻¹, a linear combination of joint rates.",
+   "atoms": [
+    {
+     "id": "3-115-a",
+     "lines": [
+      1,
+      1
+     ],
+     "kind": "heading",
+     "idea": "Section 3.4 heading: the manipulator Jacobian."
+    },
+    {
+     "id": "3-115-b",
+     "lines": [
+      2,
+      6
+     ],
+     "kind": "prose",
+     "idea": "Besides pose-from-joints, we need speed-from-joint-speeds and its dual: which joint torques match a push at the hand.",
+     "feynman": "A bicycle: how fast you pedal sets how fast you roll, and how hard the road pushes back sets how hard your legs must push. Same gears, both directions.",
+     "visual": "Orange joint dials spin; the pink hand slides with a pink velocity arrow. Flip a switch and the arrow becomes a pink force arrow while the orange dials show torque bars instead of spin.",
+     "scene": "mls-twist-jacobian",
+     "beat": "🦾 wiggle one joint",
+     "math": [
+      "jacobian",
+      "statics"
+     ],
+     "engine": [
+      "kinematics.spaceJacobian"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "3-115-c",
+     "lines": [
+      7,
+      17
+     ],
+     "kind": "prose",
+     "idea": "Differentiating g(θ) works for maps into Rᵖ, but for g into SE(3) ∂g/∂θ is a matrix-valued oddity; picking local coordinates on SE(3) only works locally and wrecks the geometry.",
+     "feynman": "Describing a spinning globe by latitude/longitude works until you hit the North Pole, where longitude goes crazy even though the globe spins smoothly.",
+     "visual": "A blue body tumbles smoothly; next to it three orange \"angle\" dials jitter and one spins wildly at a coral 🚫 pose while the body moves calmly — coordinates misbehave, the body does not.",
+     "scene": "mls-jacobian-by-eye",
+     "beat": "🎭 ∂f/∂θ is an impostor",
+     "math": [
+      "rigid-transform",
+      "euler-angles"
+     ],
+     "engine": [
+      "lie.expSE3"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-115-d",
+     "lines": [
+      18,
+      23
+     ],
+     "kind": "prose",
+     "idea": "Instead, write the Jacobian with twists via the product-of-exponentials formula: explicit, geometric and free of coordinate artifacts.",
+     "feynman": "Instead of describing a door's swing by numbers, point at its hinge: the hinge line tells you everything about how it can move.",
+     "visual": "Each orange joint grows a glowing screw-axis line; the axis lines alone are dragged into a matrix tray, one per column.",
+     "scene": "mls-twist-jacobian",
+     "beat": "🧲 column = twist moved into place",
+     "math": [
+      "poe",
+      "screw-exp"
+     ],
+     "engine": [
+      "kinematics.poeFK"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-115-e",
+     "lines": [
+      24,
+      24
+     ],
+     "kind": "heading",
+     "idea": "Subsection 4.1 heading: end-effector velocity."
+    },
+    {
+     "id": "3-115-f",
+     "lines": [
+      25,
+      30
+     ],
+     "kind": "equation",
+     "idea": "As joints follow θ(t) the hand traces g_st(θ(t)); its spatial velocity twist is V̂ˢ = ġ g⁻¹.",
+     "feynman": "Filming a moving toy car from a fixed tripod: the camera sees how the car moves right now, measured in the room.",
+     "visual": "Pink tool frame sweeps along a pink trail; a stopwatch freezes it and draws a pink screw arrow (rotation ω plus slide v) attached to the fixed slate base frame.",
+     "scene": "mls-twist-jacobian",
+     "beat": "🦾 wiggle one joint",
+     "math": [
+      "rigid-transform",
+      "derivative"
+     ],
+     "engine": [
+      "lie.logSE3"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-115-g",
+     "lines": [
+      31,
+      37
+     ],
+     "kind": "equation",
+     "label": "Eq (3.51)",
+     "idea": "Chain rule: V̂ˢ = Σᵢ (∂g/∂θᵢ) g⁻¹ θ̇ᵢ — the hand twist is linear in joint rates.",
+     "feynman": "Several hands pushing a merry-go-round: each push adds its own bit of spin, and the total is just the sum.",
+     "visual": "Turn one orange slider at a time: each adds its own pink arrow; turning all at once shows the arrows adding tip-to-tail into the total pink twist.",
+     "scene": "mls-twist-jacobian",
+     "beat": "🦾 wiggle one joint",
+     "math": [
+      "chain-rule",
+      "jacobian"
+     ],
+     "engine": [
+      "kinematics.spaceJacobian"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-115-h",
+     "lines": [
+      38,
+      47
+     ],
+     "kind": "equation",
+     "label": "Eq (3.52)",
+     "idea": "In twist coordinates Vˢ = Jˢ(θ) θ̇, with column i = (∂g/∂θᵢ g⁻¹)∨.",
+     "feynman": "A recipe card: column i says \"one unit of joint i makes the hand do this twist\".",
+     "visual": "A 6×n grid of tiles; wiggling joint i lights column i, and its six numbers equal the pink twist arrow's components.",
+     "scene": "mls-twist-jacobian",
+     "beat": "🦾 wiggle one joint",
+     "math": [
+      "jacobian",
+      "matrix"
+     ],
+     "engine": [
+      "kinematics.spaceJacobian"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-115-i",
+     "lines": [
+      48,
+      48
+     ],
+     "kind": "page-number",
+     "idea": "Page number 115."
+    }
+   ]
+  },
+  {
+   "pdf": 134,
+   "book": 116,
+   "lines": 54,
+   "section": "3.4.1",
+   "summary": "With POE kinematics the i-th spatial Jacobian column is the i-th joint twist moved by the earlier joints: Eq (3.54).",
+   "atoms": [
+    {
+     "id": "3-116-a",
+     "lines": [
+      1,
+      4
+     ],
+     "kind": "definition",
+     "idea": "Jˢ(θ) ∈ R^{6×n} is the spatial manipulator Jacobian: at each pose it turns a joint-speed vector into the hand's spatial twist.",
+     "feynman": "A gearbox for speeds: put a set of joint speeds in, get one hand motion out — the gears change as the arm changes pose.",
+     "visual": "An orange joint-speed bar chart feeds a grey matrix box; out pops a pink twist arrow at the hand. Moving the arm re-colors the box.",
+     "scene": "mls-twist-jacobian",
+     "beat": "🦾 wiggle one joint",
+     "math": [
+      "jacobian"
+     ],
+     "engine": [
+      "kinematics.spaceJacobian"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "3-116-b",
+     "lines": [
+      5,
+      25
+     ],
+     "kind": "proof",
+     "label": "Eq (3.53)",
+     "idea": "Derivation: differentiate e^{ξ̂1θ1}…e^{ξ̂nθn}g(0) in θᵢ, the later factors cancel against g⁻¹, leaving e^{…}ξ̂ᵢe^{-…} = Ad of the earlier exponentials applied to ξᵢ.",
+     "feynman": "Stacked toy blocks on turntables: spinning turntable i swings everything above it, but its own axis was put in place only by the turntables below.",
+     "visual": "Staircase: (1) product of orange exponentials as a row of boxes; (2) the box for θᵢ sprouts ξ̂ᵢ; (3) the boxes to its right meet their inverses and vanish in a puff; (4) what remains: earlier boxes sandwiching ξᵢ = Ad(·)ξᵢ.",
+     "scene": "mls-twist-jacobian",
+     "beat": "🧲 column = twist moved into place",
+     "math": [
+      "poe",
+      "screw-exp",
+      "chain-rule"
+     ],
+     "engine": [
+      "lie.adjoint",
+      "lie.expSE3"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "3-116-c",
+     "lines": [
+      26,
+      36
+     ],
+     "kind": "equation",
+     "label": "Eq (3.54)",
+     "idea": "Jˢ = [ξ1, ξ2′, …, ξn′] with ξᵢ′ = Ad_{e^{ξ̂1θ1}⋯e^{ξ̂_{i-1}θ_{i-1}}} ξᵢ: a pose-dependent 6×n map.",
+     "feynman": "Each column is a hinge photographed where it sits now, after the earlier hinges moved it.",
+     "visual": "Faint orange home-pose axis lines; bright orange current axis lines; an arrow animates each home axis into its current place and drops it into column i.",
+     "scene": "mls-twist-jacobian",
+     "beat": "🧲 column = twist moved into place",
+     "math": [
+      "jacobian",
+      "poe"
+     ],
+     "engine": [
+      "kinematics.spaceJacobian",
+      "lie.adjoint"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-116-d",
+     "lines": [
+      37,
+      53
+     ],
+     "kind": "remark",
+     "idea": "Column i depends only on θ1..θ_{i-1}: it is joint i's twist carried to its current place, so Jˢ can be read off by inspection.",
+     "feynman": "On a crane, the boom hinge's line depends on how the base turned, but not on where the hook is dangling.",
+     "visual": "Drag a LATER joint: earlier columns stay frozen (lime lock icons); drag an EARLIER joint: all later axis lines swing and their columns update.",
+     "scene": "mls-twist-jacobian",
+     "beat": "🧲 column = twist moved into place",
+     "math": [
+      "jacobian",
+      "rigid-transform"
+     ],
+     "engine": [
+      "kinematics.spaceJacobian"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-116-e",
+     "lines": [
+      54,
+      54
+     ],
+     "kind": "page-number",
+     "idea": "Page number 116."
+    }
+   ]
+  },
+  {
+   "pdf": 135,
+   "book": 117,
+   "lines": 52,
+   "section": "3.4.1",
+   "summary": "The body Jacobian expresses joint twists in the tool frame; it relates to the spatial one by an adjoint, gives point velocities, and can be inverted to steer the hand.",
+   "atoms": [
+    {
+     "id": "3-117-a",
+     "lines": [
+      1,
+      19
+     ],
+     "kind": "equation",
+     "label": "Eq (3.55)",
+     "idea": "Body Jacobian Jᵇ: Vᵇ = Jᵇθ̇, columns ξᵢ† = Ad⁻¹ of (later exponentials times g(0)) applied to ξᵢ — each joint twist seen from the current tool frame. Picking g(0)=I simplifies it.",
+     "feynman": "Describing a car's turn from the driver's seat (\"turn left\") instead of from a helicopter (\"heading north-west\").",
+     "visual": "Same arm, camera mounted on the pink gripper: orange axis lines are drawn in the gripper's own red/green/blue frame and fill a second grid.",
+     "scene": "mls-twist-jacobian",
+     "beat": "🔁 spatial ↔ body by adjoint",
+     "math": [
+      "jacobian",
+      "rigid-transform"
+     ],
+     "engine": [
+      "lie.adjoint",
+      "NEW: bodyJacobian"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-117-b",
+     "lines": [
+      20,
+      23
+     ],
+     "kind": "equation",
+     "label": "Eq (3.56)",
+     "idea": "Jˢ = Ad_{g_st} Jᵇ: the two Jacobians are the same twists in two frames.",
+     "feynman": "One map in English and one in French: a dictionary (the adjoint) translates every entry.",
+     "visual": "Two grids side by side with an \"Ad\" lens between; drag the lens across a body column and it morphs into the matching spatial column. Hand motion identical in both views.",
+     "scene": "mls-twist-jacobian",
+     "beat": "🔁 spatial ↔ body by adjoint",
+     "math": [
+      "rigid-transform",
+      "jacobian"
+     ],
+     "engine": [
+      "lie.adjoint"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-117-c",
+     "lines": [
+      24,
+      36
+     ],
+     "kind": "equation",
+     "idea": "A point q fixed on the hand moves with v = (Jθ̇)^ q, using the body Jacobian for body coordinates or the spatial one for base coordinates.",
+     "feynman": "A sticker on a spinning, sliding frisbee: its speed comes from the frisbee's spin and slide together.",
+     "visual": "Teal stickers on the pink gripper each show a velocity arrow computed from the one pink twist; drag a sticker farther from the axis and its arrow grows.",
+     "scene": "mls-twist-jacobian",
+     "beat": "📍 speed of a hand point",
+     "math": [
+      "rigid-transform",
+      "vectors"
+     ],
+     "engine": [
+      "lie.applySE3"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-117-d",
+     "lines": [
+      37,
+      45
+     ],
+     "kind": "equation",
+     "idea": "For the tool origin (qᵇ=0, qˢ=p(θ)) the three forms ṗ, R Vᵇ, Vˢ applied to p all agree.",
+     "feynman": "Three people timing the same runner from different spots still agree on how fast she ran.",
+     "visual": "Three pink arrows at the tool origin, each built a different way, overlap perfectly; a lime ✓ shows their difference is zero.",
+     "scene": "mls-twist-jacobian",
+     "beat": "📍 speed of a hand point",
+     "math": [
+      "rigid-transform"
+     ],
+     "engine": [
+      "kinematics.poeFK"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-117-e",
+     "lines": [
+      46,
+      51
+     ],
+     "kind": "equation",
+     "label": "Eq (3.57)",
+     "idea": "If J is square and invertible, θ̇ = J⁻¹V moves the hand along a desired twist without solving inverse kinematics.",
+     "feynman": "Steering a boat: you don't compute the final rudder position, you just keep nudging toward where you want to go.",
+     "visual": "Draw a gold path; joint rates are J⁻¹ times the path twist; orange dials spin and the pink hand rides the gold path.",
+     "scene": "mls-twist-jacobian",
+     "beat": "🧭 steer without IK",
+     "math": [
+      "jacobian",
+      "ik",
+      "ode"
+     ],
+     "engine": [
+      "linalg.inv",
+      "dynamics.rk4"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-117-f",
+     "lines": [
+      52,
+      52
+     ],
+     "kind": "page-number",
+     "idea": "Page number 117."
+    }
+   ]
+  },
+  {
+   "pdf": 136,
+   "book": 118,
+   "lines": 41,
+   "section": "3.4.1",
+   "summary": "Integrating θ̇ = J⁻¹V traces a workspace path; Example 3.8 reads the SCARA spatial Jacobian off its vertical axes.",
+   "atoms": [
+    {
+     "id": "3-118-a",
+     "lines": [
+      1,
+      9
+     ],
+     "kind": "figure",
+     "label": "Fig 3.13",
+     "idea": "SCARA arm (three vertical revolutes and a vertical prismatic) bent away from its home pose, with base S and tool T.",
+     "feynman": "A desk lamp with elbow hinges that only turn left-right and a stem that slides up-down.",
+     "visual": "Top-down + side view of a SCARA: orange vertical axis lines at each revolute, a blue sliding stem, pink tool frame T, slate base S.",
+     "scene": "mls-jacobian-by-eye",
+     "beat": "🔍 SCARA columns by eye",
+     "math": [
+      "forward-kinematics"
+     ],
+     "engine": [
+      "kinematics.poeFK"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "3-118-b",
+     "lines": [
+      10,
+      14
+     ],
+     "kind": "prose",
+     "idea": "Given any workspace path g(t) from g1 to g2, compute ġg⁻¹ and integrate Eq (3.57) over [0,T] to get a joint path.",
+     "feynman": "Follow a dotted trail by taking tiny steps and always correcting toward the next dot.",
+     "visual": "Gold start and goal frames joined by a gold curve; a play button integrates with tiny RK4 steps; a pink trail lands on the goal; orange joint traces plot below.",
+     "scene": "mls-twist-jacobian",
+     "beat": "🧭 steer without IK",
+     "math": [
+      "ode",
+      "jacobian"
+     ],
+     "engine": [
+      "dynamics.rk4",
+      "linalg.inv"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-118-c",
+     "lines": [
+      15,
+      25
+     ],
+     "kind": "example",
+     "label": "Ex 3.8",
+     "idea": "SCARA: axis directions stay vertical; only the points on axes move: q2′ at the end of link 1, q3′ at the end of link 2.",
+     "feynman": "Hinges of a folding ruler lying on a table: they always point up, only their positions on the table change.",
+     "visual": "Top view: teal dots mark where each orange vertical axis pierces the floor; dragging θ1 moves the second and third dots on circles.",
+     "scene": "mls-jacobian-by-eye",
+     "beat": "🔍 SCARA columns by eye",
+     "math": [
+      "jacobian",
+      "forward-kinematics"
+     ],
+     "engine": [
+      "kinematics.planarFK"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-118-d",
+     "lines": [
+      26,
+      40
+     ],
+     "kind": "example",
+     "label": "Ex 3.8",
+     "idea": "The SCARA Jˢ has columns (−ω×q′, ω) for the three revolutes and (0,0,1,0,0,0) for the slider; check: (Jˢθ̇)^ applied to p(θ) equals ṗ.",
+     "feynman": "Each hinge pushes the tool sideways in proportion to how far the tool is from it, like longer wrenches turning bolts more easily.",
+     "visual": "Column chips fill with numbers as each axis is clicked; then the hand's pink velocity from the matrix and from a finite difference overlap with a lime ✓.",
+     "scene": "mls-jacobian-by-eye",
+     "beat": "🔍 SCARA columns by eye",
+     "math": [
+      "jacobian",
+      "derivative"
+     ],
+     "engine": [
+      "kinematics.spaceJacobian",
+      "dynamics.numJacobian"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-118-e",
+     "lines": [
+      41,
+      41
+     ],
+     "kind": "page-number",
+     "idea": "Page number 118."
+    }
+   ]
+  },
+  {
+   "pdf": 137,
+   "book": 119,
+   "lines": 50,
+   "section": "3.4.1",
+   "summary": "Example 3.9: the telescoping boom arm Jacobian is built by tracking where each axis currently points and passes.",
+   "atoms": [
+    {
+     "id": "3-119-a",
+     "lines": [
+      1,
+      9
+     ],
+     "kind": "figure",
+     "label": "Fig 3.14",
+     "idea": "Idealized telescoping boom arm (Fig 3.14): two base revolutes, a telescoping prismatic boom and a spherical wrist with six twist axes.",
+     "feynman": "A telescope on a swivel tripod with a camera that can tilt and roll at the end.",
+     "visual": "3D: slate base, orange axes ξ1..ξ6 drawn as lines, a blue telescoping boom, a teal wrist-centre dot q_w, pink gripper.",
+     "scene": "mls-jacobian-by-eye",
+     "beat": "🦿 boom-arm axes in flight",
+     "math": [
+      "forward-kinematics"
+     ],
+     "engine": [
+      "kinematics.poeFK"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "3-119-b",
+     "lines": [
+      10,
+      14
+     ],
+     "kind": "example",
+     "label": "Ex 3.9",
+     "idea": "The boom arm is like an elbow arm with the elbow swapped for a sliding joint: 6 DOF.",
+     "feynman": "Like a crane whose arm extends like a telescope instead of bending.",
+     "visual": "Morph animation: elbow arm's orange elbow hinge shrinks while its forearm becomes a sliding blue boom.",
+     "scene": "mls-jacobian-by-eye",
+     "beat": "🦿 boom-arm axes in flight",
+     "math": [
+      "forward-kinematics"
+     ],
+     "engine": [
+      "kinematics.poeFK"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "3-119-c",
+     "lines": [
+      15,
+      29
+     ],
+     "kind": "example",
+     "label": "Ex 3.9",
+     "idea": "First two axes pass through (0,0,l0); ω1 = z, ω2′ = (−cos θ1, −sin θ1, 0) rotates with joint 1; twists follow as (−ω×q, ω).",
+     "feynman": "The shoulder hinge rides on the waist turntable, so it points wherever the waist turned it.",
+     "visual": "Spin θ1: the orange ξ2′ line swings around the vertical; its column chip recomputes live.",
+     "scene": "mls-jacobian-by-eye",
+     "beat": "🦿 boom-arm axes in flight",
+     "math": [
+      "jacobian",
+      "rotation"
+     ],
+     "engine": [
+      "kinematics.spaceJacobian"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-119-d",
+     "lines": [
+      30,
+      42
+     ],
+     "kind": "example",
+     "label": "Ex 3.9",
+     "idea": "The prismatic joint contributes only a direction: (v3′, 0) with v3′ = boom direction after the first two rotations.",
+     "feynman": "Sliding a drawer only cares which way the drawer points, not where it is.",
+     "visual": "The blue boom glows; a pink straight arrow along it fills the top half of column 3 while the bottom half stays zero.",
+     "scene": "mls-jacobian-by-eye",
+     "beat": "🦿 boom-arm axes in flight",
+     "math": [
+      "jacobian",
+      "vectors"
+     ],
+     "engine": [
+      "kinematics.spaceJacobian"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-119-e",
+     "lines": [
+      43,
+      49
+     ],
+     "kind": "example",
+     "label": "Ex 3.9",
+     "idea": "Wrist centre q_w′ = (0,0,l0) + R(θ1,θ2)(0, l1+θ3, 0).",
+     "feynman": "Your wrist sits at the tip of your arm wherever your shoulder points and however long your arm stretches.",
+     "visual": "A teal dot rides at the end of the boom as θ1, θ2, θ3 change; its coordinates tick in a readout.",
+     "scene": "mls-jacobian-by-eye",
+     "beat": "🦿 boom-arm axes in flight",
+     "math": [
+      "forward-kinematics",
+      "rotation"
+     ],
+     "engine": [
+      "lie.rotZ",
+      "lie.rotX"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-119-f",
+     "lines": [
+      50,
+      50
+     ],
+     "kind": "page-number",
+     "idea": "Page number 119."
+    }
+   ]
+  },
+  {
+   "pdf": 138,
+   "book": 120,
+   "lines": 54,
+   "section": "3.4.1",
+   "summary": "The boom arm Jacobian assembles without differentiating; a Jacobian of a coordinate map ∂f/∂θ is not the manipulator Jacobian and can show fake singularities.",
+   "atoms": [
+    {
+     "id": "3-120-a",
+     "lines": [
+      1,
+      15
+     ],
+     "kind": "example",
+     "label": "Ex 3.9",
+     "idea": "Wrist axis directions ω4′, ω5′, ω6′ each come from rotating the home direction by all earlier rotations (including earlier wrist joints).",
+     "feynman": "Nested gimbals in a camera stabilizer: each ring's axis is turned by every ring outside it.",
+     "visual": "Three orange wrist axis arrows nest; rotating θ4 swings ω5′ and ω6′, rotating θ5 swings only ω6′.",
+     "scene": "mls-jacobian-by-eye",
+     "beat": "🦿 boom-arm axes in flight",
+     "math": [
+      "rotation",
+      "euler-angles"
+     ],
+     "engine": [
+      "lie.expSO3"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-120-b",
+     "lines": [
+      16,
+      29
+     ],
+     "kind": "example",
+     "label": "Eq (3.58)",
+     "idea": "Full boom-arm Jˢ: columns (−ωᵢ′×q, ωᵢ′) for revolutes, (v3′, 0) for the slider — no differentiation needed.",
+     "feynman": "Building a jigsaw from pieces you can see, instead of measuring every wiggle.",
+     "visual": "All six orange axis lines are drawn; each drops into the grid; a lime ✓ compares to a numeric derivative of the pink hand pose.",
+     "scene": "mls-jacobian-by-eye",
+     "beat": "🦿 boom-arm axes in flight",
+     "math": [
+      "jacobian",
+      "poe"
+     ],
+     "engine": [
+      "kinematics.spaceJacobian",
+      "dynamics.numJacobian"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-120-c",
+     "lines": [
+      30,
+      45
+     ],
+     "kind": "remark",
+     "idea": "For SCARA one may write x = (p, φ) ∈ R⁴ and take ∂f/∂θ; it maps speeds but its columns are not joint twist axes, so it is not the manipulator Jacobian.",
+     "feynman": "A shadow of a dancer tells you where she goes on the floor, but not how her hips are turning.",
+     "visual": "Two grids: twist Jacobian columns draw as orange axis lines on the arm; ∂f/∂θ columns draw only as floating numbers with no line to attach — they turn grey.",
+     "scene": "mls-jacobian-by-eye",
+     "beat": "🎭 ∂f/∂θ is an impostor",
+     "math": [
+      "jacobian",
+      "derivative"
+     ],
+     "engine": [
+      "dynamics.numJacobian"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-120-d",
+     "lines": [
+      46,
+      53
+     ],
+     "kind": "remark",
+     "idea": "With a 6-number chart of SE(3) the Jacobian of f:Q→R⁶ has no geometric meaning and, for full-rotation tools, inherits parameterization singularities.",
+     "feynman": "A globe's latitude/longitude grid pinches at the poles even though the Earth itself is perfectly round there.",
+     "visual": "A wrist rolls smoothly; an Euler-angle readout freezes and flashes coral 🚫 at gimbal lock while the twist Jacobian's ellipsoid stays fat and lime.",
+     "scene": "mls-jacobian-by-eye",
+     "beat": "🎭 ∂f/∂θ is an impostor",
+     "math": [
+      "euler-angles",
+      "jacobian"
+     ],
+     "engine": [
+      "lie.eulerZYX"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-120-e",
+     "lines": [
+      54,
+      54
+     ],
+     "kind": "page-number",
+     "idea": "Page number 120."
+    }
+   ]
+  },
+  {
+   "pdf": 139,
+   "book": 121,
+   "lines": 46,
+   "section": "3.4.2",
+   "summary": "Power balance between joints and hand gives τ = (Jᵇ)ᵀFᵇ and τ = (Jˢ)ᵀFˢ.",
+   "atoms": [
+    {
+     "id": "3-121-a",
+     "lines": [
+      1,
+      3
+     ],
+     "kind": "remark",
+     "idea": "Those fake singularities can mislead about reachable poses and speeds; the twist Jacobian avoids them.",
+     "feynman": "A map that shows a fake cliff at the pole would scare hikers away from a flat path.",
+     "visual": "Continuation: a coral \"fake wall\" in the chart view vanishes when switching to the twist view; the pink hand passes through the pose happily.",
+     "scene": "mls-jacobian-by-eye",
+     "beat": "🎭 ∂f/∂θ is an impostor",
+     "math": [
+      "euler-angles"
+     ],
+     "engine": [
+      "lie.eulerZYX"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-121-b",
+     "lines": [
+      4,
+      4
+     ],
+     "kind": "heading",
+     "idea": "Subsection 4.2 heading: end-effector forces."
+    },
+    {
+     "id": "3-121-c",
+     "lines": [
+      5,
+      10
+     ],
+     "kind": "prose",
+     "idea": "The same Jacobian links hand wrenches to joint torques; twist–wrench duality carries over to arms.",
+     "feynman": "A seesaw: the ratio that tells how far each end moves also tells how hard each end pushes.",
+     "visual": "A velocity ellipse (pink) and a force ellipse (purple) at the hand: stretch one, the other squashes.",
+     "scene": "mls-wrench-to-torque",
+     "beat": "⚡ work in = work out",
+     "math": [
+      "statics",
+      "jacobian"
+     ],
+     "engine": [
+      "kinematics.spaceJacobian"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-121-d",
+     "lines": [
+      11,
+      24
+     ],
+     "kind": "proof",
+     "idea": "Work done on the hand ∫Vᵇ·F dt equals work done by frictionless joints ∫θ̇·τ dt over any interval.",
+     "feynman": "Pushing a wheelbarrow: the effort your arms put in equals what moves the load, no energy appears from nowhere.",
+     "visual": "Two energy buckets (orange joints, pink hand) filling at the same rate as the arm moves against a pink force; their levels are always equal.",
+     "scene": "mls-wrench-to-torque",
+     "beat": "⚡ work in = work out",
+     "math": [
+      "energy",
+      "statics"
+     ],
+     "engine": [
+      "kinematics.spaceJacobian"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-121-e",
+     "lines": [
+      25,
+      33
+     ],
+     "kind": "equation",
+     "label": "Eq (3.59)",
+     "idea": "Since intervals are arbitrary the integrands match: θ̇ᵀτ = θ̇ᵀ(Jᵇ)ᵀF for all θ̇, so τ = (Jᵇ)ᵀF.",
+     "feynman": "If two scales agree for every possible weight, they must be the same scale.",
+     "visual": "Randomly wiggle θ̇ arrows; the two power bars always match; finally the torque bars snap to the Jᵀ F values.",
+     "scene": "mls-wrench-to-torque",
+     "beat": "🔁 τ = Jᵀ F",
+     "math": [
+      "statics",
+      "jacobian"
+     ],
+     "engine": [
+      "linalg.T",
+      "linalg.mvec"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-121-f",
+     "lines": [
+      34,
+      42
+     ],
+     "kind": "equation",
+     "label": "Eq (3.60)",
+     "idea": "Same argument with spatial wrench and spatial Jacobian: τ = (Jˢ)ᵀFˢ (derivation left to the reader).",
+     "feynman": "Same seesaw described from the playground gate instead of from the seat.",
+     "visual": "Frame toggle: the pink force arrow's numbers change between body and spatial, but the orange torque bars stay identical.",
+     "scene": "mls-wrench-to-torque",
+     "beat": "🔁 τ = Jᵀ F",
+     "math": [
+      "statics",
+      "rigid-transform"
+     ],
+     "engine": [
+      "lie.adjoint"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-121-g",
+     "lines": [
+      43,
+      45
+     ],
+     "kind": "remark",
+     "idea": "Reading Jᵀ as force→torque is safe only if J is square and full rank.",
+     "feynman": "A lever works perfectly until it is broken or has extra loose joints.",
+     "visual": "A small coral ⚠️ appears next to the Jᵀ arrow when J is not square.",
+     "scene": "mls-wrench-to-torque",
+     "beat": "❓ resist or apply",
+     "math": [
+      "statics"
+     ],
+     "engine": [
+      "linalg.svd"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-121-h",
+     "lines": [
+      46,
+      46
+     ],
+     "kind": "page-number",
+     "idea": "Page number 121."
+    }
+   ]
+  },
+  {
+   "pdf": 140,
+   "book": 122,
+   "lines": 46,
+   "section": "3.4.2",
+   "summary": "Two questions — torques to resist vs wrenches produced — and how redundant or deficient arms differ; Example 3.10 starts the SCARA statics.",
+   "atoms": [
+    {
+     "id": "3-122-a",
+     "lines": [
+      1,
+      3
+     ],
+     "kind": "remark",
+     "idea": "Singular cases are postponed; here only non-square J is considered.",
+     "feynman": "First learn to ride on flat ground; potholes come next lesson.",
+     "visual": "The coral ⚠️ narrows to \"non-square\": arms with too many or too few orange joints for the pink task.",
+     "scene": "mls-wrench-to-torque",
+     "beat": "❓ resist or apply",
+     "math": [
+      "statics"
+     ],
+     "engine": [
+      "linalg.svd"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "3-122-b",
+     "lines": [
+      4,
+      15
+     ],
+     "kind": "prose",
+     "idea": "Two questions: (1) which torques resist a given hand force — Eq (3.59) always answers; (2) which torques make a desired hand wrench — the one manipulation cares about.",
+     "feynman": "Holding a door shut when someone pushes vs pushing it open yourself.",
+     "visual": "Mode switch \"resist\" (drag pink force, read orange torques) vs \"apply\" (set gold desired force, solve for orange torques).",
+     "scene": "mls-wrench-to-torque",
+     "beat": "❓ resist or apply",
+     "math": [
+      "statics"
+     ],
+     "engine": [
+      "linalg.lstsq"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-122-c",
+     "lines": [
+      16,
+      23
+     ],
+     "kind": "prose",
+     "idea": "Redundant arm (more joints than workspace dims): torques for any hand force exist, but internal motions can move the arm with the hand fixed.",
+     "feynman": "Holding a cup with a wobbly elbow: you can push it fine, but your elbow can still drift.",
+     "visual": "A 3-link planar arm presses a pink force; orange torques found; the blue elbow drifts along a teal arc while the hand stays on the plate.",
+     "scene": "mls-redundant-arm",
+     "beat": "🔄 hand frozen, elbow free",
+     "math": [
+      "statics",
+      "jacobian"
+     ],
+     "engine": [
+      "linalg.pinv"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-122-d",
+     "lines": [
+      24,
+      35
+     ],
+     "kind": "prose",
+     "idea": "Deficient arm: some wrenches cannot be produced but are resisted structurally: if F lies in null(Jᵀ), τ = 0 balances it.",
+     "feynman": "You can't lift a table by pushing sideways on its leg, but the leg won't bend either — the wood holds it.",
+     "visual": "Push pink force in a null(Jᵀ) direction: orange torque bars stay at zero, purple structure arrows light up inside blue links.",
+     "scene": "mls-wrench-to-torque",
+     "beat": "🧱 the frame carries it",
+     "math": [
+      "statics",
+      "svd"
+     ],
+     "engine": [
+      "linalg.svd"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-122-e",
+     "lines": [
+      36,
+      45
+     ],
+     "kind": "example",
+     "label": "Ex 3.10",
+     "idea": "SCARA (Jˢ)ᵀ is 4×6; its rows are the four column twists laid flat.",
+     "feynman": "The same recipe card read sideways answers the push question.",
+     "visual": "The SCARA Jacobian grid flips 90° on screen into Jᵀ; a pink wrench vector slides through it and four orange torque bars come out.",
+     "scene": "mls-wrench-to-torque",
+     "beat": "🔁 τ = Jᵀ F",
+     "math": [
+      "statics",
+      "matrix"
+     ],
+     "engine": [
+      "kinematics.spaceJacobian",
+      "linalg.T"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-122-f",
+     "lines": [
+      46,
+      46
+     ],
+     "kind": "page-number",
+     "idea": "Page number 122."
+    }
+   ]
+  },
+  {
+   "pdf": 141,
+   "book": 123,
+   "lines": 39,
+   "section": "3.4.3",
+   "summary": "SCARA cannot produce torques about horizontal axes — they lie in null(Jᵀ). Singularities are poses where J drops rank.",
+   "atoms": [
+    {
+     "id": "3-123-a",
+     "lines": [
+      1,
+      8
+     ],
+     "kind": "figure",
+     "label": "Fig 3.15",
+     "idea": "SCARA with two tilting wrenches F_N1, F_N2 at the tool that load no joint.",
+     "feynman": "Trying to tip over a lazy-susan by pushing down on its edge: it does not spin at all.",
+     "visual": "Pink curved arrows twisting the tool about x and y; all four orange torque dials stay at 0; purple bracing arrows in the links.",
+     "scene": "mls-wrench-to-torque",
+     "beat": "🧱 the frame carries it",
+     "math": [
+      "statics"
+     ],
+     "engine": [
+      "linalg.svd"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-123-b",
+     "lines": [
+      9,
+      18
+     ],
+     "kind": "example",
+     "label": "Ex 3.10",
+     "idea": "null((Jˢ)ᵀ) is spanned by pure torques about x and y: the SCARA can neither apply them nor move under them.",
+     "feynman": "A drawer slide resists twisting and tipping by its rails, not by your hand.",
+     "visual": "Null-space vectors F_N1, F_N2 drawn as red and green curved arrows; a readout τ = 0 0 0 0 in lime.",
+     "scene": "mls-wrench-to-torque",
+     "beat": "🧱 the frame carries it",
+     "math": [
+      "statics",
+      "svd"
+     ],
+     "engine": [
+      "linalg.svd"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-123-c",
+     "lines": [
+      19,
+      19
+     ],
+     "kind": "heading",
+     "idea": "Subsection 4.3 heading: singularities."
+    },
+    {
+     "id": "3-123-d",
+     "lines": [
+      20,
+      32
+     ],
+     "kind": "definition",
+     "idea": "Singular configuration: J drops rank; for 6-DOF arms J is not invertible, some hand directions are impossible and nearby joint rates blow up.",
+     "feynman": "Pushing a fully straightened knee further outward: no bend can do it, and near-straight it takes huge bends for tiny reach.",
+     "visual": "Drag the arm toward full stretch: pink velocity ellipse flattens to a line, 🚫 flashes, and orange joint-speed bars needed for a fixed gold velocity shoot off the top.",
+     "scene": "mls-singular-axes",
+     "beat": "🚫 rank drops, speeds explode",
+     "math": [
+      "jacobian",
+      "svd",
+      "manipulability"
+     ],
+     "engine": [
+      "linalg.svd",
+      "linalg.pinv"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-123-e",
+     "lines": [
+      33,
+      38
+     ],
+     "kind": "definition",
+     "idea": "With fewer than six joints, singular means the hand's DOF count drops: two or more Jacobian columns become dependent.",
+     "feynman": "Two oars pointing the same way: you lose the ability to turn the boat.",
+     "visual": "Column arrows drawn as orange vectors; when two line up they merge into one and the rank counter ticks down.",
+     "scene": "mls-singular-axes",
+     "beat": "🚫 rank drops, speeds explode",
+     "math": [
+      "jacobian",
+      "matrix"
+     ],
+     "engine": [
+      "linalg.svd"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-123-f",
+     "lines": [
+      39,
+      39
+     ],
+     "kind": "page-number",
+     "idea": "Page number 123."
+    }
+   ]
+  },
+  {
+   "pdf": 142,
+   "book": 124,
+   "lines": 43,
+   "section": "3.4.3",
+   "summary": "Singularities affect forces too; Example 3.11: two collinear revolute axes make J singular (column-operation proof).",
+   "atoms": [
+    {
+     "id": "3-124-a",
+     "lines": [
+      1,
+      2
+     ],
+     "kind": "remark",
+     "idea": "Since tasks need every DOF, singular poses should generally be avoided.",
+     "feynman": "Don't park with your wheels pointing into the curb if you need to leave fast.",
+     "visual": "Workspace map: coral bands mark singular poses; a planner's gold path steers around them.",
+     "scene": "mls-singular-axes",
+     "beat": "🚫 rank drops, speeds explode",
+     "math": [
+      "jacobian"
+     ],
+     "engine": [
+      "kinematics.manipulability"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "3-124-b",
+     "lines": [
+      3,
+      11
+     ],
+     "kind": "prose",
+     "idea": "At a singularity some wrenches sit in null(Jᵀ): held with zero torque, but a wrench in the singular direction cannot be generated at all.",
+     "feynman": "A locked-straight arm can hold a heavy bag hanging straight down effortlessly, but can't push further out no matter how hard you try.",
+     "visual": "Straight arm: a pink force along the arm shows zero orange torque and purple structure arrows; asking for gold force in that direction → coral 🚫 and nothing comes out.",
+     "scene": "mls-singular-axes",
+     "beat": "💪 forces at a singularity",
+     "math": [
+      "statics",
+      "svd"
+     ],
+     "engine": [
+      "linalg.svd"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-124-c",
+     "lines": [
+      12,
+      20
+     ],
+     "kind": "prose",
+     "idea": "Plan: identify common 6-DOF singularities from geometry, each with a different proof style.",
+     "feynman": "Detective work: three different clues each reveal a stuck robot.",
+     "visual": "Three detector badges (🪢, 📏, ✳️) sit greyed beside the arm, each glowing when its pattern appears.",
+     "scene": "mls-singular-axes",
+     "beat": "🪢 two axes collinear",
+     "math": [
+      "jacobian"
+     ],
+     "engine": [
+      "linalg.svd"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "3-124-d",
+     "lines": [
+      21,
+      30
+     ],
+     "kind": "example",
+     "label": "Ex 3.11",
+     "idea": "Two revolute axes that are parallel (ω1 = ±ω2) and collinear (ωᵢ×(q1−q2)=0) make a 6-DOF Jacobian singular.",
+     "feynman": "Two doors hung on the very same hinge line can only swing as one door.",
+     "visual": "Two orange axis lines slide until they lie exactly on top of each other; the 🪢 badge glows, rank counter 6→5.",
+     "scene": "mls-singular-axes",
+     "beat": "🪢 two axes collinear",
+     "math": [
+      "jacobian"
+     ],
+     "engine": [
+      "linalg.svd"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-124-e",
+     "lines": [
+      31,
+      35
+     ],
+     "kind": "proof",
+     "label": "Ex 3.11",
+     "idea": "Proof step 1: multiplying by invertible matrices (row/column operations) never changes singularity.",
+     "feynman": "Shuffling or combining the columns of a spreadsheet can't create information that wasn't there.",
+     "visual": "Staircase step 1: grid columns can be dragged, swapped and added; a rank meter stays fixed throughout.",
+     "scene": "mls-singular-axes",
+     "beat": "🪢 two axes collinear",
+     "math": [
+      "matrix"
+     ],
+     "engine": [
+      "linalg.det"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-124-f",
+     "lines": [
+      36,
+      42
+     ],
+     "kind": "proof",
+     "label": "Ex 3.11",
+     "idea": "Proof step 2: place the two suspect columns first: (−ω1×q1, ω1), (−ω2×q2, ω2).",
+     "feynman": "Line up the two suspects side by side.",
+     "visual": "Staircase step 2: the two collinear axes' columns slide to positions 1 and 2 in orange.",
+     "scene": "mls-singular-axes",
+     "beat": "🪢 two axes collinear",
+     "math": [
+      "matrix",
+      "jacobian"
+     ],
+     "engine": [
+      "kinematics.spaceJacobian"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-124-g",
+     "lines": [
+      43,
+      43
+     ],
+     "kind": "page-number",
+     "idea": "Page number 124."
+    }
+   ]
+  },
+  {
+   "pdf": 143,
+   "book": 125,
+   "lines": 40,
+   "section": "3.4.3",
+   "summary": "Collinear axes yield a zero column; Example 3.12: three parallel coplanar axes are singular, shown by changing frames.",
+   "atoms": [
+    {
+     "id": "3-125-a",
+     "lines": [
+      1,
+      9
+     ],
+     "kind": "proof",
+     "label": "Ex 3.11",
+     "idea": "Make ω1 = ω2, subtract column 1 from 2: the result is (−ω×(q2−q1), 0), which is zero by collinearity — J is singular.",
+     "feynman": "Two identical keys: subtract one from the other and nothing is left.",
+     "visual": "Staircase step 3: column 2 minus column 1 animates; all six tiles of the new column fade to 0; 🚫 badge stamps.",
+     "scene": "mls-singular-axes",
+     "beat": "🪢 two axes collinear",
+     "math": [
+      "matrix",
+      "vectors"
+     ],
+     "engine": [
+      "linalg.vsub",
+      "linalg.cross"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-125-b",
+     "lines": [
+      10,
+      15
+     ],
+     "kind": "remark",
+     "idea": "Spherical wrists hit this when the middle joint aligns the first and third axes; the rotation normal to the plane of joints 1 and 2 is lost.",
+     "feynman": "A camera gimbal flipped so two rings line up: one way of tilting vanishes (gimbal lock).",
+     "visual": "Wrist with three orange ring axes; turn the middle one and the outer two snap collinear; a coral 🚫 arrow shows the lost turning direction.",
+     "scene": "mls-singular-axes",
+     "beat": "🪢 two axes collinear",
+     "math": [
+      "euler-angles",
+      "rotation"
+     ],
+     "engine": [
+      "lie.expSO3"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-125-c",
+     "lines": [
+      16,
+      22
+     ],
+     "kind": "example",
+     "label": "Ex 3.12",
+     "idea": "Three revolute axes that are parallel and lie in one plane (normal n ⟂ all ωᵢ and qᵢ−qⱼ) make a 6-DOF Jacobian singular.",
+     "feynman": "Three parallel door hinges on the same wall can only swing in that wall's family of motions.",
+     "visual": "Three orange parallel axis lines; a translucent slate plane fits through them; 📏 badge glows when coplanar.",
+     "scene": "mls-singular-axes",
+     "beat": "📏 three parallel in a plane",
+     "math": [
+      "jacobian"
+     ],
+     "engine": [
+      "linalg.svd"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-125-d",
+     "lines": [
+      23,
+      29
+     ],
+     "kind": "proof",
+     "label": "Ex 3.12",
+     "idea": "Proof step 1: changing reference frame multiplies J by an invertible adjoint, so rank is unchanged.",
+     "feynman": "Moving your camera doesn't change how many ways the robot can move.",
+     "visual": "Staircase step 1: the slate base frame flies to a new spot; all columns recompute but the rank meter stays still.",
+     "scene": "mls-singular-axes",
+     "beat": "📏 three parallel in a plane",
+     "math": [
+      "rigid-transform",
+      "matrix"
+     ],
+     "engine": [
+      "lie.adjoint"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-125-e",
+     "lines": [
+      30,
+      39
+     ],
+     "kind": "proof",
+     "label": "Ex 3.12",
+     "idea": "Proof step 2: choose a frame at q1 with z along ω1 and the axes' plane = yz plane; the axes cross the y-axis at 0, y2, y3.",
+     "feynman": "Stand where the first hinge is and look along it: the others now sit neatly in a row.",
+     "visual": "Staircase step 2: camera swoops to q1; the three orange lines become vertical; teal dots mark y=0, y2, y3 on a green y-axis.",
+     "scene": "mls-singular-axes",
+     "beat": "📏 three parallel in a plane",
+     "math": [
+      "rigid-transform"
+     ],
+     "engine": [
+      "lie.adjoint"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-125-f",
+     "lines": [
+      40,
+      40
+     ],
+     "kind": "page-number",
+     "idea": "Page number 125."
+    }
+   ]
+  },
+  {
+   "pdf": 144,
+   "book": 126,
+   "lines": 41,
+   "section": "3.4.3",
+   "summary": "In the adapted frame three parallel coplanar columns are visibly dependent; Example 3.13 starts the four-intersecting-axes case via reciprocal screws.",
+   "atoms": [
+    {
+     "id": "3-126-a",
+     "lines": [
+      1,
+      9
+     ],
+     "kind": "figure",
+     "label": "Fig 3.16",
+     "idea": "Three parallel revolute twists in one plane, crossing the y-axis at q1, q2, q3.",
+     "feynman": "Three pencils standing upright in a single row on a table.",
+     "visual": "Three orange vertical axes over a red/green/blue frame at q1; teal dots at q2, q3 along y.",
+     "scene": "mls-singular-axes",
+     "beat": "📏 three parallel in a plane",
+     "math": [
+      "vectors"
+     ],
+     "engine": [
+      "lie.screwAxis"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "3-126-b",
+     "lines": [
+      10,
+      21
+     ],
+     "kind": "proof",
+     "label": "Ex 3.12",
+     "idea": "In that frame the three columns are (±yᵢ,0,0,0,0,±1): they live in a 2D subspace, so they are dependent.",
+     "feynman": "Three arrows that all lie on the same sheet of paper can't point out of it.",
+     "visual": "Staircase step 3: only two tile rows are non-zero in all three columns; the three column arrows lie in a flat lime sheet; 🚫.",
+     "scene": "mls-singular-axes",
+     "beat": "📏 three parallel in a plane",
+     "math": [
+      "matrix",
+      "vectors"
+     ],
+     "engine": [
+      "linalg.svd"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-126-c",
+     "lines": [
+      22,
+      23
+     ],
+     "kind": "remark",
+     "idea": "The elbow arm at its home pose (straight) shows this singularity.",
+     "feynman": "A straight arm can't pull its hand closer along the arm without bending first.",
+     "visual": "Elbow arm snaps straight: shoulder, elbow and wrist-pitch axes go parallel in a plane; 📏 glows.",
+     "scene": "mls-singular-axes",
+     "beat": "📏 three parallel in a plane",
+     "math": [
+      "forward-kinematics"
+     ],
+     "engine": [
+      "kinematics.poeFK"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "3-126-d",
+     "lines": [
+      24,
+      27
+     ],
+     "kind": "example",
+     "label": "Ex 3.13",
+     "idea": "Four revolute axes through one common point q make a 6-DOF Jacobian singular.",
+     "feynman": "Four hinges all meeting at a ball: together they can only rotate about that ball, never slide it.",
+     "visual": "Four orange axis lines converge on a gold dot; ✳️ badge glows.",
+     "scene": "mls-singular-axes",
+     "beat": "✳️ four through a point",
+     "math": [
+      "jacobian"
+     ],
+     "engine": [
+      "linalg.svd"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-126-e",
+     "lines": [
+      28,
+      38
+     ],
+     "kind": "proof",
+     "label": "Ex 3.13",
+     "idea": "Proof idea: a wrench is reciprocal to a twist if their pairing is zero (no work); in 6D, if enough independent wrenches are reciprocal to the twists, the twists are dependent.",
+     "feynman": "If you find three different shoves that none of the hinges can respond to, the hinges can't cover all six ways of moving.",
+     "visual": "Staircase step 1: purple wrench arrows that do zero work on all orange twists are collected; a dimension counter shows twist-span + reciprocal-span = 6.",
+     "scene": "mls-singular-axes",
+     "beat": "✳️ four through a point",
+     "math": [
+      "statics",
+      "vectors"
+     ],
+     "engine": [
+      "linalg.svd"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "3-126-f",
+     "lines": [
+      39,
+      40
+     ],
+     "kind": "proof",
+     "label": "Ex 3.13",
+     "idea": "Key fact: a revolute twist is reciprocal to any pure force applied at a point on its axis.",
+     "feynman": "Push a door right on its hinge line and it does not swing.",
+     "visual": "Staircase step 2: purple force arrow placed through an orange axis line — the door doesn't turn and a 0 work readout shows.",
+     "scene": "mls-singular-axes",
+     "beat": "✳️ four through a point",
+     "math": [
+      "statics"
+     ],
+     "engine": [
+      "linalg.vdot"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-126-g",
+     "lines": [
+      41,
+      41
+     ],
+     "kind": "page-number",
+     "idea": "Page number 126."
+    }
+   ]
+  },
+  {
+   "pdf": 145,
+   "book": 127,
+   "lines": 42,
+   "section": "3.4.3",
+   "summary": "Four axes through a point leave a 3D reciprocal set, so they are singular; combined singularities and joint limits; manipulability introduced.",
+   "atoms": [
+    {
+     "id": "3-127-a",
+     "lines": [
+      1,
+      7
+     ],
+     "kind": "proof",
+     "label": "Ex 3.13",
+     "idea": "Check at the origin: twist (0, ω) and force (f, 0) pair to zero; it generalizes to any point on the axis.",
+     "feynman": "Pushing at the hinge does nothing however you angle the push.",
+     "visual": "Purple force arrow spins around a point on the orange axis; the work readout stays 0 in lime the whole time.",
+     "scene": "mls-singular-axes",
+     "beat": "✳️ four through a point",
+     "math": [
+      "statics",
+      "vectors"
+     ],
+     "engine": [
+      "linalg.vdot"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-127-b",
+     "lines": [
+      8,
+      11
+     ],
+     "kind": "proof",
+     "label": "Ex 3.13",
+     "idea": "Every pure force through the common point is reciprocal to all four twists: a 3D reciprocal set, so the four twists span at most 3 → singular.",
+     "feynman": "Any push straight at the shared ball is ignored by all four hinges; three free push directions means the hinges are short of six.",
+     "visual": "Staircase step 3: a purple sphere of force arrows bursts out of the gold dot (3D); counter shows 4 twists squeezed into 3 dims; 🚫.",
+     "scene": "mls-singular-axes",
+     "beat": "✳️ four through a point",
+     "math": [
+      "statics",
+      "svd"
+     ],
+     "engine": [
+      "linalg.svd"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "3-127-c",
+     "lines": [
+      12,
+      14
+     ],
+     "kind": "remark",
+     "idea": "The inverse elbow arm hits this when its last axis passes through the shoulder point.",
+     "feynman": "Bend until your wrist hinge points right at your shoulder.",
+     "visual": "Inverse elbow arm folds; the last orange axis swings through the gold shoulder dot; ✳️ glows.",
+     "scene": "mls-singular-axes",
+     "beat": "✳️ four through a point",
+     "math": [
+      "forward-kinematics"
+     ],
+     "engine": [
+      "kinematics.poeFK"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-127-d",
+     "lines": [
+      15,
+      25
+     ],
+     "kind": "remark",
+     "idea": "These cases are common but not exhaustive; several can coincide — an elbow arm held straight up shows all three, yet still has 4 DOF since two lose the same direction.",
+     "feynman": "Two flat tyres on the same side don't make the car twice as stuck.",
+     "visual": "Elbow arm vertical over the base: all three badges glow at once; rank counter reads 4, not 3, with an overlay showing two badges pointing at the same lost arrow.",
+     "scene": "mls-singular-axes",
+     "beat": "🧱 stacked & joint limits",
+     "math": [
+      "jacobian",
+      "svd"
+     ],
+     "engine": [
+      "linalg.svd"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-127-e",
+     "lines": [
+      26,
+      31
+     ],
+     "kind": "remark",
+     "idea": "Joint limits also remove motion: at a stop, travel past the limit is forbidden.",
+     "feynman": "Your elbow doesn't bend backwards: at full straight there's one way you simply can't go.",
+     "visual": "A coral bumper on an orange joint dial; when the needle hits it, the corresponding half of the pink velocity ellipse turns coral.",
+     "scene": "mls-singular-axes",
+     "beat": "🧱 stacked & joint limits",
+     "math": [
+      "cspace"
+     ],
+     "engine": [
+      "kinematics.planarJacobian"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "3-127-f",
+     "lines": [
+      32,
+      32
+     ],
+     "kind": "heading",
+     "idea": "Subsection 4.4 heading: manipulability."
+    },
+    {
+     "id": "3-127-g",
+     "lines": [
+      33,
+      37
+     ],
+     "kind": "definition",
+     "idea": "Manipulability: how freely the arm can move in all workspace directions; poor near singularities.",
+     "feynman": "How easily you can wave a paintbrush in every direction without straining.",
+     "visual": "Pink velocity ellipse at the hand: round = free, flat = cramped.",
+     "scene": "mls-dexterity-meters",
+     "beat": "🗺️ reach vs wiggle room",
+     "math": [
+      "manipulability"
+     ],
+     "engine": [
+      "kinematics.manipulability"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "3-127-h",
+     "lines": [
+      38,
+      41
+     ],
+     "kind": "prose",
+     "idea": "Two families: global (which poses can be reached) and local (how easily pose can change right here).",
+     "feynman": "Can you reach the top shelf at all? And once there, can you wiggle the jar?",
+     "visual": "Split view: left a lime workspace map (reach), right a pink ellipse at the current hand (wiggle).",
+     "scene": "mls-dexterity-meters",
+     "beat": "🗺️ reach vs wiggle room",
+     "math": [
+      "manipulability",
+      "cspace"
+     ],
+     "engine": [
+      "kinematics.manipulability"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "3-127-i",
+     "lines": [
+      42,
+      42
+     ],
+     "kind": "page-number",
+     "idea": "Page number 127."
+    }
+   ]
+  },
+  {
+   "pdf": 146,
+   "book": 128,
+   "lines": 42,
+   "section": "3.4.4",
+   "summary": "Local manipulability uses singular values of the (preferably body) Jacobian: σmin and the inverse condition number.",
+   "atoms": [
+    {
+     "id": "3-128-a",
+     "lines": [
+      1,
+      6
+     ],
+     "kind": "prose",
+     "idea": "Global measures are the complete/reachable/dexterous workspaces; local measures look around one configuration.",
+     "feynman": "The playground's size versus how much room you have to swing your arms where you stand.",
+     "visual": "Workspace heat-map in lime with a draggable pink hand; the local ellipse follows the hand.",
+     "scene": "mls-dexterity-meters",
+     "beat": "🗺️ reach vs wiggle room",
+     "math": [
+      "manipulability"
+     ],
+     "engine": [
+      "kinematics.planarFK"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "3-128-b",
+     "lines": [
+      7,
+      12
+     ],
+     "kind": "prose",
+     "idea": "Local measures use J; the body Jacobian is preferred since it doesn't depend on where the base frame is.",
+     "feynman": "Judge how nimble a dancer is from her own point of view, not from where the audience sits.",
+     "visual": "Move the slate base frame around: body-Jacobian ellipse stays identical; spatial one's numbers wobble.",
+     "scene": "mls-dexterity-meters",
+     "beat": "🥚 ellipse axes = σ",
+     "math": [
+      "jacobian",
+      "rigid-transform"
+     ],
+     "engine": [
+      "lie.adjoint"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-128-c",
+     "lines": [
+      13,
+      23
+     ],
+     "kind": "prose",
+     "idea": "Measures rely on singular values (square roots of eigenvalues of AᵀA); σmax is the induced 2-norm; a singular matrix has a zero singular value.",
+     "feynman": "Squish a round ball of dough: the longest and shortest stretches tell you everything about the squish.",
+     "visual": "An orange unit circle maps through J into a pink ellipse; the long and short half-axes are labelled σ1, σ2 with SVD arrows; push to singular and one axis goes to 0.",
+     "scene": "mls-dexterity-meters",
+     "beat": "🥚 ellipse axes = σ",
+     "math": [
+      "svd",
+      "eigen"
+     ],
+     "engine": [
+      "linalg.svd"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-128-d",
+     "lines": [
+      24,
+      30
+     ],
+     "kind": "example",
+     "label": "Ex 3.14",
+     "idea": "μ1 = σmin(J): slowest hand speed from a unit joint speed; its singular vector is the most limited direction; zero at singularities.",
+     "feynman": "The weakest link in a chain: the measure is only as good as the worst direction.",
+     "visual": "Gauge μ1 tied to the ellipse's short axis; the short axis direction drawn as a coral arrow; gauge hits 0 with 🚫.",
+     "scene": "mls-dexterity-meters",
+     "beat": "📉 thinnest axis σmin",
+     "math": [
+      "svd",
+      "manipulability"
+     ],
+     "engine": [
+      "linalg.svd"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-128-e",
+     "lines": [
+      31,
+      41
+     ],
+     "kind": "example",
+     "label": "Ex 3.15",
+     "idea": "μ2 = σmin/σmax (inverse condition number): how much hand speed depends on joint-speed direction; normalized; zero at singularities.",
+     "feynman": "A round wheel rolls the same any way; an oval wheel thumps. Roundness = σmin/σmax.",
+     "visual": "Gauge μ2 shows ellipse roundness 0..1; a circle icon when 1 (isotropic, lime), a line icon when 0 (coral).",
+     "scene": "mls-dexterity-meters",
+     "beat": "⚖️ roundness σmin/σmax",
+     "math": [
+      "svd",
+      "manipulability"
+     ],
+     "engine": [
+      "linalg.svd"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-128-f",
+     "lines": [
+      42,
+      42
+     ],
+     "kind": "page-number",
+     "idea": "Page number 128."
+    }
+   ]
+  },
+  {
+   "pdf": 147,
+   "book": 129,
+   "lines": 42,
+   "section": "3.4.4",
+   "summary": "det J measures ellipsoid volume; nonzero measures define a dexterous set W′_D ⊂ SE(3). Section 5 opens with redundant manipulators.",
+   "atoms": [
+    {
+     "id": "3-129-a",
+     "lines": [
+      1,
+      8
+     ],
+     "kind": "example",
+     "label": "Ex 3.16",
+     "idea": "μ3 = det J = product of singular values = volume of the velocity ellipsoid; it can be big even when σmin is tiny.",
+     "feynman": "A very long thin noodle can have the same volume as a meatball — volume alone hides that it is thin.",
+     "visual": "Gauge μ3 as an area bar; a trick pose shows a long skinny pink ellipse with a big area bar while μ1 is nearly 0 (coral).",
+     "scene": "mls-dexterity-meters",
+     "beat": "📦 volume det J",
+     "math": [
+      "svd",
+      "manipulability"
+     ],
+     "engine": [
+      "linalg.det",
+      "linalg.svd"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-129-b",
+     "lines": [
+      9,
+      21
+     ],
+     "kind": "definition",
+     "label": "Eq (3.61)",
+     "idea": "W′_D = {g(θ): μᵢ(θ) ≠ 0} ⊂ SE(3): poses where the hand can move infinitesimally any way — unlike the earlier positional dexterous workspace in R³.",
+     "feynman": "All the spots on the dance floor where you can step in any direction, not just where you can stand.",
+     "visual": "Workspace painted lime where the meter is nonzero, coral rims where it vanishes; drag the hand over the coral rim and the ellipse collapses.",
+     "scene": "mls-dexterity-meters",
+     "beat": "🌍 the dexterous set",
+     "math": [
+      "manipulability",
+      "cspace"
+     ],
+     "engine": [
+      "kinematics.manipulability"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-129-c",
+     "lines": [
+      22,
+      22
+     ],
+     "kind": "heading",
+     "idea": "Section 3.5 heading: redundant and parallel manipulators."
+    },
+    {
+     "id": "3-129-d",
+     "lines": [
+      23,
+      27
+     ],
+     "kind": "prose",
+     "idea": "Two other common mechanisms: redundant arms and parallel arms, with the chapter's tools extended to them.",
+     "feynman": "Same toolbox, two new toys: a snake and a table with legs.",
+     "visual": "Two silhouettes slide in: a long orange-jointed snake arm and a blue deck on many legs.",
+     "scene": "mls-redundant-arm",
+     "beat": "🐍 more joints than needed",
+     "math": [
+      "forward-kinematics"
+     ],
+     "engine": [
+      "kinematics.planarFK"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "3-129-e",
+     "lines": [
+      28,
+      28
+     ],
+     "kind": "heading",
+     "idea": "Subsection 5.1 heading: redundant manipulators."
+    },
+    {
+     "id": "3-129-f",
+     "lines": [
+      29,
+      34
+     ],
+     "kind": "definition",
+     "idea": "Kinematically redundant: more DOF than the task minimally needs.",
+     "feynman": "Your arm has 7 joints to place a cup that needs only 6 numbers — one spare.",
+     "visual": "Joint counter (orange) vs task counter (pink): when orange > pink a lime \"+1 spare\" chip appears.",
+     "scene": "mls-redundant-arm",
+     "beat": "🐍 more joints than needed",
+     "math": [
+      "jacobian"
+     ],
+     "engine": [
+      "kinematics.planarJacobian"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "3-129-g",
+     "lines": [
+      35,
+      41
+     ],
+     "kind": "prose",
+     "idea": "Infinitely many joint poses give the same hand pose; spare DOF help avoid obstacles and singularities, optimize a cost, and stretch a workspace limited by joint stops.",
+     "feynman": "Reaching around a vase to grab a cup: your elbow goes up and around while your hand stays aimed.",
+     "visual": "Hand pinned on gold dot; slate obstacle pushes the blue elbow; the arm re-shapes around it without the hand moving.",
+     "scene": "mls-redundant-arm",
+     "beat": "🔄 hand frozen, elbow free",
+     "math": [
+      "ik",
+      "optimization"
+     ],
+     "engine": [
+      "kinematics.planarIK"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-129-h",
+     "lines": [
+      42,
+      42
+     ],
+     "kind": "page-number",
+     "idea": "Page number 129."
+    }
+   ]
+  },
+  {
+   "pdf": 148,
+   "book": 130,
+   "lines": 45,
+   "section": "3.5.1",
+   "summary": "Redundant arms have wide Jacobians; poses that hold the hand fixed form the self-motion manifold, internal motions live in null(J), and the pseudo-inverse picks the least joint speed.",
+   "atoms": [
+    {
+     "id": "3-130-a",
+     "lines": [
+      1,
+      14
+     ],
+     "kind": "equation",
+     "idea": "Redundant FK is still POE with n > p (p = 3 planar, 6 spatial); Jˢ = [ξ1, ξ2′, …, ξn′] is p×n, wider than tall.",
+     "feynman": "More cooks than dishes: there are more knobs than things to control.",
+     "visual": "Jacobian grid drawn as a wide rectangle: n orange columns, p pink rows; extra columns shimmer.",
+     "scene": "mls-redundant-arm",
+     "beat": "🐍 more joints than needed",
+     "math": [
+      "jacobian",
+      "poe"
+     ],
+     "engine": [
+      "kinematics.spaceJacobian"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-130-b",
+     "lines": [
+      15,
+      23
+     ],
+     "kind": "definition",
+     "label": "Eq (3.62)",
+     "idea": "IK is ill-posed: all θ with g(θ) = g_d form the self-motion manifold of g_d.",
+     "feynman": "Put your fingertip on a table and keep it there: your elbow can still roam along a whole loop.",
+     "visual": "Pink hand pinned to gold dot; in a joint-space box a teal loop traces every arm shape that keeps it there; ghost arms along the loop.",
+     "scene": "mls-redundant-arm",
+     "beat": "🔄 hand frozen, elbow free",
+     "math": [
+      "ik",
+      "cspace"
+     ],
+     "engine": [
+      "kinematics.planarIK"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-130-c",
+     "lines": [
+      24,
+      28
+     ],
+     "kind": "equation",
+     "idea": "Differentiating g(θ(t)) = g_d gives Jθ̇ = 0: internal motions have joint velocities in null(J).",
+     "feynman": "Moves that change your arm but not your fingertip are exactly the ones the fingertip \"can't feel\".",
+     "visual": "An orange arrow tangent to the teal loop; multiply by J and the pink hand velocity readout shows 0 0 in lime.",
+     "scene": "mls-redundant-arm",
+     "beat": "➖ null space of J",
+     "math": [
+      "jacobian",
+      "svd"
+     ],
+     "engine": [
+      "linalg.svd",
+      "NEW: nullspace"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-130-d",
+     "lines": [
+      29,
+      39
+     ],
+     "kind": "equation",
+     "idea": "To follow a hand path pick the minimum-norm joint rate θ̇ = J†V, with J† = Jᵀ(JJᵀ)⁻¹ the Moore–Penrose inverse.",
+     "feynman": "Many ways to walk to the door; take the one with the fewest steps.",
+     "visual": "A fan of faint orange joint-speed arrows that all produce the same gold hand velocity; the shortest one glows lime and is labelled J†V.",
+     "scene": "mls-redundant-arm",
+     "beat": "✨ pseudo-inverse: least effort",
+     "math": [
+      "least-squares",
+      "svd",
+      "jacobian"
+     ],
+     "engine": [
+      "linalg.pinv"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-130-e",
+     "lines": [
+      40,
+      44
+     ],
+     "kind": "remark",
+     "idea": "For forces, links can move while the hand is fixed, so a full torque–wrench picture needs dynamics.",
+     "feynman": "A floppy arm holding a door handle can still swing its elbow, so forces at the handle depend on how the elbow moves.",
+     "visual": "Hand clamped; blue elbow sways under gravity; small pink force wiggles appear at the clamp even though orange torques are zero.",
+     "scene": "mls-redundant-arm",
+     "beat": "⚖️ still τ = Jᵀ F at rest",
+     "math": [
+      "statics",
+      "lagrange-dynamics"
+     ],
+     "engine": [
+      "dynamics.twoLinkAccel"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-130-f",
+     "lines": [
+      45,
+      45
+     ],
+     "kind": "page-number",
+     "idea": "Page number 130."
+    }
+   ]
+  },
+  {
+   "pdf": 149,
+   "book": 131,
+   "lines": 36,
+   "section": "3.5.1",
+   "summary": "Inertial coupling of internal motions can load the hand; in static equilibrium τ = JᵀF still holds. Example 3.17 sets up a planar 3-link self-motion manifold.",
+   "atoms": [
+    {
+     "id": "3-131-a",
+     "lines": [
+      1,
+      8
+     ],
+     "kind": "figure",
+     "label": "Fig 3.17",
+     "idea": "(a) Planar 3R arm with hand at (x,y); (b) its self-motion manifold as a closed curve in joint space with a tangent arrow V_N.",
+     "feynman": "A three-segment desk lamp whose bulb stays on one spot while the arm folds in many ways.",
+     "visual": "Left: 3R arm, orange joints θ1..θ3, pink tip on gold dot. Right: teal loop in a 3D joint box with an orange tangent arrow.",
+     "scene": "mls-redundant-arm",
+     "beat": "🔄 hand frozen, elbow free",
+     "math": [
+      "cspace",
+      "ik"
+     ],
+     "engine": [
+      "kinematics.planarFK"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-131-b",
+     "lines": [
+      9,
+      21
+     ],
+     "kind": "equation",
+     "label": "Eq (3.63)",
+     "idea": "Internal motion plus inertial coupling can push the hand with zero torques; but when stationary, τ = JᵀF holds (body or spatial, matching F).",
+     "feynman": "A swinging bucket tugs your hand even if you hold still; stop the swing and only the weight counts.",
+     "visual": "Two modes: \"moving\" shows pink force wobbling from blue elbow sway; \"frozen\" shows orange torque bars exactly equal to Jᵀ times the pink force.",
+     "scene": "mls-redundant-arm",
+     "beat": "⚖️ still τ = Jᵀ F at rest",
+     "math": [
+      "statics",
+      "jacobian"
+     ],
+     "engine": [
+      "linalg.T",
+      "linalg.mvec"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-131-c",
+     "lines": [
+      22,
+      30
+     ],
+     "kind": "example",
+     "label": "Ex 3.17",
+     "idea": "Fixing hand position gives 2 equations in 3 angles, so solutions form a 1D family — the self-motion manifold.",
+     "feynman": "Two clues, three unknowns: one thing stays free.",
+     "visual": "Counter: 3 orange unknowns − 2 pink equations = 1 teal free direction; the teal loop is drawn as the 1D solution set.",
+     "scene": "mls-redundant-arm",
+     "beat": "🔄 hand frozen, elbow free",
+     "math": [
+      "ik",
+      "cspace"
+     ],
+     "engine": [
+      "kinematics.planarIK"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-131-d",
+     "lines": [
+      31,
+      35
+     ],
+     "kind": "equation",
+     "label": "Eq (3.64)",
+     "idea": "The 2×3 position Jacobian ∂p/∂θ of the 3R arm, with sums of link sines/cosines.",
+     "feynman": "Each joint pushes the tip sideways by how far the tip is from that joint.",
+     "visual": "From each orange joint a dashed line to the pink tip; the column vectors are those lines turned 90°.",
+     "scene": "mls-redundant-arm",
+     "beat": "➖ null space of J",
+     "math": [
+      "jacobian"
+     ],
+     "engine": [
+      "kinematics.planarJacobian"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-131-e",
+     "lines": [
+      36,
+      36
+     ],
+     "kind": "page-number",
+     "idea": "Page number 131."
+    }
+   ]
+  },
+  {
+   "pdf": 150,
+   "book": 132,
+   "lines": 30,
+   "section": "3.5.2",
+   "summary": "The 3R null vector is tangent to the self-motion manifold; parallel manipulators join several chains to one end-effector via a structure equation.",
+   "atoms": [
+    {
+     "id": "3-132-a",
+     "lines": [
+      1,
+      2
+     ],
+     "kind": "figure",
+     "label": "Fig 3.18",
+     "idea": "A parallel arm: three serial chains joined to one end-effector.",
+     "feynman": "Three people holding one tray together.",
+     "visual": "Three blue legs from slate base pads meeting a pink triangular platform.",
+     "scene": "mls-closed-chains",
+     "beat": "🤝 many chains, one hand",
+     "math": [
+      "forward-kinematics"
+     ],
+     "engine": [
+      "kinematics.poeFK"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "3-132-b",
+     "lines": [
+      3,
+      11
+     ],
+     "kind": "example",
+     "label": "Ex 3.17",
+     "idea": "null(∂p/∂θ) is spanned by V_N (explicit in link lengths and sines); any θ̇ = αV_N is tangent to the manifold and keeps the hand still.",
+     "feynman": "Sliding along a rail that is laid exactly where the fingertip stays put.",
+     "visual": "Orange V_N arrow on the teal loop; drag α: the arm folds, the pink tip readout never changes.",
+     "scene": "mls-redundant-arm",
+     "beat": "➖ null space of J",
+     "math": [
+      "jacobian",
+      "vectors"
+     ],
+     "engine": [
+      "linalg.cross",
+      "NEW: nullspace"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-132-c",
+     "lines": [
+      12,
+      12
+     ],
+     "kind": "heading",
+     "idea": "Subsection 5.2 heading: parallel manipulators."
+    },
+    {
+     "id": "3-132-d",
+     "lines": [
+      13,
+      21
+     ],
+     "kind": "definition",
+     "idea": "Parallel (closed-chain) manipulator: two or more serial chains connect base and end-effector; stiffer, and motors can sit at the base.",
+     "feynman": "A camera tripod vs a selfie stick: three legs are stiffer, and you only adjust at the bottom.",
+     "visual": "Compare: a single long arm sags (purple bend), the three-legged platform stays rigid; filled orange motors only at each leg's base joint.",
+     "scene": "mls-closed-chains",
+     "beat": "🤝 many chains, one hand",
+     "math": [
+      "forward-kinematics"
+     ],
+     "engine": [
+      "kinematics.poeFK"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "3-132-e",
+     "lines": [
+      22,
+      22
+     ],
+     "kind": "heading",
+     "idea": "Run-in heading: structure equation for a parallel mechanism."
+    },
+    {
+     "id": "3-132-f",
+     "lines": [
+      23,
+      29
+     ],
+     "kind": "equation",
+     "label": "Eq (3.65)",
+     "idea": "Each chain's POE must land the tool at the same g_st: chain-1 product = chain-2 product.",
+     "feynman": "Two friends walking different routes must arrive at the same café.",
+     "visual": "Each chain computes a ghost pink tool frame; the loop closes only when the ghosts coincide (gold ✓).",
+     "scene": "mls-closed-chains",
+     "beat": "🔗 the loop equation",
+     "math": [
+      "poe",
+      "rigid-transform"
+     ],
+     "engine": [
+      "kinematics.poeFK"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-132-g",
+     "lines": [
+      30,
+      30
+     ],
+     "kind": "page-number",
+     "idea": "Page number 132."
+    }
+   ]
+  },
+  {
+   "pdf": 151,
+   "book": 133,
+   "lines": 45,
+   "section": "3.5.2",
+   "summary": "The loop equation constrains joints; Gruebler's formula counts DOF; inverse kinematics is solved per chain; chains each give a Jacobian.",
+   "atoms": [
+    {
+     "id": "3-133-a",
+     "lines": [
+      1,
+      7
+     ],
+     "kind": "prose",
+     "idea": "The structure (loop) equation couples the joints, so specifying a subset fixes the rest.",
+     "feynman": "Pull one end of a lazy-tongs toy and all its scissor joints follow.",
+     "visual": "Drag one filled orange motor joint: the hollow passive joints settle automatically to keep the loop closed.",
+     "scene": "mls-closed-chains",
+     "beat": "🔗 the loop equation",
+     "math": [
+      "poe"
+     ],
+     "engine": [
+      "NEW: loopSolve"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-133-b",
+     "lines": [
+      8,
+      14
+     ],
+     "kind": "prose",
+     "idea": "The joint space is the subset Q′ of the product of joint spaces that satisfies the loop equation; its dimension needs careful counting.",
+     "feynman": "Of all the ways to bend three people's arms, only some still let them hold the same tray.",
+     "visual": "Joint-space cloud of random settings (faint) with the valid ones (teal) forming a thin surface.",
+     "scene": "mls-closed-chains",
+     "beat": "🧮 Gruebler head count",
+     "math": [
+      "cspace"
+     ],
+     "engine": [
+      "NEW: loopSolve"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-133-c",
+     "lines": [
+      15,
+      28
+     ],
+     "kind": "equation",
+     "label": "Eq (3.66)",
+     "idea": "Gruebler: F = 6N − Σ(6 − fᵢ) = 6(N − g) + Σfᵢ for N moving links, g joints, fᵢ joint freedoms; valid only if constraints are independent; planar uses 3.",
+     "feynman": "Each free block can move 6 ways; each joint glue removes the ways it forbids; count what's left.",
+     "visual": "Counter animation: each blue link drops in with +6 chips; each orange joint eats (6 − fᵢ) chips; leftover chips = F.",
+     "scene": "mls-closed-chains",
+     "beat": "🧮 Gruebler head count",
+     "math": [
+      "cspace"
+     ],
+     "engine": [
+      "NEW: gruebler"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-133-d",
+     "lines": [
+      29,
+      35
+     ],
+     "kind": "prose",
+     "idea": "Inverse kinematics of a parallel arm is easy: solve each chain separately for the desired tool pose.",
+     "feynman": "Moving a table: decide where the tabletop goes, then each leg just figures out its own length.",
+     "visual": "Drag the pink platform; each leg flashes and solves its own IK independently; all snap into place.",
+     "scene": "mls-closed-chains",
+     "beat": "🔄 inverse: solve each leg",
+     "math": [
+      "ik"
+     ],
+     "engine": [
+      "kinematics.planarIK"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "3-133-e",
+     "lines": [
+      36,
+      36
+     ],
+     "kind": "heading",
+     "idea": "Run-in heading: velocity and force relationships."
+    },
+    {
+     "id": "3-133-f",
+     "lines": [
+      37,
+      44
+     ],
+     "kind": "equation",
+     "label": "Eq (3.67)",
+     "idea": "Differentiating the loop equation: Vˢ = J1 θ̇_1 = J2 θ̇_2 — each chain's Jacobian must give the same tool twist.",
+     "feynman": "Both friends must be walking at the same speed when they arrive arm in arm.",
+     "visual": "Each leg draws the pink twist it would give; the rule is that all legs' arrows coincide (lime) — otherwise coral.",
+     "scene": "mls-closed-chains",
+     "beat": "⚡ velocities must agree",
+     "math": [
+      "jacobian"
+     ],
+     "engine": [
+      "kinematics.spaceJacobian"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-133-g",
+     "lines": [
+      45,
+      45
+     ],
+     "kind": "page-number",
+     "idea": "Page number 133."
+    }
+   ]
+  },
+  {
+   "pdf": 152,
+   "book": 134,
+   "lines": 49,
+   "section": "3.5.2",
+   "summary": "Stacked chain Jacobians resemble a grasp; chains can fight (internal forces); singularity is a drop in the dimension of admissible velocities.",
+   "atoms": [
+    {
+     "id": "3-134-a",
+     "lines": [
+      1,
+      11
+     ],
+     "kind": "equation",
+     "idea": "J1 and J2 are built from each chain's current twists; joint velocities cannot all be chosen freely.",
+     "feynman": "Holding a tray with a friend: you can't move your hands any way you like without the tray tipping.",
+     "visual": "Joint speed sliders: moving one passive slider freely makes the loop break (coral gap); it re-closes when constrained.",
+     "scene": "mls-closed-chains",
+     "beat": "⚡ velocities must agree",
+     "math": [
+      "jacobian"
+     ],
+     "engine": [
+      "kinematics.spaceJacobian"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-134-b",
+     "lines": [
+      12,
+      22
+     ],
+     "kind": "equation",
+     "label": "Eq (3.68)",
+     "idea": "Stacked form: blockdiag(J1, J2) θ̇ = [I; I] Vˢ — like a multi-fingered hand grasping the tool.",
+     "feynman": "Each leg is a finger holding the platform.",
+     "visual": "Morph: legs turn into fingers and the platform into a grasped object; the stacked matrix shows block-diagonal Jacobians over an identity stack.",
+     "scene": "mls-closed-chains",
+     "beat": "⚡ velocities must agree",
+     "math": [
+      "jacobian",
+      "matrix"
+     ],
+     "engine": [
+      "kinematics.spaceJacobian"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-134-c",
+     "lines": [
+      23,
+      29
+     ],
+     "kind": "prose",
+     "idea": "Chains can push against each other with no net tool wrench: internal forces (treated with grasping later).",
+     "feynman": "Two people squeezing a box from both sides: lots of push, but the box doesn't move.",
+     "visual": "Purple opposing force arrows along two legs cancel; a net-wrench meter at the pink platform reads 0.",
+     "scene": "mls-closed-chains",
+     "beat": "⚡ velocities must agree",
+     "math": [
+      "statics"
+     ],
+     "engine": [
+      "linalg.svd"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-134-d",
+     "lines": [
+      30,
+      30
+     ],
+     "kind": "heading",
+     "idea": "Run-in heading: singularities of parallel mechanisms."
+    },
+    {
+     "id": "3-134-e",
+     "lines": [
+      31,
+      46
+     ],
+     "kind": "equation",
+     "label": "Eq (3.69)–(3.70)",
+     "idea": "With k chains Vˢ = J1Θ̇1 = … = JkΘ̇k; admissible tool velocities are ∩ range(Jᵢ), a linear space of dimension ρ (the rank).",
+     "feynman": "Each leg allows some tool motions; only the motions every leg allows can actually happen.",
+     "visual": "Each leg paints its allowed-velocity fan in a different translucent blue; the overlap glows lime with a dimension readout ρ.",
+     "scene": "mls-closed-chains",
+     "beat": "🚫 admissible set shrinks",
+     "math": [
+      "jacobian",
+      "svd"
+     ],
+     "engine": [
+      "linalg.svd",
+      "NEW: subspaceIntersect"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-134-f",
+     "lines": [
+      47,
+      48
+     ],
+     "kind": "definition",
+     "idea": "Kinematic singularity of a parallel mechanism: ρ drops at that configuration.",
+     "feynman": "The shared-allowed set shrinks: the tray loses a way to move.",
+     "visual": "Lime overlap region thins to a line; ρ readout ticks down with 🚫.",
+     "scene": "mls-closed-chains",
+     "beat": "🚫 admissible set shrinks",
+     "math": [
+      "jacobian"
+     ],
+     "engine": [
+      "linalg.svd"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-134-g",
+     "lines": [
+      49,
+      49
+     ],
+     "kind": "page-number",
+     "idea": "Page number 134."
+    }
+   ]
+  },
+  {
+   "pdf": 153,
+   "book": 135,
+   "lines": 39,
+   "section": "3.5.3",
+   "summary": "Fully actuated parallel mechanisms only have kinematic singularities; partial actuation adds actuator singularities. The four-bar linkage is introduced.",
+   "atoms": [
+    {
+     "id": "3-135-a",
+     "lines": [
+      1,
+      10
+     ],
+     "kind": "figure",
+     "label": "Fig 3.19",
+     "idea": "Four-bar linkage: (a) home configuration with input link, coupler (tool T), output link and ground S; (b) joint angle labels for the two chains.",
+     "feynman": "A playground swing with two chains, or a windshield wiper linkage.",
+     "visual": "Slate ground bar, orange input crank (left), blue coupler with pink tool frame, orange output rocker (right); angles θ11, θ12, θ21, θ22 marked.",
+     "scene": "mls-four-bar",
+     "beat": "⚙️ crank, coupler, rocker",
+     "math": [
+      "forward-kinematics"
+     ],
+     "engine": [
+      "kinematics.planarFK"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "3-135-b",
+     "lines": [
+      11,
+      19
+     ],
+     "kind": "prose",
+     "idea": "Losing instantaneous motion mirrors serial singularities; but with only some joints actuated, extra actuator singularities can appear.",
+     "feynman": "A puppet can move freely yet your strings might all pull the wrong way to lift it.",
+     "visual": "Filled orange = motor, hollow = passive; a toggle shows a pose where motion is allowed (lime fan) but motors can't push it (coral).",
+     "scene": "mls-closed-chains",
+     "beat": "🚫 admissible set shrinks",
+     "math": [
+      "jacobian",
+      "statics"
+     ],
+     "engine": [
+      "linalg.svd"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-135-c",
+     "lines": [
+      20,
+      20
+     ],
+     "kind": "heading",
+     "idea": "Subsection 5.3 heading: four-bar linkage."
+    },
+    {
+     "id": "3-135-d",
+     "lines": [
+      21,
+      27
+     ],
+     "kind": "prose",
+     "idea": "Three rigid moving links joined by revolutes, plus the ground counted as the fourth bar: input, coupler, output.",
+     "feynman": "Four sticks pinned in a loop, one stick nailed to the table.",
+     "visual": "Highlight each bar in turn; the slate ground bar gets a \"4\" chip to explain the name.",
+     "scene": "mls-four-bar",
+     "beat": "⚙️ crank, coupler, rocker",
+     "math": [
+      "forward-kinematics"
+     ],
+     "engine": [
+      "kinematics.planarFK"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "3-135-e",
+     "lines": [
+      28,
+      38
+     ],
+     "kind": "prose",
+     "idea": "Four-bars are usually studied for synthesis (choose lengths so input/output or a coupler point follow a desired relation/path); here only analysis.",
+     "feynman": "Designing a toy whose crank makes a bird flap: you pick stick lengths to get the motion you want.",
+     "visual": "Turn the crank: a pink tracer on the coupler draws a looping coupler curve; sliders for link lengths reshape it live.",
+     "scene": "mls-four-bar",
+     "beat": "⚙️ crank, coupler, rocker",
+     "math": [
+      "forward-kinematics"
+     ],
+     "engine": [
+      "NEW: fourBarSolve"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-135-f",
+     "lines": [
+      39,
+      39
+     ],
+     "kind": "page-number",
+     "idea": "Page number 135."
+    }
+   ]
+  },
+  {
+   "pdf": 154,
+   "book": 136,
+   "lines": 45,
+   "section": "3.5.3",
+   "summary": "Four-bar mobility is 1 (planar Gruebler); spatial counting gives −2. Structure equations from two 2R chains with planar twists.",
+   "atoms": [
+    {
+     "id": "3-136-a",
+     "lines": [
+      1,
+      11
+     ],
+     "kind": "example",
+     "idea": "Planar Gruebler: N=3, g=4, fᵢ=1 ⇒ F=1; spatial version gives −2, a paradox (exercise).",
+     "feynman": "Count with the wrong rulebook and you \"prove\" a moving toy is frozen solid.",
+     "visual": "Chip counter in planar mode lands on 1 (lime); switch to 3D counting and it lands on −2 (coral ?) while the linkage keeps moving.",
+     "scene": "mls-four-bar",
+     "beat": "🧮 one DOF (and the −2 riddle)",
+     "math": [
+      "cspace"
+     ],
+     "engine": [
+      "NEW: gruebler"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-136-b",
+     "lines": [
+      12,
+      24
+     ],
+     "kind": "prose",
+     "idea": "Pick base/tool frames and a home pose that already closes the loop; then g = e^{ξ11θ11}e^{ξ12θ12}g(0) = e^{ξ21θ21}e^{ξ22θ22}g(0): 3 planar constraints on 4 angles.",
+     "feynman": "Start with the toy already assembled so every later move keeps it assembled.",
+     "visual": "Loop cut at the tool into two 2-link chains; each carries a ghost pink frame; they overlap at home pose.",
+     "scene": "mls-four-bar",
+     "beat": "🔗 two chains glued at the tool",
+     "math": [
+      "poe"
+     ],
+     "engine": [
+      "kinematics.poeFK"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-136-c",
+     "lines": [
+      25,
+      40
+     ],
+     "kind": "equation",
+     "idea": "Planar revolute twist through q is (q_y, −q_x, 1); listing the four joint twists and g(0).",
+     "feynman": "A pin on a corkboard: where the pin is tells you exactly how things spin around it.",
+     "visual": "Click each orange pin: its 3-number twist chip appears (two from its position, a 1 for spin).",
+     "scene": "mls-four-bar",
+     "beat": "🔗 two chains glued at the tool",
+     "math": [
+      "screw-exp",
+      "vectors"
+     ],
+     "engine": [
+      "lie.screwAxis"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-136-d",
+     "lines": [
+      41,
+      44
+     ],
+     "kind": "equation",
+     "idea": "Expanding POE gives x, y and φ for each chain; equate them: three trigonometric constraints.",
+     "feynman": "Both routes must give the same x, the same y and the same heading.",
+     "visual": "Three readouts (x, y, φ) per chain side by side; turning the crank keeps each pair equal.",
+     "scene": "mls-four-bar",
+     "beat": "🔗 two chains glued at the tool",
+     "math": [
+      "forward-kinematics"
+     ],
+     "engine": [
+      "kinematics.planarFK"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-136-e",
+     "lines": [
+      45,
+      45
+     ],
+     "kind": "page-number",
+     "idea": "Page number 136."
+    }
+   ]
+  },
+  {
+   "pdf": 155,
+   "book": 137,
+   "lines": 52,
+   "section": "3.5.3",
+   "summary": "Four-bar velocity constraints; separating active and passive joints (Eq 3.71) shows singularities when passive joints are collinear.",
+   "atoms": [
+    {
+     "id": "3-137-a",
+     "lines": [
+      1,
+      4
+     ],
+     "kind": "prose",
+     "idea": "Solving these for forward kinematics is complicated, though often closed-form.",
+     "feynman": "Knowing the crank angle, finding where everything else sits is like solving a tangled knot — doable but fiddly.",
+     "visual": "Turn crank: a solver spinner briefly shows two candidate coupler positions (assembly modes) as ghosts.",
+     "scene": "mls-four-bar",
+     "beat": "🔗 two chains glued at the tool",
+     "math": [
+      "ik"
+     ],
+     "engine": [
+      "NEW: fourBarSolve"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-137-b",
+     "lines": [
+      5,
+      20
+     ],
+     "kind": "equation",
+     "idea": "Velocity: Vˢ = [ξ11 ξ12′]θ̇_1 = [ξ21 ξ22′]θ̇_2, with current-pose twists written explicitly.",
+     "feynman": "Both arms of the loop must agree on how fast the tool is moving.",
+     "visual": "Each chain's two twist columns shown; tool velocity arrows from both chains coincide (lime).",
+     "scene": "mls-four-bar",
+     "beat": "⚡ drive one, solve the rest",
+     "math": [
+      "jacobian"
+     ],
+     "engine": [
+      "kinematics.planarJacobian"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-137-c",
+     "lines": [
+      21,
+      25
+     ],
+     "kind": "prose",
+     "idea": "Each chain has 2 columns, so admissible velocities are at most 2D; split actuated from passive joints.",
+     "feynman": "Two hands can each move a tray only two ways, so the tray can't move in more than two ways.",
+     "visual": "Fans of each chain's velocities as 2D planes in a 3D (vx, vy, ω) box; their intersection is a line (1 DOF).",
+     "scene": "mls-four-bar",
+     "beat": "⚡ drive one, solve the rest",
+     "math": [
+      "jacobian"
+     ],
+     "engine": [
+      "linalg.svd"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-137-d",
+     "lines": [
+      26,
+      35
+     ],
+     "kind": "equation",
+     "label": "Eq (3.71)",
+     "idea": "With θ11 actuated and α=(θ12,θ21,θ22) passive: ξ11θ̇ = [−ξ12′ ξ21 ξ22′]α̇; solvable for α̇ when the 3×3 matrix is invertible (single loop only).",
+     "feynman": "Turn the crank; the rest of the linkage is forced to follow — as long as it isn't jammed.",
+     "visual": "Crank speed slider (filled orange); hollow passive joints show computed speed bars; a determinant meter of the passive matrix.",
+     "scene": "mls-four-bar",
+     "beat": "⚡ drive one, solve the rest",
+     "math": [
+      "jacobian",
+      "matrix"
+     ],
+     "engine": [
+      "linalg.solve"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-137-e",
+     "lines": [
+      36,
+      49
+     ],
+     "kind": "prose",
+     "idea": "The passive matrix is three parallel revolutes; if they are collinear it is singular and the linkage may jam — not sufficient if ξ11 lies in their span; swapping input and output moves the singular poses.",
+     "feynman": "Three hinges in a straight line act like a locked rod: push on it and it won't budge (or it buckles either way).",
+     "visual": "Drive until the three hollow passive joints line up on a coral line: determinant meter hits 0, crank locks with 🚫. Swap input link: the jam pose moves.",
+     "scene": "mls-four-bar",
+     "beat": "🚫 passives in a line jam",
+     "math": [
+      "jacobian"
+     ],
+     "engine": [
+      "linalg.det"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-137-f",
+     "lines": [
+      50,
+      51
+     ],
+     "kind": "prose",
+     "idea": "The other case (Fig 3.20b) is an uncertainty configuration.",
+     "feynman": "A fork in the road where the linkage could go either way.",
+     "visual": "Preview: a perfectly aligned pose shows two ghost continuations branching.",
+     "scene": "mls-four-bar",
+     "beat": "🎲 uncertainty: two ways at once",
+     "math": [
+      "jacobian"
+     ],
+     "engine": [
+      "linalg.svd"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-137-g",
+     "lines": [
+      52,
+      52
+     ],
+     "kind": "page-number",
+     "idea": "Page number 137."
+    }
+   ]
+  },
+  {
+   "pdf": 156,
+   "book": 138,
+   "lines": 39,
+   "section": "3.5.4",
+   "summary": "Uncertainty configurations admit two independent velocities; the Stewart platform: two bodies joined by six actuated prismatic legs with ball joints.",
+   "atoms": [
+    {
+     "id": "3-138-a",
+     "lines": [
+      1,
+      3
+     ],
+     "kind": "figure",
+     "label": "Fig 3.20",
+     "idea": "(a) A jam configuration with the active joint marked; (b) an uncertainty configuration (all bars aligned).",
+     "feynman": "A folding ruler that is stuck vs one lying perfectly flat that can fold either way.",
+     "visual": "Two panels: left, passive joints collinear with coral lock; right, all four bars aligned with two orange arrows branching.",
+     "scene": "mls-four-bar",
+     "beat": "🚫 passives in a line jam",
+     "math": [
+      "jacobian"
+     ],
+     "engine": [
+      "NEW: fourBarSolve"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-138-b",
+     "lines": [
+      4,
+      22
+     ],
+     "kind": "example",
+     "idea": "At perfect alignment the structure equations have two independent null velocities θ̇_N1, θ̇_N2; this needs exact alignment, so it is rare.",
+     "feynman": "A pencil balanced on its tip can fall two different ways — only if balanced perfectly.",
+     "visual": "Aligned linkage: two orange null-velocity arrows shown together; nudge any length slightly and one arrow vanishes.",
+     "scene": "mls-four-bar",
+     "beat": "🎲 uncertainty: two ways at once",
+     "math": [
+      "jacobian",
+      "svd"
+     ],
+     "engine": [
+      "linalg.svd",
+      "NEW: nullspace"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-138-c",
+     "lines": [
+      23,
+      23
+     ],
+     "kind": "heading",
+     "idea": "Subsection 5.4 heading: Stewart platform."
+    },
+    {
+     "id": "3-138-d",
+     "lines": [
+      24,
+      28
+     ],
+     "kind": "prose",
+     "idea": "Stewart platform: two rigid bodies joined by prismatic legs, each attached by spherical joints; only the legs are actuated.",
+     "feynman": "A table whose six legs are telescopes with ball joints at both ends.",
+     "visual": "Slate base, blue deck, six orange telescoping legs, teal ball joints at both ends; only legs show motor fill.",
+     "scene": "mls-stewart-platform",
+     "beat": "🛸 six legs, one deck",
+     "math": [
+      "rigid-transform"
+     ],
+     "engine": [
+      "NEW: stewartIK"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "3-138-e",
+     "lines": [
+      29,
+      34
+     ],
+     "kind": "prose",
+     "idea": "Used in flight simulators to move a cockpit; an old idea (Stewart, 1950s) whose general forward kinematics was solved only recently.",
+     "feynman": "The ride that shakes a pretend airplane cockpit so it feels like flying.",
+     "visual": "Put a cockpit emoji on the deck; a simulated turbulence signal drives the legs; a small timeline chip marks the 1950s.",
+     "scene": "mls-stewart-platform",
+     "beat": "🛸 six legs, one deck",
+     "math": [
+      "rigid-transform"
+     ],
+     "engine": [
+      "NEW: stewartIK"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "3-138-f",
+     "lines": [
+      35,
+      38
+     ],
+     "kind": "prose",
+     "idea": "Detour: model spherical joints differently from three-revolute wrists.",
+     "feynman": "A ball-and-socket is not quite the same as three hinges stacked.",
+     "visual": "Side-by-side: a teal ball joint vs a three-orange-ring wrist gimbal.",
+     "scene": "mls-stewart-platform",
+     "beat": "⚪ passive ball joints never jam",
+     "math": [
+      "rotation"
+     ],
+     "engine": [
+      "lie.expSO3"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-138-g",
+     "lines": [
+      39,
+      39
+     ],
+     "kind": "page-number",
+     "idea": "Page number 138."
+    }
+   ]
+  },
+  {
+   "pdf": 157,
+   "book": 139,
+   "lines": 21,
+   "section": "3.5.4",
+   "summary": "Stacked-revolute wrists always have singular poses, passive ball joints don't; a ball joint's motion and velocity.",
+   "atoms": [
+    {
+     "id": "3-139-a",
+     "lines": [
+      1,
+      2
+     ],
+     "kind": "caption",
+     "label": "Fig 3.21",
+     "idea": "Photo: a Stewart platform carrying an industrial arm.",
+     "feynman": "A robot arm riding on a moving platform like a person on a surfboard.",
+     "visual": "A small arm icon on the blue deck, deck tilting under it.",
+     "scene": "mls-stewart-platform",
+     "beat": "🛸 six legs, one deck",
+     "math": [
+      "rigid-transform"
+     ],
+     "engine": [
+      "NEW: stewartIK"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "3-139-b",
+     "lines": [
+      3,
+      9
+     ],
+     "kind": "prose",
+     "idea": "Wrists made of three revolutes always reach a pose where two axes align; a passive ball joint never goes singular.",
+     "feynman": "A gimbal ring can line up and lock, but a marble in a cup can always roll any way.",
+     "visual": "Turn the three-ring wrist until two rings align (coral 🚫); the teal ball joint next to it keeps rolling freely (lime).",
+     "scene": "mls-stewart-platform",
+     "beat": "⚪ passive ball joints never jam",
+     "math": [
+      "euler-angles",
+      "rotation"
+     ],
+     "engine": [
+      "lie.expSO3"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-139-c",
+     "lines": [
+      10,
+      20
+     ],
+     "kind": "equation",
+     "idea": "A ball joint centred at q moves by g(R) = (R, (I−R)q), R ∈ SO(3) free; its velocity is (−ω×q, ω), ω ∈ R³ free.",
+     "feynman": "A joystick: the stick turns any way about its base, and the base point never moves.",
+     "visual": "Teal ball at q; drag a rotation gizmo; blue body spins around q while q stays pinned; a pink twist arrow shows (−ω×q, ω).",
+     "scene": "mls-stewart-platform",
+     "beat": "⚪ passive ball joints never jam",
+     "math": [
+      "rotation",
+      "rigid-transform"
+     ],
+     "engine": [
+      "lie.homog",
+      "lie.expSO3"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-139-d",
+     "lines": [
+      21,
+      21
+     ],
+     "kind": "page-number",
+     "idea": "Page number 139."
+    }
+   ]
+  },
+  {
+   "pdf": 158,
+   "book": 140,
+   "lines": 40,
+   "section": "3.5.4",
+   "summary": "A ball joint's velocity matrix is always full rank; the Stewart structure equation; hard forward but trivial inverse kinematics (leg lengths).",
+   "atoms": [
+    {
+     "id": "3-140-a",
+     "lines": [
+      1,
+      10
+     ],
+     "kind": "equation",
+     "idea": "Ball-joint velocity = [ (−eᵢ×q, eᵢ) ] ω: three columns that are never dependent.",
+     "feynman": "Three directions you can always spin a marble — they never collapse into fewer.",
+     "visual": "Three red/green/blue spin arrows at the teal ball; a rank meter stuck at 3 (lime) whatever you do.",
+     "scene": "mls-stewart-platform",
+     "beat": "⚪ passive ball joints never jam",
+     "math": [
+      "rotation",
+      "matrix"
+     ],
+     "engine": [
+      "lie.screwAxis"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-140-b",
+     "lines": [
+      11,
+      18
+     ],
+     "kind": "equation",
+     "label": "Eq (3.72)",
+     "idea": "Structure equation: for each leg i, g = g_si(R_si) e^{ξ̂ᵢθᵢ} g_ti(R_ti) g(0), all six equal.",
+     "feynman": "Six friends each walk their own path (ball, slide, ball) and must all arrive at the same deck.",
+     "visual": "Each leg computes a ghost pink deck frame through its ball–slide–ball; all six ghosts coincide when valid.",
+     "scene": "mls-stewart-platform",
+     "beat": "🛸 six legs, one deck",
+     "math": [
+      "poe",
+      "rigid-transform"
+     ],
+     "engine": [
+      "kinematics.poeFK"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-140-c",
+     "lines": [
+      19,
+      26
+     ],
+     "kind": "prose",
+     "idea": "Forward kinematics (leg lengths → deck pose) is very hard: many coupled constraints plus an idle spin of each leg about itself.",
+     "feynman": "Knowing only how long six sticks are, guessing how the table sits is a giant puzzle.",
+     "visual": "Set six leg-length sliders: several ghost deck poses flicker as candidate solutions; each leg shows a tiny idle spin arrow.",
+     "scene": "mls-stewart-platform",
+     "beat": "📏 inverse = six tape measures",
+     "math": [
+      "ik"
+     ],
+     "engine": [
+      "NEW: stewartFK"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-140-d",
+     "lines": [
+      27,
+      37
+     ],
+     "kind": "equation",
+     "idea": "Inverse kinematics is trivial: θᵢ = ‖q_si − g q_ti‖, the distance between base and deck pivots.",
+     "feynman": "To place the tabletop, just measure each leg with a tape measure.",
+     "visual": "Drag the blue deck; six length readouts update as plain distances between teal pivots; tape-measure animation along each leg.",
+     "scene": "mls-stewart-platform",
+     "beat": "📏 inverse = six tape measures",
+     "math": [
+      "ik",
+      "rigid-transform"
+     ],
+     "engine": [
+      "lie.applySE3",
+      "linalg.vdist"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "3-140-e",
+     "lines": [
+      38,
+      39
+     ],
+     "kind": "prose",
+     "idea": "Mobility is studied through the Jacobian of the structure equation.",
+     "feynman": "Next: which ways can the deck move right now?",
+     "visual": "A velocity gizmo appears on the deck ready to test directions.",
+     "scene": "mls-stewart-platform",
+     "beat": "⚡ every velocity allowed",
+     "math": [
+      "jacobian"
+     ],
+     "engine": [
+      "kinematics.spaceJacobian"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-140-f",
+     "lines": [
+      40,
+      40
+     ],
+     "kind": "page-number",
+     "idea": "Page number 140."
+    }
+   ]
+  },
+  {
+   "pdf": 159,
+   "book": 141,
+   "lines": 45,
+   "section": "3.5.4",
+   "summary": "Stewart legs never lose velocities (θᵢ≠0), but a flat platform has an actuator singularity: legs can't push out of the plane. Example 3.18 introduces a planar version.",
+   "atoms": [
+    {
+     "id": "3-141-a",
+     "lines": [
+      1,
+      12
+     ],
+     "kind": "equation",
+     "label": "Eq (3.73)",
+     "idea": "Each leg's 7-column Jacobian (ball, slide, ball) is never singular if θᵢ ≠ 0, so every tool velocity is admissible.",
+     "feynman": "Each leg can bend and stretch every which way, so the deck can always move any direction.",
+     "visual": "Per leg a 6×7 grid with rank meter at 6 (lime); the lime admissible-velocity overlap is always full.",
+     "scene": "mls-stewart-platform",
+     "beat": "⚡ every velocity allowed",
+     "math": [
+      "jacobian"
+     ],
+     "engine": [
+      "linalg.svd"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-141-b",
+     "lines": [
+      13,
+      24
+     ],
+     "kind": "prose",
+     "idea": "When base and deck are coplanar the legs can only push in-plane: out-of-plane wrenches can't be resisted or applied. Not kinematic — an actuator singularity, akin to losing force-closure.",
+     "feynman": "A trampoline pulled flat: the springs all lie sideways, so nothing holds you up.",
+     "visual": "Squash the deck flat: six purple leg-force lines lie in one plane; a gold \"lift\" wrench turns coral 🚫 while motion fans stay lime.",
+     "scene": "mls-stewart-platform",
+     "beat": "🫓 flat deck can't push up",
+     "math": [
+      "statics",
+      "jacobian"
+     ],
+     "engine": [
+      "linalg.svd"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-141-c",
+     "lines": [
+      25,
+      34
+     ],
+     "kind": "prose",
+     "idea": "Geometrically, deck wrenches are pure forces along the legs (zero-pitch screws); earlier zero-pitch singularity patterns apply: coplanar lines, or two collinear legs.",
+     "feynman": "Each leg can only push along itself, like a pool cue; if cues lie flat or two share a line, some pushes vanish.",
+     "visual": "Purple force lines along legs; detectors glow for \"all in a plane\" and \"two on one line\".",
+     "scene": "mls-stewart-platform",
+     "beat": "🫓 flat deck can't push up",
+     "math": [
+      "statics"
+     ],
+     "engine": [
+      "linalg.svd"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-141-d",
+     "lines": [
+      35,
+      44
+     ],
+     "kind": "example",
+     "label": "Ex 3.18",
+     "idea": "Planar Stewart: three actuated prismatic legs with passive revolute ends; no kinematic singularities (rank always 3).",
+     "feynman": "A flat triangle tray held by three telescoping struts.",
+     "visual": "2D: slate base, blue triangle deck, three orange legs with teal pins; velocity rank meter fixed at 3.",
+     "scene": "mls-stewart-platform",
+     "beat": "🔺 planar: lines meet, torque lost",
+     "math": [
+      "jacobian"
+     ],
+     "engine": [
+      "NEW: stewartIK"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-141-e",
+     "lines": [
+      45,
+      45
+     ],
+     "kind": "page-number",
+     "idea": "Page number 141."
+    }
+   ]
+  },
+  {
+   "pdf": 160,
+   "book": 142,
+   "lines": 30,
+   "section": "3.5.4",
+   "summary": "Three leg force lines meeting at a point leave no pure torque about that point: an actuator singularity of the planar Stewart platform.",
+   "atoms": [
+    {
+     "id": "3-142-a",
+     "lines": [
+      1,
+      8
+     ],
+     "kind": "figure",
+     "label": "Fig 3.22",
+     "idea": "Planar Stewart with leg lengths d1,d2,d3 and its wrench diagram showing three forces through one point.",
+     "feynman": "Three ropes pulling a board, all aimed at the same spot.",
+     "visual": "Left: the planar platform; right: three purple force lines F1,F2,F3 meeting at a gold dot.",
+     "scene": "mls-stewart-platform",
+     "beat": "🔺 planar: lines meet, torque lost",
+     "math": [
+      "statics"
+     ],
+     "engine": [
+      "NEW: stewartIK"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-142-b",
+     "lines": [
+      9,
+      12
+     ],
+     "kind": "prose",
+     "idea": "In the plane, three pure forces through one point are dependent — the drawn pose is singular.",
+     "feynman": "Pulling ropes all aimed at the centre of a wheel can never make it spin.",
+     "visual": "Drag the deck until the three purple lines cross at one gold dot: 🚫 flash.",
+     "scene": "mls-stewart-platform",
+     "beat": "🔺 planar: lines meet, torque lost",
+     "math": [
+      "statics",
+      "vectors"
+     ],
+     "engine": [
+      "linalg.det"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-142-c",
+     "lines": [
+      13,
+      29
+     ],
+     "kind": "proof",
+     "idea": "In a frame at the meeting point, wrenches are (vᵢfᵢ, 0): the torque entry is always 0, so a pure torque (0,1) is not in the range.",
+     "feynman": "Push a door exactly at its hinge — however hard, no turning.",
+     "visual": "Torque meter at the gold dot stays 0 while force sliders f1..f3 move; a gold \"spin\" target stays coral 🚫.",
+     "scene": "mls-stewart-platform",
+     "beat": "🔺 planar: lines meet, torque lost",
+     "math": [
+      "statics",
+      "matrix"
+     ],
+     "engine": [
+      "linalg.lstsq"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-142-d",
+     "lines": [
+      30,
+      30
+     ],
+     "kind": "page-number",
+     "idea": "Page number 142."
+    }
+   ]
+  },
+  {
+   "pdf": 161,
+   "book": 143,
+   "lines": 56,
+   "section": "3.6",
+   "summary": "Chapter summary part 1: POE forward kinematics, workspaces, IK via subproblems, and the spatial/body Jacobians for velocity and force.",
+   "atoms": [
+    {
+     "id": "3-143-a",
+     "lines": [
+      1,
+      1
+     ],
+     "kind": "heading",
+     "idea": "Section 3.6 heading: summary."
+    },
+    {
+     "id": "3-143-b",
+     "lines": [
+      2,
+      11
+     ],
+     "kind": "summary",
+     "idea": "Recap: forward kinematics g_st: Q → SE(3), written for revolute/prismatic chains as a product of exponentials of home-pose joint twists.",
+     "feynman": "A recipe: turn each hinge by its amount, in order, and see where the hand lands.",
+     "visual": "Station 1 on the map: an arm whose orange joint dials replay a quick pose loop; the pink hand frame lands each time.",
+     "scene": "mls-ch3-map",
+     "beat": "🦾 pose from joints",
+     "math": [
+      "forward-kinematics",
+      "poe"
+     ],
+     "engine": [
+      "kinematics.poeFK"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "3-143-c",
+     "lines": [
+      12,
+      16
+     ],
+     "kind": "summary",
+     "idea": "Recap: complete workspace (all reachable poses), reachable workspace (positions at some orientation), dexterous workspace (positions at every orientation).",
+     "feynman": "Places your hand can touch at all vs places where you can also twist your wrist any way.",
+     "visual": "Nested lime shaded regions: big reachable cloud, smaller dexterous core; a pink hand spinning freely only inside the core.",
+     "scene": "mls-ch3-map",
+     "beat": "🦾 pose from joints",
+     "math": [
+      "forward-kinematics",
+      "cspace"
+     ],
+     "engine": [
+      "kinematics.planarFK"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "3-143-d",
+     "lines": [
+      17,
+      32
+     ],
+     "kind": "summary",
+     "idea": "Recap: inverse kinematics via three subproblems — rotate a point onto another, rotate about two intersecting axes, rotate to a given distance — combined by choosing clever points.",
+     "feynman": "Solving a big puzzle by recognising three small standard puzzle pieces inside it.",
+     "visual": "Station 2: three mini-puzzle tiles (swing to point, two-axis swing, swing to distance) snap into an arm IK solution, gold target reached.",
+     "scene": "mls-ch3-map",
+     "beat": "🧩 joints from pose",
+     "math": [
+      "ik"
+     ],
+     "engine": [
+      "kinematics.twoLinkIK"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-143-e",
+     "lines": [
+      33,
+      55
+     ],
+     "kind": "summary",
+     "idea": "Recap: Vˢ = Jˢθ̇, Vᵇ = Jᵇθ̇ and τ = (Jˢ)ᵀFˢ = (Jᵇ)ᵀFᵇ; with POE, spatial columns are twists moved by earlier joints, body columns are twists seen from the tool.",
+     "feynman": "The same gearing tells you speeds out and forces back.",
+     "visual": "Station 3: pink velocity ellipse and purple force ellipse at the hand, toggled between base and tool frames.",
+     "scene": "mls-ch3-map",
+     "beat": "📐 speeds & pushes",
+     "math": [
+      "jacobian",
+      "statics"
+     ],
+     "engine": [
+      "kinematics.spaceJacobian",
+      "lie.adjoint"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-143-f",
+     "lines": [
+      56,
+      56
+     ],
+     "kind": "page-number",
+     "idea": "Page number 143."
+    }
+   ]
+  },
+  {
+   "pdf": 162,
+   "book": 144,
+   "lines": 36,
+   "section": "3.6",
+   "summary": "Summary part 2: singularities, manipulability, redundancy and parallel mechanisms; bibliography opens with textbook and POE references.",
+   "atoms": [
+    {
+     "id": "3-144-a",
+     "lines": [
+      1,
+      8
+     ],
+     "kind": "summary",
+     "idea": "Recap: singular = Jacobian loses rank; patterns for 6-DOF arms: two collinear revolutes, three parallel coplanar, four through a point; manipulability measures distance to singularity.",
+     "feynman": "The three classic ways a robot \"locks its knees\".",
+     "visual": "Station 4: a flattened pink ellipse with the three detector badges 🪢 📏 ✳️ cycling.",
+     "scene": "mls-ch3-map",
+     "beat": "🚫 where it breaks",
+     "math": [
+      "jacobian",
+      "manipulability"
+     ],
+     "engine": [
+      "linalg.svd"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-144-b",
+     "lines": [
+      9,
+      14
+     ],
+     "kind": "summary",
+     "idea": "Recap: redundant arms have extra DOF; the self-motion manifold holds the hand fixed; internal motions satisfy Jθ̇ = 0.",
+     "feynman": "Spare joints let your elbow roam while your finger stays on the button.",
+     "visual": "Station 5: snake arm with pinned pink tip sliding along its teal self-motion loop.",
+     "scene": "mls-ch3-map",
+     "beat": "🤝 extra & parallel arms",
+     "math": [
+      "jacobian",
+      "ik"
+     ],
+     "engine": [
+      "linalg.pinv"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-144-c",
+     "lines": [
+      15,
+      26
+     ],
+     "kind": "summary",
+     "idea": "Recap: parallel arms obey a structure equation equating chains; velocities from each chain must agree; singularities when admissible motions or generable wrenches drop rank.",
+     "feynman": "Several people carrying one sofa must agree on where and how fast it goes.",
+     "visual": "Station 6: hexapod deck with leg fans overlapping in lime; flatten it and a coral lift wrench appears.",
+     "scene": "mls-ch3-map",
+     "beat": "🤝 extra & parallel arms",
+     "math": [
+      "jacobian",
+      "statics"
+     ],
+     "engine": [
+      "NEW: stewartIK"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-144-d",
+     "lines": [
+      27,
+      27
+     ],
+     "kind": "heading",
+     "idea": "Section 3.7 heading: bibliography."
+    },
+    {
+     "id": "3-144-e",
+     "lines": [
+      28,
+      35
+     ],
+     "kind": "references",
+     "idea": "Pointers to introductory kinematics textbooks; the POE formula traces to Brockett, and this presentation draws on Paden's thesis; Brockett also edited a collection of advanced papers.",
+     "feynman": "A family tree of who first wrote the hinge-by-hinge recipe.",
+     "visual": "Timeline strip: dots for textbooks and the POE origin, each tapping open a mini POE animation.",
+     "scene": "mls-ch3-map",
+     "beat": "📚 who found what"
+    },
+    {
+     "id": "3-144-f",
+     "lines": [
+      36,
+      36
+     ],
+     "kind": "page-number",
+     "idea": "Page number 144."
+    }
+   ]
+  },
+  {
+   "pdf": 163,
+   "book": 145,
+   "lines": 17,
+   "section": "3.7",
+   "summary": "Bibliography: history of bounds on the number of 6-DOF IK solutions (32 → 16) and constructive algorithms; classical references for four-bar and parallel mechanisms.",
+   "atoms": [
+    {
+     "id": "3-145-a",
+     "lines": [
+      1,
+      10
+     ],
+     "kind": "references",
+     "idea": "History: the general 6R arm has at most 32 IK solutions (non-constructive), later made constructive and cut to 16; constructive algorithms followed and an arm with 16 solutions was exhibited.",
+     "feynman": "Detectives narrowing a suspect list from 32 to 16, then actually naming all 16.",
+     "visual": "Timeline: a counter drops 32 → 16 along the years; at the end 16 gold ghost arms all reach the same pink target.",
+     "scene": "mls-ch3-map",
+     "beat": "📚 who found what"
+    },
+    {
+     "id": "3-145-b",
+     "lines": [
+      11,
+      16
+     ],
+     "kind": "references",
+     "idea": "The parallel-mechanism treatment here is non-standard; classical four-bar and synthesis references are cited.",
+     "feynman": "Old-school mechanism books teach linkages with compass-and-ruler drawings.",
+     "visual": "Timeline dot with a four-bar icon whose coupler curve traces when tapped.",
+     "scene": "mls-ch3-map",
+     "beat": "📚 who found what"
+    },
+    {
+     "id": "3-145-c",
+     "lines": [
+      17,
+      17
+     ],
+     "kind": "page-number",
+     "idea": "Page number 145."
+    }
+   ]
+  },
+  {
+   "pdf": 164,
+   "book": 146,
+   "lines": 23,
+   "section": "3.8",
+   "summary": "Exercises begin: draw twist axes, order-independence of FK, and full FK/IK/Jacobian work for simple 3-DOF arms.",
+   "atoms": [
+    {
+     "id": "3-146-a",
+     "lines": [
+      1,
+      10
+     ],
+     "kind": "figure",
+     "label": "Fig 3.23",
+     "idea": "Four simple 3-DOF arm sketches (i)–(iv) mixing revolute and prismatic joints.",
+     "feynman": "Four toy arms built from different hinge-and-slide combinations.",
+     "visual": "Gallery of four arms with orange joints θ1..θ3; click one to load it into the Jacobian scene.",
+     "scene": "mls-jacobian-by-eye",
+     "beat": "🔍 SCARA columns by eye",
+     "math": [
+      "forward-kinematics"
+     ],
+     "engine": [
+      "kinematics.poeFK"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "3-146-b",
+     "lines": [
+      11,
+      11
+     ],
+     "kind": "heading",
+     "idea": "Section 3.8 heading: exercises."
+    },
+    {
+     "id": "3-146-c",
+     "lines": [
+      12,
+      12
+     ],
+     "kind": "exercise",
+     "label": "Exercise 1",
+     "idea": "Draw the joint twist axes for the robots shown in Chapter 1.",
+     "feynman": "Find each hinge line on a real robot photo.",
+     "visual": "Challenge: a robot silhouette; the learner drags orange axis lines onto each joint; lime ✓ when each matches the true axis within a tolerance.",
+     "scene": "poe",
+     "beat": "🏆 challenge",
+     "math": [
+      "poe",
+      "screw-exp"
+     ],
+     "engine": [
+      "lie.screwAxis"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-146-d",
+     "lines": [
+      13,
+      14
+     ],
+     "kind": "exercise",
+     "label": "Exercise 2",
+     "idea": "Show the FK map doesn't depend on the order in which the rotation and translation parts are applied.",
+     "feynman": "Put on your shirt then walk to the door, or walk then put it on — you end up dressed at the door either way, if done consistently.",
+     "visual": "Challenge: two build orders of the same pink tool frame; the learner reorders blocks and must get both ghosts to coincide (gold ✓).",
+     "scene": "forward-kinematics",
+     "beat": "🏆 challenge",
+     "math": [
+      "rigid-transform",
+      "forward-kinematics"
+     ],
+     "engine": [
+      "lie.homog"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-146-e",
+     "lines": [
+      15,
+      20
+     ],
+     "kind": "exercise",
+     "label": "Exercise 3",
+     "idea": "For each 3-DOF arm of Fig 3.23 find FK, solve IK via subproblems, and derive spatial and body Jacobians.",
+     "feynman": "Take each toy arm apart: where does the hand go, how to aim it, how fast it moves.",
+     "visual": "Challenge: load an arm; fill its Jacobian columns by dragging axis lines into the grid; the scene checks against a numeric Jacobian and lights lime per correct column.",
+     "scene": "mls-jacobian-by-eye",
+     "beat": "🔍 SCARA columns by eye",
+     "math": [
+      "jacobian",
+      "ik",
+      "forward-kinematics"
+     ],
+     "engine": [
+      "kinematics.spaceJacobian",
+      "dynamics.numJacobian"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-146-f",
+     "lines": [
+      21,
+      22
+     ],
+     "kind": "exercise",
+     "label": "Exercise 4",
+     "idea": "For each arm in Fig 3.24 find the FK map (parts continue next page).",
+     "feynman": "Four famous robot body plans to analyse.",
+     "visual": "Challenge: pick an arm from the gallery and pose the pink tool frame by setting each joint; FK readout must match a gold ghost.",
+     "scene": "forward-kinematics",
+     "beat": "🏆 challenge",
+     "math": [
+      "forward-kinematics"
+     ],
+     "engine": [
+      "kinematics.poeFK"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-146-g",
+     "lines": [
+      23,
+      23
+     ],
+     "kind": "page-number",
+     "idea": "Page number 146."
+    }
+   ]
+  },
+  {
+   "pdf": 165,
+   "book": 147,
+   "lines": 25,
+   "section": "3.8",
+   "summary": "Exercises: full analysis of four sample arms, a non-intersecting-axes Subproblem 2′, and Subproblem 4 (two rotations to two distances).",
+   "atoms": [
+    {
+     "id": "3-147-a",
+     "lines": [
+      1,
+      4
+     ],
+     "kind": "figure",
+     "label": "Fig 3.24",
+     "idea": "Sample arms: elbow, inverse elbow, telescoping boom, and a small educational arm; revolutes drawn as cylinders, prismatics as boxes.",
+     "feynman": "Four robot skeletons made of tin cans (hinges) and drawers (sliders).",
+     "visual": "Gallery of four 3D arms; orange cylinders for revolutes, blue boxes for sliders.",
+     "scene": "mls-singular-axes",
+     "beat": "🪢 two axes collinear",
+     "math": [
+      "forward-kinematics"
+     ],
+     "engine": [
+      "kinematics.poeFK"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "3-147-b",
+     "lines": [
+      5,
+      13
+     ],
+     "kind": "exercise",
+     "label": "Exercise 4",
+     "idea": "Also: IK by subproblems, spatial/body Jacobians, geometric singular configurations, and reachable/dexterous workspaces with IK solution counts by region.",
+     "feynman": "A full health check of each robot: reach, aim, speed, and weak spots.",
+     "visual": "Challenge: the learner must drive each arm into every singular pose they can find; the scene stamps 🪢/📏/✳️ badges and counts IK ghosts per workspace region.",
+     "scene": "mls-singular-axes",
+     "beat": "🧱 stacked & joint limits",
+     "math": [
+      "jacobian",
+      "ik",
+      "manipulability"
+     ],
+     "engine": [
+      "linalg.svd",
+      "kinematics.spaceJacobian"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "3-147-c",
+     "lines": [
+      14,
+      18
+     ],
+     "kind": "exercise",
+     "label": "Exercise 5",
+     "idea": "Solve the two-rotation subproblem when the two axes do not intersect, and apply it to an elbow arm with offset shoulder.",
+     "feynman": "Rotating a point with two hinges that are not on the same pin, like an offset door and gate.",
+     "visual": "Challenge: two skew orange axes; drag θ1, θ2 so a pink point lands on a gold target; the scene shows the circles' intersection points.",
+     "scene": "ik",
+     "beat": "🏆 challenge",
+     "math": [
+      "ik",
+      "rotation"
+     ],
+     "engine": [
+      "lie.expSE3"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "3-147-d",
+     "lines": [
+      19,
+      24
+     ],
+     "kind": "exercise",
+     "label": "Exercise 6",
+     "idea": "Subproblem 4: with two intersecting zero-pitch axes, rotate p so it ends at distance δ1 from q1 and δ2 from q2.",
+     "feynman": "Swing a key on two hinges so it ends up exactly a hand-length from one friend and an arm-length from another.",
+     "visual": "Challenge: two teal spheres around q1 and q2; rotate p with two orange dials until the pink point sits on both sphere surfaces (gold ✓).",
+     "scene": "ik",
+     "beat": "🏆 challenge",
+     "math": [
+      "ik",
+      "rotation"
+     ],
+     "engine": [
+      "lie.expSE3"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "3-147-e",
+     "lines": [
+      25,
+      25
+     ],
+     "kind": "page-number",
+     "idea": "Page number 147."
+    }
+   ]
+  },
+  {
+   "pdf": 166,
+   "book": 148,
+   "lines": 34,
+   "section": "3.8",
+   "summary": "Exercises: Subproblem 4 hint (three spheres), Subproblem 5 (slide to a distance), tool-frame independence of spatial velocity, and the SVD.",
+   "atoms": [
+    {
+     "id": "3-148-a",
+     "lines": [
+      1,
+      11
+     ],
+     "kind": "figure",
+     "label": "Fig 3.25",
+     "idea": "Subproblem 4 geometry: p rotated about ξ1 then ξ2, landing δ1 from q1 and δ2 from q2.",
+     "feynman": "A point on a double hinge swinging to touch two invisible balloons.",
+     "visual": "Orange axes ξ1, ξ2 meeting at r; teal spheres at q1, q2; pink path of p.",
+     "scene": "ik",
+     "beat": "🏆 challenge",
+     "math": [
+      "ik"
+     ],
+     "engine": [
+      "lie.expSE3"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-148-b",
+     "lines": [
+      12,
+      18
+     ],
+     "kind": "exercise",
+     "label": "Exercise 6",
+     "idea": "Second distance condition, plus the hint: the final point lies on three spheres (about q1, q2 and r with radius ‖p−r‖).",
+     "feynman": "Where three balloons touch is a tiny set of spots — check them.",
+     "visual": "Challenge continued: a third translucent sphere about r appears; the learner clicks the (up to two) intersection points of all three.",
+     "scene": "ik",
+     "beat": "🏆 challenge",
+     "math": [
+      "ik"
+     ],
+     "engine": [
+      "NEW: sphereIntersect3"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "3-148-c",
+     "lines": [
+      19,
+      25
+     ],
+     "kind": "exercise",
+     "label": "Exercise 7",
+     "idea": "Subproblem 5: slide p along an infinite-pitch twist until it is δ from q; use it for the SCARA prismatic extension.",
+     "feynman": "Slide a drawer until its handle is exactly a ruler-length from your nose.",
+     "visual": "Challenge: a blue slider rail; drag p along it until a teal circle of radius δ about q is touched (two possible spots glow).",
+     "scene": "ik",
+     "beat": "🏆 challenge",
+     "math": [
+      "ik"
+     ],
+     "engine": [
+      "NEW: subproblem5"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-148-d",
+     "lines": [
+      26,
+      28
+     ],
+     "kind": "exercise",
+     "label": "Exercise 8",
+     "idea": "Show the spatial velocity of the hand doesn't depend on where the tool frame is placed on it.",
+     "feynman": "Wherever you stick the sticker on a moving frisbee, the frisbee's motion (seen from the room) is the same.",
+     "visual": "Challenge: drag the pink tool frame anywhere on the gripper; the spatial twist readout must stay fixed (lime) while the body twist changes.",
+     "scene": "mls-twist-jacobian",
+     "beat": "🔁 spatial ↔ body by adjoint",
+     "math": [
+      "rigid-transform",
+      "jacobian"
+     ],
+     "engine": [
+      "lie.adjoint"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-148-e",
+     "lines": [
+      29,
+      33
+     ],
+     "kind": "exercise",
+     "label": "Exercise 9",
+     "idea": "Show any rank-r map A: Rⁿ → Rᵖ factors as A = UΣVᵀ (Eq 3.74).",
+     "feynman": "Any squish = rotate, stretch along axes, rotate again.",
+     "visual": "Challenge: a grid being squished by A; the learner chains rotate–stretch–rotate sliders to reproduce it exactly.",
+     "scene": "svd",
+     "beat": "🏆 challenge",
+     "math": [
+      "svd"
+     ],
+     "engine": [
+      "linalg.svd"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "3-148-f",
+     "lines": [
+      34,
+      34
+     ],
+     "kind": "page-number",
+     "idea": "Page number 148."
+    }
+   ]
+  },
+  {
+   "pdf": 167,
+   "book": 149,
+   "lines": 44,
+   "section": "3.8",
+   "summary": "Exercises: SVD structure (ranges and null spaces), μ3 as a product of singular values, and the image of the unit ball.",
+   "atoms": [
+    {
+     "id": "3-149-a",
+     "lines": [
+      1,
+      28
+     ],
+     "kind": "exercise",
+     "label": "Exercise 9",
+     "idea": "Parts: V's columns split into a basis of range(Aᵀ) and null(A); U's into range(A) and null(Aᵀ); Σ = diag(σ1 ≥ … ≥ σr > 0) padded with zeros.",
+     "feynman": "Some directions get stretched, some get squashed to nothing; SVD sorts them for you.",
+     "visual": "Challenge: orange input arrows v1..vn and pink outputs u1..up; the learner sorts them into \"stretched\" (lime) and \"crushed to zero\" (coral) bins.",
+     "scene": "svd",
+     "beat": "🏆 challenge",
+     "math": [
+      "svd",
+      "eigen"
+     ],
+     "engine": [
+      "linalg.svd"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "3-149-b",
+     "lines": [
+      29,
+      36
+     ],
+     "kind": "exercise",
+     "label": "Exercise 10",
+     "idea": "Show μ3 = Πσᵢ, so it vanishes exactly when J is singular.",
+     "feynman": "The box's volume is length × width × height; flatten any one side and the volume is zero.",
+     "visual": "Challenge: the learner must find a pose where the area bar hits 0 and confirm one σ bar is 0 at the same moment.",
+     "scene": "mls-dexterity-meters",
+     "beat": "📦 volume det J",
+     "math": [
+      "svd",
+      "manipulability"
+     ],
+     "engine": [
+      "linalg.det",
+      "linalg.svd"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-149-c",
+     "lines": [
+      37,
+      43
+     ],
+     "kind": "exercise",
+     "label": "Exercise 11",
+     "idea": "Describe the image of the unit ball under A, distinguishing p ≥ n, p ≤ n and rank-deficient cases.",
+     "feynman": "Squash a balloon: it becomes an egg, a flattened pancake, or a needle.",
+     "visual": "Challenge: switch shapes of A (tall, wide, deficient); the learner predicts the image (solid ellipsoid, flat ellipse, segment) before the animation reveals it.",
+     "scene": "mls-dexterity-meters",
+     "beat": "🥚 ellipse axes = σ",
+     "math": [
+      "svd",
+      "manipulability"
+     ],
+     "engine": [
+      "linalg.svd",
+      "linalg.covEllipse"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-149-d",
+     "lines": [
+      44,
+      44
+     ],
+     "kind": "page-number",
+     "idea": "Page number 149."
+    }
+   ]
+  },
+  {
+   "pdf": 168,
+   "book": 150,
+   "lines": 38,
+   "section": "3.8",
+   "summary": "Exercises: a task-ellipsoid manipulability measure, isotropic points, Euler-angle singularities via a Jacobian, and four coplanar revolutes.",
+   "atoms": [
+    {
+     "id": "3-150-a",
+     "lines": [
+      1,
+      13
+     ],
+     "kind": "exercise",
+     "label": "Exercise 12",
+     "idea": "Given a task ellipsoid with axes α1..αp, define μ_t = largest β with J(unit ball) inside E_β and express it via singular values and αᵢ.",
+     "feynman": "Will your paint stroke fit inside the shape the job needs? Scale the job shape until it just contains what you can do.",
+     "visual": "Challenge: a gold task ellipse; the pink velocity ellipse must fit inside; the learner scales β until they touch and reads μ_t.",
+     "scene": "mls-dexterity-meters",
+     "beat": "🥚 ellipse axes = σ",
+     "math": [
+      "svd",
+      "manipulability"
+     ],
+     "engine": [
+      "linalg.svd"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "3-150-b",
+     "lines": [
+      14,
+      22
+     ],
+     "kind": "exercise",
+     "label": "Exercise 13",
+     "idea": "Isotropic points (condition number 1): find them for a 2-link planar arm and a wristless elbow arm; explain their use in force tasks.",
+     "feynman": "A spot where you can push equally hard in every direction — like standing balanced on both feet.",
+     "visual": "Challenge: drag the hand until the pink ellipse becomes a perfect circle (roundness gauge = 1, lime); the scene then draws the full isotropic locus.",
+     "scene": "mls-dexterity-meters",
+     "beat": "⚖️ roundness σmin/σmax",
+     "math": [
+      "manipulability",
+      "svd"
+     ],
+     "engine": [
+      "kinematics.manipulability"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-150-c",
+     "lines": [
+      23,
+      32
+     ],
+     "kind": "exercise",
+     "label": "Exercise 14",
+     "idea": "Treat Euler angles (ZYZ, ZYX, XYZ) as joints of a rotation-only robot and find their singularities from the Jacobian.",
+     "feynman": "Three nested gimbal rings: find the twist that makes two rings line up.",
+     "visual": "Challenge: three ring gimbal with orange angle sliders; the learner must find every gimbal-lock pose for each Euler order; 🚫 stamps where the Jacobian rank drops.",
+     "scene": "mls-jacobian-by-eye",
+     "beat": "🎭 ∂f/∂θ is an impostor",
+     "math": [
+      "euler-angles",
+      "jacobian"
+     ],
+     "engine": [
+      "lie.eulerZYX",
+      "linalg.svd"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-150-d",
+     "lines": [
+      33,
+      37
+     ],
+     "kind": "exercise",
+     "label": "Exercise 15",
+     "idea": "Four revolute axes are coplanar if every direction and every connecting vector is ⟂ to a common normal n (continues).",
+     "feynman": "Four hinges all lying flat on the same tabletop.",
+     "visual": "Challenge setup: four orange axis lines and a slate plane; the learner tilts axes until all lie in the plane.",
+     "scene": "mls-singular-axes",
+     "beat": "📏 three parallel in a plane",
+     "math": [
+      "jacobian"
+     ],
+     "engine": [
+      "linalg.svd"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-150-e",
+     "lines": [
+      38,
+      38
+     ],
+     "kind": "page-number",
+     "idea": "Page number 150."
+    }
+   ]
+  },
+  {
+   "pdf": 169,
+   "book": 151,
+   "lines": 33,
+   "section": "3.8",
+   "summary": "Exercises: singularity patterns (four coplanar revolutes, six revolutes meeting a line, prismatic normal to two parallel revolutes), frame invariance of measures, and wrench balance at singularities.",
+   "atoms": [
+    {
+     "id": "3-151-a",
+     "lines": [
+      1,
+      5
+     ],
+     "kind": "exercise",
+     "label": "Exercise 15",
+     "idea": "Show four coplanar revolute axes make a 6-DOF arm singular, and name an arm that shows it.",
+     "feynman": "Four hinges on one tabletop can't lift anything off the table.",
+     "visual": "Challenge: with four coplanar orange axes, the learner finds two independent purple wrenches that do zero work on all of them (reciprocal), proving rank ≤ 4.",
+     "scene": "mls-singular-axes",
+     "beat": "📏 three parallel in a plane",
+     "math": [
+      "jacobian",
+      "statics"
+     ],
+     "engine": [
+      "linalg.svd"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "3-151-b",
+     "lines": [
+      6,
+      13
+     ],
+     "kind": "exercise",
+     "label": "Exercise 16",
+     "idea": "Show that six revolute axes all intersecting a common line make the arm singular.",
+     "feynman": "Six hinges all crossing one skewer: a pull along the skewer crosses every hinge line, so it turns none of them.",
+     "visual": "Challenge: six orange axes and a gold line crossing them all; the learner places a purple force along the gold line and sees zero work on all six (🚫 rank < 6).",
+     "scene": "mls-singular-axes",
+     "beat": "✳️ four through a point",
+     "math": [
+      "jacobian",
+      "statics"
+     ],
+     "engine": [
+      "linalg.vdot",
+      "linalg.svd"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "3-151-c",
+     "lines": [
+      14,
+      23
+     ],
+     "kind": "exercise",
+     "label": "Exercise 17",
+     "idea": "Show a prismatic axis normal to the plane of two parallel coplanar revolutes makes the arm singular; give an example arm.",
+     "feynman": "Two parallel hinges on a wall plus a slider pointing straight out of the wall: one way of moving gets counted twice.",
+     "visual": "Challenge: two parallel orange axes in a slate plane, a blue slider arrow; the learner aligns the slider with the plane normal and the rank meter drops.",
+     "scene": "mls-singular-axes",
+     "beat": "📏 three parallel in a plane",
+     "math": [
+      "jacobian"
+     ],
+     "engine": [
+      "linalg.svd"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "3-151-d",
+     "lines": [
+      24,
+      27
+     ],
+     "kind": "exercise",
+     "label": "Exercise 18",
+     "idea": "Decide which manipulability measures stay the same when base and/or tool frames change.",
+     "feynman": "Which ruler readings stay the same if you walk around the object?",
+     "visual": "Challenge: move base and tool frames with gizmos; the learner tags each gauge (μ1, μ2, μ3) as \"never moves\" (lime) or \"changes\" (coral).",
+     "scene": "mls-dexterity-meters",
+     "beat": "🥚 ellipse axes = σ",
+     "math": [
+      "manipulability",
+      "rigid-transform"
+     ],
+     "engine": [
+      "lie.adjoint",
+      "linalg.svd"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-151-e",
+     "lines": [
+      28,
+      31
+     ],
+     "kind": "exercise",
+     "label": "Exercise 19",
+     "idea": "Show that at a singular pose some hand wrench is balanced with zero torques, and relate it to the Jacobian columns.",
+     "feynman": "At a locked-straight knee, a push along the leg needs no muscle — it is perpendicular (in the work sense) to every joint motion.",
+     "visual": "Challenge: at a singular pose the learner rotates a pink wrench until all orange torque bars read 0; the scene shows it is reciprocal to every column twist.",
+     "scene": "mls-singular-axes",
+     "beat": "💪 forces at a singularity",
+     "math": [
+      "statics",
+      "svd"
+     ],
+     "engine": [
+      "linalg.svd"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-151-f",
+     "lines": [
+      32,
+      32
+     ],
+     "kind": "exercise",
+     "label": "Exercise 20",
+     "idea": "Introduces a slider-crank mechanism.",
+     "feynman": "The piston-and-crank in a car engine.",
+     "visual": "Challenge setup: a crank, a connecting rod and a slider on a slate track.",
+     "scene": "mls-four-bar",
+     "beat": "⚙️ crank, coupler, rocker",
+     "math": [
+      "forward-kinematics"
+     ],
+     "engine": [
+      "NEW: fourBarSolve"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-151-g",
+     "lines": [
+      33,
+      33
+     ],
+     "kind": "page-number",
+     "idea": "Page number 151."
+    }
+   ]
+  },
+  {
+   "pdf": 170,
+   "book": 152,
+   "lines": 35,
+   "section": "3.8",
+   "summary": "Exercises: slider-crank analysis (DOF, structure equations, Jacobian, singularities by active joint) and a planar variable-geometry truss.",
+   "atoms": [
+    {
+     "id": "3-152-a",
+     "lines": [
+      1,
+      7
+     ],
+     "kind": "figure",
+     "idea": "Slider-crank sketch: links l1, l2, l3, slider position d, base S and tool T.",
+     "feynman": "A bike pedal pushing a piston back and forth.",
+     "visual": "Orange crank θ1, blue rod, teal slider at distance d on a slate rail; pink T on the slider.",
+     "scene": "mls-four-bar",
+     "beat": "⚙️ crank, coupler, rocker",
+     "math": [
+      "forward-kinematics"
+     ],
+     "engine": [
+      "NEW: fourBarSolve"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "3-152-b",
+     "lines": [
+      8,
+      18
+     ],
+     "kind": "exercise",
+     "label": "Exercise 20",
+     "idea": "Find DOF (and why spatial Gruebler fails), structure equations, the Jacobian with explicit twists, and singular poses when d or θ1 is the active joint, with conditions on link lengths.",
+     "feynman": "Find when pushing the piston can't turn the crank — the engine's dead centre.",
+     "visual": "Challenge: toggle which joint is the motor; the learner drives until the scene jams (coral 🚫) and must find every jam pose; length sliders test when jams exist.",
+     "scene": "mls-four-bar",
+     "beat": "🚫 passives in a line jam",
+     "math": [
+      "jacobian",
+      "cspace"
+     ],
+     "engine": [
+      "linalg.det",
+      "NEW: gruebler"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "3-152-c",
+     "lines": [
+      19,
+      23
+     ],
+     "kind": "exercise",
+     "label": "Exercise 21",
+     "idea": "A planar parallel \"variable geometry truss\": three actuated prismatic legs with passive revolute ends, no actuator limits.",
+     "feynman": "A folding truss bridge that changes shape by lengthening its struts.",
+     "visual": "Challenge setup: two blue bars joined by three orange telescoping struts.",
+     "scene": "mls-stewart-platform",
+     "beat": "🔺 planar: lines meet, torque lost",
+     "math": [
+      "jacobian"
+     ],
+     "engine": [
+      "NEW: stewartIK"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-152-d",
+     "lines": [
+      24,
+      28
+     ],
+     "kind": "figure",
+     "idea": "Truss sketch: base B, platform T, legs d1, d2, d3, sizes h, w, and an alternate configuration.",
+     "feynman": "A wobbly ladder-like frame you can reshape by changing three struts.",
+     "visual": "Two panels: the truss in two shapes with orange struts d1..d3.",
+     "scene": "mls-stewart-platform",
+     "beat": "🔺 planar: lines meet, torque lost",
+     "math": [
+      "forward-kinematics"
+     ],
+     "engine": [
+      "NEW: stewartIK"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "3-152-e",
+     "lines": [
+      29,
+      34
+     ],
+     "kind": "exercise",
+     "label": "Exercise 21",
+     "idea": "Parts: Gruebler DOF, structure equations with a chosen zero pose, and explicit leg lengths for a given platform pose.",
+     "feynman": "Count the freedoms, then for any target shape just measure each strut.",
+     "visual": "Challenge: drag the platform to a gold pose; the learner must predict d1..d3 before the tape-measure readouts reveal them.",
+     "scene": "mls-stewart-platform",
+     "beat": "📏 inverse = six tape measures",
+     "math": [
+      "ik",
+      "cspace"
+     ],
+     "engine": [
+      "NEW: gruebler",
+      "linalg.vdist"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-152-f",
+     "lines": [
+      35,
+      35
+     ],
+     "kind": "page-number",
+     "idea": "Page number 152."
+    }
+   ]
+  },
+  {
+   "pdf": 171,
+   "book": 153,
+   "lines": 21,
+   "section": "3.8",
+   "summary": "Exercises: truss Jacobian and singularities; Stewart platform DOF, non-singularity for positive leg extensions, and a U-joint variant.",
+   "atoms": [
+    {
+     "id": "3-153-a",
+     "lines": [
+      1,
+      6
+     ],
+     "kind": "exercise",
+     "label": "Exercise 21",
+     "idea": "Find the truss's spatial Jacobian (exploiting legs that meet at a point) and all kinematic and actuator singularities.",
+     "feynman": "Find the shapes where the struts can still move the frame but can't hold it against a twist.",
+     "visual": "Challenge: drive the truss until three purple leg-force lines meet at one gold dot (torque 🚫), and find every such pose.",
+     "scene": "mls-stewart-platform",
+     "beat": "🔺 planar: lines meet, torque lost",
+     "math": [
+      "jacobian",
+      "statics"
+     ],
+     "engine": [
+      "linalg.svd"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "3-153-b",
+     "lines": [
+      7,
+      20
+     ],
+     "kind": "exercise",
+     "label": "Exercise 22",
+     "idea": "Stewart platform: Gruebler DOF; prove no singularity when all θᵢ > 0; DOF and structure equations when balls are replaced by U-joints, and whether singular poses appear.",
+     "feynman": "Swap ball joints for two-hinge knuckles and see if the table can still move every way.",
+     "visual": "Challenge: counter for DOF; then the learner swaps teal ball joints for orange U-joints and hunts for a pose where some leg's rank meter drops below 6.",
+     "scene": "mls-stewart-platform",
+     "beat": "⚡ every velocity allowed",
+     "math": [
+      "jacobian",
+      "cspace"
+     ],
+     "engine": [
+      "NEW: gruebler",
+      "linalg.svd"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "3-153-c",
+     "lines": [
+      21,
+      21
+     ],
+     "kind": "page-number",
+     "idea": "Page number 153."
+    }
+   ]
+  },
+  {
+   "pdf": 172,
+   "book": 154,
+   "lines": 1,
+   "section": "3.8",
+   "summary": "Blank verso page at the end of Chapter 3; only the page number.",
+   "atoms": [
+    {
+     "id": "3-154-a",
+     "lines": [
+      1,
+      1
+     ],
+     "kind": "page-number",
+     "idea": "Page number 154."
+    }
+   ]
+  }
+ ]
+}

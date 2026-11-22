@@ -4,7 +4,7 @@ import { Stage } from './viz/stage.js';
 import { UI } from './viz/ui.js';
 import { CONCEPTS, ISLANDS, BY_ID, dependents, bridge, ancestry } from './graph/concepts.js';
 import { drawMap, layoutMap } from './graph/map.js';
-import { renderBookHome, renderBookDay, renderBookPage, bookSceneMeta } from './book/book.js';
+import { renderBookHome, renderBookDay, renderBookPage, bookSceneMeta, streak, stampCount } from './book/book.js';
 
 const $ = (s, r = document) => r.querySelector(s);
 const app = $('#app');
@@ -43,7 +43,7 @@ function legendHTML() {
 function topbar(extra = '') {
   return `
     <header class="topbar">
-      <a class="brand" href="#/" aria-label="home">⚗️ <b>Crucible</b></a>
+      <a class="brand" href="#/" aria-label="home"><span class="logo">⚗️</span><b>Crucible</b></a>
       <div class="spacer"></div>
       ${extra}
       <button class="ui-btn" id="legend-btn" title="color language" aria-label="color language">🎨</button>
@@ -64,6 +64,12 @@ function renderMap(preset = null) {
       <button class="ui-btn" id="bridge-btn" title="connect two ideas" aria-label="connect two ideas" style="--tint:${col('gold')}">🔗</button>
       <a class="ui-btn" href="#/web" title="math × algorithm grid" aria-label="math × algorithm grid">▦</a>
       <a class="ui-btn" href="#/book" title="the textbook" aria-label="the textbook">📕</a>`)}
+    <section class="hero">
+      <div class="hud">${Object.entries(ISLANDS).map(([k, isl]) => `<span title="${isl.name}">${isl.icon} <b>${CONCEPTS.filter((c) => c.island === k).length}</b></span>`).join('')}
+        <span title="pages you can explain">💡 <b>${stampCount()}</b></span><span title="day streak">🔥 <b>${streak()}</b></span></div>
+      <div class="spacer"></div>
+      <a class="ui-btn cta" href="#/book" title="the textbook">📕 ▶</a>
+    </section>
     <section class="map-wrap"><div class="map-stage"></div></section>
     <nav class="bridge-strip" hidden></nav>
     <section class="shelves">${Object.entries(ISLANDS).map(([k, isl]) => `

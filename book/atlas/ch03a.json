@@ -1,0 +1,4792 @@
+{
+ "id": "ch03a",
+ "title": "Manipulator Kinematics: Forward and Inverse",
+ "pdfPages": [
+  99,
+  132
+ ],
+ "sections": [
+  {
+   "id": "3",
+   "title": "Manipulator Kinematics",
+   "book": 81
+  },
+  {
+   "id": "3.1",
+   "title": "Introduction",
+   "book": 81
+  },
+  {
+   "id": "3.2",
+   "title": "Forward Kinematics",
+   "book": 83
+  },
+  {
+   "id": "3.2.1",
+   "title": "Problem statement",
+   "book": 83
+  },
+  {
+   "id": "3.2.2",
+   "title": "The product of exponentials formula",
+   "book": 85
+  },
+  {
+   "id": "3.2.3",
+   "title": "Parameterization of manipulators via twists",
+   "book": 91
+  },
+  {
+   "id": "3.2.4",
+   "title": "Manipulator workspace",
+   "book": 95
+  },
+  {
+   "id": "3.3",
+   "title": "Inverse Kinematics",
+   "book": 97
+  },
+  {
+   "id": "3.3.1",
+   "title": "A planar example",
+   "book": 97
+  },
+  {
+   "id": "3.3.2",
+   "title": "Paden-Kahan subproblems",
+   "book": 99
+  },
+  {
+   "id": "3.3.3",
+   "title": "Solving inverse kinematics using subproblems",
+   "book": 104
+  },
+  {
+   "id": "3.3.4",
+   "title": "General solutions to inverse kinematics problems",
+   "book": 108
+  }
+ ],
+ "scenes": [
+  {
+   "id": "mls-lower-pairs",
+   "title": "Six Joint Types",
+   "icon": "🔩",
+   "section": "3.1",
+   "pages": [
+    81,
+    83
+   ],
+   "uses": [
+    "rigid-transform",
+    "screw-exp",
+    "rotation",
+    "euler-angles"
+   ],
+   "exists": "screw-exp",
+   "beats": [
+    "🚪 hinge, slider, screw",
+    "🛢️ cylinder & flat-plate pairs",
+    "⚽ a ball from three hinges",
+    "🗺️ map of the chapter"
+   ],
+   "brief": "A shelf of six joint 'toys' on a slate floor, each joining a fixed slate block to a blue block: hinge, slider, screw, cylinder, ball, flat plate. Tapping a toy drives it with an orange knob per freedom; a small dial row counts its freedoms (1,1,1,2,3,3) and a lime ghost shows the subgroup of motions it allows, coral ghosts the forbidden ones. The screw toy has a pitch slider that morphs it from hinge (pitch 0) to slider (pitch ∞). Final beat: three orange hinge axes meeting at one point assemble into a ball joint carrying a pink tool, then a chapter map of icons lights up FK → IK → Jacobian → redundant/parallel."
+  },
+  {
+   "id": "mls-fk-problem",
+   "title": "Joints → Hand",
+   "icon": "🦾",
+   "section": "3.2.1",
+   "pages": [
+    83,
+    85
+   ],
+   "uses": [
+    "forward-kinematics",
+    "rigid-transform",
+    "cspace"
+   ],
+   "exists": "forward-kinematics",
+   "beats": [
+    "🔢 count links & joints",
+    "🍩 joint space is a torus",
+    "📐 base & tool frames",
+    "🔗 chain link-to-link"
+   ],
+   "brief": "Left panel: a 3D SCARA-style arm with numbered orange joints and blue links (link 0 is slate ground). Right panel: its joint space, drawn as a donut (two angles) or a donut × ruler (with a slider joint) with a moving orange dot. Dragging the dot moves the arm; the pink tool frame T rides at the tip, the slate base frame S sits on the floor. Beat 4 shows the classical recipe: a little frame on each link and a row of 4×4 cards multiplying left to right, each card lighting up as its link moves."
+  },
+  {
+   "id": "mls-poe-formula",
+   "title": "Twist Product",
+   "icon": "🌀",
+   "section": "3.2.2",
+   "pages": [
+    85,
+    91
+   ],
+   "uses": [
+    "poe",
+    "screw-exp",
+    "rigid-transform",
+    "forward-kinematics"
+   ],
+   "exists": "poe",
+   "beats": [
+    "🌀 one joint, one twist",
+    "↪️ wiggle the last joint first",
+    "🔀 order doesn't matter",
+    "🧮 the n-joint formula",
+    "🦾 SCARA unrolled",
+    "💪 elbow with a wrist"
+   ],
+   "brief": "The arm frozen at its zero pose, each joint axis drawn as a long orange line with a twist glyph (ω arrow + point q). Turning one joint's knob sweeps the downstream links as one rigid lump around that fixed axis (expSE3). A play button performs the joints in two orders, outermost-first and base-first; in the base-first run the later axes visibly ride along (shown as faded orange copies, Ad-transformed), yet both runs end at the same pink pose, with a lime match tick. A strip of colored exponential tiles e^{ξ1θ1}…e^{ξnθn}·g(0) multiplies live, colored to match each axis. Presets: SCARA (three vertical hinges + a vertical slider) and a 6-axis elbow arm with a spherical wrist."
+  },
+  {
+   "id": "mls-ch3-frame-choices",
+   "title": "Frames & Zeros",
+   "icon": "🎯",
+   "section": "3.2.3",
+   "pages": [
+    91,
+    95
+   ],
+   "uses": [
+    "poe",
+    "dh",
+    "rigid-transform",
+    "screw-exp"
+   ],
+   "exists": "dh",
+   "beats": [
+    "🎯 base on the tool",
+    "0️⃣ choose the zero pose",
+    "📏 DH: four numbers",
+    "🔄 adjoint: DH → twists",
+    "🏆 two frames win"
+   ],
+   "brief": "One arm, two bookkeeping styles side by side. Left: POE, only two frames (slate S, pink T) and orange axis lines; dragging S onto T makes g(0) become the identity card. A 'zero pose' slider re-chooses which configuration counts as θ=0, and the twist numbers on each axis re-label while the arm does not move. Right: DH, a frame bolted to every link with its four numbers (twist angle, link length, offset, joint angle) drawn as a ruler-and-protractor glyph. A bridge animation shows each link-relative twist being carried by the adjoint into base coordinates until it lands exactly on the POE axis (lime overlap)."
+  },
+  {
+   "id": "mls-ch3-workspace",
+   "title": "Reach Clouds",
+   "icon": "☁️",
+   "section": "3.2.4",
+   "pages": [
+    95,
+    97
+   ],
+   "uses": [
+    "forward-kinematics",
+    "cspace",
+    "sampling"
+   ],
+   "exists": "forward-kinematics",
+   "beats": [
+    "🌍 every pose reached",
+    "☁️ reachable positions",
+    "🧭 any-orientation zone",
+    "⚽ wrist makes them equal",
+    "🍩 three-link annulus"
+   ],
+   "brief": "Random joint samples paint a teal cloud of tool tips (forward kinematics evaluated many times). A planar three-link arm with length sliders builds its reachable set in stages: circle swept by the last link, annulus swept by the middle link, big annulus swept by the base. A compass toggle demands 'every heading' and recolors the cloud: lime where all headings are possible (dextrous), coral where some are missing; the lime ring is 2·l3 thinner on each side. A spherical-wrist 3D arm shows the two clouds coinciding when the tool sits at the wrist center."
+  },
+  {
+   "id": "mls-ik-planar-flip",
+   "title": "Elbow Flip",
+   "icon": "🔁",
+   "section": "3.3.1",
+   "pages": [
+    97,
+    99
+   ],
+   "uses": [
+    "ik",
+    "forward-kinematics",
+    "optimization"
+   ],
+   "exists": "ik",
+   "beats": [
+    "❓ zero, one, many",
+    "📏 radius fixes the elbow",
+    "🔁 the flip twin",
+    "🧩 split into subproblems",
+    "⚡ closed form vs numeric"
+   ],
+   "brief": "A two-link planar arm (blue links, orange joints) and a draggable gold target. The target's distance r from the base is a gold circle; the elbow angle comes from the law-of-cosines triangle (l1, l2, r) drawn in faint blue; the 'flip' twin arm is a dashed ghost on the other side of the r-line. Outside the outer ring the triangle cannot close and a coral flash appears; on the ring the two arms merge into one. A side race compares the one-shot formula (instant) against an iterative solver (ball rolling downhill on an error landscape)."
+  },
+  {
+   "id": "mls-pk-swing-to-point",
+   "title": "Swing To Point",
+   "icon": "🎠",
+   "section": "3.3.2",
+   "pages": [
+    99,
+    100
+   ],
+   "uses": [
+    "ik",
+    "screw-exp",
+    "rotation",
+    "vectors"
+   ],
+   "exists": "ik",
+   "beats": [
+    "🧰 three puzzles",
+    "🎠 swing p onto q",
+    "📏 height & radius must match",
+    "🧭 read the angle",
+    "♾️ on the axis: any angle"
+   ],
+   "brief": "Paden-Kahan Subproblem 1 as a carousel. An orange axis line ξ, a pink point p and a gold point q. Turning the orange knob swings p around the axis, leaving a pink circular trail (a horizontal ring on a pole). Two meters: a height bar (ω·u vs ω·v) and a radius bar (|u'| vs |v'|); only when both pairs match (lime) does the ring pass through q. The scene flattens into the plane normal to the axis, showing u' and v' as arrows from the hub and the angle θ as an orange arc computed by atan2 of their cross and dot products. Dragging p onto the axis collapses the ring to a dot and the arc spins freely (∞ answers)."
+  },
+  {
+   "id": "mls-pk-two-axis-swing",
+   "title": "Two-Hinge Swing",
+   "icon": "🪐",
+   "section": "3.3.2",
+   "pages": [
+    100,
+    102
+   ],
+   "uses": [
+    "ik",
+    "screw-exp",
+    "rotation",
+    "vectors"
+   ],
+   "exists": "ik",
+   "beats": [
+    "🔗 two swings in a row",
+    "🪢 meet in the middle at c",
+    "📐 build c from ω1, ω2, ω1×ω2",
+    "⭕ circles cross: 0, 1 or 2",
+    "🎠 finish with two carousels"
+   ],
+   "brief": "Paden-Kahan Subproblem 2. Two orange axes ξ1, ξ2 crossing at r. The pink point p sweeps a cone-rim circle around ξ2; the gold point q, run backwards, sweeps a circle around ξ1. All three points live on one sphere around r (purple translucent shell). The two circles are drawn in full; where they cross are the candidate middle points c (lime dots, 0, 1 or 2 of them). Dragging q slides the circles apart: two crossings → one tangency → none (coral). Beat 3 shows the coordinate trick: c built from an α-arrow along ω1, a β-arrow along ω2 and a ±γ-arrow along ω1×ω2 (the ± gives the two crossings). Final beat: two Subproblem-1 carousels read off θ2 (p→c) and θ1 (c→q)."
+  },
+  {
+   "id": "mls-pk-swing-to-distance",
+   "title": "Swing To Distance",
+   "icon": "📏",
+   "section": "3.3.2",
+   "pages": [
+    102,
+    103
+   ],
+   "uses": [
+    "ik",
+    "screw-exp",
+    "rotation",
+    "vectors"
+   ],
+   "exists": "ik",
+   "beats": [
+    "⚪ ring meets ball",
+    "🫓 squash onto the plane",
+    "📐 law of cosines",
+    "🔁 two answers: the flip"
+   ],
+   "brief": "Paden-Kahan Subproblem 3. The pink point p swings around the orange axis, tracing a ring; a gold point q wears a purple translucent ball of radius δ (slider). Where the ring pierces the ball are the answers (lime dots, 0/1/2). Beat 2 squashes everything onto the plane normal to the axis: the ball becomes a gold disc of radius δ' (δ shrunk by the height gap, shown as a vertical teal ruler), the ring becomes a pink circle of radius |u'|. Beat 3 draws the triangle hub–p'–q' with the angle φ found by the law of cosines, offset from the base angle θ0. The flip solution is a dashed twin on the mirror side."
+  },
+  {
+   "id": "mls-ik-subproblem-tricks",
+   "title": "Divide & Conquer",
+   "icon": "✂️",
+   "section": "3.3.3",
+   "pages": [
+    104,
+    107
+   ],
+   "uses": [
+    "ik",
+    "poe",
+    "screw-exp",
+    "rigid-transform"
+   ],
+   "exists": "ik",
+   "beats": [
+    "📍 points on axes freeze joints",
+    "📏 distances ignore rotations",
+    "💪 elbow: wrist center first",
+    "🖐️ elbow: then the wrist",
+    "🦾 SCARA in four moves",
+    "🔢 count the answers"
+   ],
+   "brief": "A 'solver workbench': the full arm in light gray with a gold ghost of the desired pose. Two trick buttons. 'Pin a point': a teal pin placed on a joint axis makes that joint's knob go limp (turning it moves nothing the pin can see), so the equation loses an unknown. 'Measure a distance': a teal tape measure from a point on the first axes to the pinned point; rotating the base joints leaves the tape length unchanged (lime meter), so only one joint remains. Then the elbow arm is solved step by step: each step lights one Subproblem badge (1, 2 or 3) and freezes the solved joints in orange; the branching answers spawn ghost arms (up to 8 for the elbow arm, 2 for the SCARA), laid out in a fan."
+  },
+  {
+   "id": "mls-ik-elimination",
+   "title": "Counting Solutions",
+   "icon": "🧮",
+   "section": "3.3.4",
+   "pages": [
+    108,
+    114
+   ],
+   "uses": [
+    "ik",
+    "matrix",
+    "dh",
+    "eigen",
+    "linearize"
+   ],
+   "exists": "ik",
+   "beats": [
+    "🧱 stack the monomials",
+    "🔳 determinant must vanish",
+    "🔧 rearrange the six joints",
+    "➗ half-angle makes polynomials",
+    "1️⃣6️⃣ at most sixteen",
+    "⚠️ numerics matter"
+   ],
+   "brief": "Brute-force elimination made visible. A grid of coefficient tiles (a matrix whose entries are little polynomials in x1) multiplies a column of monomial beads (x2², x2x3, …, 1). Multiplying rows by x2 adds new rows until the grid is square. A slider sweeps x1 while a plot draws det A(x1); its zero crossings are gold dots, and at each one the null-space column (teal) gives x2, x3. For the 6-joint arm: a 12×12 tile grid, a curve of degree 16 in x3, and a counter of real roots (≤16). A ghost fan shows up to 16 arm poses reaching one gold target; a 'conditioning' meter turns coral when the determinant computation becomes fragile, and an eigenvalue button replaces it with a stabler route."
+  }
+ ],
+ "pages": [
+  {
+   "pdf": 99,
+   "book": 81,
+   "lines": 30,
+   "section": "3.1",
+   "summary": "Chapter 3 opens: kinematics links joint motion to link motion; most arms are rigid links joined by lower-pair joints, of which revolute and prismatic dominate.",
+   "atoms": [
+    {
+     "id": "3-81-a",
+     "lines": [
+      1,
+      2
+     ],
+     "kind": "heading",
+     "idea": "Chapter 3 title: Manipulator Kinematics."
+    },
+    {
+     "id": "3-81-b",
+     "lines": [
+      3,
+      9
+     ],
+     "kind": "prose",
+     "idea": "The chapter studies how joint motions of a general n-joint open-chain arm produce motions of its rigid links, using the twist and exponential tools of Chapter 2, and briefly treats redundant and parallel mechanisms in the same language.",
+     "feynman": "Like a desk lamp: bending its elbow and shoulder decides where the bulb ends up. Kinematics is just the rulebook from \"how much did each hinge bend\" to \"where is the bulb\".",
+     "visual": "Chapter map: a row of icons (🦾 FK, 🎯 IK, 🧮 Jacobian, 🐙 redundant, 🕸️ parallel). A small arm on the left: turning orange knobs moves the pink tool; an arrow from knob-space to tool-space pulses.",
+     "scene": "mls-lower-pairs",
+     "beat": "🗺️ map of the chapter",
+     "math": [
+      "forward-kinematics",
+      "rigid-transform"
+     ],
+     "engine": [
+      "kinematics.poeFK"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "3-81-c",
+     "lines": [
+      10,
+      10
+     ],
+     "kind": "heading",
+     "idea": "Section 1: Introduction."
+    },
+    {
+     "id": "3-81-d",
+     "lines": [
+      11,
+      15
+     ],
+     "kind": "prose",
+     "idea": "A typical manipulator is a set of rigid links connected by joints; motors drive the joints, and a tool such as a gripper at the far end touches the world.",
+     "feynman": "A human arm: bones are the links, shoulder/elbow/wrist are the joints, muscles are the motors and the hand is the gripper.",
+     "visual": "A blue chain of links on a slate base with orange motor cylinders at each joint; tapping a motor makes its joint turn and the pink gripper at the end opens and closes on a teal block.",
+     "scene": "mls-lower-pairs",
+     "beat": "🚪 hinge, slider, screw",
+     "math": [
+      "forward-kinematics"
+     ],
+     "engine": [
+      "kinematics.planarFK"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "3-81-e",
+     "lines": [
+      16,
+      20
+     ],
+     "kind": "prose",
+     "idea": "Joints are traditionally chosen from the six lower pairs (revolute, prismatic, helical, cylindrical, spherical, planar); each one restricts the relative motion of two links to a subgroup of SE(3).",
+     "feynman": "Six kinds of furniture hardware: a door hinge, a drawer slide, a jar lid that rises as it turns, a telescope tube that slides and spins, a ball-and-socket camera mount, and a puck sliding on a table.",
+     "visual": "A shelf of six joint toys connecting a slate block to a blue block. Tapping one animates it; a lime ghost cloud shows every pose it allows, coral shows what it forbids; a freedom counter reads 1,1,1,2,3,3.",
+     "scene": "mls-lower-pairs",
+     "beat": "🚪 hinge, slider, screw",
+     "math": [
+      "rigid-transform"
+     ],
+     "engine": [
+      "lie.expSE3"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "3-81-f",
+     "lines": [
+      21,
+      26
+     ],
+     "kind": "prose",
+     "idea": "Revolute, prismatic and helical joints are each a single screw motion (pitch 0, infinite, finite nonzero). A cylindrical joint stacks a revolute and a prismatic joint on one axis, giving two freedoms. Revolute and prismatic joints are by far the most common.",
+     "feynman": "A screw is the master joint: if the thread is flat it only spins (hinge); if the thread is infinitely steep it only slides (drawer). A jar lid is in between.",
+     "visual": "One screw toy with a pitch slider: at 0 the blue nut just spins (hinge), at large pitch it rides fast along the axis, at ∞ it only slides. A second slider unlocks the coupling so spin and slide move independently: the cylinder joint, freedom counter = 2.",
+     "scene": "mls-lower-pairs",
+     "beat": "🚪 hinge, slider, screw",
+     "math": [
+      "screw-exp"
+     ],
+     "engine": [
+      "lie.screwAxis",
+      "lie.expSE3"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-81-g",
+     "lines": [
+      27,
+      29
+     ],
+     "kind": "prose",
+     "idea": "A spherical joint allows any rotation about a point; passive versions are ball-and-socket joints. (Sentence continues on the next page.)",
+     "feynman": "Your hip or a joystick base: the ball can point anywhere, but it is held at one center.",
+     "visual": "A blue ball in a slate socket; dragging the pink stick sweeps it over a lime hemisphere while the center dot stays fixed.",
+     "scene": "mls-lower-pairs",
+     "beat": "🛢️ cylinder & flat-plate pairs",
+     "math": [
+      "rotation"
+     ],
+     "engine": [
+      "lie.expSO3"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "3-81-h",
+     "lines": [
+      30,
+      30
+     ],
+     "kind": "page-number",
+     "idea": "Page number 81."
+    }
+   ]
+  },
+  {
+   "pdf": 100,
+   "book": 82,
+   "lines": 44,
+   "section": "3.1",
+   "summary": "Actuated ball joints are three intersecting hinges (Euler-like, with singularities); planar joints live in SE(2); the POE formula is the chapter's core tool, followed by IK via Paden-Kahan subproblems.",
+   "atoms": [
+    {
+     "id": "3-82-a",
+     "lines": [
+      1,
+      4
+     ],
+     "kind": "prose",
+     "idea": "A ball-and-socket cannot be driven with motors to push hard, so actuated spherical joints are built from three motorized revolute joints whose axes meet at one point.",
+     "feynman": "A camera gimbal: three motors each turn one ring, and together they aim the camera anywhere around one center point.",
+     "visual": "Three nested gimbal rings in red, green, blue (one per axis) around a pink tool; each ring has its own orange knob; all three axes pass through one center dot.",
+     "scene": "mls-lower-pairs",
+     "beat": "⚽ a ball from three hinges",
+     "math": [
+      "rotation",
+      "euler-angles"
+     ],
+     "engine": [
+      "lie.expSO3"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-82-b",
+     "lines": [
+      5,
+      10
+     ],
+     "kind": "equation",
+     "idea": "Orientation of such a wrist is the product of three single-axis rotations, exp(ω̂1θ1)exp(ω̂2θ2)exp(ω̂3θ3). This mirrors an Euler-angle parameterization and inherits its singularities; spherical wrists let the tool take any orientation.",
+     "feynman": "Like aiming a flashlight by turning three dials in order: you can point anywhere, but at certain settings two dials do the same thing and you lose a direction (gimbal lock).",
+     "visual": "The three rings turn in sequence; the tile strip e^{ω̂1θ1}·e^{ω̂2θ2}·e^{ω̂3θ3} lights up in matching colors. Dragging the middle knob to the lock angle makes two rings coincide; a coral 🚫 flashes and one direction of the pink tool can no longer be reached.",
+     "scene": "mls-lower-pairs",
+     "beat": "⚽ a ball from three hinges",
+     "math": [
+      "euler-angles",
+      "rotation"
+     ],
+     "engine": [
+      "lie.expSO3",
+      "lie.eulerZYX"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-82-c",
+     "lines": [
+      11,
+      15
+     ],
+     "kind": "prose",
+     "idea": "A planar joint allows any translation and rotation in a plane (SE(2), a 3-dimensional subgroup of SE(3)); it can be built from two prismatic joints and a revolute joint, and is rare in practice, like the helical joint.",
+     "feynman": "A hockey puck on ice: slide it left-right, forward-back, and spin it, but it never lifts off.",
+     "visual": "A blue puck on a slate plate with two orange slider rails (x, y) and a spin knob; a lime ghost fills the plane, a coral arrow pointing up is blocked.",
+     "scene": "mls-lower-pairs",
+     "beat": "🛢️ cylinder & flat-plate pairs",
+     "math": [
+      "rigid-transform"
+     ],
+     "engine": [
+      "lie.expSE3"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "3-82-d",
+     "lines": [
+      16,
+      25
+     ],
+     "kind": "prose",
+     "idea": "Real mechanisms connect lower pairs with rigid links, and each joint restricts motion to a subgroup of SE(3), so Chapter 2's tools apply. This chapter and the next focus on open chains of actuated joints, moved by controlling joint forces and torques.",
+     "feynman": "A paper-doll chain: each paper fastener allows only a spin, and the whole doll's pose is built from those spins in a row.",
+     "visual": "A serial chain of joint toys clicks together; each new link inherits the motion of all links before it (blue links highlight cumulatively from base to tip).",
+     "scene": "mls-lower-pairs",
+     "beat": "🗺️ map of the chapter",
+     "math": [
+      "rigid-transform",
+      "forward-kinematics"
+     ],
+     "engine": [
+      "kinematics.poeFrames"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "3-82-e",
+     "lines": [
+      26,
+      34
+     ],
+     "kind": "prose",
+     "idea": "The chapter's centerpiece is the product of exponentials formula: open-chain kinematics as a product of exponentials of joint twists. It applies whenever joints are revolute, prismatic or helical (practically all commercial arms) and gives a global, geometric parameterization.",
+     "feynman": "Like giving directions as a list of turns around fixed lamp posts: each instruction is \"turn this much around that post\", and the list multiplies out to where you end up.",
+     "visual": "Preview: orange screw axes drawn through the zero-pose arm; a strip of exponential tiles e^{ξ1θ1}…e^{ξnθn} multiplies into the pink tool pose; this is a teaser that links to the Twist Product scene.",
+     "scene": "mls-poe-formula",
+     "beat": "🧮 the n-joint formula",
+     "math": [
+      "poe",
+      "screw-exp"
+     ],
+     "engine": [
+      "kinematics.poeFK"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-82-f",
+     "lines": [
+      35,
+      43
+     ],
+     "kind": "prose",
+     "idea": "Roadmap: Section 2 derives the product of exponentials for a general open chain in SE(3); Section 3 solves the inverse problem using Paden-Kahan subproblems tied to the exponential representation; Section 4 (continuing) covers velocities and forces.",
+     "feynman": "A road trip plan: first learn to read where the car ends up (forward), then learn to pick turns to reach a destination (inverse), then learn how fast you go (velocity).",
+     "visual": "The chapter-map icon row lights in order: 🦾 forward → 🎯 inverse (with a small 🧰 toolbox badge for the subproblems) → 🧮 velocity.",
+     "scene": "mls-lower-pairs",
+     "beat": "🗺️ map of the chapter",
+     "math": [
+      "forward-kinematics",
+      "ik"
+     ],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "3-82-g",
+     "lines": [
+      44,
+      44
+     ],
+     "kind": "page-number",
+     "idea": "Page number 82."
+    }
+   ]
+  },
+  {
+   "pdf": 101,
+   "book": 83,
+   "lines": 31,
+   "section": "3.2.1",
+   "summary": "Fig 3.1 numbers a SCARA (AdeptOne) robot; forward kinematics maps relative link configurations to the end-effector pose for open serial chains of revolute/prismatic joints.",
+   "atoms": [
+    {
+     "id": "3-83-a",
+     "lines": [
+      1,
+      12
+     ],
+     "kind": "figure",
+     "label": "Fig 3.1",
+     "idea": "Numbering conventions on an AdeptOne SCARA robot: base is link 0, joints 1-4 (three revolute, one prismatic), links 1-4, base frame S on the ground, tool frame T at the tip.",
+     "feynman": "Numbering train cars from the engine: the engine is car 0, the coupling behind car i-1 is coupling i.",
+     "visual": "A 3D SCARA with number badges popping onto each orange joint (1..4) and each blue link (0..4); slate frame S on the base, pink frame T at the tip. Tapping a badge highlights the joint and the two links it connects.",
+     "scene": "mls-fk-problem",
+     "beat": "🔢 count links & joints",
+     "math": [
+      "forward-kinematics"
+     ],
+     "engine": [
+      "kinematics.poeFrames"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "3-83-b",
+     "lines": [
+      13,
+      15
+     ],
+     "kind": "prose",
+     "idea": "Roadmap continued: the manipulator Jacobian (Section 4) and extensions to redundant and parallel mechanisms (Section 5).",
+     "feynman": "After learning where the hand is and how to reach a spot, you learn how speeds and pushes pass through the arm, and then about arms with extra or looped joints.",
+     "visual": "The chapter map icon row finishes lighting: 🧮 Jacobian, then 🐙 redundant and 🕸️ parallel icons.",
+     "scene": "mls-lower-pairs",
+     "beat": "🗺️ map of the chapter",
+     "math": [
+      "jacobian"
+     ],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "3-83-c",
+     "lines": [
+      16,
+      17
+     ],
+     "kind": "heading",
+     "idea": "Section 2 Forward Kinematics; 2.1 Problem statement."
+    },
+    {
+     "id": "3-83-d",
+     "lines": [
+      18,
+      28
+     ],
+     "kind": "definition",
+     "idea": "Forward kinematics: find the end-effector pose from the relative configurations of adjacent links. Restrict to open serial chains with revolute or prismatic joints; joints are numbered 1..n from the base, joint i joins links i-1 and i, link 0 is the base and link n carries the end-effector.",
+     "feynman": "A row of dominoes glued by hinges: knowing each hinge angle tells you exactly where the last domino sits.",
+     "visual": "Scrub a \"joint i\" slider: the highlight moves along the chain, showing joint i sitting between link i-1 and link i; the pink end-effector glows on link n.",
+     "scene": "mls-fk-problem",
+     "beat": "🔢 count links & joints",
+     "math": [
+      "forward-kinematics"
+     ],
+     "engine": [
+      "kinematics.poeFrames"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "3-83-e",
+     "lines": [
+      29,
+      30
+     ],
+     "kind": "prose",
+     "idea": "The joint space Q is the set of all possible joint-variable values; it is also the configuration space of the robot (sentence continues).",
+     "feynman": "The full set of dial positions on a safe: every combination is a point, and each combination sets the whole mechanism.",
+     "visual": "A small right panel showing a point in joint space; dragging it updates the arm on the left.",
+     "scene": "mls-fk-problem",
+     "beat": "🍩 joint space is a torus",
+     "math": [
+      "cspace"
+     ],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "3-83-f",
+     "lines": [
+      31,
+      31
+     ],
+     "kind": "page-number",
+     "idea": "Page number 83."
+    }
+   ]
+  },
+  {
+   "pdf": 102,
+   "book": 84,
+   "lines": 44,
+   "section": "3.2.1",
+   "summary": "Joint space is a product of circles and lines (a torus times R^r); base frame S and tool frame T are attached; forward kinematics is a map g_st from Q into SE(3), classically built by composing link-to-link motions.",
+   "atoms": [
+    {
+     "id": "3-84-a",
+     "lines": [
+      1,
+      10
+     ],
+     "kind": "prose",
+     "idea": "Joint values fix all link positions, so Q is the configuration space. A revolute angle lives on the circle S¹ (0 and 2π identified), with sign by the right-hand rule; a prismatic displacement lives on the real line along a directed axis.",
+     "feynman": "A clock hand: going all the way round brings you back to the same spot, so its \"space\" is a circle. A drawer slide just goes in and out along a line.",
+     "visual": "Each joint gets its own dial: revolute joints show an orange circular dial where 359° and 0° touch; the prismatic joint shows an orange ruler. A right-hand icon shows the positive turning direction about the axis.",
+     "scene": "mls-fk-problem",
+     "beat": "🍩 joint space is a torus",
+     "math": [
+      "cspace",
+      "rotation"
+     ],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "3-84-b",
+     "lines": [
+      11,
+      21
+     ],
+     "kind": "prose",
+     "idea": "Q is the Cartesian product of the joint spaces; the number of freedoms equals the number of joints. The SCARA has Q = S¹×S¹×R×S¹. With p revolute and r prismatic joints, Q = T^p × R^r (T^p the p-torus); joint limits may shrink Q to a subset.",
+     "feynman": "Two clock hands together make a donut: going round either hand loops you around the donut one way or the other.",
+     "visual": "Two angle dials morph into a donut surface with an orange dot; dragging the dot around either loop of the donut turns one joint. Adding the slider joint stretches the picture into donut × ruler. Joint limits paint coral no-go bands on the donut.",
+     "scene": "mls-fk-problem",
+     "beat": "🍩 joint space is a torus",
+     "math": [
+      "cspace"
+     ],
+     "engine": [],
+     "difficulty": 2
+    },
+    {
+     "id": "3-84-c",
+     "lines": [
+      22,
+      29
+     ],
+     "kind": "prose",
+     "idea": "Two frames are attached: the base frame S, fixed relative to link 0 (usually on it), and the tool frame T on the end-effector, which moves with the joints. The letter S avoids confusion with a moving body frame B.",
+     "feynman": "A tape measure anchored on the floor (S) and a sticker on your fingertip (T): we always ask where the sticker is relative to the anchor.",
+     "visual": "A slate frame S on the floor stays still; a pink frame T on the gripper moves when any knob turns; a teal dashed arrow from S to T is the quantity being computed.",
+     "scene": "mls-fk-problem",
+     "beat": "📐 base & tool frames",
+     "math": [
+      "rigid-transform"
+     ],
+     "engine": [
+      "lie.homog"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "3-84-d",
+     "lines": [
+      30,
+      38
+     ],
+     "kind": "definition",
+     "idea": "Forward kinematics problem: given θ in Q (all joint variables called angles for brevity), find the tool frame T relative to S. It is a map g_st : Q → SE(3); the section builds it explicitly and studies its structure.",
+     "feynman": "A vending machine: you punch in the button codes (joint angles) and out pops exactly one snack position (tool pose).",
+     "visual": "An orange dot in the joint-space donut is wired to a pink frame in 3D space; moving the dot moves the frame, and a little arrow labelled g_st links the two panels.",
+     "scene": "mls-fk-problem",
+     "beat": "📐 base & tool frames",
+     "math": [
+      "forward-kinematics",
+      "rigid-transform"
+     ],
+     "engine": [
+      "kinematics.poeFK"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-84-e",
+     "lines": [
+      39,
+      43
+     ],
+     "kind": "prose",
+     "idea": "The classical approach composes the rigid motions of the individual joints, illustrated on a two-joint arm (Fig 3.2) by chaining transformations between adjacent frames (continues).",
+     "feynman": "Passing a note down a row of classmates: each one rotates it a bit before handing it on, and the final orientation is all those handoffs combined.",
+     "visual": "A two-link arm with a small frame on each link; the frames light up one after another from base to tip, each passing its pose to the next.",
+     "scene": "mls-fk-problem",
+     "beat": "🔗 chain link-to-link",
+     "math": [
+      "forward-kinematics",
+      "rigid-transform"
+     ],
+     "engine": [
+      "kinematics.dhChain"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-84-f",
+     "lines": [
+      44,
+      44
+     ],
+     "kind": "page-number",
+     "idea": "Page number 84."
+    }
+   ]
+  },
+  {
+   "pdf": 103,
+   "book": 85,
+   "lines": 30,
+   "section": "3.2.2",
+   "summary": "The classical chain g_st = g_{s l1}(θ1)…g_{ln t} (Eq 3.1) for any open chain; Section 2.2 starts the POE view: each joint's motion is the exponential of a twist.",
+   "atoms": [
+    {
+     "id": "3-85-a",
+     "lines": [
+      1,
+      6
+     ],
+     "kind": "figure",
+     "label": "Fig 3.2",
+     "idea": "A two-joint planar manipulator with link lengths L1, L2, joint angles θ1, θ2, base frame S and tool frame T.",
+     "feynman": "A two-piece folding ruler pinned to a table at one end.",
+     "visual": "The two-link arm (blue links, orange joints) with slate S at the base and pink T at the tip; both joint knobs draggable.",
+     "scene": "mls-fk-problem",
+     "beat": "🔗 chain link-to-link",
+     "math": [
+      "forward-kinematics"
+     ],
+     "engine": [
+      "kinematics.planarFK"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "3-85-b",
+     "lines": [
+      7,
+      11
+     ],
+     "kind": "equation",
+     "idea": "For the two-joint arm, g_st(θ1,θ2) = g_{s l1}(θ1) g_{l1 l2}(θ2) g_{l2 t}; this map from the 2-torus into SE(3) is its forward kinematics.",
+     "feynman": "Three steps of directions: from the door to the first table, from that table to the second, from the second table to the cup.",
+     "visual": "Three 4×4 cards in a row, each glued to the link frame it describes; turning θ1 changes only the first card, turning θ2 only the second; the product card drives the pink T.",
+     "scene": "mls-fk-problem",
+     "beat": "🔗 chain link-to-link",
+     "math": [
+      "rigid-transform",
+      "forward-kinematics"
+     ],
+     "engine": [
+      "lie.homog"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-85-c",
+     "lines": [
+      12,
+      18
+     ],
+     "kind": "equation",
+     "label": "Eq (3.1)",
+     "idea": "In general g_st(θ) = g_{s l1}(θ1) g_{l1 l2}(θ2) … g_{l_{n-1} l_n}(θn) g_{l_n t}: forward kinematics as a product of adjacent-link transforms.",
+     "feynman": "A train of couplings: the last car's place is the engine's place, plus each coupling's offset, applied one after another.",
+     "visual": "Slider n adds links; each new link brings a new card to the product strip; the pink T updates as the strip multiplies left to right.",
+     "scene": "mls-fk-problem",
+     "beat": "🔗 chain link-to-link",
+     "math": [
+      "rigid-transform",
+      "forward-kinematics"
+     ],
+     "engine": [
+      "kinematics.dhChain"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-85-d",
+     "lines": [
+      19,
+      19
+     ],
+     "kind": "heading",
+     "idea": "Subsection 2.2 The product of exponentials formula."
+    },
+    {
+     "id": "3-85-e",
+     "lines": [
+      20,
+      29
+     ],
+     "kind": "equation",
+     "idea": "Each joint moves its outboard body by a screw motion along the joint axis: g_ab(θ) = exp(ξ̂θ) g_ab(0). For a prismatic (infinite pitch) twist, θ ∈ R is a translation; otherwise θ ∈ S¹ is a rotation angle.",
+     "feynman": "A door on its hinge: wherever the handle starts, opening by θ moves it along a circle around the hinge line. A drawer moves its handle straight out by θ.",
+     "visual": "One orange joint axis with a twist glyph; a blue body starts at a ghost pose g(0) and turning the knob sweeps it to exp(ξ̂θ)g(0), leaving a pink arc trail (or a straight trail for a slider).",
+     "scene": "mls-poe-formula",
+     "beat": "🌀 one joint, one twist",
+     "math": [
+      "screw-exp",
+      "rigid-transform"
+     ],
+     "engine": [
+      "lie.expSE3"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-85-f",
+     "lines": [
+      30,
+      30
+     ],
+     "kind": "page-number",
+     "idea": "Page number 85."
+    }
+   ]
+  },
+  {
+   "pdf": 104,
+   "book": 86,
+   "lines": 45,
+   "section": "3.2.2",
+   "summary": "Deriving the POE formula on the two-joint arm: moving the outer joint first gives exp(ξ1θ1)exp(ξ2θ2)g(0) (Eq 3.2); moving the base joint first moves the second axis, but the adjoint/conjugation identity gives the same answer.",
+   "atoms": [
+    {
+     "id": "3-86-a",
+     "lines": [
+      1,
+      8
+     ],
+     "kind": "equation",
+     "idea": "Freeze joint 1 and move only θ2: the tool undergoes a pure rotation about the second joint axis, so g_st(θ2) = exp(ξ̂2θ2) g_st(0), with ξ2 the zero-pitch twist of joint 2.",
+     "feynman": "Hold your shoulder still and bend only your elbow: your hand swings on a circle around the elbow line.",
+     "visual": "Joint 1 knob locked (slate padlock); turning the θ2 knob swings link 2 and the pink tool around the orange axis ξ2, which is drawn at its zero-pose location.",
+     "scene": "mls-poe-formula",
+     "beat": "↪️ wiggle the last joint first",
+     "math": [
+      "screw-exp",
+      "poe"
+     ],
+     "engine": [
+      "lie.expSE3",
+      "lie.screwAxis"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-86-b",
+     "lines": [
+      9,
+      16
+     ],
+     "kind": "equation",
+     "label": "Eq (3.2)",
+     "idea": "Now hold θ2 and move θ1: the whole bent arm turns about axis 1, giving g_st(θ1,θ2) = exp(ξ̂1θ1) exp(ξ̂2θ2) g_st(0). Both twists are constants, read off at the zero configuration.",
+     "feynman": "Bend your elbow first, then swing the whole arm from the shoulder: the shoulder swing carries the already-bent arm along like a stiff object.",
+     "visual": "Play \"outer first\": θ2 animates around ξ2, then θ1 swings the bent arm as one rigid lump around ξ1; the tile strip e^{ξ1θ1}·e^{ξ2θ2}·g(0) builds right-to-left as each motion happens. Both axes stay drawn where they were at θ=0.",
+     "scene": "mls-poe-formula",
+     "beat": "↪️ wiggle the last joint first",
+     "math": [
+      "poe",
+      "screw-exp"
+     ],
+     "engine": [
+      "kinematics.poeFK"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-86-c",
+     "lines": [
+      17,
+      27
+     ],
+     "kind": "equation",
+     "idea": "Moving θ1 first instead gives g_st(θ1) = exp(ξ̂1θ1)g_st(0), but this carries joint 2's axis to a new place: ξ2' = Ad_{exp(ξ̂1θ1)} ξ2.",
+     "feynman": "Swing your shoulder first: your elbow hinge is now somewhere else in the room, so bending the elbow now spins around a moved line.",
+     "visual": "Play \"base first\": θ1 swings first and a faded orange copy of axis ξ2 rides along to its new place (the Ad-transformed axis), with a ghost of the original axis left behind in slate.",
+     "scene": "mls-poe-formula",
+     "beat": "🔀 order doesn't matter",
+     "math": [
+      "screw-exp",
+      "rigid-transform"
+     ],
+     "engine": [
+      "lie.adjoint",
+      "lie.expSE3"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-86-d",
+     "lines": [
+      28,
+      33
+     ],
+     "kind": "equation",
+     "idea": "Rotation about the moved axis equals a conjugation: exp(ξ̂2'θ2) = exp(ξ̂1θ1) exp(ξ̂2θ2) exp(−ξ̂1θ1) (Chapter 2 exercise property).",
+     "feynman": "To turn a doorknob on a door that has been swung open: swing the door shut, turn the knob, swing the door open again. Same result as turning it in place.",
+     "visual": "Three-step animation of the conjugation sandwich: undo θ1 (arm swings back, coral arrow), rotate about the original ξ2 (orange), redo θ1 (arm swings forward); the end pose overlaps the direct rotation about ξ2' with a lime match tick.",
+     "scene": "mls-poe-formula",
+     "beat": "🔀 order doesn't matter",
+     "math": [
+      "screw-exp",
+      "rigid-transform"
+     ],
+     "engine": [
+      "lie.expSE3",
+      "lie.invSE3"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-86-e",
+     "lines": [
+      34,
+      41
+     ],
+     "kind": "equation",
+     "idea": "Substituting the conjugation into exp(ξ̂2'θ2)exp(ξ̂1θ1)g_st(0) cancels the inner exp(−ξ̂1θ1)exp(ξ̂1θ1) pair, recovering exp(ξ̂1θ1)exp(ξ̂2θ2)g_st(0): the result does not depend on the order the joints moved.",
+     "feynman": "Two routes to the same café: whichever street you walk first, you arrive at the same door.",
+     "visual": "Side by side, the \"outer first\" and \"base first\" playbacks run in sync; tiles in the base-first strip slide together and a matching pair e^{−ξ1θ1}e^{ξ1θ1} pops (fades to identity); both pink tool frames land on the same spot (lime overlap ring).",
+     "scene": "mls-poe-formula",
+     "beat": "🔀 order doesn't matter",
+     "math": [
+      "poe",
+      "screw-exp"
+     ],
+     "engine": [
+      "kinematics.poeFK",
+      "lie.expSE3"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-86-f",
+     "lines": [
+      42,
+      44
+     ],
+     "kind": "prose",
+     "idea": "The same idea extends to any n-joint open chain: let S be a base frame and T a frame on the last link (continues).",
+     "feynman": "Once you can stack two hinges, you can stack any number like Lego bricks.",
+     "visual": "A \"+ joint\" button adds links to the chain; each new link brings its own orange axis line at the zero pose.",
+     "scene": "mls-poe-formula",
+     "beat": "🧮 the n-joint formula",
+     "math": [
+      "poe"
+     ],
+     "engine": [
+      "kinematics.poeFK"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-86-g",
+     "lines": [
+      45,
+      45
+     ],
+     "kind": "page-number",
+     "idea": "Page number 86."
+    }
+   ]
+  },
+  {
+   "pdf": 105,
+   "book": 87,
+   "lines": 44,
+   "section": "3.2.2",
+   "summary": "General POE: pick a reference configuration θ=0, write a twist per joint at that pose (revolute: (−ω×q, ω); prismatic: (v, 0)), and g_st(θ) = exp(ξ̂1θ1)…exp(ξ̂nθn)g_st(0) (Eq 3.3); then Example 3.1 starts on a SCARA.",
+   "atoms": [
+    {
+     "id": "3-87-a",
+     "lines": [
+      1,
+      7
+     ],
+     "kind": "definition",
+     "idea": "Reference configuration: the arm pose at θ = 0, with g_st(0) the tool-to-base transform there. Each joint gets a twist ξi describing its screw motion with all other joints held at zero.",
+     "feynman": "A \"home pose\" photo of the arm: every later pose is described as \"from the home photo, turn joint 1 by this, joint 2 by that\".",
+     "visual": "The arm snaps to a translucent home pose (all knobs at 0); each joint axis is frozen as an orange line labelled with its twist glyph; g(0) is shown as a slate-to-pink dashed arrow.",
+     "scene": "mls-poe-formula",
+     "beat": "🧮 the n-joint formula",
+     "math": [
+      "poe",
+      "screw-exp"
+     ],
+     "engine": [
+      "lie.screwAxis"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-87-b",
+     "lines": [
+      8,
+      13
+     ],
+     "kind": "equation",
+     "idea": "Revolute twist: ξi = (−ωi×qi, ωi) with ωi the unit axis direction and qi any point on the axis.",
+     "feynman": "A spinning merry-go-round: to describe it you only need where the pole is (any point on it) and which way it points.",
+     "visual": "Drag the teal point q along the orange axis: the twist numbers (−ω×q, ω) shown as a column of colored beads stay unchanged, proving any point on the axis works.",
+     "scene": "mls-poe-formula",
+     "beat": "🧮 the n-joint formula",
+     "math": [
+      "screw-exp"
+     ],
+     "engine": [
+      "lie.screwAxis"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-87-c",
+     "lines": [
+      14,
+      20
+     ],
+     "kind": "equation",
+     "idea": "Prismatic twist: ξi = (vi, 0) with vi the unit direction of sliding; all vectors are expressed in the base frame S.",
+     "feynman": "A drawer only needs one arrow: which way it slides. Where the drawer sits does not matter for that arrow.",
+     "visual": "A prismatic joint shows a straight orange double-arrow v; dragging the slider along its rail leaves the twist bead column (v, 0) unchanged.",
+     "scene": "mls-poe-formula",
+     "beat": "🧮 the n-joint formula",
+     "math": [
+      "screw-exp"
+     ],
+     "engine": [
+      "lie.screwAxis"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "3-87-d",
+     "lines": [
+      21,
+      29
+     ],
+     "kind": "equation",
+     "label": "Eq (3.3)",
+     "idea": "Product of exponentials formula: g_st(θ) = exp(ξ̂1θ1) exp(ξ̂2θ2) … exp(ξ̂nθn) g_st(0). Twists are numbered from the base, but the formula gives the tool pose regardless of the order joints actually move.",
+     "feynman": "A recipe where each step is \"rotate around a pole that never moves\". The poles stay fixed in the kitchen, so the steps can be done in any order and the cake comes out the same.",
+     "visual": "The full tile strip e^{ξ1θ1}…e^{ξnθn}·g(0), each tile colored like its axis; all n knobs are free; a shuffle button randomizes the order the joints animate and the pink tool always lands on the same spot (lime tick).",
+     "scene": "mls-poe-formula",
+     "beat": "🧮 the n-joint formula",
+     "math": [
+      "poe",
+      "screw-exp",
+      "forward-kinematics"
+     ],
+     "engine": [
+      "kinematics.poeFK",
+      "lie.expSE3"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-87-e",
+     "lines": [
+      30,
+      35
+     ],
+     "kind": "example",
+     "label": "Ex 3.1",
+     "idea": "Example 3.1 sets up a SCARA with three revolute joints and one prismatic joint (ordered differently from the AdeptOne figure), with θ=0 fully stretched out and base/tool frames placed as in Fig 3.3.",
+     "feynman": "A desk lamp with three hinges that all spin around vertical poles, plus a plunger that moves the head up and down.",
+     "visual": "SCARA preset: three vertical orange hinge axes plus a vertical prismatic rail at the tip, arm stretched straight along y at the home pose.",
+     "scene": "mls-poe-formula",
+     "beat": "🦾 SCARA unrolled",
+     "math": [
+      "poe",
+      "forward-kinematics"
+     ],
+     "engine": [
+      "kinematics.poeFK"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-87-f",
+     "lines": [
+      36,
+      41
+     ],
+     "kind": "equation",
+     "idea": "At θ = 0 the tool frame is the base frame shifted by (0, l1+l2, l0) with no rotation: g_st(0) = [I, (0, l1+l2, l0); 0, 1].",
+     "feynman": "In the home pose the gripper points the same way as the base, just moved forward by the arm's length and up by the column height.",
+     "visual": "Dashed slate-to-pink arrow from S to T in the home pose, with its three teal components 0, l1+l2, l0 shown as rulers along x, y, z; T's axes are parallel to S's.",
+     "scene": "mls-poe-formula",
+     "beat": "🦾 SCARA unrolled",
+     "math": [
+      "rigid-transform"
+     ],
+     "engine": [
+      "lie.homog"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "3-87-g",
+     "lines": [
+      42,
+      43
+     ],
+     "kind": "footnote",
+     "idea": "Footnote: the twist uses −ω×q rather than q×ω because that form also reads correctly in the planar case.",
+     "feynman": "Two ways to write the same address; one of them also works when the map is flat, so we use that one everywhere.",
+     "visual": "Toggle 3D ↔ planar view: the bead column (−ω×q, ω) keeps the same meaning in both, while a coral version with q×ω flips sign in the planar view.",
+     "scene": "mls-poe-formula",
+     "beat": "🧮 the n-joint formula",
+     "math": [
+      "screw-exp"
+     ],
+     "engine": [
+      "lie.screwAxis"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-87-h",
+     "lines": [
+      44,
+      44
+     ],
+     "kind": "page-number",
+     "idea": "Page number 87."
+    }
+   ]
+  },
+  {
+   "pdf": 106,
+   "book": 88,
+   "lines": 42,
+   "section": "3.2.2",
+   "summary": "SCARA example: all revolute axes point along z through points q1, q2, q3 on the y-axis; the prismatic joint slides along z; the forward kinematics is the product of four exponentials times g_st(0).",
+   "atoms": [
+    {
+     "id": "3-88-a",
+     "lines": [
+      1,
+      10
+     ],
+     "kind": "figure",
+     "label": "Fig 3.3",
+     "idea": "SCARA in its reference configuration: three revolute axes (θ1, θ2, θ3) through points q1, q2, q3 spaced by l1, l2, a vertical slider θ4, column height l0, base frame S and tool frame T.",
+     "feynman": "A row of three upright posts along a straight line, with a vertical plunger at the end.",
+     "visual": "SCARA preset in 3D: three upright orange axis lines through teal points q1, q2, q3 along the y-axis, a vertical prismatic rail near T; dimension rulers l0, l1, l2 in slate.",
+     "scene": "mls-poe-formula",
+     "beat": "🦾 SCARA unrolled",
+     "math": [
+      "poe",
+      "forward-kinematics"
+     ],
+     "engine": [
+      "kinematics.poeFrames"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "3-88-b",
+     "lines": [
+      11,
+      20
+     ],
+     "kind": "equation",
+     "idea": "Revolute directions ω1 = ω2 = ω3 = (0,0,1); axis points q1 = 0, q2 = (0,l1,0), q3 = (0,l1+l2,0).",
+     "feynman": "All three hinges are like doors on upright hinges; you only need to say where each hinge post stands.",
+     "visual": "Each orange axis gets a blue up-arrow ω (all identical) and a teal foot point q; the points slide into place along the y-axis at 0, l1, l1+l2.",
+     "scene": "mls-poe-formula",
+     "beat": "🦾 SCARA unrolled",
+     "math": [
+      "screw-exp"
+     ],
+     "engine": [
+      "lie.screwAxis"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "3-88-c",
+     "lines": [
+      21,
+      29
+     ],
+     "kind": "equation",
+     "idea": "The resulting revolute twists are ξ1 = (0,0,0,0,0,1), ξ2 = (l1,0,0,0,0,1), ξ3 = (l1+l2,0,0,0,0,1): the first three entries are −ω×q.",
+     "feynman": "The farther a post is from the base, the more a spin about it drags the origin sideways; that sideways drag is the first number.",
+     "visual": "Bead columns for ξ1, ξ2, ξ3 appear under each axis; the x-bead grows with the axis distance from the origin (0, l1, l1+l2), drawn as a red bar.",
+     "scene": "mls-poe-formula",
+     "beat": "🦾 SCARA unrolled",
+     "math": [
+      "screw-exp"
+     ],
+     "engine": [
+      "lie.screwAxis"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-88-d",
+     "lines": [
+      30,
+      36
+     ],
+     "kind": "equation",
+     "idea": "The prismatic joint slides along z: ξ4 = (v4, 0) = (0,0,1,0,0,0).",
+     "feynman": "An elevator: it only needs to know \"up\".",
+     "visual": "The prismatic rail glows; its bead column shows a single blue z-bead in the top half and zeros below.",
+     "scene": "mls-poe-formula",
+     "beat": "🦾 SCARA unrolled",
+     "math": [
+      "screw-exp"
+     ],
+     "engine": [
+      "lie.screwAxis"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "3-88-e",
+     "lines": [
+      37,
+      41
+     ],
+     "kind": "equation",
+     "idea": "The forward kinematics is g_st(θ) = exp(ξ̂1θ1)exp(ξ̂2θ2)exp(ξ̂3θ3)exp(ξ̂4θ4)g_st(0) = [R(θ), p(θ); 0, 1].",
+     "feynman": "Four instructions in a row, then apply them to the home pose of the gripper.",
+     "visual": "The four-tile strip plus g(0) tile multiplies into a 4×4 result card split into an R block (blue) and a p column (pink).",
+     "scene": "mls-poe-formula",
+     "beat": "🦾 SCARA unrolled",
+     "math": [
+      "poe"
+     ],
+     "engine": [
+      "kinematics.poeFK"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-88-f",
+     "lines": [
+      42,
+      42
+     ],
+     "kind": "page-number",
+     "idea": "Page number 88."
+    }
+   ]
+  },
+  {
+   "pdf": 107,
+   "book": 89,
+   "lines": 73,
+   "section": "3.2.2",
+   "summary": "Explicit SCARA exponentials and their product (Eq 3.4): heading is θ1+θ2+θ3, planar position is a two-link chain, height is l0+θ4. Example 3.2 starts the elbow manipulator.",
+   "atoms": [
+    {
+     "id": "3-89-a",
+     "lines": [
+      1,
+      34
+     ],
+     "kind": "equation",
+     "idea": "Each SCARA exponential is a 4×4 matrix: rotations about z by θi with translation terms like (l1 sinθ2, l1(1−cosθ2), 0) that keep the off-origin axis fixed, and a pure z-translation by θ4 for the slider.",
+     "feynman": "Spinning a plate on a pole that is not at the center of the table: every point moves, except points on the pole, so the matrix must include a \"move the center\" part.",
+     "visual": "Click a tile to open it: a 4×4 grid whose rotation block spins with θi, and whose translation column draws the arc the origin travels around the off-center axis (pink trail). The point on the axis stays put (lime dot).",
+     "scene": "mls-poe-formula",
+     "beat": "🦾 SCARA unrolled",
+     "math": [
+      "screw-exp",
+      "rigid-transform"
+     ],
+     "engine": [
+      "lie.expSE3"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-89-b",
+     "lines": [
+      35,
+      48
+     ],
+     "kind": "equation",
+     "label": "Eq (3.4)",
+     "idea": "Multiplying out: R(θ) is a z-rotation by θ1+θ2+θ3, and p(θ) = (−l1 sinθ1 − l2 sin(θ1+θ2), l1 cosθ1 + l2 cos(θ1+θ2), l0+θ4).",
+     "feynman": "From above, the SCARA is just a two-link arm in the plane plus an elevator; the gripper heading is the sum of the three spins.",
+     "visual": "Top-down inset: the arm drawn as a planar two-link chain with a heading arrow whose angle readout equals θ1+θ2+θ3; side inset: height bar l0+θ4. The pink tool in 3D and the formula readout agree live.",
+     "scene": "mls-poe-formula",
+     "beat": "🦾 SCARA unrolled",
+     "math": [
+      "poe",
+      "forward-kinematics"
+     ],
+     "engine": [
+      "kinematics.poeFK",
+      "kinematics.planarFK"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-89-c",
+     "lines": [
+      49,
+      53
+     ],
+     "kind": "example",
+     "label": "Ex 3.2",
+     "idea": "Example 3.2: an elbow manipulator with two intersecting shoulder axes, an elbow, and a spherical wrist of three intersecting axes; reference pose fully extended.",
+     "feynman": "Your own arm: a shoulder that swings two ways, an elbow, and a wrist that can point the hand anywhere.",
+     "visual": "Elbow-arm preset: six orange axes; the three wrist axes meet at one teal point and the two shoulder axes meet at another; arm stretched straight at the home pose.",
+     "scene": "mls-poe-formula",
+     "beat": "💪 elbow with a wrist",
+     "math": [
+      "poe",
+      "forward-kinematics"
+     ],
+     "engine": [
+      "kinematics.poeFK"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-89-d",
+     "lines": [
+      54,
+      60
+     ],
+     "kind": "equation",
+     "idea": "The elbow arm's home transform is again a pure shift: g_st(0) = [I, (0, l1+l2, l0); 0, 1].",
+     "feynman": "In the home pose the hand points the same way as the body; it is just out front and up.",
+     "visual": "Dashed slate-to-pink arrow S→T with teal rulers 0, l1+l2, l0; T axes parallel to S axes.",
+     "scene": "mls-poe-formula",
+     "beat": "💪 elbow with a wrist",
+     "math": [
+      "rigid-transform"
+     ],
+     "engine": [
+      "lie.homog"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "3-89-e",
+     "lines": [
+      61,
+      72
+     ],
+     "kind": "equation",
+     "idea": "The shoulder twists: ξ1 = (0,0,0,0,0,1) (vertical axis) and ξ2 = (0,−l0,0,−1,0,0) (horizontal axis through (0,0,l0) along −x), computed as (−ω×q, ω).",
+     "feynman": "The shoulder turns like a lazy Susan (around up) and nods like a head (around a sideways line at shoulder height).",
+     "visual": "Axes ξ1 (vertical) and ξ2 (horizontal at height l0) drawn in orange with teal foot points; their bead columns fill in as the cross product −ω×q animates as a small vector construction.",
+     "scene": "mls-poe-formula",
+     "beat": "💪 elbow with a wrist",
+     "math": [
+      "screw-exp"
+     ],
+     "engine": [
+      "lie.screwAxis"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-89-f",
+     "lines": [
+      73,
+      73
+     ],
+     "kind": "page-number",
+     "idea": "Page number 89."
+    }
+   ]
+  },
+  {
+   "pdf": 108,
+   "book": 90,
+   "lines": 37,
+   "section": "3.2.2",
+   "summary": "Fig 3.4 elbow manipulator; any point on the axis serves for q; the remaining four twists; the full forward kinematics with a compact position formula.",
+   "atoms": [
+    {
+     "id": "3-90-a",
+     "lines": [
+      1,
+      8
+     ],
+     "kind": "figure",
+     "label": "Fig 3.4",
+     "idea": "The elbow manipulator with axes ξ1…ξ6, link lengths l0, l1, l2, shoulder point q1, elbow point q2, base frame S and tool frame T.",
+     "feynman": "A shoulder–elbow–wrist arm drawn stretched out with its six hinge lines.",
+     "visual": "Elbow preset annotated with numbered orange axes ξ1..ξ6 and teal points q1, q2; slate S, pink T.",
+     "scene": "mls-poe-formula",
+     "beat": "💪 elbow with a wrist",
+     "math": [
+      "poe"
+     ],
+     "engine": [
+      "kinematics.poeFrames"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "3-90-b",
+     "lines": [
+      9,
+      11
+     ],
+     "kind": "prose",
+     "idea": "For ξ1 the point q1 = (0,0,l0) was used, but the origin or any other point on the same axis gives the same twist.",
+     "feynman": "To tell someone where a flagpole is, any spot on the pole works.",
+     "visual": "Drag the teal point along axis ξ1 from the origin up to (0,0,l0) and beyond: the twist beads do not change (lime steady meter).",
+     "scene": "mls-poe-formula",
+     "beat": "💪 elbow with a wrist",
+     "math": [
+      "screw-exp"
+     ],
+     "engine": [
+      "lie.screwAxis"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "3-90-c",
+     "lines": [
+      12,
+      21
+     ],
+     "kind": "equation",
+     "idea": "The other twists: ξ3 = (0,−l0,l1,−1,0,0) (elbow), ξ4 = (l1+l2,0,0,0,0,1), ξ5 = (0,−l0,l1+l2,−1,0,0), ξ6 = (−l0,0,0,0,1,0) (wrist).",
+     "feynman": "Each hinge gets the same two facts: which way it points and where it stands; the numbers follow mechanically.",
+     "visual": "Bead columns appear one by one under ξ3..ξ6; the wrist axes ξ4, ξ5, ξ6 all pass through the teal wrist center, which is highlighted.",
+     "scene": "mls-poe-formula",
+     "beat": "💪 elbow with a wrist",
+     "math": [
+      "screw-exp"
+     ],
+     "engine": [
+      "lie.screwAxis"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-90-d",
+     "lines": [
+      22,
+      26
+     ],
+     "kind": "equation",
+     "idea": "Full kinematics: g_st(θ) = exp(ξ̂1θ1)…exp(ξ̂6θ6) g_st(0) = [R(θ), p(θ); 0, 1].",
+     "feynman": "Six turns about six fixed poles, applied to the home pose.",
+     "visual": "Six-tile strip plus g(0) multiplies into an R block (blue) and a p column (pink); all six knobs live.",
+     "scene": "mls-poe-formula",
+     "beat": "💪 elbow with a wrist",
+     "math": [
+      "poe"
+     ],
+     "engine": [
+      "kinematics.poeFK"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-90-e",
+     "lines": [
+      27,
+      36
+     ],
+     "kind": "equation",
+     "idea": "The position only involves θ1, θ2, θ3: p = (−sinθ1·(l1cosθ2 + l2cos(θ2+θ3)), cosθ1·(l1cosθ2 + l2cos(θ2+θ3)), l0 − l1 sinθ2 − l2 sin(θ2+θ3)); shorthand ci, si, cij, sij is introduced.",
+     "feynman": "Twisting your wrist does not move your wrist bone; only shoulder and elbow move where the wrist is.",
+     "visual": "Wiggling θ4..θ6 leaves the pink position readout frozen (lime), while θ1..θ3 move it; the reach in the vertical plane is a two-link arm in a side inset rotated by θ1.",
+     "scene": "mls-poe-formula",
+     "beat": "💪 elbow with a wrist",
+     "math": [
+      "forward-kinematics"
+     ],
+     "engine": [
+      "kinematics.poeFK"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-90-f",
+     "lines": [
+      37,
+      37
+     ],
+     "kind": "page-number",
+     "idea": "Page number 90."
+    }
+   ]
+  },
+  {
+   "pdf": 109,
+   "book": 91,
+   "lines": 37,
+   "section": "3.2.2",
+   "summary": "The nine rotation entries of the elbow arm written in sine/cosine shorthand; Section 2.3 begins on parameterizing arms by twists, starting with putting the base frame on the tool frame.",
+   "atoms": [
+    {
+     "id": "3-91-a",
+     "lines": [
+      1,
+      10
+     ],
+     "kind": "equation",
+     "idea": "The rotation matrix entries r11…r33 of the elbow arm are long sums of products of the sines and cosines of the joint angles (θ2 and θ3 always appear together as θ2+θ3).",
+     "feynman": "Writing out the orientation by hand is like writing out every step of a long dance; the computer does not need it, it just multiplies the tiles.",
+     "visual": "A 3×3 grid of tiles r11..r33 that light up as functions of the knobs; a \"compute\" button shows the same grid from the tile product with a lime equality check.",
+     "scene": "mls-poe-formula",
+     "beat": "💪 elbow with a wrist",
+     "math": [
+      "rotation"
+     ],
+     "engine": [
+      "kinematics.poeFK"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-91-b",
+     "lines": [
+      11,
+      15
+     ],
+     "kind": "heading",
+     "idea": "Subsection 2.3 Parameterization of manipulators via twists: with POE, the joint twists fully characterize the kinematics."
+    },
+    {
+     "id": "3-91-c",
+     "lines": [
+      16,
+      16
+     ],
+     "kind": "heading",
+     "idea": "Choice of base frame and reference configuration."
+    },
+    {
+     "id": "3-91-d",
+     "lines": [
+      17,
+      26
+     ],
+     "kind": "prose",
+     "idea": "The base frame need not sit at the robot base; a convenient choice is to fix it so it coincides with the tool frame at θ=0. Then g_st(0) = I and g_st(θ) = exp(ξ̂1θ1)…exp(ξ̂nθn).",
+     "feynman": "Measuring from the place where your hand starts: at the start the hand is \"right here, no offset\", so only the moves matter.",
+     "visual": "Drag the slate base frame S onto the pink tool frame at the home pose; the g(0) tile shrinks to an identity tile and disappears from the strip.",
+     "scene": "mls-ch3-frame-choices",
+     "beat": "🎯 base on the tool",
+     "math": [
+      "poe",
+      "rigid-transform"
+     ],
+     "engine": [
+      "kinematics.poeFK"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-91-e",
+     "lines": [
+      27,
+      36
+     ],
+     "kind": "prose",
+     "idea": "The reference configuration is also a choice: adding constant offsets to the joint variables makes any pose the θ=0 pose. Twist coordinates depend on this choice and on the base frame, so pick the one making analysis easy, e.g. axis points with simple coordinates (continues).",
+     "feynman": "Which clock reading you call \"midnight\" is a convention; pick one that makes your schedule easy to write.",
+     "visual": "A \"set zero here\" button on the arm: the current pose becomes the home pose; all knob readouts reset to 0 and the twist bead columns re-compute, while the arm itself does not move.",
+     "scene": "mls-ch3-frame-choices",
+     "beat": "0️⃣ choose the zero pose",
+     "math": [
+      "poe",
+      "screw-exp"
+     ],
+     "engine": [
+      "lie.screwAxis"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-91-f",
+     "lines": [
+      37,
+      37
+     ],
+     "kind": "page-number",
+     "idea": "Page number 91."
+    }
+   ]
+  },
+  {
+   "pdf": 110,
+   "book": 92,
+   "lines": 39,
+   "section": "3.2.3",
+   "summary": "Example 3.3 redoes the SCARA with the base frame placed on the tool frame at θ=0 (Fig 3.5); the twists are recomputed relative to this new base.",
+   "atoms": [
+    {
+     "id": "3-92-a",
+     "lines": [
+      1,
+      9
+     ],
+     "kind": "figure",
+     "label": "Fig 3.5",
+     "idea": "SCARA at its reference pose with the base frame S placed exactly on the tool frame T.",
+     "feynman": "Putting the ruler's zero mark right at the fingertip instead of at the shoulder.",
+     "visual": "SCARA preset with S and T drawn as one combined slate+pink frame at the tip; the orange axes now sit at negative y positions relative to it.",
+     "scene": "mls-ch3-frame-choices",
+     "beat": "🎯 base on the tool",
+     "math": [
+      "poe"
+     ],
+     "engine": [
+      "kinematics.poeFrames"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "3-92-b",
+     "lines": [
+      10,
+      11
+     ],
+     "kind": "prose",
+     "idea": "A usual habit is to choose the reference pose so that points on the joint axes have simple coordinates, as in all earlier examples.",
+     "feynman": "Choose the starting pose where the measurements are round numbers, like parking a car exactly on a grid line.",
+     "visual": "Snap-to-grid toggle: when the home pose is chosen with all axes on grid lines, the teal axis points show short round coordinates; a random home pose gives messy ones.",
+     "scene": "mls-ch3-frame-choices",
+     "beat": "0️⃣ choose the zero pose",
+     "math": [
+      "poe"
+     ],
+     "engine": [
+      "lie.screwAxis"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "3-92-c",
+     "lines": [
+      12,
+      16
+     ],
+     "kind": "example",
+     "label": "Ex 3.3",
+     "idea": "Example 3.3: SCARA forward kinematics with the base frame coinciding with the tool frame at θ=0; twists are now written in this new base frame.",
+     "feynman": "Same robot, new measuring tape position: the hinges have not moved, only the numbers describing them.",
+     "visual": "Toggle \"base at tool\": the arm stays still while the bead columns under each axis morph to their new values.",
+     "scene": "mls-ch3-frame-choices",
+     "beat": "🎯 base on the tool",
+     "math": [
+      "poe",
+      "screw-exp"
+     ],
+     "engine": [
+      "lie.screwAxis"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-92-d",
+     "lines": [
+      17,
+      32
+     ],
+     "kind": "equation",
+     "idea": "With the new base, ξ1 = (−l1−l2, 0,0,0,0,1) using axis point (0,−l1−l2,0), and ξ2 = (−l2,0,0,0,0,1) using (0,−l2,0).",
+     "feynman": "The posts are now behind you (negative y), so the sideways drag numbers flip sign compared with before.",
+     "visual": "Teal axis points sit at y = −(l1+l2) and −l2; the red x-bead bars in the twist columns point negative, mirroring the old picture.",
+     "scene": "mls-ch3-frame-choices",
+     "beat": "🎯 base on the tool",
+     "math": [
+      "screw-exp"
+     ],
+     "engine": [
+      "lie.screwAxis"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-92-e",
+     "lines": [
+      33,
+      38
+     ],
+     "kind": "equation",
+     "idea": "Likewise ξ3 = (0,0,0,0,0,1) (its axis passes through the new origin) and the slider twist stays ξ4 = (0,0,1,0,0,0).",
+     "feynman": "The hinge right under your fingertip has no offset at all, and the elevator still just says \"up\".",
+     "visual": "Axis 3 now goes through the combined S,T frame, so its bead column has zeros on top; the prismatic column is unchanged (lime tick).",
+     "scene": "mls-ch3-frame-choices",
+     "beat": "🎯 base on the tool",
+     "math": [
+      "screw-exp"
+     ],
+     "engine": [
+      "lie.screwAxis"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "3-92-f",
+     "lines": [
+      39,
+      39
+     ],
+     "kind": "page-number",
+     "idea": "Page number 92."
+    }
+   ]
+  },
+  {
+   "pdf": 111,
+   "book": 93,
+   "lines": 48,
+   "section": "3.2.3",
+   "summary": "The SCARA kinematics with base-at-tool (Eq 3.5) has g_st(0)=I; then the Denavit-Hartenberg alternative: a frame per link and a four-parameter link transform, chained as in Eq 3.6.",
+   "atoms": [
+    {
+     "id": "3-93-a",
+     "lines": [
+      1,
+      14
+     ],
+     "kind": "equation",
+     "label": "Eq (3.5)",
+     "idea": "Result: same rotation (about z by θ1+θ2+θ3), and position p = (−l1 sinθ1 − l2 sin(θ1+θ2), −l1−l2 + l1 cosθ1 + l2 cos(θ1+θ2), θ4).",
+     "feynman": "Moving the measuring tape only shifts all answers by a constant; the arm itself does exactly the same thing.",
+     "visual": "Two readout cards side by side (old base vs new base); dragging any knob changes both identically except for a constant teal offset (0, l1+l2, l0) that never changes.",
+     "scene": "mls-ch3-frame-choices",
+     "beat": "🎯 base on the tool",
+     "math": [
+      "poe",
+      "forward-kinematics"
+     ],
+     "engine": [
+      "kinematics.poeFK"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-93-b",
+     "lines": [
+      15,
+      17
+     ],
+     "kind": "prose",
+     "idea": "Here g_st(0) = I, consistent with S and T coinciding at θ=0; compare with Example 3.1.",
+     "feynman": "At the start, the fingertip is exactly at the ruler's zero: no offset to report.",
+     "visual": "At the home pose the result card turns into a lime identity grid.",
+     "scene": "mls-ch3-frame-choices",
+     "beat": "🎯 base on the tool",
+     "math": [
+      "rigid-transform"
+     ],
+     "engine": [
+      "kinematics.poeFK"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "3-93-c",
+     "lines": [
+      18,
+      24
+     ],
+     "kind": "prose",
+     "idea": "Given S and T, joint twists fully parameterize the kinematics. The standard alternative in robotics is Denavit-Hartenberg (DH) parameters; their relation and merits are compared.",
+     "feynman": "Two ways of writing directions: \"turn around these landmarks\" (twists) versus \"from each corner, go so far and turn so much\" (DH).",
+     "visual": "Split screen: POE arm (two frames, orange axis lines) on the left; DH arm (a frame on every link) on the right; both arms move together from the same knobs.",
+     "scene": "mls-ch3-frame-choices",
+     "beat": "📏 DH: four numbers",
+     "math": [
+      "dh",
+      "poe"
+     ],
+     "engine": [
+      "kinematics.dhChain",
+      "kinematics.poeFK"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-93-d",
+     "lines": [
+      25,
+      31
+     ],
+     "kind": "equation",
+     "label": "Eq (3.6)",
+     "idea": "DH places link frames L_i by fixed rules (base S = L0) and builds g_st(θ) = g_{l0 l1}(θ1)…g_{l_{n-1} l_n}(θn) g_{l_n t}, the same chain shape as Eq (3.1).",
+     "feynman": "Like stacking building blocks where each block's socket is drilled by a strict rule so the next block always fits the same way.",
+     "visual": "Right panel: a little RGB frame snaps onto each link following the DH rules (z along the joint axis, x along the common normal); a strip of DH cards multiplies from base to tip.",
+     "scene": "mls-ch3-frame-choices",
+     "beat": "📏 DH: four numbers",
+     "math": [
+      "dh",
+      "rigid-transform"
+     ],
+     "engine": [
+      "kinematics.dhChain"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-93-e",
+     "lines": [
+      32,
+      44
+     ],
+     "kind": "equation",
+     "idea": "Each DH link transform depends on four scalars (twist α_i, length a_i, offset d_i, angle φ_i) in a fixed 4×4 pattern; φ_i is the joint variable for revolute joints, d_i for prismatic ones. DH tables exist for standard industrial robots and are used by most commercial software.",
+     "feynman": "Four knobs per link: how much the next hinge is tilted, how far apart the hinges are, how far along you slide, and how much you turn.",
+     "visual": "Open a DH card: a ruler-and-protractor glyph per link with four sliders (α, a, d, φ); moving each slider animates one elementary motion (turn about z, slide along z, slide along x, turn about x) composing into the link transform. The joint's own slider is orange.",
+     "scene": "mls-ch3-frame-choices",
+     "beat": "📏 DH: four numbers",
+     "math": [
+      "dh"
+     ],
+     "engine": [
+      "kinematics.dhTransform"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-93-f",
+     "lines": [
+      45,
+      47
+     ],
+     "kind": "prose",
+     "idea": "Only four parameters suffice per link, versus six for a general twist, because the link frames are chosen cleverly so that terms cancel (continues).",
+     "feynman": "If you always cut sandwich slices along the crust, you only need to say the thickness, not the angle: a smart convention saves numbers.",
+     "visual": "A counter shows \"6\" beads for a twist and \"4\" sliders for DH; two twist beads fade to gray as the DH frame snaps into its convention, showing what the convention absorbed.",
+     "scene": "mls-ch3-frame-choices",
+     "beat": "📏 DH: four numbers",
+     "math": [
+      "dh",
+      "screw-exp"
+     ],
+     "engine": [
+      "kinematics.dhTransform"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-93-g",
+     "lines": [
+      48,
+      48
+     ],
+     "kind": "page-number",
+     "idea": "Page number 93."
+    }
+   ]
+  },
+  {
+   "pdf": 112,
+   "book": 94,
+   "lines": 50,
+   "section": "3.2.3",
+   "summary": "DH and twists are not one-to-one: twists are all in one base frame, DH motions are link-relative. Writing each link transform as a relative exponential (Eq 3.7-3.9) and conjugating gives ξ_i = Ad ξ_{i-1,i} (Eq 3.10).",
+   "atoms": [
+    {
+     "id": "3-94-a",
+     "lines": [
+      1,
+      4
+     ],
+     "kind": "prose",
+     "idea": "The DH parameters have physical meanings tied to adjacent link frames (a classic text gives a good account).",
+     "feynman": "Each DH number is something you could measure on the real robot with a ruler or a protractor.",
+     "visual": "Hovering a DH slider highlights the physical distance or angle on the arm it measures (a slate ruler or protractor between adjacent axes).",
+     "scene": "mls-ch3-frame-choices",
+     "beat": "📏 DH: four numbers",
+     "math": [
+      "dh"
+     ],
+     "engine": [
+      "kinematics.dhTransform"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "3-94-b",
+     "lines": [
+      5,
+      11
+     ],
+     "kind": "prose",
+     "idea": "There is no simple one-to-one map between twists and DH parameters, because twists are written in a single base frame while DH describes each link relative to the previous one. Let ξ_{i-1,i} be joint i's twist written in link frame i-1.",
+     "feynman": "One map uses street addresses from the city center; the other says \"from the last house, go two doors down\". Converting means walking the whole path.",
+     "visual": "In the DH panel each axis carries a small local twist glyph drawn in its predecessor's frame (faded orange); in the POE panel the same axis carries a global glyph; a dotted bridge connects each pair.",
+     "scene": "mls-ch3-frame-choices",
+     "beat": "🔄 adjoint: DH → twists",
+     "math": [
+      "dh",
+      "poe"
+     ],
+     "engine": [
+      "lie.adjoint"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-94-c",
+     "lines": [
+      12,
+      18
+     ],
+     "kind": "equation",
+     "label": "Eq (3.7)–(3.8)",
+     "idea": "With g_{l_{i-1} l_i} = exp(ξ̂_{i-1,i}θi) g_{l_{i-1} l_i}(0), the kinematics become an alternating product exp·g(0)·exp·g(0)…, which resembles but is not the POE formula.",
+     "feynman": "A dance where each move is \"turn, then step to the next partner\": turns and steps are mixed together rather than all turns first.",
+     "visual": "The DH strip shows interleaved tiles: an orange exponential tile, then a slate fixed tile, repeated; the POE strip above has all orange tiles first and one slate tile at the end.",
+     "scene": "mls-ch3-frame-choices",
+     "beat": "🔄 adjoint: DH → twists",
+     "math": [
+      "dh",
+      "poe"
+     ],
+     "engine": [
+      "kinematics.dhChain"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-94-d",
+     "lines": [
+      19,
+      34
+     ],
+     "kind": "equation",
+     "label": "Eq (3.9)",
+     "idea": "Insert identity pairs g(0)g(0)^{-1} to regroup the product so each exponential is sandwiched between a cumulative fixed transform g_{l0 l_{i-1}}(0) and its inverse.",
+     "feynman": "Hiding \"step forward, step back\" pairs in a dance does not change where you end up, but lets you regroup moves.",
+     "visual": "Animated tile surgery: matching pairs of slate tiles g and g⁻¹ fade into the strip (lime identity glow), then brackets slide to group each orange tile with its sandwich.",
+     "scene": "mls-ch3-frame-choices",
+     "beat": "🔄 adjoint: DH → twists",
+     "math": [
+      "rigid-transform"
+     ],
+     "engine": [
+      "lie.invSE3"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "3-94-e",
+     "lines": [
+      35,
+      41
+     ],
+     "kind": "equation",
+     "idea": "Using g exp(ξ̂θ) g^{-1} = exp((Ad_g ξ)^∧ θ), each sandwich becomes a single exponential of an adjoint-transformed twist.",
+     "feynman": "Turning a doorknob seen from across the room is still a turn of the knob; the adjoint just re-describes where that knob is from your viewpoint.",
+     "visual": "Each bracketed sandwich collapses into one orange tile; its axis line flies from the link-local frame to the base-frame location (Ad_g applied), drawn by the adjoint matrix acting on the bead column.",
+     "scene": "mls-ch3-frame-choices",
+     "beat": "🔄 adjoint: DH → twists",
+     "math": [
+      "screw-exp",
+      "rigid-transform"
+     ],
+     "engine": [
+      "lie.adjoint",
+      "lie.expSE3"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "3-94-f",
+     "lines": [
+      42,
+      46
+     ],
+     "kind": "equation",
+     "label": "Eq (3.10)",
+     "idea": "Hence ξ_i = Ad_{g_{l0 l_{i-1}}(0)} ξ_{i-1,i}: the POE twist is joint i's twist at the reference pose expressed in the base frame.",
+     "feynman": "Translate each \"from the last house\" instruction into a city-center address once, and you never need the house-by-house directions again.",
+     "visual": "Final frame of the bridge animation: every carried DH axis lands exactly on the POE axis (lime overlap glow), and the two strips now read the same.",
+     "scene": "mls-ch3-frame-choices",
+     "beat": "🔄 adjoint: DH → twists",
+     "math": [
+      "screw-exp",
+      "dh",
+      "poe"
+     ],
+     "engine": [
+      "lie.adjoint"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-94-g",
+     "lines": [
+      47,
+      49
+     ],
+     "kind": "prose",
+     "idea": "So from DH parameters one can get the twists by writing each link transform in exponential form (Eq 3.7) and applying Eq (3.10) (continues).",
+     "feynman": "A recipe card for converting old-style directions into landmark directions.",
+     "visual": "A \"convert DH → twists\" button runs the bridge animation link by link and fills the POE bead columns.",
+     "scene": "mls-ch3-frame-choices",
+     "beat": "🔄 adjoint: DH → twists",
+     "math": [
+      "dh",
+      "poe"
+     ],
+     "engine": [
+      "lie.adjoint",
+      "lie.logSE3"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-94-h",
+     "lines": [
+      50,
+      50
+     ],
+     "kind": "page-number",
+     "idea": "Page number 94."
+    }
+   ]
+  },
+  {
+   "pdf": 113,
+   "book": 95,
+   "lines": 39,
+   "section": "3.2.4",
+   "summary": "Writing twists directly from axes is usually simpler, and POE needs only two frames, making it preferable to DH. Section 2.4 defines the workspace (Eq 3.11), reachable workspace (Eq 3.12) and dextrous workspace (Eq 3.13).",
+   "atoms": [
+    {
+     "id": "3-95-a",
+     "lines": [
+      1,
+      9
+     ],
+     "kind": "prose",
+     "idea": "In practice it is far easier to write the twists directly from axis directions and convenient axis points. POE uses only two frames (S and T) and its twists have clear geometric meaning, which makes it preferable to DH.",
+     "feynman": "Instead of translating old directions, just look at the hinges and say where they are and which way they point.",
+     "visual": "Frame counter race: POE shows \"2\" frames, DH shows \"n+1\" frames; tapping an axis in POE shows its line and direction directly; a 🏆 lands on the POE side.",
+     "scene": "mls-ch3-frame-choices",
+     "beat": "🏆 two frames win",
+     "math": [
+      "poe",
+      "dh"
+     ],
+     "engine": [
+      "lie.screwAxis"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "3-95-b",
+     "lines": [
+      10,
+      10
+     ],
+     "kind": "heading",
+     "idea": "Subsection 2.4 Manipulator workspace."
+    },
+    {
+     "id": "3-95-c",
+     "lines": [
+      11,
+      19
+     ],
+     "kind": "definition",
+     "label": "Eq (3.11)",
+     "idea": "The (complete) workspace W = {g_st(θ) : θ ∈ Q} ⊂ SE(3) is the set of all tool poses the arm can reach; any planned motion must stay inside it.",
+     "feynman": "All the places and angles your hand can be when you sit in a chair without getting up.",
+     "visual": "Many random joint settings (orange dots in joint space) each spawn a small pink tool frame; together they fill a cloud of frames. A gold target pose outside the cloud blinks coral.",
+     "scene": "mls-ch3-workspace",
+     "beat": "🌍 every pose reached",
+     "math": [
+      "forward-kinematics",
+      "sampling"
+     ],
+     "engine": [
+      "kinematics.poeFK",
+      "NEW: workspaceSampler"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-95-d",
+     "lines": [
+      20,
+      27
+     ],
+     "kind": "definition",
+     "label": "Eq (3.12)",
+     "idea": "Because SE(3) is hard to picture, use the reachable workspace W_R = {p(θ) : θ ∈ Q} ⊂ R³: the positions reachable in at least one orientation.",
+     "feynman": "Ignore which way the hand faces; just paint every spot your fingertip can touch.",
+     "visual": "Drop the orientation of each sampled frame: only the pink tip dots remain, forming a teal cloud in 3D (the reachable workspace).",
+     "scene": "mls-ch3-workspace",
+     "beat": "☁️ reachable positions",
+     "math": [
+      "forward-kinematics",
+      "sampling"
+     ],
+     "engine": [
+      "kinematics.poeFK",
+      "NEW: workspaceSampler"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-95-e",
+     "lines": [
+      28,
+      36
+     ],
+     "kind": "definition",
+     "label": "Eq (3.13)",
+     "idea": "Dextrous workspace W_D = {p : every rotation R is achievable at p}: positions reachable with any orientation. Inside it, orientation can be ignored when placing objects.",
+     "feynman": "Places where you can hold a cup at the spot AND tilt it any way you like; near the edge of your reach you can only hold it one way.",
+     "visual": "Compass toggle: at each teal dot, a small sphere of orientations is tested; dots whose sphere fills completely turn lime (dextrous), others turn coral, with the missing directions shown as coral patches on that dot's mini-sphere.",
+     "scene": "mls-ch3-workspace",
+     "beat": "🧭 any-orientation zone",
+     "math": [
+      "forward-kinematics",
+      "rotation"
+     ],
+     "engine": [
+      "NEW: workspaceSampler"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-95-f",
+     "lines": [
+      37,
+      38
+     ],
+     "kind": "prose",
+     "idea": "Computing the dextrous workspace of a general arm can be very difficult; industrial arms commonly (continues on next page).",
+     "feynman": "Checking every tilt at every spot is a lot of work, so robot makers use a trick.",
+     "visual": "A coral progress bar crawls while testing many orientations per point, hinting at the cost.",
+     "scene": "mls-ch3-workspace",
+     "beat": "🧭 any-orientation zone",
+     "math": [
+      "forward-kinematics"
+     ],
+     "engine": [],
+     "difficulty": 2
+    },
+    {
+     "id": "3-95-g",
+     "lines": [
+      39,
+      39
+     ],
+     "kind": "page-number",
+     "idea": "Page number 95."
+    }
+   ]
+  },
+  {
+   "pdf": 114,
+   "book": 96,
+   "lines": 27,
+   "section": "3.2.4",
+   "summary": "Fig 3.6 builds the planar three-link workspace; with a spherical wrist and tool at the wrist center, W_D = W_R and W = W_R × SO(3). Example 3.4 begins.",
+   "atoms": [
+    {
+     "id": "3-96-a",
+     "lines": [
+      1,
+      13
+     ],
+     "kind": "figure",
+     "label": "Fig 3.6",
+     "idea": "A planar three-link arm (a); its reachable set built by sweeping circles and annuli (b); the reachable workspace (c); the thinner dextrous workspace, shrunk by 2l3 at both edges (d).",
+     "feynman": "Swing a stick on a stick on a stick: the tip paints a donut-shaped ring on the floor.",
+     "visual": "Four tabs: (a) the arm with length sliders; (b) staged sweeps: a pink circle, then a teal annulus, then the big annulus; (c) the reachable ring filled teal; (d) the narrower lime ring with coral bands 2·l3 wide on both edges.",
+     "scene": "mls-ch3-workspace",
+     "beat": "🍩 three-link annulus",
+     "math": [
+      "forward-kinematics"
+     ],
+     "engine": [
+      "kinematics.planarFK",
+      "NEW: workspaceSampler"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-96-b",
+     "lines": [
+      14,
+      21
+     ],
+     "kind": "prose",
+     "idea": "Industrial arms often end in a spherical wrist (three orthogonal intersecting revolute axes). If the tool frame is at the wrist center, any orientation is achievable at any reachable position, so W_D = W_R and W = W_R × SO(3).",
+     "feynman": "A wrist that can point your hand any way: wherever your wrist can go, your hand can face any direction there.",
+     "visual": "3D elbow arm with spherical wrist: the teal reachable cloud and lime dextrous cloud overlap completely; spinning the wrist knobs sweeps a pink tool frame through all orientations at a fixed point.",
+     "scene": "mls-ch3-workspace",
+     "beat": "⚽ wrist makes them equal",
+     "math": [
+      "forward-kinematics",
+      "rotation"
+     ],
+     "engine": [
+      "kinematics.poeFK"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-96-c",
+     "lines": [
+      22,
+      24
+     ],
+     "kind": "prose",
+     "idea": "This holds only with the tool frame at the wrist center; an offset makes the analysis more complicated.",
+     "feynman": "Hold a long spoon instead: turning your wrist now swings the spoon tip around, so its tip cannot point every way at every spot.",
+     "visual": "Tool-offset slider: as the pink tool moves off the wrist center, the lime cloud shrinks away from the teal cloud's edges, with coral rims appearing.",
+     "scene": "mls-ch3-workspace",
+     "beat": "⚽ wrist makes them equal",
+     "math": [
+      "forward-kinematics"
+     ],
+     "engine": [
+      "NEW: workspaceSampler"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-96-d",
+     "lines": [
+      25,
+      26
+     ],
+     "kind": "example",
+     "label": "Ex 3.4",
+     "idea": "Example 3.4: workspace of the planar three-link arm of Fig 3.6a, with tool pose g = (x, y, φ) (continues).",
+     "feynman": "A three-piece folding ruler on a table: where can its tip go, and where can it point any way?",
+     "visual": "Planar three-link preset with readouts x, y and heading φ shown as a pink arrow at the tip.",
+     "scene": "mls-ch3-workspace",
+     "beat": "🍩 three-link annulus",
+     "math": [
+      "forward-kinematics"
+     ],
+     "engine": [
+      "kinematics.planarFK"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "3-96-e",
+     "lines": [
+      27,
+      27
+     ],
+     "kind": "page-number",
+     "idea": "Page number 96."
+    }
+   ]
+  },
+  {
+   "pdf": 115,
+   "book": 97,
+   "lines": 37,
+   "section": "3.2.4 / 3.3",
+   "summary": "Planar three-link workspace (Eq 3.14): reachable set is an annulus from l1−l2−l3 to l1+l2+l3; the dextrous set is thinner by 2l3 on each edge. Section 3 states the inverse kinematics problem (Eq 3.15) and starts the planar two-link example.",
+   "atoms": [
+    {
+     "id": "3-97-a",
+     "lines": [
+      1,
+      7
+     ],
+     "kind": "equation",
+     "label": "Eq (3.14)",
+     "idea": "By plane geometry, x = l1 cosθ1 + l2 cos(θ1+θ2) + l3 cos(θ1+θ2+θ3), similarly for y with sines, and φ = θ1+θ2+θ3. Assume l1 > l2 > l3 and l1 > l2 + l3.",
+     "feynman": "Add three arrows tip to tail, each turned a bit more than the last; the final heading is the sum of all the turns.",
+     "visual": "Three colored arrows chained tip to tail (blue links) with angle arcs in orange; the readout x, y, φ updates live and matches the pink tip.",
+     "scene": "mls-ch3-workspace",
+     "beat": "🍩 three-link annulus",
+     "math": [
+      "forward-kinematics",
+      "vectors"
+     ],
+     "engine": [
+      "kinematics.planarFK"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-97-b",
+     "lines": [
+      8,
+      16
+     ],
+     "kind": "prose",
+     "idea": "Reachable workspace by sweeping: fix θ1, θ2 and sweep θ3 to get a circle of radius l3; sweep θ2 to get an annulus (radii l2−l3 to l2+l3) around the end of link 1; sweep θ1 to get the final annulus with radii l1−l2−l3 and l1+l2+l3.",
+     "feynman": "Spin a sparkler on the end of a stick that is itself spinning on the end of another: the light paints a ring, then a thicker ring.",
+     "visual": "Staged sweep with three play buttons: last link spins leaving a pink circle; middle link spins smearing it into a teal annulus; base spins smearing that into the big teal annulus; inner/outer radius readouts appear.",
+     "scene": "mls-ch3-workspace",
+     "beat": "🍩 three-link annulus",
+     "math": [
+      "forward-kinematics"
+     ],
+     "engine": [
+      "kinematics.planarFK",
+      "NEW: workspaceSampler"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-97-c",
+     "lines": [
+      17,
+      21
+     ],
+     "kind": "prose",
+     "idea": "The dextrous workspace is subtler: the last joint acts like a planar wrist, but the tool sits l3 away from it, so the dextrous ring loses 2l3 at the inner and outer edges.",
+     "feynman": "To point a flashlight any direction while it is at a spot, the flashlight's handle (the wrist) must be able to circle all around that spot; near the edge of your reach, the handle can't.",
+     "visual": "Click a point: a pink circle of radius l3 around it shows where the wrist would have to be for each heading; it turns lime only if the whole circle lies inside the wrist's reachable ring. The lime set is the narrower ring.",
+     "scene": "mls-ch3-workspace",
+     "beat": "🍩 three-link annulus",
+     "math": [
+      "forward-kinematics"
+     ],
+     "engine": [
+      "NEW: workspaceSampler"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-97-d",
+     "lines": [
+      22,
+      29
+     ],
+     "kind": "definition",
+     "label": "Eq (3.15)",
+     "idea": "Inverse kinematics: given g_d ∈ SE(3), find θ ∈ Q with g_st(θ) = g_d; there may be many, exactly one, or no solutions.",
+     "feynman": "Forward is \"I bent my arm like this, where is my hand?\". Inverse is \"I want my hand on the cup, how should I bend?\". Sometimes there are two ways, sometimes the cup is too far.",
+     "visual": "Drag a gold target frame; ghost arms appear for each solution found (a counter shows 0, 1, 2 …); outside the workspace the target blinks coral and no ghost appears.",
+     "scene": "mls-ik-planar-flip",
+     "beat": "❓ zero, one, many",
+     "math": [
+      "ik"
+     ],
+     "engine": [
+      "kinematics.twoLinkIK"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-97-e",
+     "lines": [
+      30,
+      36
+     ],
+     "kind": "equation",
+     "idea": "Planar two-link example (Fig 3.7a): x = l1 cosθ1 + l2 cos(θ1+θ2), y = l1 sinθ1 + l2 sin(θ1+θ2).",
+     "feynman": "A two-piece folding ruler pinned at one end; its tip is the sum of two arrows.",
+     "visual": "Two-link arm with a draggable gold target; the two arrows are shown tip-to-tail with orange angle arcs.",
+     "scene": "mls-ik-planar-flip",
+     "beat": "❓ zero, one, many",
+     "math": [
+      "forward-kinematics"
+     ],
+     "engine": [
+      "kinematics.planarFK"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "3-97-f",
+     "lines": [
+      37,
+      37
+     ],
+     "kind": "page-number",
+     "idea": "Page number 97."
+    }
+   ]
+  },
+  {
+   "pdf": 116,
+   "book": 98,
+   "lines": 43,
+   "section": "3.3.1",
+   "summary": "Two-link planar IK via polar coordinates: the elbow angle comes from r by the law of cosines (two values, the flip), then the shoulder angle from atan2 and a second cosine law (Eq 3.16). Lessons: split into subproblems; each may have 0, 1 or many answers.",
+   "atoms": [
+    {
+     "id": "3-98-a",
+     "lines": [
+      1,
+      11
+     ],
+     "kind": "figure",
+     "label": "Fig 3.7",
+     "idea": "Two-link planar IK: (a) the arm reaching (x, y) from base B; (b) the polar construction with distance r, direction φ, elbow angle θ2 with interior angle α, shoulder offset β, and a dashed flip solution.",
+     "feynman": "Reaching for a cup with your elbow up or elbow down: two arm shapes, same hand spot.",
+     "visual": "Two-link arm with gold target; the faint blue triangle (l1, l2, r) is drawn; the flip twin is a dashed ghost arm mirrored across the base–target line; angle arcs α, β, φ in orange.",
+     "scene": "mls-ik-planar-flip",
+     "beat": "🔁 the flip twin",
+     "math": [
+      "ik"
+     ],
+     "engine": [
+      "kinematics.twoLinkIK"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-98-b",
+     "lines": [
+      12,
+      19
+     ],
+     "kind": "equation",
+     "label": "Eq (3.16)",
+     "idea": "Switch to polar coordinates (r, φ) of the target. The distance r = √(x²+y²) alone fixes the elbow: by the law of cosines, θ2 = π ± α with α = arccos((l1²+l2²−r²)/(2 l1 l2)).",
+     "feynman": "How far your hand is from your shoulder depends only on how much your elbow is bent, not where your shoulder points. Closer means more bent.",
+     "visual": "Drag the gold target around a gold circle of fixed radius r: the elbow angle readout stays constant while only the shoulder turns. Dragging the target inward bends the elbow more; the triangle sides l1, l2, r feed a cosine-law meter that outputs α.",
+     "scene": "mls-ik-planar-flip",
+     "beat": "📏 radius fixes the elbow",
+     "math": [
+      "ik"
+     ],
+     "engine": [
+      "kinematics.twoLinkIK"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-98-c",
+     "lines": [
+      20,
+      22
+     ],
+     "kind": "prose",
+     "idea": "If α ≠ 0 there are two elbow values giving the same radius; the second is called the flip solution.",
+     "feynman": "The elbow can bend \"up\" or \"down\" and the hand lands in the same place, like a knee bending forward or (ouch) backward.",
+     "visual": "A flip button swaps the solid arm and the dashed ghost; both tips sit on the gold target (lime ring). As α → 0 (target at full reach) the two arms merge into one.",
+     "scene": "mls-ik-planar-flip",
+     "beat": "🔁 the flip twin",
+     "math": [
+      "ik"
+     ],
+     "engine": [
+      "kinematics.twoLinkIK"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-98-d",
+     "lines": [
+      23,
+      29
+     ],
+     "kind": "equation",
+     "idea": "Then solve for the shoulder: θ1 = atan2(y, x) ± β with β = arccos((r²+l1²−l2²)/(2 l1 r)), the sign of β matching that of α. Each elbow value yields its shoulder value.",
+     "feynman": "First point your arm toward the cup, then lean back a little to make room for the elbow bend; which way you lean depends on whether the elbow is up or down.",
+     "visual": "An orange arrow aims along φ = atan2(y, x), then a second orange arc swings it back by β; the sign of β is colored to match the chosen flip (solid vs dashed arm).",
+     "scene": "mls-ik-planar-flip",
+     "beat": "🔁 the flip twin",
+     "math": [
+      "ik"
+     ],
+     "engine": [
+      "kinematics.twoLinkIK"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-98-e",
+     "lines": [
+      30,
+      33
+     ],
+     "kind": "prose",
+     "idea": "General lesson: IK is solved by splitting it into subproblems (here, elbow from r, then shoulder to rotate into place).",
+     "feynman": "Packing a suitcase: first decide how big the bag must be (elbow), then which way it faces (shoulder).",
+     "visual": "Two badge steps light up in order: \"📏 radius → θ2\" then \"🧭 direction → θ1\"; the arm animates each step separately.",
+     "scene": "mls-ik-planar-flip",
+     "beat": "🧩 split into subproblems",
+     "math": [
+      "ik"
+     ],
+     "engine": [
+      "kinematics.twoLinkIK"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "3-98-f",
+     "lines": [
+      34,
+      42
+     ],
+     "kind": "prose",
+     "idea": "Each subproblem can have zero, one or several solutions. If the target is outside the workspace, some subproblem fails (e.g. r > l1 + l2). Multiple solutions arise when several joint settings give the same tool pose, and every branch must be carried through.",
+     "feynman": "Like a family tree of answers: every time a question has two answers, the tree splits, and you must follow every branch to the end.",
+     "visual": "A branching tree diagram grows beside the arm: step 1 splits into two branches (elbow up/down), each continues to a full ghost arm. Dragging the target past the outer gold ring makes the triangle unable to close: the cosine meter goes past ±1, flashes coral, and the tree has no leaves.",
+     "scene": "mls-ik-planar-flip",
+     "beat": "❓ zero, one, many",
+     "math": [
+      "ik"
+     ],
+     "engine": [
+      "kinematics.twoLinkIK"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-98-g",
+     "lines": [
+      43,
+      43
+     ],
+     "kind": "page-number",
+     "idea": "Page number 98."
+    }
+   ]
+  },
+  {
+   "pdf": 117,
+   "book": 99,
+   "lines": 45,
+   "section": "3.3.2",
+   "summary": "Closed-form vs numerical IK; the Paden-Kahan approach reduces IK to a few geometric, numerically stable subproblems. Subproblem 1 (rotate p about one axis onto q, Eq 3.17) begins: subtract a point r on the axis to get exp(ω̂θ)u = v (Eq 3.18).",
+   "atoms": [
+    {
+     "id": "3-99-a",
+     "lines": [
+      1,
+      11
+     ],
+     "kind": "prose",
+     "idea": "IK methods are either closed-form (fast, exact formulas from geometric/algebraic identities; available for most industrial arms) or numerical (iterative solvers of Eq 3.15).",
+     "feynman": "Closed form is a recipe that gives the answer in one go; numerical is playing \"hot and cold\" until you get there.",
+     "visual": "Race: one arm jumps straight to the gold target (closed form, instant); another inches toward it as a ball rolls down an error bowl (numerical); a step counter ticks for the numerical one.",
+     "scene": "mls-ik-planar-flip",
+     "beat": "⚡ closed form vs numeric",
+     "math": [
+      "ik",
+      "optimization"
+     ],
+     "engine": [
+      "kinematics.twoLinkIK",
+      "kinematics.planarIK"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-99-b",
+     "lines": [
+      12,
+      16
+     ],
+     "kind": "heading",
+     "idea": "Subsection 3.2 Paden-Kahan subproblems: a geometric IK method built on the product of exponentials, due to Paden building on Kahan."
+    },
+    {
+     "id": "3-99-c",
+     "lines": [
+      17,
+      25
+     ],
+     "kind": "prose",
+     "idea": "The method solves a few frequently occurring subproblems first, then reduces a full IK problem to these. The subproblems are geometric and numerically stable, but the list is not complete; some arms need others.",
+     "feynman": "A toolbox with three tools: most furniture can be assembled with them, but now and then you need a special wrench.",
+     "visual": "A 🧰 toolbox opens to reveal three badges: 🎠 swing to a point, 🪐 two-hinge swing, 📏 swing to a distance; a fourth slot shows \"?\" in slate.",
+     "scene": "mls-pk-swing-to-point",
+     "beat": "🧰 three puzzles",
+     "math": [
+      "ik"
+     ],
+     "engine": [
+      "NEW: ik.subproblem1",
+      "NEW: ik.subproblem2",
+      "NEW: ik.subproblem3"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "3-99-d",
+     "lines": [
+      26,
+      31
+     ],
+     "kind": "remark",
+     "idea": "Each subproblem is stated geometrically and solved in detail; first-time readers may skip the solutions until seeing how they are used.",
+     "feynman": "Learn what each tool does first; how it is forged can wait.",
+     "visual": "Each badge, when tapped, first plays the geometric puzzle (what moves where) before showing any construction.",
+     "scene": "mls-pk-swing-to-point",
+     "beat": "🧰 three puzzles",
+     "math": [
+      "ik"
+     ],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "3-99-e",
+     "lines": [
+      32,
+      36
+     ],
+     "kind": "definition",
+     "label": "Eq (3.17)",
+     "idea": "Subproblem 1: given a unit zero-pitch twist ξ and points p, q, find θ with exp(ξ̂θ)p = q.",
+     "feynman": "A carousel: a horse at p, the spot q where you want the horse to stop. How far must the carousel turn?",
+     "visual": "Orange axis ξ, pink point p, gold point q; turning the knob swings p around the axis leaving a pink ring trail; the goal is for p to land on q (lime flash).",
+     "scene": "mls-pk-swing-to-point",
+     "beat": "🎠 swing p onto q",
+     "math": [
+      "ik",
+      "screw-exp"
+     ],
+     "engine": [
+      "NEW: ik.subproblem1"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-99-f",
+     "lines": [
+      37,
+      44
+     ],
+     "kind": "equation",
+     "label": "Eq (3.18)",
+     "idea": "Pick r on the axis; set u = p − r and v = q − r. Since rotation fixes r, the problem becomes a pure rotation of vectors: exp(ω̂θ)u = v.",
+     "feynman": "Measure from the carousel's pole: the horse is an arrow from the pole, and turning the carousel just turns that arrow.",
+     "visual": "A teal pin r on the axis; arrows u (pink) and v (gold) drawn from r; the knob now rotates the arrow u about ω.",
+     "scene": "mls-pk-swing-to-point",
+     "beat": "🎠 swing p onto q",
+     "math": [
+      "rotation",
+      "vectors"
+     ],
+     "engine": [
+      "lie.expSO3"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-99-g",
+     "lines": [
+      45,
+      45
+     ],
+     "kind": "page-number",
+     "idea": "Page number 99."
+    }
+   ]
+  },
+  {
+   "pdf": 118,
+   "book": 100,
+   "lines": 37,
+   "section": "3.3.2",
+   "summary": "Subproblem 1 solution: project u, v onto the plane normal to ω; solvable only if heights and projected lengths match (Eq 3.19); θ = atan2(ωᵀ(u′×v′), u′ᵀv′); infinitely many if p is on the axis. Subproblem 2 stated (Eq 3.20).",
+   "atoms": [
+    {
+     "id": "3-100-a",
+     "lines": [
+      1,
+      11
+     ],
+     "kind": "figure",
+     "label": "Fig 3.8",
+     "idea": "Subproblem 1 picture: (a) p swings about the axis of ξ to q, with u and v drawn from r; (b) the projections u′ and v′ onto the plane normal to the axis and the angle θ between them.",
+     "feynman": "Looking down on a carousel from above: the horse's path is a circle, and the turn angle is the slice between \"now\" and \"goal\".",
+     "visual": "Two views: 3D (axis, ring, u, v) and a top-down disc (u′ pink, v′ gold, orange θ arc). A camera button flies from the 3D view to the top-down view.",
+     "scene": "mls-pk-swing-to-point",
+     "beat": "🧭 read the angle",
+     "math": [
+      "rotation"
+     ],
+     "engine": [
+      "NEW: ik.subproblem1"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-100-b",
+     "lines": [
+      12,
+      14
+     ],
+     "kind": "prose",
+     "idea": "For vectors, the twist exponential acts as the plain rotation exp(ω̂θ).",
+     "feynman": "Arrows don't care where the pole is, only which way it points.",
+     "visual": "Drag the teal pin r along the axis: u and v change, but the solved θ readout stays the same.",
+     "scene": "mls-pk-swing-to-point",
+     "beat": "🎠 swing p onto q",
+     "math": [
+      "rotation"
+     ],
+     "engine": [
+      "lie.expSO3"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-100-c",
+     "lines": [
+      15,
+      18
+     ],
+     "kind": "equation",
+     "idea": "Project onto the plane perpendicular to the axis: u′ = u − ωωᵀu and v′ = v − ωωᵀv.",
+     "feynman": "Shine a flashlight straight down the carousel pole: each horse's shadow lands on the floor disc.",
+     "visual": "Vertical teal drop-lines project the tips of u and v onto a translucent disc normal to ω; the shadows are u′ and v′.",
+     "scene": "mls-pk-swing-to-point",
+     "beat": "📏 height & radius must match",
+     "math": [
+      "vectors"
+     ],
+     "engine": [
+      "NEW: ik.subproblem1"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-100-d",
+     "lines": [
+      19,
+      23
+     ],
+     "kind": "equation",
+     "label": "Eq (3.19)",
+     "idea": "Necessary conditions: equal heights along the axis, ωᵀu = ωᵀv, and equal projected lengths, |u′| = |v′|.",
+     "feynman": "A carousel horse can only reach a spot at the same height (horses don't go up and down here) and the same distance from the pole.",
+     "visual": "Two meters: a height bar pair (ωᵀu vs ωᵀv) and a radius bar pair (|u′| vs |v′|). Dragging q off the pink ring makes one pair mismatch and turn coral; the ring misses q.",
+     "scene": "mls-pk-swing-to-point",
+     "beat": "📏 height & radius must match",
+     "math": [
+      "vectors"
+     ],
+     "engine": [
+      "NEW: ik.subproblem1"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-100-e",
+     "lines": [
+      24,
+      29
+     ],
+     "kind": "equation",
+     "idea": "If the conditions hold and u′ ≠ 0: u′×v′ = ω sinθ|u′||v′| and u′·v′ = cosθ|u′||v′|, so θ = atan2(ωᵀ(u′×v′), u′ᵀv′).",
+     "feynman": "The \"how far round\" is read from two numbers: how much the arrows point the same way (cosine) and which way round they are (sine).",
+     "visual": "On the top-down disc: a blue bar for the dot product and an orange bar for the signed cross product feed an atan2 dial that points to θ; the 3D carousel then swings by that angle and p lands on q (lime).",
+     "scene": "mls-pk-swing-to-point",
+     "beat": "🧭 read the angle",
+     "math": [
+      "rotation",
+      "vectors"
+     ],
+     "engine": [
+      "NEW: ik.subproblem1"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-100-f",
+     "lines": [
+      30,
+      31
+     ],
+     "kind": "prose",
+     "idea": "If u′ = 0, then p = q lies on the axis and every θ works: infinitely many solutions.",
+     "feynman": "The horse glued onto the pole never moves, so any turn of the carousel \"works\".",
+     "visual": "Drag p onto the axis: the pink ring shrinks to a dot, the atan2 dial spins freely, and a ♾️ badge appears.",
+     "scene": "mls-pk-swing-to-point",
+     "beat": "♾️ on the axis: any angle",
+     "math": [
+      "ik"
+     ],
+     "engine": [
+      "NEW: ik.subproblem1"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-100-g",
+     "lines": [
+      32,
+      36
+     ],
+     "kind": "definition",
+     "label": "Eq (3.20)",
+     "idea": "Subproblem 2: given two unit zero-pitch twists ξ1, ξ2 with intersecting axes and points p, q, find θ1, θ2 with exp(ξ̂1θ1)exp(ξ̂2θ2)p = q.",
+     "feynman": "A Ferris wheel mounted on a turntable: first the wheel turns, then the turntable spins. Can you bring your seat to a given spot?",
+     "visual": "Two orange axes crossing at a teal point r; two knobs θ2 then θ1; the pink point p moves first around ξ2 then around ξ1; goal: land on gold q.",
+     "scene": "mls-pk-two-axis-swing",
+     "beat": "🔗 two swings in a row",
+     "math": [
+      "ik",
+      "screw-exp"
+     ],
+     "engine": [
+      "NEW: ik.subproblem2"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-100-h",
+     "lines": [
+      37,
+      37
+     ],
+     "kind": "page-number",
+     "idea": "Page number 100."
+    }
+   ]
+  },
+  {
+   "pdf": 119,
+   "book": 101,
+   "lines": 34,
+   "section": "3.3.2",
+   "summary": "Subproblem 2 solution: if axes coincide it is Subproblem 1; otherwise find the intermediate point c reached by the first rotation and by undoing the second (Eq 3.21-3.22); this gives height and length constraints (Eq 3.23) and c is written in the basis ω1, ω2, ω1×ω2 (Eq 3.24).",
+   "atoms": [
+    {
+     "id": "3-101-a",
+     "lines": [
+      1,
+      10
+     ],
+     "kind": "figure",
+     "label": "Fig 3.9",
+     "idea": "Subproblem 2: p swings about ξ2 by θ2 to c, then c swings about ξ1 by θ1 to q; both circles pass through c, and everything sits around the intersection r.",
+     "feynman": "Two hula hoops touching at a point: walk around the first hoop to the touching point, then switch hoops and walk to the goal.",
+     "visual": "The pink circle of p around ξ2 and the gold circle of q around ξ1 are drawn in full; lime dots mark where they cross (the candidate c points); orange arcs mark θ2 then θ1.",
+     "scene": "mls-pk-two-axis-swing",
+     "beat": "🪢 meet in the middle at c",
+     "math": [
+      "ik",
+      "rotation"
+     ],
+     "engine": [
+      "NEW: ik.subproblem2"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-101-b",
+     "lines": [
+      11,
+      16
+     ],
+     "kind": "prose",
+     "idea": "p is rotated about ξ2 by θ2 and then about ξ1 by θ1 to reach q. If the two axes coincide this is Subproblem 1, and any θ1 + θ2 equal to its answer works.",
+     "feynman": "If the Ferris wheel and the turntable spin around the same line, two turns are just one bigger turn split however you like.",
+     "visual": "Drag ξ2 onto ξ1: the two circles merge into one; a slider \"split\" shows many (θ1, θ2) pairs with the same sum all landing on q (lime fan).",
+     "scene": "mls-pk-two-axis-swing",
+     "beat": "🔗 two swings in a row",
+     "math": [
+      "rotation"
+     ],
+     "engine": [
+      "NEW: ik.subproblem2"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-101-c",
+     "lines": [
+      17,
+      20
+     ],
+     "kind": "equation",
+     "label": "Eq (3.21)",
+     "idea": "If the axes are not parallel (ω1×ω2 ≠ 0), let c be the point with exp(ξ̂2θ2)p = c = exp(−ξ̂1θ1)q: where p arrives after the first rotation, equivalently q rotated backward by the second.",
+     "feynman": "Two friends walking toward each other on different circular paths: meet at the crossing point, then continue together.",
+     "visual": "A \"meet in the middle\" button: p walks forward around ξ2 (pink trail) while q walks backward around ξ1 (gold trail); they meet at c, a lime dot.",
+     "scene": "mls-pk-two-axis-swing",
+     "beat": "🪢 meet in the middle at c",
+     "math": [
+      "ik"
+     ],
+     "engine": [
+      "NEW: ik.subproblem2"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-101-d",
+     "lines": [
+      21,
+      25
+     ],
+     "kind": "equation",
+     "label": "Eq (3.22)",
+     "idea": "Let r be the axes' intersection; subtracting it gives exp(ξ̂2θ2)(p−r) = c − r = exp(−ξ̂1θ1)(q−r).",
+     "feynman": "Measure everything from the hub where both axles meet.",
+     "visual": "The teal hub r lights up; arrows from r to p, c and q are drawn.",
+     "scene": "mls-pk-two-axis-swing",
+     "beat": "🪢 meet in the middle at c",
+     "math": [
+      "vectors"
+     ],
+     "engine": [
+      "NEW: ik.subproblem2"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-101-e",
+     "lines": [
+      26,
+      31
+     ],
+     "kind": "equation",
+     "label": "Eq (3.23)",
+     "idea": "With u = p − r, v = q − r, z = c − r: exp(ω̂2θ2)u = z = exp(−ω̂1θ1)v, so ω2ᵀu = ω2ᵀz, ω1ᵀv = ω1ᵀz, and |u| = |z| = |v|.",
+     "feynman": "All three points are the same distance from the hub (they live on one ball), and each rotation keeps the height along its own axis.",
+     "visual": "A purple translucent sphere centered at r passes through p, c and q; two height bars show ω2ᵀu = ω2ᵀz and ω1ᵀv = ω1ᵀz staying equal (lime) during the motion.",
+     "scene": "mls-pk-two-axis-swing",
+     "beat": "📐 build c from ω1, ω2, ω1×ω2",
+     "math": [
+      "vectors",
+      "rotation"
+     ],
+     "engine": [
+      "NEW: ik.subproblem2"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-101-f",
+     "lines": [
+      32,
+      33
+     ],
+     "kind": "equation",
+     "label": "Eq (3.24)",
+     "idea": "Since ω1, ω2, ω1×ω2 are independent, write z = αω1 + βω2 + γ(ω1×ω2).",
+     "feynman": "Any spot in a room can be reached by walking along the two hallway directions and then going up or down the stairs.",
+     "visual": "Build c from three arrows tip to tail from r: α along ω1 (orange), β along ω2 (orange), then γ along ω1×ω2 (blue, perpendicular to both).",
+     "scene": "mls-pk-two-axis-swing",
+     "beat": "📐 build c from ω1, ω2, ω1×ω2",
+     "math": [
+      "vectors"
+     ],
+     "engine": [
+      "NEW: ik.subproblem2"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-101-g",
+     "lines": [
+      34,
+      34
+     ],
+     "kind": "page-number",
+     "idea": "Page number 101."
+    }
+   ]
+  },
+  {
+   "pdf": 120,
+   "book": 102,
+   "lines": 41,
+   "section": "3.3.2",
+   "summary": "Solving for α, β from the height constraints, then γ² from |z| = |u| (Eq 3.25): 0, 1 or 2 real γ, matching 0/1/2 circle crossings; finish with two Subproblem-1 solves. Subproblem 3 stated (Eq 3.26): circle meets sphere.",
+   "atoms": [
+    {
+     "id": "3-102-a",
+     "lines": [
+      1,
+      2
+     ],
+     "kind": "equation",
+     "label": "Eq (3.25)",
+     "idea": "Then |z|² = α² + β² + 2αβ ω1ᵀω2 + γ²|ω1×ω2|².",
+     "feynman": "The length of a three-leg walk depends on each leg and on how much the first two legs lean together.",
+     "visual": "A length readout for z broken into colored pieces: α² and β² (orange), the overlap term (orange hatched), and γ² times |ω1×ω2|² (blue).",
+     "scene": "mls-pk-two-axis-swing",
+     "beat": "📐 build c from ω1, ω2, ω1×ω2",
+     "math": [
+      "vectors"
+     ],
+     "engine": [
+      "NEW: ik.subproblem2"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-102-b",
+     "lines": [
+      3,
+      11
+     ],
+     "kind": "equation",
+     "idea": "Substituting into the height constraints gives two linear equations, solved for α = ((ω1ᵀω2)ω2ᵀu − ω1ᵀv)/((ω1ᵀω2)² − 1) and β = ((ω1ᵀω2)ω1ᵀv − ω2ᵀu)/((ω1ᵀω2)² − 1).",
+     "feynman": "Two clues (one height per axis) pin down the two \"hallway\" steps uniquely.",
+     "visual": "The α and β arrows grow to their solved lengths while two height bars lock in lime; the tip lands on the line where the two height planes cross (drawn as a slate dashed line through the sphere).",
+     "scene": "mls-pk-two-axis-swing",
+     "beat": "📐 build c from ω1, ω2, ω1×ω2",
+     "math": [
+      "least-squares",
+      "vectors"
+     ],
+     "engine": [
+      "linalg.solve"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-102-c",
+     "lines": [
+      12,
+      17
+     ],
+     "kind": "equation",
+     "idea": "From |z|² = |u|²: γ² = (|u|² − α² − β² − 2αβω1ᵀω2)/|ω1×ω2|². Zero, one or two real γ, each giving a z and hence a c.",
+     "feynman": "The dashed line pokes through the ball: it can pierce it at two spots, graze it at one, or miss it.",
+     "visual": "The slate dashed line meets the purple sphere: two lime dots (±γ), one dot when tangent, or none with a coral flash; the γ² gauge goes negative exactly when the line misses.",
+     "scene": "mls-pk-two-axis-swing",
+     "beat": "⭕ circles cross: 0, 1 or 2",
+     "math": [
+      "vectors"
+     ],
+     "engine": [
+      "NEW: ik.subproblem2"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-102-d",
+     "lines": [
+      18,
+      24
+     ],
+     "kind": "prose",
+     "idea": "Finally solve exp(ξ̂2θ2)p = c and exp(−ξ̂1θ1)q = c with Subproblem 1; each c gives one (θ1, θ2). Two solutions when the circles cross twice, one when tangent, none when they miss.",
+     "feynman": "Once you know the meeting spot, each friend just needs one carousel turn to get there.",
+     "visual": "Two small Subproblem-1 carousels pop up (one per axis) and read off θ2 and θ1; dragging q makes the pink and gold circles go from crossing twice to touching to missing, with the solution counter 2 → 1 → 0.",
+     "scene": "mls-pk-two-axis-swing",
+     "beat": "🎠 finish with two carousels",
+     "math": [
+      "ik"
+     ],
+     "engine": [
+      "NEW: ik.subproblem1",
+      "NEW: ik.subproblem2"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-102-e",
+     "lines": [
+      25,
+      29
+     ],
+     "kind": "definition",
+     "label": "Eq (3.26)",
+     "idea": "Subproblem 3: given a unit zero-pitch twist ξ, points p, q, and δ > 0, find θ with |q − exp(ξ̂θ)p| = δ.",
+     "feynman": "Spin a carousel until your horse is exactly a rope's length away from a friend standing nearby.",
+     "visual": "Orange axis, pink p with its swing ring, gold q with a purple rope of length δ (slider); turning the knob moves p and a δ meter turns lime when the rope is exactly taut.",
+     "scene": "mls-pk-swing-to-distance",
+     "beat": "⚪ ring meets ball",
+     "math": [
+      "ik",
+      "screw-exp"
+     ],
+     "engine": [
+      "NEW: ik.subproblem3"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-102-f",
+     "lines": [
+      30,
+      33
+     ],
+     "kind": "prose",
+     "idea": "Geometrically: rotate p about the axis until it is distance δ from q; a solution exists iff the circle traced by p meets the sphere of radius δ around q.",
+     "feynman": "A hoop and a balloon: the horse's path (hoop) must poke through the balloon around your friend.",
+     "visual": "The pink ring and a purple translucent ball of radius δ around q; where the ring pierces the ball are lime dots (0, 1 or 2).",
+     "scene": "mls-pk-swing-to-distance",
+     "beat": "⚪ ring meets ball",
+     "math": [
+      "ik"
+     ],
+     "engine": [
+      "NEW: ik.subproblem3"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-102-g",
+     "lines": [
+      34,
+      40
+     ],
+     "kind": "equation",
+     "label": "Eq (3.27)",
+     "idea": "With r on the axis, u = p − r, v = q − r, the condition is |v − exp(ω̂θ)u|² = δ²; project to u′ = u − ωωᵀu, v′ = v − ωωᵀv.",
+     "feynman": "Again shine a light down the pole and look at shadows on the floor.",
+     "visual": "Teal drop-lines project u and v onto the disc normal to ω, giving u′ and v′.",
+     "scene": "mls-pk-swing-to-distance",
+     "beat": "🫓 squash onto the plane",
+     "math": [
+      "vectors"
+     ],
+     "engine": [
+      "NEW: ik.subproblem3"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-102-h",
+     "lines": [
+      41,
+      41
+     ],
+     "kind": "page-number",
+     "idea": "Page number 102."
+    }
+   ]
+  },
+  {
+   "pdf": 121,
+   "book": 103,
+   "lines": 38,
+   "section": "3.3.2",
+   "summary": "Subproblem 3 in the projected plane: δ′² = δ² − (ωᵀ(p−q))², θ0 is the angle from u′ to v′ (Eq 3.28), and the law of cosines gives θ = θ0 ± arccos(·) (Eq 3.29): 0, 1 or 2 solutions where two circles intersect.",
+   "atoms": [
+    {
+     "id": "3-103-a",
+     "lines": [
+      1,
+      12
+     ],
+     "kind": "figure",
+     "label": "Fig 3.10",
+     "idea": "Subproblem 3: (a) p swings around the axis to be δ from q, with the height gap ωᵀ(p−q); (b) the projected picture: a circle of radius |u′|, a circle of radius δ′ around v′, θ0 and θ, and a dashed flip solution.",
+     "feynman": "From above, it is two circles on the floor: the horse's path and the rope's reach. Where they cross are the answers.",
+     "visual": "Left: 3D ring, ball, and a vertical teal ruler for the height gap. Right: top-down disc with the pink circle |u′|, a gold circle of radius δ′ around v′, lime crossings, a dashed flip twin.",
+     "scene": "mls-pk-swing-to-distance",
+     "beat": "🫓 squash onto the plane",
+     "math": [
+      "ik"
+     ],
+     "engine": [
+      "NEW: ik.subproblem3"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-103-b",
+     "lines": [
+      13,
+      19
+     ],
+     "kind": "equation",
+     "idea": "Project δ too: δ′² = δ² − (ωᵀ(p−q))², so the condition becomes |v′ − exp(ω̂θ)u′|² = δ′².",
+     "feynman": "If your friend stands on a higher step, part of the rope is used up just going up; what is left reaches sideways (Pythagoras).",
+     "visual": "A right triangle drawn in teal: hypotenuse δ, vertical leg = height gap, horizontal leg = δ′; the ball's slice at p's height becomes the gold δ′ circle on the floor.",
+     "scene": "mls-pk-swing-to-distance",
+     "beat": "🫓 squash onto the plane",
+     "math": [
+      "vectors"
+     ],
+     "engine": [
+      "NEW: ik.subproblem3"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-103-c",
+     "lines": [
+      20,
+      23
+     ],
+     "kind": "equation",
+     "label": "Eq (3.28)",
+     "idea": "Let θ0 = atan2(ωᵀ(u′×v′), u′ᵀv′), the angle from u′ to v′.",
+     "feynman": "First note how far round the friend is from the horse, as if you wanted to bring the horse right in front of them.",
+     "visual": "An orange arc θ0 from u′ to v′ on the floor disc, read by the same atan2 dial as Subproblem 1.",
+     "scene": "mls-pk-swing-to-distance",
+     "beat": "📐 law of cosines",
+     "math": [
+      "rotation"
+     ],
+     "engine": [
+      "NEW: ik.subproblem3"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-103-d",
+     "lines": [
+      24,
+      28
+     ],
+     "kind": "equation",
+     "idea": "The triangle formed by the axis center, the rotated u′, and v′ has sides |u′|, |v′|, δ′ with angle φ = θ0 − θ at the center: |u′|² + |v′|² − 2|u′||v′|cosφ = δ′².",
+     "feynman": "A triangle made of two sticks from the pole and the rope: knowing all three lengths fixes the angle at the pole.",
+     "visual": "The blue triangle hub–p′–v′ with the angle φ highlighted at the hub; dragging δ′ makes φ open and close, the triangle stays closed (lime) while it can.",
+     "scene": "mls-pk-swing-to-distance",
+     "beat": "📐 law of cosines",
+     "math": [
+      "rotation"
+     ],
+     "engine": [
+      "NEW: ik.subproblem3"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-103-e",
+     "lines": [
+      29,
+      34
+     ],
+     "kind": "equation",
+     "label": "Eq (3.29)",
+     "idea": "Hence θ = θ0 ± arccos((|u′|² + |v′|² − δ′²)/(2|u′||v′|)).",
+     "feynman": "Stop a little before or a little after facing your friend: both spots are exactly a rope's length away.",
+     "visual": "Two orange arcs offset by ±φ from θ0; the solid arm lands on one crossing, a dashed flip twin on the other.",
+     "scene": "mls-pk-swing-to-distance",
+     "beat": "🔁 two answers: the flip",
+     "math": [
+      "ik"
+     ],
+     "engine": [
+      "NEW: ik.subproblem3"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-103-f",
+     "lines": [
+      35,
+      37
+     ],
+     "kind": "prose",
+     "idea": "Equation (3.29) has zero, one or two solutions according to how many points the circle of radius |u′| shares with the circle of radius δ′.",
+     "feynman": "Two hoops on the floor can cross twice, kiss once, or not touch at all.",
+     "visual": "Dragging the δ slider: two lime crossings → one (tangent) → none (coral), with the solution counter following; the arccos meter leaves [−1, 1] exactly when the circles part.",
+     "scene": "mls-pk-swing-to-distance",
+     "beat": "🔁 two answers: the flip",
+     "math": [
+      "ik"
+     ],
+     "engine": [
+      "NEW: ik.subproblem3"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-103-g",
+     "lines": [
+      38,
+      38
+     ],
+     "kind": "page-number",
+     "idea": "Page number 103."
+    }
+   ]
+  },
+  {
+   "pdf": 122,
+   "book": 104,
+   "lines": 45,
+   "section": "3.3.3",
+   "summary": "Two reduction tricks: apply the kinematics to a point on an axis to kill that joint, and subtract a point then take norms so rotations about it drop out. Example 3.5 (elbow IK) begins.",
+   "atoms": [
+    {
+     "id": "3-104-a",
+     "lines": [
+      1,
+      4
+     ],
+     "kind": "heading",
+     "idea": "Subsection 3.3 Solving inverse kinematics using subproblems: turning full IK into the subproblems."
+    },
+    {
+     "id": "3-104-b",
+     "lines": [
+      5,
+      18
+     ],
+     "kind": "equation",
+     "idea": "Trick 1: a revolute exponential fixes points on its own axis. For exp(ξ̂1θ1)exp(ξ̂2θ2)exp(ξ̂3θ3) = g, applying both sides to a point p on axis 3 gives exp(ξ̂1θ1)exp(ξ̂2θ2)p = gp, which is Subproblem 2 if axes 1 and 2 intersect.",
+     "feynman": "A pin stuck through the middle of a spinning wheel's axle doesn't move when the wheel spins, so watching that pin tells you nothing about the wheel and everything about the rest.",
+     "visual": "Place a teal pin on joint 3's axis: turning knob 3 leaves the pin perfectly still (a lime \"frozen\" halo), and knob 3 greys out in the equation strip; the remaining two-axis problem lights the 🪐 Subproblem 2 badge.",
+     "scene": "mls-ik-subproblem-tricks",
+     "beat": "📍 points on axes freeze joints",
+     "math": [
+      "ik",
+      "poe"
+     ],
+     "engine": [
+      "lie.expSE3",
+      "NEW: ik.subproblem2"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-104-c",
+     "lines": [
+      19,
+      34
+     ],
+     "kind": "equation",
+     "idea": "Trick 2: rigid motions keep distances. If axes 1 and 2 meet at q, apply the equation to a point p off axis 3, subtract q, and take norms: ‖gp − q‖ = ‖exp(ξ̂3θ3)p − q‖ because the first two rotations fix q and preserve length. This is Subproblem 3.",
+     "feynman": "Swing a tape measure tied to a pole: however you spin around the pole, the tape length to the pole never changes, so it only depends on the joint further out.",
+     "visual": "A teal tape measure from the hub q (where axes 1 and 2 meet) to the point p; spinning knobs 1 and 2 swings the tape but its length readout stays fixed (lime); only knob 3 changes the length, lighting the 📏 Subproblem 3 badge.",
+     "scene": "mls-ik-subproblem-tricks",
+     "beat": "📏 distances ignore rotations",
+     "math": [
+      "ik",
+      "rigid-transform"
+     ],
+     "engine": [
+      "NEW: ik.subproblem3"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-104-d",
+     "lines": [
+      35,
+      37
+     ],
+     "kind": "prose",
+     "idea": "Next: using the subproblems to solve IK of common manipulators (more in the exercises).",
+     "feynman": "Now that the tools are sharpened, let's build some real furniture.",
+     "visual": "Preset selector with two robots: 💪 elbow arm and 🦾 SCARA.",
+     "scene": "mls-ik-subproblem-tricks",
+     "beat": "💪 elbow: wrist center first",
+     "math": [
+      "ik"
+     ],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "3-104-e",
+     "lines": [
+      38,
+      44
+     ],
+     "kind": "example",
+     "label": "Ex 3.5",
+     "idea": "Example 3.5: the elbow manipulator (3 arm joints plus a spherical wrist) suits the subproblems; we must solve exp(ξ̂1θ1)…exp(ξ̂6θ6)g_st(0) = g_d.",
+     "feynman": "An arm with a ball-like wrist: first get the wrist to the right spot, then twist the hand.",
+     "visual": "Elbow preset with a gold ghost tool pose g_d; six knobs all unknown (slate \"?\" badges).",
+     "scene": "mls-ik-subproblem-tricks",
+     "beat": "💪 elbow: wrist center first",
+     "math": [
+      "ik",
+      "poe"
+     ],
+     "engine": [
+      "kinematics.poeFK"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-104-f",
+     "lines": [
+      45,
+      45
+     ],
+     "kind": "page-number",
+     "idea": "Page number 104."
+    }
+   ]
+  },
+  {
+   "pdf": 123,
+   "book": 105,
+   "lines": 38,
+   "section": "3.3.3",
+   "summary": "Elbow IK: move g_st(0) to the right (Eq 3.30); Step 1 applies the equation to the wrist center and measures distance from the shoulder point to get θ3 via Subproblem 3 (Eq 3.31-3.33); Step 2 gets θ1, θ2 via Subproblem 2 (Eq 3.34).",
+   "atoms": [
+    {
+     "id": "3-105-a",
+     "lines": [
+      1,
+      8
+     ],
+     "kind": "figure",
+     "label": "Fig 3.11",
+     "idea": "Elbow manipulator with axes ξ1…ξ6, the shoulder point p_b where axes 1 and 2 cross, and the wrist center q_w where the wrist axes cross.",
+     "feynman": "Your arm with two special spots marked: the shoulder ball and the wrist ball.",
+     "visual": "Elbow preset with two teal marker spheres: p_b at the shoulder crossing and the wrist center; orange axes ξ1..ξ6.",
+     "scene": "mls-ik-subproblem-tricks",
+     "beat": "💪 elbow: wrist center first",
+     "math": [
+      "poe"
+     ],
+     "engine": [
+      "kinematics.poeFrames"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-105-b",
+     "lines": [
+      9,
+      14
+     ],
+     "kind": "equation",
+     "label": "Eq (3.30)",
+     "idea": "Right-multiply by g_st(0)^{-1} to isolate the exponentials: exp(ξ̂1θ1)…exp(ξ̂6θ6) = g_d g_st(0)^{-1} =: g1. The solution proceeds in four steps.",
+     "feynman": "Subtract the home pose first so only the turns remain to be found.",
+     "visual": "The g(0) tile slides across the equals sign and flips into its inverse (slate), merging with the gold g_d into one gold tile g1; four step badges appear.",
+     "scene": "mls-ik-subproblem-tricks",
+     "beat": "💪 elbow: wrist center first",
+     "math": [
+      "rigid-transform"
+     ],
+     "engine": [
+      "lie.invSE3"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-105-c",
+     "lines": [
+      15,
+      20
+     ],
+     "kind": "equation",
+     "label": "Eq (3.31)",
+     "idea": "Step 1: apply both sides to the wrist center p_w; the wrist exponentials fix it, leaving exp(ξ̂1θ1)exp(ξ̂2θ2)exp(ξ̂3θ3)p_w = g1 p_w.",
+     "feynman": "Wherever you twist your hand, your wrist bone stays put; so the wrist location depends only on shoulder and elbow.",
+     "visual": "Teal pin at the wrist center: knobs 4, 5, 6 grey out (turning them leaves the pin fixed); a gold ghost pin shows where the pin must go (g1 p_w).",
+     "scene": "mls-ik-subproblem-tricks",
+     "beat": "💪 elbow: wrist center first",
+     "math": [
+      "ik"
+     ],
+     "engine": [
+      "NEW: ik.subproblem2"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-105-d",
+     "lines": [
+      21,
+      29
+     ],
+     "kind": "equation",
+     "label": "Eq (3.32)–(3.33)",
+     "idea": "Subtract the shoulder point p_b (on axes 1 and 2) and take norms: ‖exp(ξ̂3θ3)p_w − p_b‖ = ‖g1 p_w − p_b‖, since rotations about axes through p_b keep that distance.",
+     "feynman": "The distance from shoulder to wrist depends only on how bent the elbow is, no matter how the shoulder points.",
+     "visual": "Teal tape from shoulder p_b to wrist: spinning knobs 1, 2 doesn't change its length; the gold target length from p_b to the gold ghost wrist is shown alongside.",
+     "scene": "mls-ik-subproblem-tricks",
+     "beat": "💪 elbow: wrist center first",
+     "math": [
+      "ik",
+      "rigid-transform"
+     ],
+     "engine": [
+      "NEW: ik.subproblem3"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-105-e",
+     "lines": [
+      30,
+      31
+     ],
+     "kind": "prose",
+     "idea": "This is Subproblem 3 with p = p_w, q = p_b, δ = ‖g1 p_w − p_b‖, which yields θ3.",
+     "feynman": "Bend the elbow until shoulder-to-wrist equals the needed length.",
+     "visual": "The 📏 badge lights; the elbow knob turns until the tape matches the gold length; two elbow answers appear (solid and dashed ghost).",
+     "scene": "mls-ik-subproblem-tricks",
+     "beat": "💪 elbow: wrist center first",
+     "math": [
+      "ik"
+     ],
+     "engine": [
+      "NEW: ik.subproblem3"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-105-f",
+     "lines": [
+      32,
+      37
+     ],
+     "kind": "equation",
+     "label": "Eq (3.34)",
+     "idea": "Step 2: with θ3 known, exp(ξ̂1θ1)exp(ξ̂2θ2)(exp(ξ̂3θ3)p_w) = g1 p_w is Subproblem 2 for θ1, θ2.",
+     "feynman": "With the elbow set, aim the whole arm with the two shoulder motions so the wrist lands in place.",
+     "visual": "The 🪐 badge lights: the pink circle of the wrist around ξ2 and the gold circle around ξ1 cross; for each elbow branch up to two shoulder ghosts appear.",
+     "scene": "mls-ik-subproblem-tricks",
+     "beat": "💪 elbow: wrist center first",
+     "math": [
+      "ik"
+     ],
+     "engine": [
+      "NEW: ik.subproblem2"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-105-g",
+     "lines": [
+      38,
+      38
+     ],
+     "kind": "page-number",
+     "idea": "Page number 105."
+    }
+   ]
+  },
+  {
+   "pdf": 124,
+   "book": 106,
+   "lines": 43,
+   "section": "3.3.3",
+   "summary": "Elbow IK Steps 3-4: peel off the known joints (Eq 3.35), apply to a point on axis 6 for θ4, θ5 via Subproblem 2 (Eq 3.36), then θ6 via Subproblem 1 (Eq 3.37); up to 8 solutions. Example 3.6 starts SCARA IK: θ4 = z − l0 directly.",
+   "atoms": [
+    {
+     "id": "3-106-a",
+     "lines": [
+      1,
+      9
+     ],
+     "kind": "equation",
+     "label": "Eq (3.35)–(3.36)",
+     "idea": "Step 3: move the known arm exponentials right: exp(ξ̂4θ4)exp(ξ̂5θ5)exp(ξ̂6θ6) = exp(−ξ̂3θ3)exp(−ξ̂2θ2)exp(−ξ̂1θ1)g_d g_st(0)^{-1} =: g2. Apply to a point on axis 6 but off axes 4, 5, giving Subproblem 2 for θ4, θ5.",
+     "feynman": "With the wrist in place, point the hand: the last twist (spinning the hand around its own pointing direction) doesn't change where a dot on the fingertip line goes.",
+     "visual": "Solved arm knobs lock in orange; a teal pin on axis 6 makes knob 6 grey out; the 🪐 badge solves θ4, θ5 with two crossing circles centered at the wrist.",
+     "scene": "mls-ik-subproblem-tricks",
+     "beat": "🖐️ elbow: then the wrist",
+     "math": [
+      "ik"
+     ],
+     "engine": [
+      "NEW: ik.subproblem2"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-106-b",
+     "lines": [
+      10,
+      15
+     ],
+     "kind": "equation",
+     "label": "Eq (3.37)",
+     "idea": "Step 4: only θ6 remains; apply the rearranged equation to any point off axis 6 to get exp(ξ̂6θ6)p = q, solved by Subproblem 1.",
+     "feynman": "Last, roll the hand around its pointing line until the thumb is on the right side.",
+     "visual": "A teal point off axis 6; the 🎠 badge swings it onto its gold target; knob 6 locks in orange.",
+     "scene": "mls-ik-subproblem-tricks",
+     "beat": "🖐️ elbow: then the wrist",
+     "math": [
+      "ik"
+     ],
+     "engine": [
+      "NEW: ik.subproblem1"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-106-c",
+     "lines": [
+      16,
+      20
+     ],
+     "kind": "prose",
+     "idea": "Up to eight solutions arise from the branches of Eqs (3.33), (3.34), (3.36). Strategy: first position the wrist center with three angles, then orient with the wrist.",
+     "feynman": "Two choices of elbow × two of shoulder × two of wrist flips = 8 ways to hold the same cup.",
+     "visual": "A branching tree 2 → 4 → 8 grows beside the arm; tapping a leaf shows that ghost arm; all eight ghosts fan out together, each with the pink tool exactly on the gold pose.",
+     "scene": "mls-ik-subproblem-tricks",
+     "beat": "🔢 count the answers",
+     "math": [
+      "ik"
+     ],
+     "engine": [
+      "NEW: ik.subproblem1",
+      "NEW: ik.subproblem2",
+      "NEW: ik.subproblem3"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-106-d",
+     "lines": [
+      21,
+      33
+     ],
+     "kind": "example",
+     "label": "Ex 3.6",
+     "idea": "Example 3.6: SCARA IK. From Example 3.1, the tool pose is a z-rotation by φ at position (x, y, z); we solve for joints given x, y, z, φ (Eq 3.38).",
+     "feynman": "Tell the desk lamp where the bulb should be and which way it faces, and figure out the hinge angles.",
+     "visual": "SCARA preset with a draggable gold target: a dot in 3D with a heading arrow φ; the target equation tile g_d holds only φ and (x, y, z).",
+     "scene": "mls-ik-subproblem-tricks",
+     "beat": "🦾 SCARA in four moves",
+     "math": [
+      "ik"
+     ],
+     "engine": [
+      "kinematics.poeFK"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-106-e",
+     "lines": [
+      34,
+      42
+     ],
+     "kind": "equation",
+     "idea": "Applying the kinematics to the tool origin gives p(θ) = (x, y, z); the third component l0 + θ4 = z gives θ4 = z − l0 directly, without any subproblem.",
+     "feynman": "The elevator height is simply the target height minus the column height.",
+     "visual": "Dragging the gold target up and down moves only the slider joint; a height bar shows θ4 = z − l0; no badge is needed (a small ✓).",
+     "scene": "mls-ik-subproblem-tricks",
+     "beat": "🦾 SCARA in four moves",
+     "math": [
+      "ik"
+     ],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "3-106-f",
+     "lines": [
+      43,
+      43
+     ],
+     "kind": "page-number",
+     "idea": "Page number 106."
+    }
+   ]
+  },
+  {
+   "pdf": 125,
+   "book": 107,
+   "lines": 36,
+   "section": "3.3.3",
+   "summary": "SCARA IK continued: with θ4 known (Eq 3.39), a distance from axis 1 to axis 3 gives θ2 by Subproblem 3 (Eq 3.40), then θ1 and θ3 by Subproblem 1 (Eq 3.41); at most two solutions.",
+   "atoms": [
+    {
+     "id": "3-107-a",
+     "lines": [
+      1,
+      10
+     ],
+     "kind": "figure",
+     "label": "Fig 3.12",
+     "idea": "SCARA at its reference pose (same as Fig 3.3), with the axis points q1, q2, q3.",
+     "feynman": "The desk lamp again, stretched straight out.",
+     "visual": "SCARA preset home pose with teal axis points q1, q2, q3.",
+     "scene": "mls-ik-subproblem-tricks",
+     "beat": "🦾 SCARA in four moves",
+     "math": [
+      "poe"
+     ],
+     "engine": [
+      "kinematics.poeFrames"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "3-107-b",
+     "lines": [
+      11,
+      13
+     ],
+     "kind": "equation",
+     "label": "Eq (3.39)",
+     "idea": "Move θ4 to the right: exp(ξ̂1θ1)exp(ξ̂2θ2)exp(ξ̂3θ3) = g_d g_st(0)^{-1} exp(−ξ̂4θ4) =: g1.",
+     "feynman": "With the elevator height done, only the three swings are left.",
+     "visual": "The θ4 tile slides across the equals sign as its inverse and merges into a gold g1 tile; knob 4 locks in orange.",
+     "scene": "mls-ik-subproblem-tricks",
+     "beat": "🦾 SCARA in four moves",
+     "math": [
+      "rigid-transform"
+     ],
+     "engine": [
+      "lie.invSE3"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-107-c",
+     "lines": [
+      14,
+      22
+     ],
+     "kind": "equation",
+     "label": "Eq (3.40)",
+     "idea": "Apply to p on axis 3, subtract q on axis 1, take norms: ‖exp(ξ̂2θ2)p − q‖ = ‖g1 p − q‖ =: δ. Subproblem 3 gives θ2.",
+     "feynman": "How far the end hinge is from the base hinge depends only on the middle hinge bend.",
+     "visual": "Teal tape from base axis q to a pin on axis 3: knobs 1 and 3 leave its length fixed; knob 2 changes it; the 📏 badge finds two θ2 values (elbow left/right).",
+     "scene": "mls-ik-subproblem-tricks",
+     "beat": "🦾 SCARA in four moves",
+     "math": [
+      "ik"
+     ],
+     "engine": [
+      "NEW: ik.subproblem3"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-107-d",
+     "lines": [
+      23,
+      27
+     ],
+     "kind": "equation",
+     "idea": "Then θ1: apply the equation to a point p′ on axis 3 so θ3 drops out, giving exp(ξ̂1θ1)(exp(ξ̂2θ2)p′) = g1 p′: Subproblem 1.",
+     "feynman": "Now that the arm bend is known, swing the whole arm at the base until the end hinge is above the target.",
+     "visual": "The 🎠 badge swings the pinned axis-3 point around axis 1 onto its gold ghost; knob 1 locks.",
+     "scene": "mls-ik-subproblem-tricks",
+     "beat": "🦾 SCARA in four moves",
+     "math": [
+      "ik"
+     ],
+     "engine": [
+      "NEW: ik.subproblem1"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-107-e",
+     "lines": [
+      28,
+      33
+     ],
+     "kind": "equation",
+     "label": "Eq (3.41)",
+     "idea": "Finally exp(ξ̂3θ3) = exp(−ξ̂2θ2)exp(−ξ̂1θ1)g_d g_st^{-1}exp(−ξ̂4θ4); apply to any point off axis 3 and use Subproblem 1 for θ3.",
+     "feynman": "Last, turn the end hinge so the gripper faces the right way.",
+     "visual": "A teal point off axis 3 swings onto its gold ghost; the heading arrow at the tool matches φ (lime); knob 3 locks.",
+     "scene": "mls-ik-subproblem-tricks",
+     "beat": "🦾 SCARA in four moves",
+     "math": [
+      "ik"
+     ],
+     "engine": [
+      "NEW: ik.subproblem1"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-107-f",
+     "lines": [
+      34,
+      35
+     ],
+     "kind": "prose",
+     "idea": "The SCARA has at most two IK solutions, from the two roots of Eq (3.40).",
+     "feynman": "The lamp's middle hinge can bend left or right to reach the same spot.",
+     "visual": "A two-leaf tree; both ghost SCARAs (left-elbow and right-elbow) touch the gold target together.",
+     "scene": "mls-ik-subproblem-tricks",
+     "beat": "🔢 count the answers",
+     "math": [
+      "ik"
+     ],
+     "engine": [
+      "NEW: ik.subproblem3"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-107-g",
+     "lines": [
+      36,
+      36
+     ],
+     "kind": "page-number",
+     "idea": "Page number 107."
+    }
+   ]
+  },
+  {
+   "pdf": 126,
+   "book": 108,
+   "lines": 45,
+   "section": "3.3.4",
+   "summary": "Subproblems work mainly when axes intersect; for general arms, IK uses elimination theory (dialytic elimination) to reduce n polynomials in n unknowns to one polynomial in one unknown. Example 3.7 sets up three quadratic-type polynomials.",
+   "atoms": [
+    {
+     "id": "3-108-a",
+     "lines": [
+      1,
+      1
+     ],
+     "kind": "heading",
+     "idea": "Subsection 3.4 General solutions to inverse kinematics problems."
+    },
+    {
+     "id": "3-108-b",
+     "lines": [
+      2,
+      7
+     ],
+     "kind": "prose",
+     "idea": "The subproblems (and their exercise extensions) decompose IK for many arms, chiefly when some joint axes intersect.",
+     "feynman": "The three tools fit most furniture, but only furniture with the right kind of bolts (intersecting axes).",
+     "visual": "A gallery of arms: those with intersecting axes get a lime 🧰 badge; an arm with skewed, non-meeting axes gets a coral 🧰✗ badge.",
+     "scene": "mls-ik-elimination",
+     "beat": "🧱 stack the monomials",
+     "math": [
+      "ik"
+     ],
+     "engine": [],
+     "difficulty": 2
+    },
+    {
+     "id": "3-108-c",
+     "lines": [
+      8,
+      16
+     ],
+     "kind": "prose",
+     "idea": "General IK (no intersecting axes), planar or spatial, was an active research topic at the time: how many solutions there are and how to compute them in real time. A summary of the most general approaches follows.",
+     "feynman": "When the bolts don't line up, you need a universal method, and an open question is how many ways the arm could reach a spot at all.",
+     "visual": "The skewed-axis arm with a gold target and a \"?\" counter for the number of solutions.",
+     "scene": "mls-ik-elimination",
+     "beat": "🧱 stack the monomials",
+     "math": [
+      "ik"
+     ],
+     "engine": [],
+     "difficulty": 3
+    },
+    {
+     "id": "3-108-d",
+     "lines": [
+      17,
+      25
+     ],
+     "kind": "prose",
+     "idea": "These approaches rest on classical elimination theory: systematically eliminate n−1 variables from n polynomials in n unknowns to get one polynomial in one unknown. It is general but brute force, using only simple structure. The technique is called dialytic elimination.",
+     "feynman": "Like solving a sudoku by pure bookkeeping: keep combining rows until only one unknown is left in one equation.",
+     "visual": "Three equation cards with unknowns x1, x2, x3 drawn as colored beads; an \"eliminate\" button combines cards until only x1 beads remain on one card.",
+     "scene": "mls-ik-elimination",
+     "beat": "🧱 stack the monomials",
+     "math": [
+      "ik",
+      "matrix"
+     ],
+     "engine": [
+      "NEW: dialyticEliminate"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-108-e",
+     "lines": [
+      26,
+      40
+     ],
+     "kind": "example",
+     "label": "Ex 3.7",
+     "idea": "Example 3.7: three polynomials f1, f2, f3 in x1, x2, x3, each a linear combination (coefficients a_i…g_i) of the monomials x1², x1x2, x1x3, x2², x3, 1.",
+     "feynman": "Three shopping receipts, each listing how many of the same six item types were bought; we want the item prices that make all totals zero.",
+     "visual": "A 3×6 tile grid of real coefficients multiplying a column of six monomial beads (x1², x1x2, x1x3, x2², x3, 1); result column of three zeros.",
+     "scene": "mls-ik-elimination",
+     "beat": "🧱 stack the monomials",
+     "math": [
+      "matrix"
+     ],
+     "engine": [
+      "NEW: dialyticEliminate"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-108-f",
+     "lines": [
+      41,
+      44
+     ],
+     "kind": "prose",
+     "idea": "Goal: eliminate x2, x3 to get a single polynomial in x1, in two steps; Step 1 rewrites the system in x2, x3 (continues).",
+     "feynman": "First treat x1 as a known number, then only x2 and x3 are unknowns.",
+     "visual": "The x1 beads turn into a slider (orange knob); the grid tiles become small polynomials in x1.",
+     "scene": "mls-ik-elimination",
+     "beat": "🧱 stack the monomials",
+     "math": [
+      "matrix"
+     ],
+     "engine": [],
+     "difficulty": 3
+    },
+    {
+     "id": "3-108-g",
+     "lines": [
+      45,
+      45
+     ],
+     "kind": "page-number",
+     "idea": "Page number 108."
+    }
+   ]
+  },
+  {
+   "pdf": 127,
+   "book": 109,
+   "lines": 63,
+   "section": "3.3.4",
+   "summary": "Dialytic elimination: treat coefficients as polynomials in x1, multiply by x2 to add independent rows until the monomial count equals the equation count, form a square A(x1), and require det A(x1) = 0 (generically degree six); null vectors give x2, x3.",
+   "atoms": [
+    {
+     "id": "3-109-a",
+     "lines": [
+      1,
+      10
+     ],
+     "kind": "equation",
+     "idea": "Step 1: write the system as a 3×4 matrix whose entries are polynomials in x1, multiplying the monomials (x2², x3, x2, 1).",
+     "feynman": "Pretend one ingredient's amount is fixed; then the recipe is a smaller table in the remaining ingredients.",
+     "visual": "The grid shrinks to 3×4 with tiles that pulse as the x1 slider moves; four monomial beads in x2, x3 on the right.",
+     "scene": "mls-ik-elimination",
+     "beat": "🧱 stack the monomials",
+     "math": [
+      "matrix"
+     ],
+     "engine": [
+      "NEW: dialyticEliminate"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-109-b",
+     "lines": [
+      11,
+      23
+     ],
+     "kind": "equation",
+     "idea": "Step 2: create more independent polynomials until there are as many equations as unknown monomials. Multiplying f1, f2, f3 by x2 gives three new equations in x2³, x2x3, x2², x2.",
+     "feynman": "Making extra clues by doubling: multiply each clue by x2 to get new, different clues about bigger monomials.",
+     "visual": "Each row card is cloned and stamped \"× x2\"; the clone's beads shift up one degree (x2² → x2³, x3 → x2x3 …).",
+     "scene": "mls-ik-elimination",
+     "beat": "🧱 stack the monomials",
+     "math": [
+      "matrix"
+     ],
+     "engine": [
+      "NEW: dialyticEliminate"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-109-c",
+     "lines": [
+      24,
+      41
+     ],
+     "kind": "equation",
+     "idea": "Combining gives six equations in the six monomials x2³, x2x3, x2², x2, x3, 1: a square 6×6 matrix A(x1) times the monomial vector equals 0.",
+     "feynman": "Six clues and six unknown \"items\": now the puzzle is a square table.",
+     "visual": "The 3×4 original and 3×4 clone stack into a 6×6 tile grid (zero tiles in slate) multiplying a six-bead column; a \"square ✓\" badge appears.",
+     "scene": "mls-ik-elimination",
+     "beat": "🧱 stack the monomials",
+     "math": [
+      "matrix"
+     ],
+     "engine": [
+      "NEW: dialyticEliminate"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-109-d",
+     "lines": [
+      42,
+      46
+     ],
+     "kind": "equation",
+     "idea": "A nonzero monomial vector (its last entry is 1) can only be in the null space if det A(x1) = 0, so the system is equivalent to det A(x1) = 0, a polynomial in x1, generically of degree six, whose roots need not be real.",
+     "feynman": "A squishing machine can only flatten a non-zero arrow to nothing if it squashes space flat: its volume factor (determinant) must be zero.",
+     "visual": "Sweep the x1 slider: a plot draws det A(x1) as a blue curve; gold dots mark zero crossings; at each, the 6×6 grid visibly loses rank (a unit cube squashes flat).",
+     "scene": "mls-ik-elimination",
+     "beat": "🔳 determinant must vanish",
+     "math": [
+      "matrix",
+      "eigen"
+     ],
+     "engine": [
+      "linalg.det",
+      "NEW: dialyticEliminate"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-109-e",
+     "lines": [
+      47,
+      50
+     ],
+     "kind": "prose",
+     "idea": "The degree bounds the number of real solutions; for each real root x1, x2 and x3 are read off from the null vector of A(x1) scaled so its last entry is 1.",
+     "feynman": "Once you know x1, the flattened direction of the machine tells you the remaining prices directly.",
+     "visual": "At a gold root, the teal null-space column appears beside the grid, rescaled so its \"1\" bead is exactly 1; its x2 and x3 beads give the answer.",
+     "scene": "mls-ik-elimination",
+     "beat": "🔳 determinant must vanish",
+     "math": [
+      "matrix",
+      "svd"
+     ],
+     "engine": [
+      "linalg.svd"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-109-f",
+     "lines": [
+      51,
+      58
+     ],
+     "kind": "prose",
+     "idea": "If the null space has dimension greater than one (a repeated root), there may be several (x2, x3) for that x1; the null-space dimension bounds that multiplicity.",
+     "feynman": "Sometimes the machine flattens two directions at once, and there is more than one way to fill in the remaining prices.",
+     "visual": "At a double root, two teal null vectors appear and a small fan of (x2, x3) options lights up.",
+     "scene": "mls-ik-elimination",
+     "beat": "🔳 determinant must vanish",
+     "math": [
+      "matrix",
+      "svd"
+     ],
+     "engine": [
+      "linalg.svd"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "3-109-g",
+     "lines": [
+      59,
+      62
+     ],
+     "kind": "footnote",
+     "idea": "Footnotes: independence is meant over polynomials in x1; a monomial is a single product of powers such as x2x3 or x1³.",
+     "feynman": "A bead is one \"word\" like x2·x3; independent clues are ones you cannot get by mixing the others with x1-flavored multipliers.",
+     "visual": "Hovering a bead shows its monomial; hovering a row shows a lime \"new information\" tick if it is independent of the rows above.",
+     "scene": "mls-ik-elimination",
+     "beat": "🧱 stack the monomials",
+     "math": [
+      "matrix"
+     ],
+     "engine": [],
+     "difficulty": 2
+    },
+    {
+     "id": "3-109-h",
+     "lines": [
+      63,
+      63
+     ],
+     "kind": "page-number",
+     "idea": "Page number 109."
+    }
+   ]
+  },
+  {
+   "pdf": 128,
+   "book": 110,
+   "lines": 56,
+   "section": "3.3.4",
+   "summary": "Setting up general six-joint IK: write it in DH form, move the θ1, θ2 and θ6 link transforms to the right (Eq 3.43), name the columns of g_d g_{l6 t}^{-1} (Eq 3.44), and treat ci, si as polynomial unknowns so both sides are cubic.",
+   "atoms": [
+    {
+     "id": "3-110-a",
+     "lines": [
+      1,
+      10
+     ],
+     "kind": "equation",
+     "idea": "For a general 6-joint arm, the POE equation exp(ξ̂1θ1)…exp(ξ̂6θ6)g_st(0) = g_d is rewritten in DH form g_{l0 l1}(θ1)…g_{l5 l6}(θ6)g_{l6 t} = g_d, as in Eq (3.6).",
+     "feynman": "Use the bookkeeping style that makes the algebra simplest, even if it is less pretty.",
+     "visual": "The six-joint arm with no intersecting axes; its POE tile strip flips into a DH card strip (frames on each link).",
+     "scene": "mls-ik-elimination",
+     "beat": "🔧 rearrange the six joints",
+     "math": [
+      "dh",
+      "poe"
+     ],
+     "engine": [
+      "kinematics.dhChain"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-110-b",
+     "lines": [
+      11,
+      20
+     ],
+     "kind": "equation",
+     "label": "Eq (3.42)",
+     "idea": "Each DH link transform has the standard four-parameter pattern in (φi, αi, ai, di).",
+     "feynman": "Every link card is built from the same four-knob template.",
+     "visual": "A DH card opens to the four-slider glyph; joint slider orange, the other three slate fixed.",
+     "scene": "mls-ik-elimination",
+     "beat": "🔧 rearrange the six joints",
+     "math": [
+      "dh"
+     ],
+     "engine": [
+      "kinematics.dhTransform"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-110-c",
+     "lines": [
+      21,
+      33
+     ],
+     "kind": "equation",
+     "label": "Eq (3.43)",
+     "idea": "Rearrange as g_{l2l3}(θ3) g_{l3l4}(θ4) g_{l4l5}(θ5) = g_{l1l2}^{-1}(θ2) g_{l0l1}^{-1}(θ1) g_d g_{l6t}^{-1} g_{l5l6}^{-1}(θ6): the inverses of the θ1, θ2 and θ6 transforms are moved to the right side.",
+     "feynman": "Split a long equation down the middle so each side has about the same amount of unknown stuff.",
+     "visual": "Cards for θ1, θ2 and θ6 slide across the equals sign and flip to their inverses; the left keeps θ3, θ4, θ5, balancing at three each like a seesaw.",
+     "scene": "mls-ik-elimination",
+     "beat": "🔧 rearrange the six joints",
+     "math": [
+      "rigid-transform",
+      "dh"
+     ],
+     "engine": [
+      "lie.invSE3"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "3-110-d",
+     "lines": [
+      34,
+      46
+     ],
+     "kind": "equation",
+     "label": "Eq (3.44)",
+     "idea": "Write g_d g_{l6t}^{-1} as a 4×4 matrix with rotation columns l, m, n and translation q.",
+     "feynman": "The target pose, with the tool offset removed, is just three direction arrows and a position.",
+     "visual": "The gold target tile opens to three colored arrows l, m, n (red, green, blue) and a gold position dot q.",
+     "scene": "mls-ik-elimination",
+     "beat": "🔧 rearrange the six joints",
+     "math": [
+      "rigid-transform"
+     ],
+     "engine": [
+      "lie.homog"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "3-110-e",
+     "lines": [
+      47,
+      55
+     ],
+     "kind": "prose",
+     "idea": "Set ci = cos θi and si = sin θi and treat Eq (3.43) as polynomial in them; each link transform is degree ≤ 1 in its own ci, si, and the rearrangement makes both sides cubic. The elimination then reduces everything to θ3 (continues).",
+     "feynman": "Replace every angle by a pair of numbers (cos, sin) living on a circle; then the whole problem is about polynomials, which algebra can grind through.",
+     "visual": "Each orange knob turns into a point on a small unit circle with c and s readouts; a degree meter for each side reads 3.",
+     "scene": "mls-ik-elimination",
+     "beat": "➗ half-angle makes polynomials",
+     "math": [
+      "rotation",
+      "matrix"
+     ],
+     "engine": [],
+     "difficulty": 4
+    },
+    {
+     "id": "3-110-f",
+     "lines": [
+      56,
+      56
+     ],
+     "kind": "page-number",
+     "idea": "Page number 110."
+    }
+   ]
+  },
+  {
+   "pdf": 129,
+   "book": 111,
+   "lines": 44,
+   "section": "3.3.4",
+   "summary": "Steps 1-2 of the general method: the last two columns of Eq (3.43) do not depend on θ6; equating them gives six equations EQ1-EQ6 (Eq 3.45) in θ1…θ5, with auxiliary quantities built from DH parameters and the target pose.",
+   "atoms": [
+    {
+     "id": "3-111-a",
+     "lines": [
+      1,
+      3
+     ],
+     "kind": "prose",
+     "idea": "The steps are only sketched; full proofs are in the cited papers.",
+     "feynman": "A map of the trail, without every rock described.",
+     "visual": "A step tracker with eight numbered stones; a small 📄 icon marks that details live elsewhere.",
+     "scene": "mls-ik-elimination",
+     "beat": "🔧 rearrange the six joints",
+     "math": [
+      "ik"
+     ],
+     "engine": [],
+     "difficulty": 2
+    },
+    {
+     "id": "3-111-b",
+     "lines": [
+      4,
+      18
+     ],
+     "kind": "equation",
+     "idea": "Step 1: the third and fourth columns of the right side of Eq (3.43) do not depend on θ6; this follows from the explicit inverse of the DH link transform, whose last two columns contain no θ6.",
+     "feynman": "Spinning the hand around its own pointing direction doesn't change which way it points or where its base sits.",
+     "visual": "Turn knob 6: in the inverse DH card the first two columns flicker while the last two stay frozen (lime).",
+     "scene": "mls-ik-elimination",
+     "beat": "🔧 rearrange the six joints",
+     "math": [
+      "dh"
+     ],
+     "engine": [
+      "kinematics.dhTransform",
+      "linalg.inv"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "3-111-c",
+     "lines": [
+      19,
+      28
+     ],
+     "kind": "equation",
+     "label": "Eq (3.45)",
+     "idea": "Step 2: equating those columns gives six scalar equations EQ1-EQ6 linking c2, s2, c3, s3 with auxiliary quantities f, r (depending on θ4, θ5) and h, n (depending on θ1 and the target).",
+     "feynman": "Six balance scales, each with the arm's middle joints on one pan and the base joints plus target on the other.",
+     "visual": "Six seesaw icons; the left pan beads are θ3, θ4, θ5 colored, the right pan beads θ1, θ2 and gold target; each balances when the right angles are dialed in.",
+     "scene": "mls-ik-elimination",
+     "beat": "🔧 rearrange the six joints",
+     "math": [
+      "dh"
+     ],
+     "engine": [
+      "NEW: dialyticEliminate"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "3-111-d",
+     "lines": [
+      29,
+      43
+     ],
+     "kind": "equation",
+     "idea": "The auxiliary quantities f, r, g, m, h, n are explicit products of the ci, si with the DH constants (ai, di, μi = sin αi, λi = cos αi), and the target enters through p, q, r, u, v, w built from l, m, n, q and the last link's parameters.",
+     "feynman": "Bookkeeping labels for sub-totals, so the big equations fit on a page.",
+     "visual": "Hovering a seesaw bead expands it into a small tree of the c/s and DH constants it is built from.",
+     "scene": "mls-ik-elimination",
+     "beat": "🔧 rearrange the six joints",
+     "math": [
+      "dh"
+     ],
+     "engine": [],
+     "difficulty": 4
+    },
+    {
+     "id": "3-111-e",
+     "lines": [
+      44,
+      44
+     ],
+     "kind": "page-number",
+     "idea": "Page number 111."
+    }
+   ]
+  },
+  {
+   "pdf": 130,
+   "book": 112,
+   "lines": 47,
+   "section": "3.3.4",
+   "summary": "Step 3 regroups EQ1-EQ6 into two vector equations for p and l (Eq 3.46); Step 4 forms 14 equations from p, l, p·p, p·l, p×l and a combination, collected as P(s3,c3)·(θ4,θ5 monomials) = Q·(θ1,θ2 monomials) (Eq 3.47); Step 5 solves for the θ1,θ2 monomials when Q has rank 8.",
+   "atoms": [
+    {
+     "id": "3-112-a",
+     "lines": [
+      1,
+      12
+     ],
+     "kind": "equation",
+     "label": "Eq (3.46)",
+     "idea": "Step 3: regroup the six equations as two vector equations for p and l: (rotation in θ2)·h = (DH α2 matrix)(rotation in θ3)·f + const, and similarly with n and r.",
+     "feynman": "Pack six scalar scales into two arrow-balances, each comparing a 3D arrow from the base side with one from the wrist side.",
+     "visual": "Two pairs of 3D arrows (pink p, blue l) drawn from each side; they overlap (lime) when the angles are right.",
+     "scene": "mls-ik-elimination",
+     "beat": "🔧 rearrange the six joints",
+     "math": [
+      "rotation",
+      "dh"
+     ],
+     "engine": [],
+     "difficulty": 4
+    },
+    {
+     "id": "3-112-b",
+     "lines": [
+      13,
+      15
+     ],
+     "kind": "prose",
+     "idea": "Left sides are linear combinations of 1, c2, s2, c1, s1, c1c2, s1c2, s1s2; right sides combine (with s3, c3 coefficients) 1, c5, s5, c4, s4, c4c5, s4c5, s4s5.",
+     "feynman": "Each side is a short shopping list of the same kinds of items, just with different prices.",
+     "visual": "Two bead trays: one with eight θ1/θ2 product beads, one with eight θ4/θ5 product beads, each tray colored by joint.",
+     "scene": "mls-ik-elimination",
+     "beat": "🔧 rearrange the six joints",
+     "math": [
+      "matrix"
+     ],
+     "engine": [],
+     "difficulty": 4
+    },
+    {
+     "id": "3-112-c",
+     "lines": [
+      16,
+      32
+     ],
+     "kind": "equation",
+     "label": "Eq (3.47)",
+     "idea": "Step 4: p, l, p·p, p·l, p×l and (p·p)l − 2(p·l)p all keep the same functional form, giving 3+3+1+1+3+3 = 14 equations: P(s3,c3)·[s4s5, s4c5, c4s5, c4c5, s4, c4, s5, c5, 1] = Q·[s1s2, s1c2, c1s2, c1c2, s1, c1, s2, c2], with P 14×9 and Q a constant 14×8 matrix.",
+     "feynman": "Mixing clues by dot and cross products creates new clues that still speak the same \"language\" of beads, so we end up with 14 clues.",
+     "visual": "Fourteen row-tiles stack up (colored by origin: p, l, dots, cross, combo); a 14×9 grid P (pulsing with θ3) on the left and a static 14×8 grid Q on the right.",
+     "scene": "mls-ik-elimination",
+     "beat": "🔧 rearrange the six joints",
+     "math": [
+      "matrix"
+     ],
+     "engine": [
+      "NEW: dialyticEliminate"
+     ],
+     "difficulty": 5
+    },
+    {
+     "id": "3-112-d",
+     "lines": [
+      33,
+      46
+     ],
+     "kind": "equation",
+     "label": "Eq (3.48)",
+     "idea": "Step 5: if rank Q = 8, use 8 of the 14 equations to express the eight θ1,θ2 monomials in terms of the θ4,θ5 monomials; substituting into the other six gives Σ(c3,s3)·[θ4,θ5 monomials] = 0 (continues).",
+     "feynman": "Use eight clues to remove the base-joint unknowns entirely; six clues remain, involving only the middle and wrist joints.",
+     "visual": "Q's eight columns light up and are \"solved away\" (beads fade); the remaining six rows form a new 6×9 grid Σ, pulsing with θ3.",
+     "scene": "mls-ik-elimination",
+     "beat": "🔧 rearrange the six joints",
+     "math": [
+      "matrix",
+      "least-squares"
+     ],
+     "engine": [
+      "linalg.solve",
+      "NEW: dialyticEliminate"
+     ],
+     "difficulty": 5
+    },
+    {
+     "id": "3-112-e",
+     "lines": [
+      47,
+      47
+     ],
+     "kind": "page-number",
+     "idea": "Page number 112."
+    }
+   ]
+  },
+  {
+   "pdf": 131,
+   "book": 113,
+   "lines": 58,
+   "section": "3.3.4",
+   "summary": "Rank-deficient Q is deferred to the literature; Step 6 substitutes the tangent half-angle xi = tan(θi/2) to make equations polynomial (Eq 3.49); Step 7 multiplies by x4 to build a 12×12 dialytic system Σ̄ (Eq 3.50).",
+   "atoms": [
+    {
+     "id": "3-113-a",
+     "lines": [
+      1,
+      1
+     ],
+     "kind": "equation",
+     "idea": "Σ(c3, s3) is a 6×9 matrix.",
+     "feynman": "Six clues about nine bead types.",
+     "visual": "The Σ grid shows its size badge 6×9.",
+     "scene": "mls-ik-elimination",
+     "beat": "🔧 rearrange the six joints",
+     "math": [
+      "matrix"
+     ],
+     "engine": [],
+     "difficulty": 4
+    },
+    {
+     "id": "3-113-b",
+     "lines": [
+      2,
+      6
+     ],
+     "kind": "remark",
+     "idea": "If Q has rank k < 8, only k of the θ1,θ2 monomials can be eliminated, leaving six equations in more unknowns; details are in the cited paper.",
+     "feynman": "If some clues repeat each other, you cannot remove all unknowns, and a harder route is needed.",
+     "visual": "Rank slider on Q: below 8 some columns stay lit (coral) and a \"harder path\" sign appears.",
+     "scene": "mls-ik-elimination",
+     "beat": "⚠️ numerics matter",
+     "math": [
+      "matrix",
+      "svd"
+     ],
+     "engine": [
+      "linalg.svd"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "3-113-c",
+     "lines": [
+      7,
+      17
+     ],
+     "kind": "equation",
+     "idea": "Step 6: with Q of rank 8, substitute si = 2xi/(1+xi²), ci = (1−xi²)/(1+xi²), with xi = tan(θi/2), for i = 3, 4, 5.",
+     "feynman": "Every point on a circle can be reached by a straight line through the circle's bottom point: the slope of that line (half-angle tangent) labels the point without sines or cosines.",
+     "visual": "A unit circle with a line from its bottom point (−1) to the point at angle θ; the line hits a vertical ruler at x = tan(θ/2); dragging θ slides x (orange), and c, s readouts are rational functions of x.",
+     "scene": "mls-ik-elimination",
+     "beat": "➗ half-angle makes polynomials",
+     "math": [
+      "rotation"
+     ],
+     "engine": [
+      "NEW: halfAngleSub"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-113-d",
+     "lines": [
+      18,
+      35
+     ],
+     "kind": "equation",
+     "label": "Eq (3.49)",
+     "idea": "Clear denominators by multiplying by (1+x4²)(1+x5²), and the first four equations also by (1+x3²): Σ1(x3)·[x4²x5², x4²x5, x4², x4x5², x4x5, x4, x5², x5, 1] = 0. The first four rows are quadratic in x3; the last two are rational in x3 but any 6×6 minor is a polynomial in x3 (stated, needs proof).",
+     "feynman": "Multiply every clue by the same positive amounts to clear the fractions, like multiplying a recipe by the common denominator.",
+     "visual": "Fraction bars on the tiles vanish one by one as (1+x²) factors are multiplied in; the bead column becomes nine products of x4, x5 powers.",
+     "scene": "mls-ik-elimination",
+     "beat": "➗ half-angle makes polynomials",
+     "math": [
+      "matrix"
+     ],
+     "engine": [
+      "NEW: halfAngleSub"
+     ],
+     "difficulty": 5
+    },
+    {
+     "id": "3-113-e",
+     "lines": [
+      36,
+      57
+     ],
+     "kind": "equation",
+     "label": "Eq (3.50)",
+     "idea": "Step 7: dialytic elimination of x4, x5: multiply the six equations by x4 and stack with the originals to get a 12×12 system Σ̄ = [Σ1 0; 0 Σ1] (with 6×3 zero blocks) times 12 monomials equal to 0.",
+     "feynman": "The same trick as the small example: clone every clue with an extra x4 until the table is square.",
+     "visual": "The 6×9 grid clones itself, shifts three columns to the right (slate zero blocks fill the gaps), and the pair locks into a 12×12 square; a \"square ✓\" badge.",
+     "scene": "mls-ik-elimination",
+     "beat": "🔳 determinant must vanish",
+     "math": [
+      "matrix"
+     ],
+     "engine": [
+      "NEW: dialyticEliminate"
+     ],
+     "difficulty": 5
+    },
+    {
+     "id": "3-113-f",
+     "lines": [
+      58,
+      58
+     ],
+     "kind": "page-number",
+     "idea": "Page number 113."
+    }
+   ]
+  },
+  {
+   "pdf": 132,
+   "book": 114,
+   "lines": 44,
+   "section": "3.3.4",
+   "summary": "Step 8: det Σ̄ = 0 is a degree-16 polynomial in x3; back-substitute for the other angles and finish θ6 with Subproblem 1. Sixteen is a sharp upper bound for 6R arms (Lee and Liang); numerical drawbacks motivate a generalized eigenvalue formulation (Manocha and Canny).",
+   "atoms": [
+    {
+     "id": "3-114-a",
+     "lines": [
+      1,
+      4
+     ],
+     "kind": "equation",
+     "idea": "Step 8: det Σ̄ = 0 is a polynomial of degree 16 in x3. Solve for x3, then x4, x5 from the null space of Σ̄, then θ1, θ2 from Eq (3.47).",
+     "feynman": "Find the special values of one knob where the giant machine flattens; then everything else drops out like dominoes.",
+     "visual": "Sweep the x3 slider: a blue curve det Σ̄(x3) with up to 16 gold zero crossings; tapping one shows the teal null vector giving x4, x5, then θ1, θ2 lock in orange.",
+     "scene": "mls-ik-elimination",
+     "beat": "🔳 determinant must vanish",
+     "math": [
+      "matrix",
+      "eigen"
+     ],
+     "engine": [
+      "linalg.det",
+      "linalg.svd"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "3-114-b",
+     "lines": [
+      5,
+      12
+     ],
+     "kind": "equation",
+     "idea": "Only θ6 remains: with the others known, apply the POE equation to any point p to get exp(ξ̂6θ6)p = q, solved by Subproblem 1.",
+     "feynman": "The last hand-roll is the same carousel puzzle as before.",
+     "visual": "The 🎠 badge appears at the wrist; a teal point swings onto its gold target; knob 6 locks.",
+     "scene": "mls-ik-elimination",
+     "beat": "1️⃣6️⃣ at most sixteen",
+     "math": [
+      "ik"
+     ],
+     "engine": [
+      "NEW: ik.subproblem1"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "3-114-c",
+     "lines": [
+      13,
+      19
+     ],
+     "kind": "prose",
+     "idea": "The procedure gives a 16th-order polynomial in x3, which may or may not have 16 real roots. The elbow arm had at most 8 solutions, but if its wrist axes do not meet, it can have up to 16.",
+     "feynman": "A wrist with misaligned bolts can reach the same cup in more ways than a neat one.",
+     "visual": "Elbow-arm preset with a \"wrist offset\" slider: at zero offset the root counter shows ≤8; adding offset reveals more real roots on the curve, up to 16 ghost arms.",
+     "scene": "mls-ik-elimination",
+     "beat": "1️⃣6️⃣ at most sixteen",
+     "math": [
+      "ik"
+     ],
+     "engine": [
+      "NEW: dialyticEliminate"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "3-114-d",
+     "lines": [
+      20,
+      28
+     ],
+     "kind": "prose",
+     "idea": "Sixteen is the sharp upper bound for any 6-joint open-chain spatial arm (it is attained), far better than naive Bezout bounds; Lee and Liang first found these tricks (notably the rearrangement of Eq 3.43), settling earlier wrong conjectures.",
+     "feynman": "Sixteen is the most ways any six-hinge arm can hold one pose, and there really are arms that use all sixteen.",
+     "visual": "A fan of 16 ghost arms all touching one gold pose for a special arm; a counter shows \"16 / 16\"; a comparison bar shows the much larger naive bound shrinking to 16.",
+     "scene": "mls-ik-elimination",
+     "beat": "1️⃣6️⃣ at most sixteen",
+     "math": [
+      "ik"
+     ],
+     "engine": [
+      "NEW: dialyticEliminate"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "3-114-e",
+     "lines": [
+      29,
+      36
+     ],
+     "kind": "prose",
+     "idea": "Drawbacks: mostly numerical (determinants of ill-conditioned matrices), plus conceptual ones such as the rank < 8 case in Step 5 leading to overdetermined systems.",
+     "feynman": "Computing a giant determinant is like balancing a tower of many cards: tiny errors can topple it.",
+     "visual": "A conditioning meter next to the 12×12 grid: as x3 approaches some values, it turns coral and the det curve jitters with noise.",
+     "scene": "mls-ik-elimination",
+     "beat": "⚠️ numerics matter",
+     "math": [
+      "matrix",
+      "svd"
+     ],
+     "engine": [
+      "linalg.svd"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "3-114-f",
+     "lines": [
+      37,
+      43
+     ],
+     "kind": "prose",
+     "idea": "Recasting dialytic elimination as a generalized eigenvalue problem improves conditioning and speed, which matters for real-time IK, e.g. for obstacle avoidance in clutter.",
+     "feynman": "Instead of balancing the tall card tower, use a sturdy machine that finds all answers at once.",
+     "visual": "An \"eigen\" button replaces the jittery det curve with clean gold eigenvalue dots on the x3 axis; a stopwatch shows faster solve; the arm dodges slate obstacles using the solutions in real time.",
+     "scene": "mls-ik-elimination",
+     "beat": "⚠️ numerics matter",
+     "math": [
+      "eigen",
+      "ik"
+     ],
+     "engine": [
+      "NEW: generalizedEig"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "3-114-g",
+     "lines": [
+      44,
+      44
+     ],
+     "kind": "page-number",
+     "idea": "Page number 114."
+    }
+   ]
+  }
+ ]
+}

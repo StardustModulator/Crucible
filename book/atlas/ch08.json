@@ -1,0 +1,5035 @@
+{
+ "id": "ch08",
+ "title": "Nonholonomic Motion Planning",
+ "pdfPages": [
+  373,
+  412
+ ],
+ "sections": [
+  {
+   "id": "8",
+   "title": "Nonholonomic Motion Planning",
+   "book": 355
+  },
+  {
+   "id": "8.1",
+   "title": "Introduction",
+   "book": 355
+  },
+  {
+   "id": "8.2",
+   "title": "Steering Model Control Systems Using Sinusoids",
+   "book": 358
+  },
+  {
+   "id": "8.2.1",
+   "title": "First-order controllable systems: Brockett's system",
+   "book": 358
+  },
+  {
+   "id": "8.2.2",
+   "title": "Second-order controllable systems",
+   "book": 361
+  },
+  {
+   "id": "8.2.3",
+   "title": "Higher-order systems: chained form systems",
+   "book": 363
+  },
+  {
+   "id": "8.3",
+   "title": "General Methods for Steering",
+   "book": 366
+  },
+  {
+   "id": "8.3.1",
+   "title": "Fourier techniques",
+   "book": 367
+  },
+  {
+   "id": "8.3.2",
+   "title": "Conversion to chained form",
+   "book": 369
+  },
+  {
+   "id": "8.3.3",
+   "title": "Optimal steering of nonholonomic systems",
+   "book": 371
+  },
+  {
+   "id": "8.3.4",
+   "title": "Steering with piecewise constant inputs",
+   "book": 375
+  },
+  {
+   "id": "8.4",
+   "title": "Dynamic Finger Repositioning",
+   "book": 382
+  },
+  {
+   "id": "8.4.1",
+   "title": "Problem description",
+   "book": 382
+  },
+  {
+   "id": "8.4.2",
+   "title": "Steering using sinusoids",
+   "book": 383
+  },
+  {
+   "id": "8.4.3",
+   "title": "Geometric phase algorithm",
+   "book": 385
+  },
+  {
+   "id": "8.5",
+   "title": "Summary",
+   "book": 389
+  },
+  {
+   "id": "8.6",
+   "title": "Bibliography",
+   "book": 390
+  },
+  {
+   "id": "8.7",
+   "title": "Exercises",
+   "book": 391
+  }
+ ],
+ "scenes": [
+  {
+   "id": "mls-nh-planning-map",
+   "title": "Planning Toolbox",
+   "icon": "🗺️",
+   "section": "8.1",
+   "pages": [
+    355,
+    358
+   ],
+   "uses": [
+    "cspace",
+    "graph-search",
+    "rrt",
+    "optimization",
+    "trajectory"
+   ],
+   "exists": "cspace",
+   "brief": "Top-down parking lot: a blue cart with lime arrows forward/back and a coral ✖ sideways. A gold parking spot sits beside it. Beat 1: a holonomic planner draws a straight slate-dashed line sideways into the spot; the cart refuses and the line flashes coral. Beat 2: a cost meter (effort, length, time) and an orange throttle pinned at its stops, switching sides at orange tick marks (bang-bang). Beat 3: a branching tree of constant moves fans out from the cart (m branches per level, count m^d ticking up), leaves land near but not on the gold spot. Beat 4: three canonical Lego moves (turn-in-place loop, drive, turn) snap together to reach the spot. Beat 5: a chapter map of tiles (sinusoids, Fourier, chained form, optimal, piecewise constant, finger rolling) each lighting when hovered.",
+   "beats": [
+    "🚧 why ordinary planners fail",
+    "🏁 optimal: pay the cheapest price",
+    "🌳 tree of constant moves",
+    "🧩 canonical moves stitched",
+    "🗺️ chapter map"
+   ]
+  },
+  {
+   "id": "mls-brockett-sinusoids",
+   "title": "Circles Make Height",
+   "icon": "🌀",
+   "section": "8.2.1",
+   "pages": [
+    358,
+    361
+   ],
+   "uses": [
+    "vectors",
+    "ode",
+    "optimization",
+    "lagrange-dynamics",
+    "rotation"
+   ],
+   "exists": "ode",
+   "brief": "A 3D box: the floor is the (q1,q2) plane, the vertical axis is q3. Two orange joystick knobs push a blue bead around the floor; a pink shadow trail draws its floor path while the bead rises or sinks by the signed area swept (teal fill inside the loop, area readout = height). Beat 3 animates the optimal inputs as an orange arrow spinning at constant length on a dial (u(t)=e^{Λt}u0): the floor path is a perfect circle and a cost bar compares it with drawn squares and ellipses of equal area (circle wins). Beat 4 adds more knobs: m floor axes and a so(m) grid of heights, each driven by a pair of knobs spinning at harmonics 1,2,…; Beat 5 is the recipe: first slide the bead straight to its floor target, then trace a circle of the right area to lift it to the gold height.",
+   "beats": [
+    "🎮 two knobs, three states",
+    "📐 loop area = height",
+    "🌀 cheapest loop is a circle",
+    "🎼 more knobs, more harmonics",
+    "🪜 two-step recipe"
+   ]
+  },
+  {
+   "id": "mls-second-order-steering",
+   "title": "Beat Frequencies",
+   "icon": "🎶",
+   "section": "8.2.2",
+   "pages": [
+    361,
+    363
+   ],
+   "uses": [
+    "ode",
+    "convolution",
+    "vectors"
+   ],
+   "exists": "convolution",
+   "brief": "Five stacked strip-charts (q1, q2, q12, q121, q122), each a teal wave over one period with its net drift shown as a gold bar at the end. Two orange tone dials pick the frequency of u1 and u2 (1×, 2×, 3× base). A spectrum bar under each row shows which frequencies the state contains (sums and differences of its parents, drawn as colored ticks); a lime ✓ lights only when a zero-frequency tick appears, and that row alone ends displaced. A Jacobi triangle of three bracket arrows that cancel to zero explains why some rows are tied together (purple link).",
+   "beats": [
+    "🔺 one more bracket level",
+    "🔗 Jacobi ties the knots",
+    "🎶 frequencies add and subtract",
+    "🎯 nudge one state at a time"
+   ]
+  },
+  {
+   "id": "mls-chained-form",
+   "title": "Chained Form",
+   "icon": "⛓️",
+   "section": "8.2.3",
+   "pages": [
+    363,
+    366
+   ],
+   "uses": [
+    "ode",
+    "convolution",
+    "linearize"
+   ],
+   "exists": "ode",
+   "brief": "A vertical chain of n beads (q1…qn). Bead q2 is pulled by orange knob u2; each lower bead moves at a speed equal to the bead above it times the master knob u1 (a slider). Beat 2: a ladder of bracket arrows ad^k g1 g2 lights one new rung (coordinate axis) per bracket, alternating sign. Beat 3: u1 = a·sin(2πt), u2 = b·cos(2πkt) as two orange oscillators; each bead shows a spectrum dial whose dominant frequency drops by one per link until bead k+2 hits zero frequency (gold). Beat 5: drag a and b; a gold readout shows the net jump (a/4π)^k·b/k! matching the simulated RK4 result while all upper beads return home (lime rings).",
+   "beats": [
+    "⛓️ each link copies the one before",
+    "🪜 bracket ladder climbs one rung",
+    "🎼 slow push, fast wiggle",
+    "📉 frequencies step down to zero",
+    "🧾 the payout formula"
+   ]
+  },
+  {
+   "id": "mls-fourier-steering",
+   "title": "Fourier Steering",
+   "icon": "🤸",
+   "section": "8.3.1",
+   "pages": [
+    366,
+    369
+   ],
+   "uses": [
+    "convolution",
+    "ode",
+    "linearize",
+    "trajectory"
+   ],
+   "exists": "convolution",
+   "brief": "Left: a hopping robot in flight (blue body, orange hip angle ψ and leg length l). Right: a car (blue) with orange steering wheel. Beat 1: wiggle hip and leg in a sine/cosine pair; the body angle α creeps each cycle; repeat to cartwheel 2π. Beat 2: a Fourier bar chart of f(l(t)) shows β1, β2, …; only the first harmonic bar glows gold because it lines up with u1, the others integrate away (teal fades). Beat 3: car coordinates z=(x, φ, sin θ, y) laid beside a pure chain; the coral difference shrinks for small angles. Beat 4: the three-phase car maneuver A, B, C plays out with live Lissajous plots (x,φ two loops; x,θ one loop; x,y open curve that lifts y to gold).",
+   "beats": [
+    "🤸 hopper cartwheels in mid-air",
+    "🧮 only the first harmonic pays",
+    "🚗 car is nearly a chain",
+    "➰ Lissajous loops are brackets"
+   ]
+  },
+  {
+   "id": "mls-chained-conversion",
+   "title": "Become a Chain",
+   "icon": "🔄",
+   "section": "8.3.2",
+   "pages": [
+    369,
+    371
+   ],
+   "uses": [
+    "linearize",
+    "jacobian",
+    "derivative",
+    "ode"
+   ],
+   "exists": "linearize",
+   "brief": "Two panels: left the original system with curved blue flow lines of g1, g2; right the same motion in straightened z-coordinates where the flow lines become the stiff chain staircase. A morph slider blends the coordinate grid from curved to straight. Beat 2: nested translucent sheets Δ2 ⊂ Δ1 ⊂ Δ0 (each flat = involutive, lime; a twisted one turns coral). Beat 3: two height maps h1, h2 as colored contour lines: h1 contours stay parallel to Δ1 sheets and climb exactly 1 per unit along g1; h2 contours hug Δ2. Beat 4: a car whose x, y, θ, φ readouts become z1…z4 and the chain steering of the previous scene drives it.",
+   "beats": [
+    "🔄 new coordinates, new knobs",
+    "📚 nested flat families",
+    "🎯 find the two height maps",
+    "🚗 car becomes a chain"
+   ]
+  },
+  {
+   "id": "mls-optimal-steering",
+   "title": "Cheapest Steering",
+   "icon": "💰",
+   "section": "8.3.3",
+   "pages": [
+    371,
+    375
+   ],
+   "uses": [
+    "optimization",
+    "lagrange-dynamics",
+    "energy",
+    "rotation",
+    "gradient-descent",
+    "convolution"
+   ],
+   "exists": "optimization",
+   "brief": "Main canvas: a state point moving under orange inputs u with a gold target; a coral effort meter integrates |u|². Beat 2: a purple costate arrow p rides along; the Hamiltonian is a landscape and the input arrow always points to make p·g as negative as possible (u = −pᵀg). Beat 3: the input vector u is drawn on a dial; its tip stays on a circle of fixed radius while it turns (norm readout frozen). Beat 4: for Engel’s system the turning angle α behaves like a swinging pendulum (α̈ ∝ sin α) with an energy bar; elliptic-function wave shown. Beat 5: Ritz: a mixer board of Fourier-coefficient sliders per input; a cost readout = coefficient energy + γ·miss distance; gradient/Newton steps animate the sliders until the endpoint lands on gold.",
+   "beats": [
+    "💰 cost = squared effort",
+    "🧭 costate compass & Hamiltonian",
+    "⭕ effort stays on a circle",
+    "🌊 Engel: pendulum-like swing",
+    "🎛️ Ritz: tune Fourier knobs"
+   ]
+  },
+  {
+   "id": "mls-piecewise-steering",
+   "title": "Piecewise Steering",
+   "icon": "🧱",
+   "section": "8.3.4",
+   "pages": [
+    375,
+    381
+   ],
+   "uses": [
+    "screw-exp",
+    "poe",
+    "matrix",
+    "ode",
+    "optimization"
+   ],
+   "exists": "poe",
+   "brief": "Beat 1: a flow along one vector field drawn as a train of small straight steps converging to a curve (e^{tg}). Beat 2: a bookshelf of Philip Hall basis fields: shelf 1 holds g1, g2 (orange), shelf 2 [g1,g2], shelf 3 the double brackets (taller shelves are bracket depth); for nilpotent systems the shelves stop. Beat 3: every shelf gets a ghostly fictitious knob v_j; the Chen–Fliess–Sussmann coordinates h_j fill bars as you push the ghost knobs. Beat 4: a box loop (u1, u2, −u1, −u2 for √ε each) traced by a blue cart; the gap between start and end equals ε along the bracket direction, with a faint leak along the next shelf; an eight-leg loop with ∛ε isolates the deeper shelf. Beat 5: for non-nilpotent systems the shelf goes on forever; repeated corrections halve the distance to gold each pass.",
+   "beats": [
+    "🧱 flows as exponentials",
+    "🗂️ Philip Hall shelf of directions",
+    "👻 fictitious knobs on every shelf",
+    "🔁 box loop buys a bracket",
+    "♾️ not nilpotent: get closer"
+   ]
+  },
+  {
+   "id": "mls-finger-repositioning",
+   "title": "Finger Walk",
+   "icon": "✋",
+   "section": "8.4.1",
+   "pages": [
+    382,
+    384
+   ],
+   "uses": [
+    "jacobian",
+    "svd",
+    "forward-kinematics",
+    "ode"
+   ],
+   "exists": "jacobian",
+   "brief": "A three-fingered hand (orange joints, pink tips) holds a slate box fixed in place. Beat 2: a null-space slider moves the fingers while the box stays still (box motion readout locked at 0, lime). Beat 3: zoom on one ball-shaped fingertip on a flat face: five readouts (contact on finger, contact on face, contact angle) drawn as a chain. Beat 4: run sinusoidal inputs; the finger-contact plot traces a closed figure-eight (pink returns home) while the face-contact dot (teal) slides down the face to a gold mark.",
+   "beats": [
+    "✋ hold still, walk the fingers",
+    "🔀 null-space wiggles",
+    "⚽ ball-tip as a chain",
+    "∞ figure-eight walks the tip"
+   ]
+  },
+  {
+   "id": "mls-ch8-geometric-phase",
+   "title": "Geometric Phase",
+   "icon": "🌐",
+   "section": "8.4.3",
+   "pages": [
+    385,
+    388
+   ],
+   "uses": [
+    "rotation",
+    "derivative",
+    "ode"
+   ],
+   "exists": "rotation",
+   "brief": "A blue ball of adjustable radius rolls on a slate table without slipping; its contact point draws a pink curve on the ball and a teal curve on the table. Beat 2: draw any closed loop on the ball: the ball comes back to the same contact spot but twisted about the vertical by an angle Δψ, and a gold cap area readout on the unit sphere equals the twist (radius slider changes nothing). Beat 3: the four-leg path A→B→C→D→A on the table (legs x, π/2, π/2, x) moves the contact spot along the ball’s equator by distance l = 2(x − atan(2x/π)); drag l and x is solved live. Beat 4: the same area-equals-turn rule on a falling cat, a satellite spinning reaction wheels, and a paramecium with beating cilia.",
+   "beats": [
+    "🌐 roll a ball on the table",
+    "📐 twist = enclosed area",
+    "🟦 a square on the table moves the spot",
+    "🛰️ same trick: satellites & cilia"
+   ]
+  },
+  {
+   "id": "mls-ch8-recap",
+   "title": "Steering Recap",
+   "icon": "🧭",
+   "section": "8.5",
+   "pages": [
+    389,
+    390
+   ],
+   "uses": [
+    "optimization",
+    "convolution",
+    "ode",
+    "poe"
+   ],
+   "brief": "A shelf of six tool cards, each a thumbnail of the chapter scene it summarizes (circle loop, chain with sinusoids, conversion morph, constant-norm dial, box loop, rolling ball). Clicking a card replays a 3-second loop of that scene. Beat 2: a horizontal timeline of colored dots for the key ideas (classical nonholonomic mechanics, constructive controllability for mobile robots and rolling fingers, sinusoid steering, optimal-control structure, Ritz numerics, car-with-trailers parking), linked to the tools they produced.",
+   "beats": [
+    "🗺️ six tools on one shelf",
+    "📜 who found what, when"
+   ]
+  }
+ ],
+ "pages": [
+  {
+   "pdf": 373,
+   "book": 355,
+   "lines": 24,
+   "section": "8",
+   "summary": "Planning for nonholonomic systems must respect velocity constraints and avoid obstacles, which ordinary planners ignore.",
+   "atoms": [
+    {
+     "id": "8-355-a",
+     "lines": [
+      1,
+      3
+     ],
+     "kind": "heading",
+     "idea": "Chapter 8 title: planning motions for systems with nonholonomic constraints."
+    },
+    {
+     "id": "8-355-b",
+     "lines": [
+      4,
+      20
+     ],
+     "kind": "prose",
+     "idea": "Paths must satisfy the velocity constraints ω_i(q)q̇ = 0 and also miss obstacles (for rolling fingers: no finger–finger or finger–object collision). Standard planners assume any direction in configuration space is reachable, so their paths break nonholonomic constraints; dedicated methods are needed.",
+     "feynman": "A shopping cart can roll forward and back and turn, but its wheels refuse to slide sideways. A map app that draws a line straight sideways into the parking spot is useless for it: you need a plan the wheels can actually follow.",
+     "visual": "Top-down: blue cart, lime forward/back arrows, coral ✖ on the sideways arrow, slate obstacles, gold parking spot to the cart’s side. A slate-dashed straight path snaps in; press ▶ and the cart’s wheels lock, the path flashes coral. Toggle \"nonholonomic\" and a curvy lime path appears that the cart can follow.",
+     "scene": "mls-nh-planning-map",
+     "beat": "🚧 why ordinary planners fail",
+     "math": [
+      "cspace",
+      "graph-search"
+     ],
+     "engine": [
+      "NEW: unicycleStep",
+      "planning.astar"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "8-355-c",
+     "lines": [
+      21,
+      23
+     ],
+     "kind": "heading",
+     "idea": "Section 8.1 Introduction: overview of the general approaches and chapter plan."
+    },
+    {
+     "id": "8-355-d",
+     "lines": [
+      24,
+      24
+     ],
+     "kind": "page-number",
+     "idea": "Page number."
+    }
+   ]
+  },
+  {
+   "pdf": 374,
+   "book": 356,
+   "lines": 43,
+   "section": "8.1",
+   "summary": "Three families of planners: optimal control (often bang-bang), piecewise-constant input search, and nilpotent-system methods using the BCH formula.",
+   "atoms": [
+    {
+     "id": "8-356-a",
+     "lines": [
+      1,
+      7
+     ],
+     "kind": "prose",
+     "idea": "Optimal control picks, among all feasible trajectories, the one minimizing a cost functional such as path length, control energy, or travel time.",
+     "feynman": "Many routes get you home; you choose the one that uses the least gas, or the shortest, or the fastest — the \"price tag\" decides the route.",
+     "visual": "Several candidate lime paths from the cart to the gold spot, each with a coral cost bar beside it (toggle cost: length / effort / time). The cheapest path thickens and turns gold as the cost type changes.",
+     "scene": "mls-nh-planning-map",
+     "beat": "🏁 optimal: pay the cheapest price",
+     "math": [
+      "optimization",
+      "trajectory"
+     ],
+     "engine": [
+      "NEW: pathCost"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "8-356-b",
+     "lines": [
+      8,
+      16
+     ],
+     "kind": "prose",
+     "idea": "With bounded inputs it is natural to minimize time. For convex input sets the time-optimal inputs usually sit at their limits (bang-bang), switching between extreme values at some (possibly infinitely many) instants; planning reduces to choosing switch times and the extreme values between them.",
+     "feynman": "To win a go-kart race you hold the pedal flat and steer fully left or fully right — never halfway. The only decisions are when to flip.",
+     "visual": "Orange throttle and steering sliders snap only to their end stops; a timeline below shows orange tick marks at switch instants. Drag a tick: the cart’s path re-bends and a time readout updates; the fastest arrangement makes the readout turn gold.",
+     "scene": "mls-nh-planning-map",
+     "beat": "🏁 optimal: pay the cheapest price",
+     "math": [
+      "optimization"
+     ],
+     "engine": [
+      "NEW: bangBangSim"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-356-c",
+     "lines": [
+      17,
+      29
+     ],
+     "kind": "prose",
+     "idea": "A naive piecewise-constant planner applies every sequence of discretized constant inputs over fixed time slices, building a tree with m^d nodes after d steps; memory explodes, and the goal is generally reached only approximately, so post-processing is needed.",
+     "feynman": "Imagine trying every combination of \"left, straight, right\" for 10 seconds each: after a few moves you have thousands of possible places, and none is exactly your parking spot.",
+     "visual": "From the blue cart, a fan of lime branches grows level by level (one branch per input choice); a counter shows m^d nodes ballooning. Leaves are teal dots; the nearest one to the gold spot glows but leaves a coral miss distance.",
+     "scene": "mls-nh-planning-map",
+     "beat": "🌳 tree of constant moves",
+     "math": [
+      "graph-search",
+      "rrt"
+     ],
+     "engine": [
+      "NEW: constantInputTree"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "8-356-d",
+     "lines": [
+      30,
+      42
+     ],
+     "kind": "prose",
+     "idea": "Lafferriere and Sussmann give a general piecewise-constant method for nilpotent systems (all brackets beyond order k vanish), built on the Baker–Campbell–Hausdorff formula; for non-nilpotent systems it at least halves the distance to a nearby goal, so repeating it on small segments converges.",
+     "feynman": "Like parallel parking by repeating a small wiggle: each wiggle gets you at least halfway closer to the curb, so a few wiggles put you right there.",
+     "visual": "A cart repeats a box-shaped wiggle; a coral distance bar to the gold spot halves after each wiggle (1, ½, ¼ …) on a log scale, converging. A toggle \"nilpotent\" makes it land exactly in one shot.",
+     "scene": "mls-nh-planning-map",
+     "beat": "🌳 tree of constant moves",
+     "math": [
+      "optimization"
+     ],
+     "engine": [
+      "NEW: lafferriereSussmannStep"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-356-e",
+     "lines": [
+      43,
+      43
+     ],
+     "kind": "page-number",
+     "idea": "Page number."
+    }
+   ]
+  },
+  {
+   "pdf": 375,
+   "book": 357,
+   "lines": 41,
+   "section": "8.1",
+   "summary": "Canonical paths stitch special maneuvers together; the chapter outline runs from model systems to general methods to finger repositioning.",
+   "atoms": [
+    {
+     "id": "8-357-a",
+     "lines": [
+      1,
+      19
+     ],
+     "kind": "prose",
+     "idea": "Canonical-path planners pick a family of parameterized maneuvers (e.g. a pure net rotation of a car, or a straight drive) and compose them to reach any configuration; such families are problem-specific, sometimes derived from closed-form optimal paths, and were used for a spherical fingertip rolling on an object.",
+     "feynman": "Parking with a handful of practiced moves: \"turn on the spot\", \"drive straight\", \"turn again\". Any parking job is a mix of those three Lego bricks.",
+     "visual": "Three Lego bricks (turn-loop, straight, turn-loop) in blue; drag them onto a timeline. The cart executes them in order and ends on the gold spot; a knob per brick sets its angle/length.",
+     "scene": "mls-nh-planning-map",
+     "beat": "🧩 canonical moves stitched",
+     "math": [
+      "trajectory",
+      "cspace"
+     ],
+     "engine": [
+      "NEW: canonicalManeuver"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "8-357-b",
+     "lines": [
+      20,
+      20
+     ],
+     "kind": "heading",
+     "idea": "Outline of the chapter."
+    },
+    {
+     "id": "8-357-c",
+     "lines": [
+      21,
+      34
+     ],
+     "kind": "prose",
+     "label": "Eq (8.1)",
+     "idea": "Section 2 steers canonical \"model\" driftless systems q̇ = Σ g_i(q)u_i (Eq 8.1); for first-order systems the optimal inputs are sinusoids, which motivates sinusoidal steering of higher-order models and leads to chained-form systems.",
+     "feynman": "Learn to ride on training wheels first: a perfectly simple toy system shows the trick (wiggle in circles) before you try a real bike.",
+     "visual": "Chapter map: six tiles; the first tile (a circle loop lifting a bead) glows and a lime arrow points to a chain-of-beads tile.",
+     "scene": "mls-nh-planning-map",
+     "beat": "🗺️ chapter map",
+     "math": [
+      "ode"
+     ],
+     "engine": [
+      "NEW: driftlessStep"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "8-357-d",
+     "lines": [
+      35,
+      40
+     ],
+     "kind": "prose",
+     "idea": "Section 3 extends sinusoids to non-model systems by Fourier analysis, asks when a system can be converted to chained form, and approximates optimal inputs with a Ritz method.",
+     "feynman": "Once you can ride the toy, you learn how to tweak the trick for a real car whose steering is a bit bent.",
+     "visual": "Map tiles 2–4 light in turn: a Fourier bar chart, a morphing coordinate grid, a mixer board of sliders.",
+     "scene": "mls-nh-planning-map",
+     "beat": "🗺️ chapter map",
+     "math": [
+      "convolution",
+      "optimization"
+     ],
+     "engine": [
+      "NEW: driftlessStep"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "8-357-e",
+     "lines": [
+      41,
+      41
+     ],
+     "kind": "page-number",
+     "idea": "Page number."
+    }
+   ]
+  },
+  {
+   "pdf": 376,
+   "book": 358,
+   "lines": 36,
+   "section": "8.2",
+   "summary": "Outline ends with piecewise-constant steering and finger repositioning; Section 2 introduces Brockett’s first-order model system Eq (8.2).",
+   "atoms": [
+    {
+     "id": "8-358-a",
+     "lines": [
+      1,
+      5
+     ],
+     "kind": "prose",
+     "idea": "Remaining outline: piecewise-constant inputs for the general problem, then Section 4 applies these tools plus geometric \"canonical trajectory\" reasoning to sliding fingertips across a held object.",
+     "feynman": "Last stops on the tour: steering with step-like pushes, then a robot hand that walks its fingertips across a cup without letting go.",
+     "visual": "Map tiles 5–6 light: a box-shaped loop and a hand rolling a ball-tip across a box face.",
+     "scene": "mls-nh-planning-map",
+     "beat": "🗺️ chapter map",
+     "math": [
+      "ode"
+     ],
+     "engine": [
+      "NEW: driftlessStep"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "8-358-b",
+     "lines": [
+      6,
+      7
+     ],
+     "kind": "heading",
+     "idea": "Section 8.2 Steering model control systems using sinusoids."
+    },
+    {
+     "id": "8-358-c",
+     "lines": [
+      8,
+      20
+     ],
+     "kind": "prose",
+     "idea": "Model systems are canonical forms that, though they look unrelated to Chapter 7 examples, capture them. Brockett’s optimal-steering results motivate sinusoids at integer-related frequencies; the section starts with degree-two systems of growth vector (m, m(m+1)/2), then chained forms.",
+     "feynman": "Like learning music with a metronome: pure tones at 1×, 2×, 3× the beat are the clean building blocks every song is made of.",
+     "visual": "Two orange oscillators labeled 1× and 2× ticking in time; a blue bead in a 3D box rises a notch each time the oscillators complete a cycle.",
+     "scene": "mls-brockett-sinusoids",
+     "beat": "🎮 two knobs, three states",
+     "math": [
+      "convolution",
+      "ode"
+     ],
+     "engine": [
+      "dynamics.rk4"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "8-358-d",
+     "lines": [
+      21,
+      22
+     ],
+     "kind": "heading",
+     "idea": "Section 8.2.1 First-order controllable systems: Brockett's system."
+    },
+    {
+     "id": "8-358-e",
+     "lines": [
+      23,
+      29
+     ],
+     "kind": "definition",
+     "idea": "A first-order controllable system: the input fields g_i together with all first brackets [g_j,g_k], j<k, are independent and span the tangent space, which forces n = m + m(m−1)/2 = m(m+1)/2.",
+     "feynman": "With two knobs you can move in two directions directly, and wiggling them in a loop gives you exactly one more — so 2 knobs give 3 directions. With 3 knobs you get 3 + 3 = 6.",
+     "visual": "A counter panel: m orange knob icons; beneath, m lime arrows plus one teal bracket arrow per knob pair (drawn as a small loop icon between two knobs). Total = m(m+1)/2 updates as you add knobs.",
+     "scene": "mls-brockett-sinusoids",
+     "beat": "🎮 two knobs, three states",
+     "math": [
+      "vectors"
+     ],
+     "engine": [
+      "NEW: lieBracket"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-358-f",
+     "lines": [
+      30,
+      35
+     ],
+     "kind": "equation",
+     "label": "Eq (8.2)",
+     "idea": "Brockett’s system with m = 2, n = 3: q̇1 = u1, q̇2 = u2, q̇3 = q1u2 − q2u1.",
+     "feynman": "Pushing a toy on a table with two fingers (x and y) while a counter measures how much area your finger path has swept: going around a loop counter-clockwise winds the counter up.",
+     "visual": "Two orange knobs move the blue bead on the floor; the bead’s height q3 rises at the rate q1u2 − q2u1 (twice the swept area). A pink floor trail plus teal swept-area fill.",
+     "scene": "mls-brockett-sinusoids",
+     "beat": "🎮 two knobs, three states",
+     "math": [
+      "ode",
+      "vectors"
+     ],
+     "engine": [
+      "dynamics.rk4"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "8-358-g",
+     "lines": [
+      36,
+      36
+     ],
+     "kind": "page-number",
+     "idea": "Page number."
+    }
+   ]
+  },
+  {
+   "pdf": 377,
+   "book": 359,
+   "lines": 45,
+   "section": "8.2.1",
+   "summary": "Brockett’s fields have bracket (0,0,2); the least-squares steering problem is posed and its Euler–Lagrange equations show a constant multiplier and rotating inputs.",
+   "atoms": [
+    {
+     "id": "8-359-a",
+     "lines": [
+      1,
+      7
+     ],
+     "kind": "equation",
+     "idea": "g1 = (1,0,−q2), g2 = (0,1,q1), and [g1,g2] = (0,0,2): the system is maximally nonholonomic, degree 2, growth vector (2,3).",
+     "feynman": "Go east a bit, north a bit, west, south: you return over the same floor spot but the counter has gone up — the leftover is the \"third direction\".",
+     "visual": "Bracket demo: the bead traces a tiny square on the floor (orange segments g1, g2, −g1, −g2); at the end a gold vertical arrow shows the net lift = 2 × area.",
+     "scene": "mls-brockett-sinusoids",
+     "beat": "🎮 two knobs, three states",
+     "math": [
+      "vectors"
+     ],
+     "engine": [
+      "NEW: lieBracket"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-359-b",
+     "lines": [
+      8,
+      12
+     ],
+     "kind": "prose",
+     "idea": "Goal: steer Eq 8.2 from q0 at t=0 to qf at t=1 while minimizing the energy ∫₀¹ |u|² dt.",
+     "feynman": "Get the toy to the right spot and height while tiring your fingers as little as possible.",
+     "visual": "Gold target bead; a coral effort meter fills as ∫|u|² accumulates during the drive; try different loops and compare the final meter.",
+     "scene": "mls-brockett-sinusoids",
+     "beat": "🌀 cheapest loop is a circle",
+     "math": [
+      "optimization"
+     ],
+     "engine": [
+      "NEW: controlEnergy"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "8-359-c",
+     "lines": [
+      13,
+      19
+     ],
+     "kind": "equation",
+     "idea": "Since q̇i = ui, the third equation becomes the constraint q̇3 = q1q̇2 − q2q̇1, and the cost integrand is q̇1² + q̇2²; adjoin the constraint with multiplier λ(t) to get L = q̇1² + q̇2² + λ(q̇3 − q1q̇2 + q2q̇1).",
+     "feynman": "A rule you must obey becomes a price you pay: the multiplier λ is the fine per unit of breaking the rule, tuned so you never want to break it.",
+     "visual": "Equation tokens colored: orange q̇ terms (effort), purple λ·(constraint) term (constraint force). A purple spring between the bead and the allowed surface stays slack when the rule is met.",
+     "scene": "mls-brockett-sinusoids",
+     "beat": "🌀 cheapest loop is a circle",
+     "math": [
+      "lagrange-dynamics",
+      "optimization"
+     ],
+     "engine": [
+      "NEW: augmentedLagrangian"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-359-d",
+     "lines": [
+      20,
+      30
+     ],
+     "kind": "prose",
+     "idea": "Stationary trajectories satisfy the Euler–Lagrange equations of this augmented Lagrangian, the same equations as in mechanics because dynamics itself comes from a least-action principle; λ(t) is fixed by the constraint.",
+     "feynman": "A ball rolling in a bowl \"chooses\" its path to minimize action; our cheapest steering path obeys exactly the same kind of rule.",
+     "visual": "Side-by-side: a ball in a bowl (left) and the steering bead (right), both obeying d/dt ∂L/∂q̇ − ∂L/∂q = 0; the shared equation is shown in ∑ layer with tokens colored by picture.",
+     "scene": "mls-brockett-sinusoids",
+     "beat": "🌀 cheapest loop is a circle",
+     "math": [
+      "lagrange-dynamics"
+     ],
+     "engine": [
+      "NEW: eulerLagrangeResidual"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-359-e",
+     "lines": [
+      31,
+      38
+     ],
+     "kind": "equation",
+     "label": "Eq (8.3)",
+     "idea": "Euler–Lagrange equations: q̈1 + λq̇2 = 0, q̈2 − λq̇1 = 0, λ̇ = 0, so λ is constant.",
+     "feynman": "A charged particle in a constant magnetic field: its velocity just turns at a fixed rate — it goes in circles.",
+     "visual": "The bead’s velocity arrow (orange) turns at a constant rate λ while keeping length; a λ readout stays frozen (lime).",
+     "scene": "mls-brockett-sinusoids",
+     "beat": "🌀 cheapest loop is a circle",
+     "math": [
+      "ode",
+      "rotation"
+     ],
+     "engine": [
+      "dynamics.rk4"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-359-f",
+     "lines": [
+      39,
+      44
+     ],
+     "kind": "equation",
+     "idea": "Optimal inputs obey u̇ = Λu with Λ = [[0,−λ],[λ,0]] skew-symmetric.",
+     "feynman": "A merry-go-round turning at a steady speed: anything riding on it rotates, never stretches.",
+     "visual": "An orange input arrow on a dial rotating at constant angular speed; the 2×2 Λ matrix shown as a pure rotation generator acting on the dial grid.",
+     "scene": "mls-brockett-sinusoids",
+     "beat": "🌀 cheapest loop is a circle",
+     "math": [
+      "rotation",
+      "matrix"
+     ],
+     "engine": [
+      "lie.expSO3"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-359-g",
+     "lines": [
+      45,
+      45
+     ],
+     "kind": "page-number",
+     "idea": "Page number."
+    }
+   ]
+  },
+  {
+   "pdf": 378,
+   "book": 360,
+   "lines": 48,
+   "section": "8.2.1",
+   "summary": "Optimal inputs are rotations of u(0); returning (q1,q2) home forces λ = 2nπ, the cheapest is one full circle with |u0|² = 2πa; the m-input generalization lives on R^m × so(m).",
+   "atoms": [
+    {
+     "id": "8-360-a",
+     "lines": [
+      1,
+      6
+     ],
+     "kind": "equation",
+     "idea": "Because Λ is skew with constant λ, u(t) = e^{Λt}u(0): cosine/sine pairs at frequency λ.",
+     "feynman": "A clock hand sweeping steadily: its x and y shadows are a cosine and a sine.",
+     "visual": "The rotating orange arrow casts two shadows on side strip-charts: a cosine (x) and sine (y) wave drawn live.",
+     "scene": "mls-brockett-sinusoids",
+     "beat": "🌀 cheapest loop is a circle",
+     "math": [
+      "rotation"
+     ],
+     "engine": [
+      "lie.expSO3"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "8-360-b",
+     "lines": [
+      7,
+      16
+     ],
+     "kind": "equation",
+     "idea": "Since q1, q2 are directly steerable, the interesting task is (0,0,0) → (0,0,a). Integrating, (q1,q2)(t) = (e^{Λt} − I)Λ⁻¹u(0).",
+     "feynman": "To raise the toy without moving it on the table, your finger must draw a loop that ends where it began.",
+     "visual": "Bead starts at the origin; gold target directly above at height a. The floor trail is a circle passing through the origin; its center and radius follow from u(0) and λ.",
+     "scene": "mls-brockett-sinusoids",
+     "beat": "📐 loop area = height",
+     "math": [
+      "ode",
+      "matrix"
+     ],
+     "engine": [
+      "dynamics.rk4"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-360-c",
+     "lines": [
+      17,
+      22
+     ],
+     "kind": "equation",
+     "idea": "Returning to q1=q2=0 at t=1 requires e^{Λ} = I, so λ = 2nπ; then q3(1) = −|u(0)|²/λ = a.",
+     "feynman": "The loop has to close, so the clock hand must make a whole number of turns; the height gained is the area wrapped.",
+     "visual": "A λ slider snaps only to multiples of 2π (lime ticks); off-tick values leave a coral gap between path end and start. Height readout = −|u0|²/λ.",
+     "scene": "mls-brockett-sinusoids",
+     "beat": "📐 loop area = height",
+     "math": [
+      "rotation",
+      "ode"
+     ],
+     "engine": [
+      "dynamics.rk4"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-360-d",
+     "lines": [
+      23,
+      32
+     ],
+     "kind": "prose",
+     "idea": "Cost = |u(0)|² = −λa, minimized by n = −1: one circle, |u(0)|² = 2πa, with arbitrary direction of u(0); the optimal input is a sine/cosine pair at 2π/T.",
+     "feynman": "Of all fences enclosing the same garden area, the circle uses the least fence (and the least running). Go around once, not twice.",
+     "visual": "Draw any closed loop with the same area: a coral effort bar compares it to the circle (lime, shortest). Toggle n = 1, 2, 3 turns: smaller circles stacked, more effort.",
+     "scene": "mls-brockett-sinusoids",
+     "beat": "🌀 cheapest loop is a circle",
+     "math": [
+      "optimization"
+     ],
+     "engine": [
+      "NEW: controlEnergy"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-360-e",
+     "lines": [
+      33,
+      37
+     ],
+     "kind": "equation",
+     "label": "Eq (8.4)",
+     "idea": "m-input generalization: q̇i = ui and q̇ij = qiuj − qjui for i<j — one height per pair of knobs.",
+     "feynman": "With three fingers pushing a toy in 3D, each pair of fingers has its own area counter: xy, xz, yz.",
+     "visual": "m floor axes; a triangular grid of height counters (one per knob pair) beside the bead; each counter rises with the area swept in its pair-plane.",
+     "scene": "mls-brockett-sinusoids",
+     "beat": "🎼 more knobs, more harmonics",
+     "math": [
+      "vectors"
+     ],
+     "engine": [
+      "dynamics.rk4"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-360-f",
+     "lines": [
+      38,
+      43
+     ],
+     "kind": "equation",
+     "label": "Eq (8.5)",
+     "idea": "Compactly on R^m × so(m): q̇ = u, Ẏ = quᵀ − uqᵀ, with Y skew-symmetric collecting the pair areas.",
+     "feynman": "All the area counters fit in one antisymmetric table: the xy counter is minus the yx counter.",
+     "visual": "An m×m grid of colored cells; above the diagonal teal, below the mirrored value with opposite sign; cells fill as the bead moves.",
+     "scene": "mls-brockett-sinusoids",
+     "beat": "🎼 more knobs, more harmonics",
+     "math": [
+      "matrix"
+     ],
+     "engine": [
+      "NEW: soMatrix"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-360-g",
+     "lines": [
+      44,
+      47
+     ],
+     "kind": "equation",
+     "idea": "Euler–Lagrange: q̈ − Λq̇ = 0, Λ̇ = 0 with Λ ∈ so(m) the multiplier matrix.",
+     "feynman": "Same merry-go-round, but now in more dimensions: the velocity spins in several planes at once.",
+     "visual": "Velocity arrow in m-D shown as m/2 independent dials each turning at its own constant rate.",
+     "scene": "mls-brockett-sinusoids",
+     "beat": "🎼 more knobs, more harmonics",
+     "math": [
+      "lagrange-dynamics",
+      "rotation"
+     ],
+     "engine": [
+      "lie.expSO3"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "8-360-h",
+     "lines": [
+      48,
+      48
+     ],
+     "kind": "page-number",
+     "idea": "Page number."
+    }
+   ]
+  },
+  {
+   "pdf": 379,
+   "book": 361,
+   "lines": 35,
+   "section": "8.2.1",
+   "summary": "u(t) = e^{Λt}u(0) in SO(m); Brockett: optimal loops use harmonics 2π, 4π, …; Algorithm 1 steers base states then pair-areas; Section 2.2 starts second-order systems.",
+   "atoms": [
+    {
+     "id": "8-361-a",
+     "lines": [
+      1,
+      5
+     ],
+     "kind": "equation",
+     "idea": "Again Λ is constant and u(t) = e^{Λt}u(0) with e^{Λt} a rotation in SO(m).",
+     "feynman": "The input arrow is just being spun around; its length never changes.",
+     "visual": "Dial with orange arrow in m-D; a length readout stays fixed (lime).",
+     "scene": "mls-brockett-sinusoids",
+     "beat": "🎼 more knobs, more harmonics",
+     "math": [
+      "rotation"
+     ],
+     "engine": [
+      "lie.expSO3"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-361-b",
+     "lines": [
+      6,
+      14
+     ],
+     "kind": "theorem",
+     "idea": "Brockett: steering q from 0 back to 0 while Y goes 0 → given nonsingular Y(1) (m even) needs m/2 sinusoids at frequencies 2π, 2·2π, …, (m/2)·2π; for odd m with rank m−1, (m−1)/2 sinusoids at 2π … ((m−1)/2)·2π.",
+     "feynman": "A band where each pair of players hums its own note, one octave-step higher than the last: 1×, 2×, 3× the base beat.",
+     "visual": "m/2 dials spinning at speeds 1, 2, 3 (orange); a spectrum bar shows exactly these lines (gold), and the so(m) grid fills to the gold target pattern.",
+     "scene": "mls-brockett-sinusoids",
+     "beat": "🎼 more knobs, more harmonics",
+     "math": [
+      "convolution",
+      "rotation"
+     ],
+     "engine": [
+      "NEW: brockettHarmonics"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "8-361-c",
+     "lines": [
+      15,
+      18
+     ],
+     "kind": "prose",
+     "idea": "The proof is skipped; the fact motivates a simple steering algorithm for Eq 8.4.",
+     "feynman": "You don’t need to know why the band plays those notes to use them.",
+     "visual": "A greyed \"proof\" card flips to show the two-step recipe card.",
+     "scene": "mls-brockett-sinusoids",
+     "beat": "🪜 two-step recipe",
+     "math": [
+      "convolution"
+     ],
+     "engine": [
+      "NEW: brockettHarmonics"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "8-361-d",
+     "lines": [
+      19,
+      24
+     ],
+     "kind": "algorithm",
+     "label": "Algorithm 1",
+     "idea": "Steering first-order canonical systems: (1) drive the qi to their targets with any input, ignoring the qij; (2) apply integrally related sinusoids chosen so that the qij reach their targets while the qi return to where they were.",
+     "feynman": "Slide the toy to the right spot first, then draw a closed loop to wind the counter to the right number — the loop ends where it started, so the spot doesn’t change.",
+     "visual": "Two-stage play button: stage 1 a straight orange drag to the gold floor spot; stage 2 a circle (or harmonic loops) lifting the bead to the gold height; floor readouts stay lime during stage 2.",
+     "scene": "mls-brockett-sinusoids",
+     "beat": "🪜 two-step recipe",
+     "math": [
+      "ode"
+     ],
+     "engine": [
+      "NEW: steerBrockett"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "8-361-e",
+     "lines": [
+      25,
+      27
+     ],
+     "kind": "prose",
+     "idea": "The steps go by order: directly controlled states first, then the first-bracket directions.",
+     "feynman": "Fix the easy things first, then the tricky sideways ones.",
+     "visual": "Stage indicator: rung 0 (lime) then rung 1 (teal) on a two-step ladder.",
+     "scene": "mls-brockett-sinusoids",
+     "beat": "🪜 two-step recipe",
+     "math": [
+      "ode"
+     ],
+     "engine": [
+      "NEW: steerBrockett"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "8-361-f",
+     "lines": [
+      28,
+      28
+     ],
+     "kind": "heading",
+     "idea": "Section 8.2.2 Second-order controllable systems."
+    },
+    {
+     "id": "8-361-g",
+     "lines": [
+      29,
+      34
+     ],
+     "kind": "equation",
+     "label": "Eq (8.6)",
+     "idea": "When one level of brackets is not enough, add states driven by second-level products: q̇i = ui, q̇ij = qiuj, q̇ijk = qijuk (up to the Jacobi identity).",
+     "feynman": "Area counters of area counters: a counter that winds up when you loop while the first counter is already high.",
+     "visual": "Three tiers of beads: tier 0 driven by knobs, tier 1 by products of tier 0 and knobs, tier 2 by tier 1 times knobs; tiers drawn as a pyramid.",
+     "scene": "mls-second-order-steering",
+     "beat": "🔺 one more bracket level",
+     "math": [
+      "ode",
+      "vectors"
+     ],
+     "engine": [
+      "dynamics.rk4"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-361-h",
+     "lines": [
+      35,
+      35
+     ],
+     "kind": "page-number",
+     "idea": "Page number."
+    }
+   ]
+  },
+  {
+   "pdf": 380,
+   "book": 362,
+   "lines": 37,
+   "section": "8.2.2",
+   "summary": "The Jacobi identity ties some second-order states together; Algorithm 2 steers second-order model systems with sinusoids whose frequency sums and differences hit zero.",
+   "atoms": [
+    {
+     "id": "8-362-a",
+     "lines": [
+      1,
+      8
+     ],
+     "kind": "prose",
+     "idea": "Because [gi,[gj,gk]] + [gk,[gi,gj]] + [gj,[gk,gi]] = 0, not every q_ijk is independently controllable; e.g. q231 − q132 is a fixed function of lower states (q1q23 − q2q13).",
+     "feynman": "Three kids on a triangular seesaw: if two tilt, the third is forced. You can’t set all three on your own.",
+     "visual": "Jacobi triangle: three teal bracket arrows head-to-tail that close into a loop (sum = 0, lime ✓). Two second-order bead counters linked by a purple chain: move one and the other follows.",
+     "scene": "mls-second-order-steering",
+     "beat": "🔗 Jacobi ties the knots",
+     "math": [
+      "vectors"
+     ],
+     "engine": [
+      "NEW: lieBracket"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "8-362-b",
+     "lines": [
+      9,
+      13
+     ],
+     "kind": "equation",
+     "idea": "At most (m+1)m(m−1)/3 of the q_ijk are controllable (counting argument from Chapter 7, Exercise 17).",
+     "feynman": "Count the truly free counters after crossing out the ones the seesaw rule forces.",
+     "visual": "A grid of m³ candidate cells; cells forced by Jacobi grey out in purple; a counter shows the survivors = (m+1)m(m−1)/3 as you change m.",
+     "scene": "mls-second-order-steering",
+     "beat": "🔗 Jacobi ties the knots",
+     "math": [
+      "vectors"
+     ],
+     "engine": [
+      "NEW: hallBasisCount"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-362-c",
+     "lines": [
+      14,
+      19
+     ],
+     "kind": "prose",
+     "idea": "For these systems the multipliers are no longer constant; for m = 2 the optimal inputs are elliptic functions (Brockett–Dai). Still, Algorithm 1 can be extended.",
+     "feynman": "The perfect move becomes a lopsided swing instead of a steady circle — hard to compute, so we settle for a good-enough recipe.",
+     "visual": "Ghost of an elliptic-function wave (purple, uneven) next to a clean sinusoid (orange); a toggle chooses the \"good enough\" sinusoid.",
+     "scene": "mls-second-order-steering",
+     "beat": "🎶 frequencies add and subtract",
+     "math": [
+      "optimization"
+     ],
+     "engine": [
+      "NEW: steerSecondOrder"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "8-362-d",
+     "lines": [
+      20,
+      32
+     ],
+     "kind": "algorithm",
+     "label": "Algorithm 2",
+     "idea": "Steering second-order model systems: (1) set the qi (others drift); (2) set the qij with integrally related sinusoids — products of inputs at ωi, ωj contain ωi ± ωj, and a zero component gives net motion; (3) use a second sinusoid set with ωi ± ωj ≠ 0 but a zero component in ωi + ωj + ωk, moving the earlier states in closed loops and only q_ijk net.",
+     "feynman": "Two singers humming close notes make a slow \"wah-wah\" beat (the difference). Choose notes so that the beat vanishes exactly at the level you want to change — only that counter creeps.",
+     "visual": "Strip-charts for q1, q2, q12, q121, q122 with spectrum ticks per row (sums/differences of parent ticks). Orange dials pick ω1, ω2; the row whose spectrum contains a zero tick lights gold and ends displaced; all other rows end on their start (lime rings).",
+     "scene": "mls-second-order-steering",
+     "beat": "🎶 frequencies add and subtract",
+     "math": [
+      "convolution",
+      "ode"
+     ],
+     "engine": [
+      "NEW: steerSecondOrder"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "8-362-e",
+     "lines": [
+      33,
+      36
+     ],
+     "kind": "prose",
+     "idea": "Step 2 is identical to Algorithm 1; Step 3 is messy in general but simple for concrete systems, e.g. m = 2.",
+     "feynman": "The general rulebook is thick, but for a two-knob toy you can just do it by hand.",
+     "visual": "Switch to the m = 2 preset: five rows appear, ready for step 3.",
+     "scene": "mls-second-order-steering",
+     "beat": "🎯 nudge one state at a time",
+     "math": [
+      "ode"
+     ],
+     "engine": [
+      "NEW: steerSecondOrder"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "8-362-f",
+     "lines": [
+      37,
+      37
+     ],
+     "kind": "page-number",
+     "idea": "Page number."
+    }
+   ]
+  },
+  {
+   "pdf": 381,
+   "book": 363,
+   "lines": 38,
+   "section": "8.2.2",
+   "summary": "For m = 2, sin 2πt against cos 4πt moves q121 alone (by −a²b/16π²) and the swapped pair moves q122 alone (by a²b/32π²); chained-form systems introduced.",
+   "atoms": [
+    {
+     "id": "8-363-a",
+     "lines": [
+      1,
+      6
+     ],
+     "kind": "equation",
+     "idea": "m = 2 instance: q̇1 = u1, q̇2 = u2, q̇12 = q1u2, q̇121 = q12u1, q̇122 = q12u2.",
+     "feynman": "A five-bead abacus where lower beads move only when the bead above is off-center and you push.",
+     "visual": "Five beads in a pyramid (tier 0: q1,q2; tier 1: q12; tier 2: q121,q122), each linked by arrows from its driver.",
+     "scene": "mls-second-order-steering",
+     "beat": "🎯 nudge one state at a time",
+     "math": [
+      "ode"
+     ],
+     "engine": [
+      "dynamics.rk4"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-363-b",
+     "lines": [
+      7,
+      17
+     ],
+     "kind": "example",
+     "idea": "After Algorithm 1 for q1,q2,q12: u1 = a sin 2πt, u2 = b cos 4πt changes only q121, by −a²b/(16π²); swapping roles (u1 = b cos 4πt, u2 = a sin 2πt) changes only q122, by +a²b/(32π²).",
+     "feynman": "Hum one note and its octave: everything wobbles and returns, except one counter that ratchets by an amount proportional to (loudness of note 1)² × (loudness of note 2).",
+     "visual": "Sliders a, b (orange); play one period with RK4. q121 row ends displaced; a gold readout shows −a²b/16π² next to the simulated value (they match). Swap button moves q122 instead.",
+     "scene": "mls-second-order-steering",
+     "beat": "🎯 nudge one state at a time",
+     "math": [
+      "ode",
+      "convolution"
+     ],
+     "engine": [
+      "dynamics.rk4"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "8-363-c",
+     "lines": [
+      18,
+      22
+     ],
+     "kind": "prose",
+     "idea": "Each q_ijk needs its own step in these algorithms; mixing sinusoids and solving polynomial equations for the coefficients can move several at once (Exercise 4).",
+     "feynman": "Instead of fixing one dent at a time, plan a single wiggle that fixes all dents together — at the price of solving a little equation puzzle.",
+     "visual": "Multi-slider mode: four coefficient sliders per input; two gold targets for q121 and q122; a solver button adjusts sliders until both rows hit gold.",
+     "scene": "mls-second-order-steering",
+     "beat": "🎯 nudge one state at a time",
+     "math": [
+      "optimization"
+     ],
+     "engine": [
+      "NEW: steerSecondOrder"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "8-363-d",
+     "lines": [
+      23,
+      23
+     ],
+     "kind": "heading",
+     "idea": "Section 8.2.3 Higher-order systems: chained form systems."
+    },
+    {
+     "id": "8-363-e",
+     "lines": [
+      24,
+      37
+     ],
+     "kind": "prose",
+     "idea": "General higher-order canonical forms exist but are hard to steer with sinusoids; the chained systems are a special class that sinusoids at integer frequencies do steer. They are dual to the Goursat normal form, and many systems convert to them.",
+     "feynman": "A train: the engine pulls car 1, car 1 pulls car 2, and so on — each car only follows the one in front. That simple pulling chain is easy to drive with rhythm.",
+     "visual": "A vertical chain of beads hanging from an orange knob, each linked to the one above; a faint \"Goursat\" twin chain mirrored in purple shows the dual picture.",
+     "scene": "mls-chained-form",
+     "beat": "⛓️ each link copies the one before",
+     "math": [
+      "ode"
+     ],
+     "engine": [
+      "dynamics.rk4"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-363-f",
+     "lines": [
+      38,
+      38
+     ],
+     "kind": "page-number",
+     "idea": "Page number."
+    }
+   ]
+  },
+  {
+   "pdf": 382,
+   "book": 364,
+   "lines": 44,
+   "section": "8.2.3",
+   "summary": "The two-input one-chain system Eq (8.7)–(8.8) and Lemma 8.1: each further bracket with g1 lights up the next coordinate.",
+   "atoms": [
+    {
+     "id": "8-364-a",
+     "lines": [
+      1,
+      8
+     ],
+     "kind": "equation",
+     "label": "Eq (8.7)",
+     "idea": "One-chain system: q̇1 = u1, q̇2 = u2, q̇3 = q2u1, q̇4 = q3u1, …, q̇n = q_{n−1}u1.",
+     "feynman": "A car pulling trailers: the first input drives, the second steers, and each trailer’s heading creeps toward the one ahead only while you drive.",
+     "visual": "Bead chain: q2 pulled by knob u2; each lower bead’s speed = (bead above) × u1, drawn as a lime belt whose speed shows u1.",
+     "scene": "mls-chained-form",
+     "beat": "⛓️ each link copies the one before",
+     "math": [
+      "ode"
+     ],
+     "engine": [
+      "dynamics.rk4"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-364-b",
+     "lines": [
+      9,
+      22
+     ],
+     "kind": "equation",
+     "label": "Eq (8.8)",
+     "idea": "Vector-field form: g1 = (1, 0, q2, q3, …, q_{n−1}), g2 = (0, 1, 0, …, 0).",
+     "feynman": "One knob is the \"go\" pedal that also shifts every link by the link above; the other knob just turns the first link.",
+     "visual": "Two arrow-fields over a slice of state space: g2 straight up (orange), g1 tilted by the current bead values (blue arrows changing with position).",
+     "scene": "mls-chained-form",
+     "beat": "⛓️ each link copies the one before",
+     "math": [
+      "vectors"
+     ],
+     "engine": [
+      "control.vectorField"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-364-c",
+     "lines": [
+      23,
+      28
+     ],
+     "kind": "definition",
+     "idea": "Call Eq 8.7 the one-chain system. Iterated brackets: ad_{g1}g2 = [g1,g2], ad^k_{g1}g2 = [g1, ad^{k−1}_{g1}g2].",
+     "feynman": "Wiggling the steering inside a drive-loop, then wiggling that inside another drive-loop: each nesting reaches one trailer further.",
+     "visual": "A nested-loop icon: loop inside loop inside loop; each nesting level highlights the next bead in the chain.",
+     "scene": "mls-chained-form",
+     "beat": "🪜 bracket ladder climbs one rung",
+     "math": [
+      "vectors"
+     ],
+     "engine": [
+      "NEW: lieBracket"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-364-d",
+     "lines": [
+      29,
+      42
+     ],
+     "kind": "lemma",
+     "label": "Lemma 8.1",
+     "idea": "For the chain fields, ad^k_{g1}g2 = (−1)^k e_{k+2}: a single nonzero entry in slot k+2 with alternating sign.",
+     "feynman": "Each extra nesting of the wiggle moves exactly the next trailer — first backwards, then forwards, alternating.",
+     "visual": "Ladder of coordinate axes e3, e4, …; pressing \"+bracket\" lights the next rung with an arrow pointing up (+) or down (−) alternately; all other entries shown as zero dots.",
+     "scene": "mls-chained-form",
+     "beat": "🪜 bracket ladder climbs one rung",
+     "math": [
+      "vectors"
+     ],
+     "engine": [
+      "NEW: lieBracket"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-364-e",
+     "lines": [
+      43,
+      43
+     ],
+     "kind": "proof",
+     "idea": "Proof by induction, starting from the first two brackets because the first level is irregular.",
+     "feynman": "Check the first two rungs by hand, then show \"if a rung works, the next one does too\".",
+     "visual": "Staircase: first two steps drawn solid, then a domino animation knocking the rest.",
+     "scene": "mls-chained-form",
+     "beat": "🪜 bracket ladder climbs one rung",
+     "math": [
+      "vectors"
+     ],
+     "engine": [
+      "NEW: lieBracket"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-364-f",
+     "lines": [
+      44,
+      44
+     ],
+     "kind": "page-number",
+     "idea": "Page number."
+    }
+   ]
+  },
+  {
+   "pdf": 383,
+   "book": 365,
+   "lines": 49,
+   "section": "8.2.3",
+   "summary": "Proof of Lemma 8.1, controllability of the one-chain (Prop 8.2), and Algorithm 3: u1 = a sin 2πt, u2 = b cos 2πkt moves only q_{k+2}.",
+   "atoms": [
+    {
+     "id": "8-365-a",
+     "lines": [
+      1,
+      14
+     ],
+     "kind": "proof",
+     "idea": "Base cases: [g1,g2] = −e3 and [g1,[g1,g2]] = +e4.",
+     "feynman": "First two dominoes: one wiggle shifts trailer 1 backward, a wiggle-inside-a-wiggle shifts trailer 2 forward.",
+     "visual": "Staircase step 1: compute brackets numerically by tiny flows; arrows appear at e3 (coral, down) and e4 (lime, up).",
+     "scene": "mls-chained-form",
+     "beat": "🪜 bracket ladder climbs one rung",
+     "math": [
+      "vectors"
+     ],
+     "engine": [
+      "NEW: lieBracket"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-365-b",
+     "lines": [
+      15,
+      31
+     ],
+     "kind": "proof",
+     "idea": "Inductive step: bracketing (−1)^k e_{k+2} with g1 gives (−1)^{k+1} e_{k+3}, since only the q_{k+2} entry of g1 depends on that coordinate.",
+     "feynman": "If one domino falls, it knocks the next one, with the sign flipping each time.",
+     "visual": "Staircase step 2: domino row of rungs; each falls onto the next, flipping arrow direction.",
+     "scene": "mls-chained-form",
+     "beat": "🪜 bracket ladder climbs one rung",
+     "math": [
+      "vectors"
+     ],
+     "engine": [
+      "NEW: lieBracket"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-365-c",
+     "lines": [
+      32,
+      33
+     ],
+     "kind": "proposition",
+     "label": "Prop 8.2",
+     "idea": "The one-chain system is completely nonholonomic, hence controllable.",
+     "feynman": "With the trailer trick, you can put every trailer anywhere.",
+     "visual": "All n rungs lit lime = full rank; a gold ✓ appears.",
+     "scene": "mls-chained-form",
+     "beat": "🪜 bracket ladder climbs one rung",
+     "math": [
+      "vectors"
+     ],
+     "engine": [
+      "NEW: lieBracket"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "8-365-d",
+     "lines": [
+      34,
+      36
+     ],
+     "kind": "proof",
+     "idea": "g1, g2 and ad^i_{g1}g2 for 1 ≤ i ≤ n−2 give n independent fields by Lemma 8.1.",
+     "feynman": "Count the directions you can push: n of them, all different — enough.",
+     "visual": "Rank meter fills to n as rungs light.",
+     "scene": "mls-chained-form",
+     "beat": "🪜 bracket ladder climbs one rung",
+     "math": [
+      "matrix"
+     ],
+     "engine": [
+      "linalg.svd"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "8-365-e",
+     "lines": [
+      37,
+      41
+     ],
+     "kind": "prose",
+     "idea": "Heuristic: with u1 = sin 2πt and u2 = cos 2πkt, q3 carries frequency 2π(k−1), q4 2π(k−2), …, and q_{k+2} gets a zero-frequency part, so it drifts while earlier states return.",
+     "feynman": "Each trailer hears the beat of the one before, slowed by one notch. The k-th trailer down hears a beat that has slowed to a stop — a steady push — so it alone moves.",
+     "visual": "Each bead has a spectrum dial; play the inputs and watch the dominant tick step down 1 per link until a gold zero tick appears at bead k+2.",
+     "scene": "mls-chained-form",
+     "beat": "📉 frequencies step down to zero",
+     "math": [
+      "convolution"
+     ],
+     "engine": [
+      "NEW: chainSpectrum"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-365-f",
+     "lines": [
+      42,
+      48
+     ],
+     "kind": "algorithm",
+     "label": "Algorithm 3",
+     "idea": "Steering chained form: (1) set q1, q2; (2) for each q_{k+2}, k ≥ 1, apply u1 = a sin 2πt, u2 = b cos 2πkt with (a/4π)^k b/k! equal to the needed change.",
+     "feynman": "Fix the engine and first car, then for each trailer down the line play the matching rhythm once to nudge just that trailer.",
+     "visual": "Algorithm runner: step buttons per bead; each step plays the oscillators (orange) for one period; the targeted bead jumps to gold, the rest end where they started.",
+     "scene": "mls-chained-form",
+     "beat": "🎼 slow push, fast wiggle",
+     "math": [
+      "ode",
+      "convolution"
+     ],
+     "engine": [
+      "NEW: steerChained"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-365-g",
+     "lines": [
+      49,
+      49
+     ],
+     "kind": "page-number",
+     "idea": "Page number."
+    }
+   ]
+  },
+  {
+   "pdf": 384,
+   "book": 366,
+   "lines": 53,
+   "section": "8.2.3",
+   "summary": "Prop 8.3: Algorithm 3 works — only zero-frequency terms survive, giving q_{k+2} a jump of (a/4π)^k b/k!; Section 3 begins on general steering.",
+   "atoms": [
+    {
+     "id": "8-366-a",
+     "lines": [
+      1,
+      2
+     ],
+     "kind": "proposition",
+     "label": "Prop 8.3",
+     "idea": "Algorithm 3 can steer the one-chain system to any configuration.",
+     "feynman": "The trailer-rhythm recipe can park every trailer anywhere.",
+     "visual": "Random gold target configuration; run the algorithm; every bead lands on gold.",
+     "scene": "mls-chained-form",
+     "beat": "🎼 slow push, fast wiggle",
+     "math": [
+      "ode"
+     ],
+     "engine": [
+      "NEW: steerChained"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "8-366-b",
+     "lines": [
+      3,
+      11
+     ],
+     "kind": "proof",
+     "idea": "Constructive proof: products of sinusoids split into sums at frequencies shifted by ±1 step; a state changes over a period only via its zero-frequency component, so only the lowest frequency per state matters.",
+     "feynman": "Over a full swing, anything that wiggles averages out; only a steady push leaves a mark.",
+     "visual": "Staircase step 1: each bead’s signal decomposed into colored sinusoid strands; strands with nonzero frequency fade to grey after one period, the zero-frequency strand (gold) remains.",
+     "scene": "mls-chained-form",
+     "beat": "📉 frequencies step down to zero",
+     "math": [
+      "convolution"
+     ],
+     "engine": [
+      "NEW: chainSpectrum"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "8-366-c",
+     "lines": [
+      12,
+      41
+     ],
+     "kind": "proof",
+     "idea": "Integrating from the origin: q1 ∝ (1 − cos 2πt), q2 ∝ sin 2πkt, q3 has frequencies 2π(k±1), q4’s lowest is 2π(k−2), …, until q_{k+2} contains a sin² 2πt term whose average is ½, giving linear growth.",
+     "feynman": "Pass the rhythm down a line of people; each one slows it a notch; the last one is just steadily walking.",
+     "visual": "Staircase step 2: a waterfall plot: rows = beads, horizontal = frequency; the lit ticks march left one column per row until hitting zero at row k+2.",
+     "scene": "mls-chained-form",
+     "beat": "📉 frequencies step down to zero",
+     "math": [
+      "convolution",
+      "ode"
+     ],
+     "engine": [
+      "NEW: chainSpectrum"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "8-366-d",
+     "lines": [
+      42,
+      47
+     ],
+     "kind": "proof",
+     "idea": "So q_{k+2}(1) = q_{k+2}(0) + (a/4π)^k b/k! and earlier states are periodic; nonzero initial conditions only add terms like q_{i−1}(0)u1 that integrate to zero.",
+     "feynman": "The payout depends on how hard you wiggle each knob; starting from a different spot only adds extra wobbles that cancel.",
+     "visual": "Payout readout: formula value vs simulated jump side by side; randomize the start: extra coral wobble lines appear but their net bars are zero.",
+     "scene": "mls-chained-form",
+     "beat": "🧾 the payout formula",
+     "math": [
+      "ode"
+     ],
+     "engine": [
+      "dynamics.rk4"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-366-e",
+     "lines": [
+      48,
+      49
+     ],
+     "kind": "prose",
+     "idea": "More inputs and multi-chained systems are treated in the cited work.",
+     "feynman": "Several engines pulling several chains work the same way.",
+     "visual": "Toggle \"two chains\": a second bead chain driven by a second knob appears beside the first.",
+     "scene": "mls-chained-form",
+     "beat": "⛓️ each link copies the one before",
+     "math": [
+      "ode"
+     ],
+     "engine": [
+      "dynamics.rk4"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "8-366-f",
+     "lines": [
+      50,
+      50
+     ],
+     "kind": "heading",
+     "idea": "Section 8.3 General methods for steering."
+    },
+    {
+     "id": "8-366-g",
+     "lines": [
+      51,
+      52
+     ],
+     "kind": "prose",
+     "idea": "Real systems rarely appear exactly in model form, so more general techniques are needed.",
+     "feynman": "Real bicycles aren’t textbook toys; you need to adapt the trick.",
+     "visual": "A real car silhouette fades in over the ideal bead chain, with small coral mismatches.",
+     "scene": "mls-fourier-steering",
+     "beat": "🚗 car is nearly a chain",
+     "math": [
+      "linearize"
+     ],
+     "engine": [
+      "NEW: driftlessStep"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "8-366-h",
+     "lines": [
+      53,
+      53
+     ],
+     "kind": "page-number",
+     "idea": "Page number."
+    }
+   ]
+  },
+  {
+   "pdf": 385,
+   "book": 367,
+   "lines": 42,
+   "section": "8.3",
+   "summary": "Fourier techniques: the hopping robot in flight becomes a near-chain system after a Taylor expansion and coordinate change; sinusoids then steer its body angle.",
+   "atoms": [
+    {
+     "id": "8-367-a",
+     "lines": [
+      1,
+      2
+     ],
+     "kind": "prose",
+     "idea": "This section covers planning methods for general nonholonomic systems.",
+     "feynman": "Now we take the toy trick out into the real world.",
+     "visual": "Section banner tile: a hopper and a car side by side, each with a small orange oscillator icon.",
+     "scene": "mls-fourier-steering",
+     "beat": "🤸 hopper cartwheels in mid-air",
+     "math": [
+      "ode"
+     ],
+     "engine": [
+      "NEW: driftlessStep"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "8-367-b",
+     "lines": [
+      3,
+      3
+     ],
+     "kind": "heading",
+     "idea": "Section 8.3.1 Fourier techniques."
+    },
+    {
+     "id": "8-367-c",
+     "lines": [
+      4,
+      7
+     ],
+     "kind": "prose",
+     "idea": "Integer-frequency sinusoid steering can be adapted with basic Fourier analysis to systems outside the model classes; two Chapter 7 examples illustrate it.",
+     "feynman": "If your instrument is slightly out of tune, you listen to which overtones it produces and adjust how loud you play.",
+     "visual": "A Fourier bar chart icon slides in next to the oscillator pair.",
+     "scene": "mls-fourier-steering",
+     "beat": "🧮 only the first harmonic pays",
+     "math": [
+      "convolution"
+     ],
+     "engine": [
+      "NEW: fourierCoeffs"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "8-367-d",
+     "lines": [
+      8,
+      17
+     ],
+     "kind": "example",
+     "label": "Ex 8.1, Eq (8.9)",
+     "idea": "Hopping robot in flight: ψ̇ = u1 (hip), l̇ = u2 (leg extension), θ̇ = −m(l+d)²/(I + m(l+d)²) · u1 (body rotates to conserve angular momentum).",
+     "feynman": "A diver in mid-air: swinging the arms one way twists the body the other way; stretching or tucking changes how much it twists.",
+     "visual": "Side view: blue body, orange hip angle ψ and leg-length l sliders; swinging the leg counter-rotates the body (θ readout). Angular momentum bar stays at 0 (lime).",
+     "scene": "mls-fourier-steering",
+     "beat": "🤸 hopper cartwheels in mid-air",
+     "math": [
+      "ode",
+      "energy"
+     ],
+     "engine": [
+      "NEW: hopperFlight"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-367-e",
+     "lines": [
+      18,
+      31
+     ],
+     "kind": "equation",
+     "idea": "Taylor-expand in l: θ̇ ≈ −md²/(md²+I) ψ̇ − 2mdI/(md²+I)² · l u1 + O(l²)u1. With α = θ + md²/(md²+I) ψ the system becomes ψ̇ = u1, l̇ = u2, α̇ = f(l)u1.",
+     "feynman": "Measure the body angle relative to the leg’s average twist: then only the stretch-while-swinging part changes it, like a chain link.",
+     "visual": "Coordinate swap animation: θ dial morphs into α dial; the formula α̇ = f(l)u1 appears with f plotted as a teal curve, its straight tangent at 0 overlaid in blue.",
+     "scene": "mls-fourier-steering",
+     "beat": "🤸 hopper cartwheels in mid-air",
+     "math": [
+      "linearize",
+      "derivative"
+     ],
+     "engine": [
+      "NEW: hopperFlight"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-367-f",
+     "lines": [
+      32,
+      41
+     ],
+     "kind": "prose",
+     "idea": "Dropping the higher-order terms gives a 3-state chain, which justifies using the chain algorithm on the exact system: set ψ and l first, then use u1 = a1 sin 2πt, u2 = a2 cos 2πt for one period to move α while ψ and l return; l(t) = (a2/2π) sin 2πt.",
+     "feynman": "Swing the leg in a circle (forward-out, back-in): each loop the body turns a bit, and the leg ends where it started.",
+     "visual": "Hopper animation: leg tip traces a closed orange loop in (ψ, l) space; α dial ticks forward each loop; ψ and l readouts return home (lime).",
+     "scene": "mls-fourier-steering",
+     "beat": "🤸 hopper cartwheels in mid-air",
+     "math": [
+      "ode",
+      "convolution"
+     ],
+     "engine": [
+      "NEW: hopperFlight"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-367-g",
+     "lines": [
+      42,
+      42
+     ],
+     "kind": "page-number",
+     "idea": "Page number."
+    }
+   ]
+  },
+  {
+   "pdf": 386,
+   "book": 368,
+   "lines": 46,
+   "section": "8.3.1",
+   "summary": "Only the first Fourier coefficient of f(l(t)) produces net body rotation: Δα = a1β1/2; the kinematic car becomes a near-chain via z = (x, φ, sin θ, y).",
+   "atoms": [
+    {
+     "id": "8-368-a",
+     "lines": [
+      1,
+      15
+     ],
+     "kind": "equation",
+     "idea": "Expand f((a2/2π) sin 2πt) = β1 sin 2πt + β2 sin 4πt + …; over one period only the β1 term survives against u1: Δα = a1β1/2. β1 depends on a2, so solve numerically for (a1,a2); a full mid-air cartwheel is Δα = 2π.",
+     "feynman": "Push a swing in time with its own rhythm and it goes higher; pushes at the wrong rhythm cancel out. Only the matching harmonic pays.",
+     "visual": "Fourier bar chart of f(l(t)) (teal bars β1, β2, …); multiply by u1’s sine: only β1’s bar turns gold and feeds a Δα meter. Root-finder adjusts a1, a2 until the hopper completes a 2π flip.",
+     "scene": "mls-fourier-steering",
+     "beat": "🧮 only the first harmonic pays",
+     "math": [
+      "convolution",
+      "optimization"
+     ],
+     "engine": [
+      "NEW: fourierCoeffs",
+      "NEW: hopperFlight"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-368-b",
+     "lines": [
+      16,
+      24
+     ],
+     "kind": "example",
+     "label": "Ex 8.2",
+     "idea": "Kinematic front-wheel-drive car (Eq 7.14): ẋ = cos θ u1, ẏ = sin θ u1, θ̇ = (tan φ / l) u1, φ̇ = u2; u1 alone moves no single state directly.",
+     "feynman": "A real car: the gas pedal moves you along your heading, the steering wheel turns the front wheels, and turning only happens while you roll.",
+     "visual": "Top-down blue car with orange steering wheel and gas pedal; heading θ and steering φ drawn as arcs; no sideways motion (coral ✖).",
+     "scene": "mls-fourier-steering",
+     "beat": "🚗 car is nearly a chain",
+     "math": [
+      "ode"
+     ],
+     "engine": [
+      "NEW: carStep"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "8-368-c",
+     "lines": [
+      25,
+      39
+     ],
+     "kind": "equation",
+     "idea": "With z1 = x, z2 = φ, z3 = sin θ, z4 = y and v1 = cos θ u1, v2 = u2: ż1 = v1, ż2 = v2, ż3 = (tan z2 / l) v1, ż4 = z3/√(1−z3²) v1; the linear parts match a one-chain and Fourier analysis absorbs the rest.",
+     "feynman": "For small angles a car is just a chain of trailers: steering angle → heading → sideways position.",
+     "visual": "Two columns: car states and chain beads; lime links where they agree; coral mismatch bars grow with steering angle (drag φ).",
+     "scene": "mls-fourier-steering",
+     "beat": "🚗 car is nearly a chain",
+     "math": [
+      "linearize"
+     ],
+     "engine": [
+      "NEW: carStep"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-368-d",
+     "lines": [
+      40,
+      45
+     ],
+     "kind": "prose",
+     "idea": "Figure 8.1 shows the car maneuver in phases: A sets x and φ with constant inputs; B uses a sine/cosine to fix θ while returning the others; C uses u1 = a1 sin 4πt, u2 = a2 sin 2πt …",
+     "feynman": "Three moves: drive into place, wiggle to straighten the heading, then a double wiggle to slide sideways.",
+     "visual": "Phase timeline A | B | C below the car; each phase highlights its orange input waveform.",
+     "scene": "mls-fourier-steering",
+     "beat": "➰ Lissajous loops are brackets",
+     "math": [
+      "trajectory"
+     ],
+     "engine": [
+      "NEW: carStep"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-368-e",
+     "lines": [
+      46,
+      46
+     ],
+     "kind": "page-number",
+     "idea": "Page number."
+    }
+   ]
+  },
+  {
+   "pdf": 387,
+   "book": 369,
+   "lines": 46,
+   "section": "8.3.1",
+   "summary": "Figure 8.1 shows the three-phase car maneuver; its Lissajous loops reveal Lie-bracket motions as rectified harmonics. Section 3.2 asks when a system can be converted to chained form.",
+   "atoms": [
+    {
+     "id": "8-369-a",
+     "lines": [
+      1,
+      31
+     ],
+     "kind": "figure",
+     "label": "Fig 8.1",
+     "idea": "Car path from (x,y,θ,φ) = (−5, 1, 0.05, 1) to (0, 0.5, 0, 0): plots of φ, y, θ versus x and inputs versus time, segmented into A, B, C.",
+     "feynman": "Like a dance with three parts — a walk, a twirl, a figure-eight — each part fixes one thing and leaves the rest as they were.",
+     "visual": "Four live plots: φ vs x (two loops in C), θ vs x (one loop in C), y vs x (open curve that drops y to gold), and u1,u2 vs time with A/B/C bands; a blue car moves along.",
+     "scene": "mls-fourier-steering",
+     "beat": "➰ Lissajous loops are brackets",
+     "math": [
+      "trajectory",
+      "ode"
+     ],
+     "engine": [
+      "dynamics.rk4",
+      "NEW: carStep"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-369-b",
+     "lines": [
+      32,
+      41
+     ],
+     "kind": "prose",
+     "idea": "In phase C, the (x,φ) Lissajous curve has two loops, (x,θ) one loop, and (x,y) is open — the net y gain. Bracket motions are rectified harmonic periodic motions, with the harmonic ratio set by the bracket order.",
+     "feynman": "A ratchet turns back-and-forth jiggling into steady turning; here a 2:1 jiggle of two knobs ratchets the car sideways.",
+     "visual": "Lissajous panel: closed loops drawn in lime (states that return), the open curve in gold (the state that moves); a frequency-ratio dial (1:1, 2:1, 3:1) shows which depth of bracket it reaches.",
+     "scene": "mls-fourier-steering",
+     "beat": "➰ Lissajous loops are brackets",
+     "math": [
+      "convolution"
+     ],
+     "engine": [
+      "NEW: lissajous"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "8-369-c",
+     "lines": [
+      42,
+      42
+     ],
+     "kind": "heading",
+     "idea": "Section 8.3.2 Conversion to chained form."
+    },
+    {
+     "id": "8-369-d",
+     "lines": [
+      43,
+      45
+     ],
+     "kind": "prose",
+     "idea": "Question: can a change of inputs and a nonlinear change of coordinates turn a given nonholonomic system into a model (chained) form?",
+     "feynman": "Is this crooked road secretly a straight road seen through warped glasses?",
+     "visual": "Morph slider: curved coordinate grid with blue flow lines; sliding toward \"straight\" warps the grid until the flow becomes the chain staircase.",
+     "scene": "mls-chained-conversion",
+     "beat": "🔄 new coordinates, new knobs",
+     "math": [
+      "linearize"
+     ],
+     "engine": [
+      "NEW: chainConversion"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-369-e",
+     "lines": [
+      46,
+      46
+     ],
+     "kind": "page-number",
+     "idea": "Page number."
+    }
+   ]
+  },
+  {
+   "pdf": 388,
+   "book": 370,
+   "lines": 52,
+   "section": "8.3.2",
+   "summary": "Sufficient conditions for two-input systems to become a one-chain: nested distributions of constant rank and involutive, plus functions h1, h2 defining the new coordinates by Lie derivatives.",
+   "atoms": [
+    {
+     "id": "8-370-a",
+     "lines": [
+      1,
+      6
+     ],
+     "kind": "prose",
+     "idea": "Find an input transform v = β(q)u and a diffeomorphism z = φ(q) so that the system is chained in (z, v).",
+     "feynman": "Rename your knobs and redraw your map so that the machine behaves like the simple chain toy.",
+     "visual": "Two panels: original (q, u) and transformed (z, v); colored knob relabeling arrows from u to v (orange), grid map q → z.",
+     "scene": "mls-chained-conversion",
+     "beat": "🔄 new coordinates, new knobs",
+     "math": [
+      "linearize",
+      "jacobian"
+     ],
+     "engine": [
+      "NEW: chainConversion"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-370-b",
+     "lines": [
+      7,
+      11
+     ],
+     "kind": "prose",
+     "idea": "Necessary and sufficient conditions exist but are heavy; for two inputs with g1, g2 independent there are simpler sufficient conditions for one-chain form.",
+     "feynman": "There is a complete rulebook, but for two knobs a short checklist is enough.",
+     "visual": "Checklist card with three boxes appears on the side of the morph panel.",
+     "scene": "mls-chained-conversion",
+     "beat": "📚 nested flat families",
+     "math": [
+      "linearize"
+     ],
+     "engine": [
+      "NEW: chainConversion"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-370-c",
+     "lines": [
+      12,
+      22
+     ],
+     "kind": "equation",
+     "idea": "Conditions: Δ0 = span{g1, g2, ad g2, …, ad^{n−2} g2}, Δ1 = span{g2, ad g2, …, ad^{n−2} g2}, Δ2 = span{g2, …, ad^{n−3} g2} (ad = ad_{g1}) must each have constant rank and be involutive.",
+     "feynman": "Stacks of flat sheets of paper: each family of allowed directions must lie flat (no twist) so it can be stacked into layers.",
+     "visual": "Nested translucent sheet families Δ2 ⊂ Δ1 ⊂ Δ0; an involutivity test brackets two in-sheet arrows: if the result stays in the sheet, sheet glows lime, else coral twist.",
+     "scene": "mls-chained-conversion",
+     "beat": "📚 nested flat families",
+     "math": [
+      "vectors"
+     ],
+     "engine": [
+      "NEW: involutiveTest"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "8-370-d",
+     "lines": [
+      23,
+      31
+     ],
+     "kind": "prose",
+     "idea": "Need h1 with dh1·Δ1 = 0 and dh1·g1 = 1, and h2 independent of h1 with dh2·Δ2 = 0. Frobenius guarantees functions annihilating the nested involutive Δ2 ⊂ Δ1; the extra normalization dh1·g1 = 1 is the real condition.",
+     "feynman": "Find a height map that stays flat along all sheets of one stack but climbs exactly one step for every unit you push the go-pedal.",
+     "visual": "Contour lines of h1 (gold) lie along Δ1 sheets; a step counter along a g1 flow line increases by exactly 1 per unit time; h2 contours (teal) lie along Δ2.",
+     "scene": "mls-chained-conversion",
+     "beat": "🎯 find the two height maps",
+     "math": [
+      "derivative",
+      "vectors"
+     ],
+     "engine": [
+      "NEW: chainConversion"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "8-370-e",
+     "lines": [
+      32,
+      51
+     ],
+     "kind": "equation",
+     "idea": "New coordinates z1 = h1, z2 = L_{g1}^{n−2}h2, …, z_{n−1} = L_{g1}h2, z_n = h2, with v1 = u1 and v2 = (L_{g1}^{n−1}h2)u1 + (L_{g2}L_{g1}^{n−2}h2)u2, give ż1 = v1, ż2 = v2, ż_k = z_{k−1}v1.",
+     "feynman": "Measure h2, then how fast it changes along the go-pedal, then how fast that changes… each derivative becomes the next trailer in the chain.",
+     "visual": "A column of repeated \"rate of change along g1\" operators turns h2 into a stack of beads z_n, z_{n−1}, …, z2; play the system and the beads follow the chain rule exactly.",
+     "scene": "mls-chained-conversion",
+     "beat": "🎯 find the two height maps",
+     "math": [
+      "derivative",
+      "chain-rule"
+     ],
+     "engine": [
+      "NEW: chainConversion"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "8-370-f",
+     "lines": [
+      52,
+      52
+     ],
+     "kind": "page-number",
+     "idea": "Page number."
+    }
+   ]
+  },
+  {
+   "pdf": 389,
+   "book": 371,
+   "lines": 42,
+   "section": "8.3.2",
+   "summary": "Example 8.3 converts the kinematic car to a one-chain with h1 = x, h2 = y; Section 3.3 poses least-squares optimal steering with Lagrange multipliers.",
+   "atoms": [
+    {
+     "id": "8-371-a",
+     "lines": [
+      1,
+      1
+     ],
+     "kind": "prose",
+     "idea": "The procedure is illustrated on the kinematic car.",
+     "feynman": "Now try the warped-glasses trick on a real car.",
+     "visual": "Car icon slides into the morph panel.",
+     "scene": "mls-chained-conversion",
+     "beat": "🚗 car becomes a chain",
+     "math": [
+      "linearize"
+     ],
+     "engine": [
+      "NEW: chainConversion"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "8-371-b",
+     "lines": [
+      2,
+      19
+     ],
+     "kind": "example",
+     "label": "Ex 8.3",
+     "idea": "Write the car as ẋ = u1, ẏ = tan θ u1, θ̇ = (tan φ / l) u1, φ̇ = u2. With h1 = x, h2 = y the conditions hold, giving z1 = x, z2 = curvature-like (tan φ / l) times a power of sec θ, z3 = tan θ, z4 = y, and v from an explicit input map.",
+     "feynman": "Measure the car by: how far along the road, how sharply it is turning, its slope, and how far sideways — that list behaves exactly like a trailer chain.",
+     "visual": "Car panel with readouts x, y, θ, φ morphing into z1…z4 beads; drive with chain inputs v1, v2 and the car parks sideways into a gold slot.",
+     "scene": "mls-chained-conversion",
+     "beat": "🚗 car becomes a chain",
+     "math": [
+      "linearize",
+      "ode"
+     ],
+     "engine": [
+      "NEW: chainConversion",
+      "NEW: carStep"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-371-c",
+     "lines": [
+      20,
+      20
+     ],
+     "kind": "heading",
+     "idea": "Section 8.3.3 Optimal steering of nonholonomic systems."
+    },
+    {
+     "id": "8-371-d",
+     "lines": [
+      21,
+      28
+     ],
+     "kind": "prose",
+     "idea": "Least-squares optimal control: steer q̇ = Σ g_i(q)u_i from q0 to qf in unit time minimizing ½∫₀¹ |u|² dt.",
+     "feynman": "Get there on time while burning the least fuel.",
+     "visual": "State point with gold target; coral effort meter integrating ½|u|²; candidate paths with costs.",
+     "scene": "mls-optimal-steering",
+     "beat": "💰 cost = squared effort",
+     "math": [
+      "optimization"
+     ],
+     "engine": [
+      "NEW: controlEnergy"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "8-371-e",
+     "lines": [
+      29,
+      36
+     ],
+     "kind": "prose",
+     "idea": "Informal derivation; existence assumed via Chow’s theorem (bracket rank n everywhere). Constraints are adjoined with a multiplier function p(t) ∈ Rⁿ.",
+     "feynman": "Promise first that the trip is possible (enough knob combinations), then attach a fine for each moment you break the rules.",
+     "visual": "Bracket rank bar full (lime) unlocks the optimizer; a purple multiplier arrow p appears riding on the state.",
+     "scene": "mls-optimal-steering",
+     "beat": "💰 cost = squared effort",
+     "math": [
+      "optimization",
+      "lagrange-dynamics"
+     ],
+     "engine": [
+      "NEW: controlEnergy"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-371-f",
+     "lines": [
+      37,
+      41
+     ],
+     "kind": "equation",
+     "label": "Eq (8.10)",
+     "idea": "J(q,p,u) = ∫₀¹ [½uᵀu − pᵀ(q̇ − Σ g_i u_i)] dt.",
+     "feynman": "Total bill = fuel used + fines for any mismatch between where you move and where the knobs allow.",
+     "visual": "Equation tokens colored: orange ½uᵀu, purple p, blue g_i; a stacked bar shows fuel vs fine (fine stays at 0 on valid paths).",
+     "scene": "mls-optimal-steering",
+     "beat": "💰 cost = squared effort",
+     "math": [
+      "optimization"
+     ],
+     "engine": [
+      "NEW: controlEnergy"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-371-g",
+     "lines": [
+      42,
+      42
+     ],
+     "kind": "page-number",
+     "idea": "Page number."
+    }
+   ]
+  },
+  {
+   "pdf": 390,
+   "book": 372,
+   "lines": 48,
+   "section": "8.3.3",
+   "summary": "The Hamiltonian, first variation, and stationarity give u_i = −pᵀg_i, the optimal Hamiltonian H*, and Hamilton’s equations; Prop 8.4 begins.",
+   "atoms": [
+    {
+     "id": "8-372-a",
+     "lines": [
+      1,
+      5
+     ],
+     "kind": "equation",
+     "label": "Eq (8.11)",
+     "idea": "Hamiltonian H(q,p,u) = ½uᵀu + pᵀ Σ g_i(q)u_i.",
+     "feynman": "A compass p tells you how much each direction is worth; H trades fuel against progress in valuable directions.",
+     "visual": "Purple costate arrow p and blue field arrows g_i; an H landscape over the input plane (bowl) with its bottom marked gold.",
+     "scene": "mls-optimal-steering",
+     "beat": "🧭 costate compass & Hamiltonian",
+     "math": [
+      "optimization",
+      "energy"
+     ],
+     "engine": [
+      "NEW: optimalHamiltonian"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-372-b",
+     "lines": [
+      6,
+      9
+     ],
+     "kind": "equation",
+     "idea": "Integrating by parts: J = −pᵀq |₀¹ + ∫₀¹ (H + ṗᵀq) dt.",
+     "feynman": "Move the derivative from one factor to the other, paying only boundary terms.",
+     "visual": "Two shaded areas swapping: the area under −pᵀq̇ equals boundary bars minus area under ṗᵀq.",
+     "scene": "mls-optimal-steering",
+     "beat": "🧭 costate compass & Hamiltonian",
+     "math": [
+      "derivative"
+     ],
+     "engine": [
+      "NEW: optimalHamiltonian"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-372-c",
+     "lines": [
+      10,
+      20
+     ],
+     "kind": "equation",
+     "label": "Eq (8.12)",
+     "idea": "First variation δJ in δu, δq must vanish: ṗ = −∂H/∂q and ∂H/∂u = 0.",
+     "feynman": "At the bottom of a valley, small steps in any direction don’t change your height.",
+     "visual": "Wiggle the optimal input path with a small teal perturbation; a δJ readout stays ~0 (lime) on the optimum and is nonzero elsewhere.",
+     "scene": "mls-optimal-steering",
+     "beat": "🧭 costate compass & Hamiltonian",
+     "math": [
+      "optimization",
+      "derivative"
+     ],
+     "engine": [
+      "NEW: optimalHamiltonian"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "8-372-d",
+     "lines": [
+      21,
+      28
+     ],
+     "kind": "equation",
+     "label": "Eqs (8.13)–(8.14)",
+     "idea": "Stationarity gives u_i = −pᵀg_i(q); substituting, H*(q,p) = −½ Σ (pᵀg_i)².",
+     "feynman": "Push each knob in proportion to how much the compass values that knob’s direction.",
+     "visual": "Each orange input bar equals minus the projection of purple p onto blue g_i (drawn as shadow lengths).",
+     "scene": "mls-optimal-steering",
+     "beat": "🧭 costate compass & Hamiltonian",
+     "math": [
+      "optimization",
+      "vectors"
+     ],
+     "engine": [
+      "NEW: optimalHamiltonian"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-372-e",
+     "lines": [
+      29,
+      39
+     ],
+     "kind": "equation",
+     "label": "Eq (8.15)",
+     "idea": "Optimal trajectories obey Hamilton’s equations q̇ = ∂H*/∂p, ṗ = −∂H*/∂q, with boundary conditions q(0) = q0, q(1) = qf.",
+     "feynman": "Like a planet: position and momentum evolve together, and you choose the starting kick so you land on the target.",
+     "visual": "Phase-space pair: state point (blue) and costate arrow (purple) evolving by RK4; drag the initial p to shoot the endpoint onto gold (shooting).",
+     "scene": "mls-optimal-steering",
+     "beat": "🧭 costate compass & Hamiltonian",
+     "math": [
+      "ode",
+      "energy"
+     ],
+     "engine": [
+      "dynamics.rk4",
+      "NEW: shootingSolve"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "8-372-f",
+     "lines": [
+      40,
+      45
+     ],
+     "kind": "proposition",
+     "label": "Prop 8.4",
+     "idea": "Constant norm of optimal controls (statement begins): for least-squares steering of q̇ = Σ g_i u_i satisfying the rank condition …",
+     "feynman": "Claim: the best driver always presses the controls equally hard.",
+     "visual": "Input dial appears with a radius readout ready.",
+     "scene": "mls-optimal-steering",
+     "beat": "⭕ effort stays on a circle",
+     "math": [
+      "optimization"
+     ],
+     "engine": [
+      "NEW: optimalHamiltonian"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-372-g",
+     "lines": [
+      46,
+      47
+     ],
+     "kind": "footnote",
+     "idea": "Footnote: the variation means perturbing u by δu and tracking induced changes δp, δH.",
+     "feynman": "Nudge the plan slightly and watch what else shifts.",
+     "visual": "Small teal δu perturbation curve overlaid on the optimal input.",
+     "scene": "mls-optimal-steering",
+     "beat": "🧭 costate compass & Hamiltonian",
+     "math": [
+      "derivative"
+     ],
+     "engine": [
+      "NEW: optimalHamiltonian"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "8-372-h",
+     "lines": [
+      48,
+      48
+     ],
+     "kind": "page-number",
+     "idea": "Page number."
+    }
+   ]
+  },
+  {
+   "pdf": 391,
+   "book": 373,
+   "lines": 46,
+   "section": "8.3.3",
+   "summary": "Prop 8.4: optimal inputs have constant norm, because u̇ = Ω(q,p)u with Ω skew; consequences for other costs and Engel’s system.",
+   "atoms": [
+    {
+     "id": "8-373-a",
+     "lines": [
+      1,
+      3
+     ],
+     "kind": "proposition",
+     "idea": "… the optimal input has constant norm: |u(t)|² = |u(0)|² for all t ∈ [0,1].",
+     "feynman": "The best plan keeps the gas pedal at a steady pressure; only the mix of directions changes.",
+     "visual": "Input dial: orange tip stays on a fixed lime circle while turning.",
+     "scene": "mls-optimal-steering",
+     "beat": "⭕ effort stays on a circle",
+     "math": [
+      "rotation",
+      "optimization"
+     ],
+     "engine": [
+      "NEW: optimalHamiltonian"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-373-b",
+     "lines": [
+      4,
+      19
+     ],
+     "kind": "proof",
+     "idea": "Differentiate u_i = −pᵀg_i, substitute ṗ from Hamilton’s equations; the terms combine into u̇_i = Σ_j pᵀ[g_i,g_j]u_j.",
+     "feynman": "How the input changes depends only on how much the compass values each \"wiggle direction\" (bracket).",
+     "visual": "Staircase step 1: product-rule split of d/dt(pᵀg_i) into two colored terms; they merge into a bracket arrow [g_i,g_j] projected on p.",
+     "scene": "mls-optimal-steering",
+     "beat": "⭕ effort stays on a circle",
+     "math": [
+      "derivative",
+      "chain-rule"
+     ],
+     "engine": [
+      "NEW: lieBracket"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "8-373-c",
+     "lines": [
+      20,
+      30
+     ],
+     "kind": "proof",
+     "label": "Eq (8.16)",
+     "idea": "In matrix form u̇ = Ω(q,p)u with Ω_ij = pᵀ[g_i,g_j], a skew-symmetric matrix in so(m).",
+     "feynman": "A spinning turntable can only rotate what sits on it, never stretch it.",
+     "visual": "Staircase step 2: Ω shown as a grid with mirrored opposite-sign entries; acting on the input arrow only rotates it.",
+     "scene": "mls-optimal-steering",
+     "beat": "⭕ effort stays on a circle",
+     "math": [
+      "matrix",
+      "rotation"
+     ],
+     "engine": [
+      "NEW: optimalHamiltonian"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "8-373-d",
+     "lines": [
+      31,
+      34
+     ],
+     "kind": "proof",
+     "label": "Eq (8.17)",
+     "idea": "The time-varying linear ODE has solution u(t) = U(t)u(0) with U(t) ∈ SO(m) (Exercise 6), so the norm is constant.",
+     "feynman": "Rotations never change length.",
+     "visual": "Staircase step 3: the input arrow carried by a rotating frame; length readout frozen (lime).",
+     "scene": "mls-optimal-steering",
+     "beat": "⭕ effort stays on a circle",
+     "math": [
+      "rotation",
+      "ode"
+     ],
+     "engine": [
+      "lie.expSO3"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-373-e",
+     "lines": [
+      35,
+      45
+     ],
+     "kind": "remark",
+     "idea": "Constant norm means the same input also solves problems with monotone transformations of the integrand, e.g. ∫√(uᵀu) dt, and some minimum-time problems (Exercise 8); it also helps solve Engel’s system.",
+     "feynman": "If you always drive at the same speed, the cheapest-fuel route is also the shortest route and, after scaling, the fastest.",
+     "visual": "Three cost meters (energy, length, time) for the same path; ranking of candidates is identical across meters.",
+     "scene": "mls-optimal-steering",
+     "beat": "⭕ effort stays on a circle",
+     "math": [
+      "optimization"
+     ],
+     "engine": [
+      "NEW: controlEnergy"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-373-f",
+     "lines": [
+      46,
+      46
+     ],
+     "kind": "page-number",
+     "idea": "Page number."
+    }
+   ]
+  },
+  {
+   "pdf": 392,
+   "book": 374,
+   "lines": 47,
+   "section": "8.3.3",
+   "summary": "Engel’s system (growth (2,3,4)): optimal inputs are (r sin α, r cos α) with α obeying a pendulum equation, solved by elliptic integrals.",
+   "atoms": [
+    {
+     "id": "8-374-a",
+     "lines": [
+      1,
+      14
+     ],
+     "kind": "example",
+     "label": "Ex 8.4",
+     "idea": "Engel’s system: q̇1 = u1, q̇2 = u2, q̇3 = q1u2 − q2u1, q̇4 = q1²u2; growth vector (2,3,4); [g1,g2] = (0,0,2,2q1).",
+     "feynman": "Like Brockett’s toy but with an extra counter that weighs the swept area by how far east you are.",
+     "visual": "Bead with two counters: plain area (q3) and east-weighted area (q4) shown as a gradient-colored fill.",
+     "scene": "mls-optimal-steering",
+     "beat": "🌊 Engel: pendulum-like swing",
+     "math": [
+      "vectors",
+      "ode"
+     ],
+     "engine": [
+      "dynamics.rk4"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "8-374-b",
+     "lines": [
+      15,
+      22
+     ],
+     "kind": "equation",
+     "label": "Eq (8.18)",
+     "idea": "Specializing Eq 8.16: u̇1 = 2(p3 + q1p4)u2, u̇2 = −2(p3 + q1p4)u1, so u = r(sin α, cos α) with r constant.",
+     "feynman": "The pedal pressure is fixed; only the steering direction turns, at a speed that depends on where you are.",
+     "visual": "Input dial with fixed radius r; turning speed readout α̇ varies with q1 (color-coded east–west).",
+     "scene": "mls-optimal-steering",
+     "beat": "🌊 Engel: pendulum-like swing",
+     "math": [
+      "rotation"
+     ],
+     "engine": [
+      "NEW: engelOptimal"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "8-374-c",
+     "lines": [
+      23,
+      30
+     ],
+     "kind": "equation",
+     "idea": "H* = −½(p1 − q2p3)² − ½(p2 + q1p3 + q1²p4)² does not depend on q3, q4, so p3, p4 are constant, and α̈ = 2p4 r sin α.",
+     "feynman": "The turning angle swings exactly like a pendulum.",
+     "visual": "Side-by-side: pendulum bob (blue) and the input dial angle α moving in lockstep.",
+     "scene": "mls-optimal-steering",
+     "beat": "🌊 Engel: pendulum-like swing",
+     "math": [
+      "ode",
+      "energy"
+     ],
+     "engine": [
+      "dynamics.pendulumDeriv"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "8-374-d",
+     "lines": [
+      31,
+      46
+     ],
+     "kind": "equation",
+     "label": "Eq (8.19)",
+     "idea": "Energy integral: α̇² = b − 2δ cos α (δ = 2p4r); if b − 2|δ| > 0, α̇ = c√(1 − k sin²(α/2)), integrated by an elliptic integral of the first kind.",
+     "feynman": "A pendulum that has enough energy to go over the top keeps spinning, fast at the bottom and slow at the top; the timing follows a special \"elliptic\" curve.",
+     "visual": "Energy bar for the α-pendulum (stays fixed, lime); α(t) plotted as a non-uniform staircase wave (elliptic function) vs a uniform sine.",
+     "scene": "mls-optimal-steering",
+     "beat": "🌊 Engel: pendulum-like swing",
+     "math": [
+      "energy",
+      "ode"
+     ],
+     "engine": [
+      "dynamics.pendulumEnergy",
+      "NEW: ellipticF"
+     ],
+     "difficulty": 5
+    },
+    {
+     "id": "8-374-e",
+     "lines": [
+      47,
+      47
+     ],
+     "kind": "page-number",
+     "idea": "Page number."
+    }
+   ]
+  },
+  {
+   "pdf": 393,
+   "book": 375,
+   "lines": 42,
+   "section": "8.3.3",
+   "summary": "Engel’s optimal inputs are elliptic functions; the Ritz method approximates optimal inputs with a truncated Fourier basis and a penalized cost; Section 3.4 introduces piecewise-constant steering.",
+   "atoms": [
+    {
+     "id": "8-375-a",
+     "lines": [
+      1,
+      2
+     ],
+     "kind": "prose",
+     "idea": "So the optimal inputs for Engel’s system are elliptic functions.",
+     "feynman": "The perfect swing is a lopsided pendulum rhythm, not a pure tone.",
+     "visual": "Elliptic wave locked in gold on the input strip.",
+     "scene": "mls-optimal-steering",
+     "beat": "🌊 Engel: pendulum-like swing",
+     "math": [
+      "ode"
+     ],
+     "engine": [
+      "NEW: ellipticF"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-375-b",
+     "lines": [
+      3,
+      18
+     ],
+     "kind": "prose",
+     "idea": "Exact least-squares steering is usually intractable; the Ritz method restricts each input to a truncated orthonormal trigonometric basis of L²[0,1] (1, √2 cos 2kπt, √2 sin 2kπt), u_i = Σ_{k≤N} α_ik ψ_k.",
+     "feynman": "Instead of drawing any wiggle you like, you build it from a fixed set of piano notes and only choose their volumes.",
+     "visual": "Mixer board: N+1 sliders per input (orange), each a Fourier coefficient; the waveform above updates as the sum of colored basis waves.",
+     "scene": "mls-optimal-steering",
+     "beat": "🎛️ Ritz: tune Fourier knobs",
+     "math": [
+      "convolution",
+      "optimization"
+     ],
+     "engine": [
+      "NEW: ritzInputs"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-375-c",
+     "lines": [
+      19,
+      32
+     ],
+     "kind": "equation",
+     "label": "Eqs (8.20)–(8.21)",
+     "idea": "Choose coefficients to minimize J = ½(Σ|α_i|² + γ|q(1) − qf|²): effort plus a penalty γ for missing the goal; large N and γ should give a low-cost input that nearly reaches qf.",
+     "feynman": "Score = how loudly you played + a big fine times how far you missed. Make the fine big enough and you’ll hit the target.",
+     "visual": "Cost readout split into coral effort and purple miss-penalty bars; a γ slider; the endpoint (pink) and the gold goal with the miss distance drawn.",
+     "scene": "mls-optimal-steering",
+     "beat": "🎛️ Ritz: tune Fourier knobs",
+     "math": [
+      "optimization",
+      "least-squares"
+     ],
+     "engine": [
+      "NEW: ritzCost"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-375-d",
+     "lines": [
+      33,
+      38
+     ],
+     "kind": "prose",
+     "idea": "The finite-dimensional problem can be solved by many methods, e.g. a modified Newton iteration (implemented in a published package).",
+     "feynman": "Now it’s a normal \"find the lowest point\" puzzle with a few dials.",
+     "visual": "Press ▶: Newton/gradient steps move the sliders; a ball rolls down the cost bowl; the endpoint lands on gold.",
+     "scene": "mls-optimal-steering",
+     "beat": "🎛️ Ritz: tune Fourier knobs",
+     "math": [
+      "optimization",
+      "gradient-descent"
+     ],
+     "engine": [
+      "dynamics.numJacobian",
+      "linalg.solve"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-375-e",
+     "lines": [
+      39,
+      39
+     ],
+     "kind": "heading",
+     "idea": "Section 8.3.4 Steering with piecewise constant inputs."
+    },
+    {
+     "id": "8-375-f",
+     "lines": [
+      40,
+      41
+     ],
+     "kind": "prose",
+     "idea": "Outline of Lafferriere and Sussmann’s method for general nonholonomic systems.",
+     "feynman": "Steering with step-like pushes: hold a knob, switch, hold another.",
+     "visual": "Input strip changes to a staircase (piecewise-constant) waveform.",
+     "scene": "mls-piecewise-steering",
+     "beat": "🧱 flows as exponentials",
+     "math": [
+      "ode"
+     ],
+     "engine": [
+      "NEW: piecewiseInputs"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "8-375-g",
+     "lines": [
+      42,
+      42
+     ],
+     "kind": "page-number",
+     "idea": "Page number."
+    }
+   ]
+  },
+  {
+   "pdf": 394,
+   "book": 376,
+   "lines": 42,
+   "section": "8.3.4",
+   "summary": "For nilpotent systems, flows are formal exponentials of vector fields; the Chen–Fliess formula writes every reachable flow as a product of exponentials along a Philip Hall basis.",
+   "atoms": [
+    {
+     "id": "8-376-a",
+     "lines": [
+      1,
+      9
+     ],
+     "kind": "prose",
+     "idea": "The method needs the controllability Lie algebra to be nilpotent of order k (brackets with more than k factors vanish); its first step builds a canonical system using formal power series in vector fields.",
+     "feynman": "Wiggles inside wiggles eventually stop doing anything new — after k levels the toy has no more hidden directions, so the list of moves is finite.",
+     "visual": "Bracket-depth tower: levels 1…k colored, level k+1 drawn as empty slate outlines (all zero).",
+     "scene": "mls-piecewise-steering",
+     "beat": "🧱 flows as exponentials",
+     "math": [
+      "vectors"
+     ],
+     "engine": [
+      "NEW: lieBracket"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "8-376-b",
+     "lines": [
+      10,
+      22
+     ],
+     "kind": "equation",
+     "idea": "The flow of g_i for time t is written as a formal exponential e^{tg_i}(q), with the formal series I + t g_i + (t²/2!) g_i² + … treated as a map Rⁿ → Rⁿ (justification of powers deferred).",
+     "feynman": "Following a river current for t seconds is \"doing a tiny step over and over\" — the same recipe as compound interest.",
+     "visual": "A dot follows a blue flow line; n small straight steps (orange) converge to the curved flow as n grows (slider n).",
+     "scene": "mls-piecewise-steering",
+     "beat": "🧱 flows as exponentials",
+     "math": [
+      "screw-exp",
+      "ode"
+     ],
+     "engine": [
+      "dynamics.rk4",
+      "lie.expSE3"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "8-376-c",
+     "lines": [
+      23,
+      33
+     ],
+     "kind": "definition",
+     "idea": "Take a Philip Hall basis B1, …, Bs of the nilpotent controllability Lie algebra (brackets up to order k, respecting skew-symmetry and Jacobi); brackets are formal polynomials, e.g. [g1,g2] = g1g2 − g2g1.",
+     "feynman": "A tidy bookshelf listing every distinct move once: plain moves, wiggles, wiggles-of-wiggles — no duplicates, no moves that the seesaw rule makes redundant.",
+     "visual": "Bookshelf: shelf 1 orange g1, g2; shelf 2 teal [g1,g2]; shelf 3 double brackets; duplicates and Jacobi-dependent books fade purple and fall off.",
+     "scene": "mls-piecewise-steering",
+     "beat": "🗂️ Philip Hall shelf of directions",
+     "math": [
+      "vectors",
+      "matrix"
+     ],
+     "engine": [
+      "NEW: philipHallBasis"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "8-376-d",
+     "lines": [
+      34,
+      41
+     ],
+     "kind": "equation",
+     "label": "Eq (8.22)",
+     "idea": "Chen–Fliess: every flow of q̇ = Σ g_i u_i from q has the form S_t = e^{h_s(t)B_s} ⋯ e^{h_1(t)B_1}(q).",
+     "feynman": "Any dance you can do is the same as doing each basic move from the bookshelf once, for the right amount of time, in a fixed order.",
+     "visual": "A product-of-exponentials ribbon: one colored segment per basis book, lengths h_j; the composite endpoint coincides with the actual flow endpoint (lime ✓).",
+     "scene": "mls-piecewise-steering",
+     "beat": "🗂️ Philip Hall shelf of directions",
+     "math": [
+      "poe",
+      "screw-exp"
+     ],
+     "engine": [
+      "kinematics.poeFK",
+      "NEW: philipHallBasis"
+     ],
+     "difficulty": 5
+    },
+    {
+     "id": "8-376-e",
+     "lines": [
+      42,
+      42
+     ],
+     "kind": "page-number",
+     "idea": "Page number."
+    }
+   ]
+  },
+  {
+   "pdf": 395,
+   "book": 377,
+   "lines": 47,
+   "section": "8.3.4",
+   "summary": "Philip Hall coordinates h_j satisfy a differential equation driven by fictitious inputs v_j; differentiating the product formula introduces Ad-maps that are polynomial for nilpotent algebras.",
+   "atoms": [
+    {
+     "id": "8-377-a",
+     "lines": [
+      1,
+      7
+     ],
+     "kind": "prose",
+     "idea": "The h_j are Philip Hall coordinates: all reachable flows come from composing flows along basis elements — reminiscent of the product-of-exponentials formula for arms.",
+     "feynman": "Like a robot arm’s pose being the product of each joint’s twist, any steering maneuver is a product of basis-move flows.",
+     "visual": "Split view: a robot arm (orange joints, pink tip) built from POE next to the steering ribbon; both highlight segment-by-segment.",
+     "scene": "mls-piecewise-steering",
+     "beat": "🗂️ Philip Hall shelf of directions",
+     "math": [
+      "poe"
+     ],
+     "engine": [
+      "kinematics.poeFK"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-377-b",
+     "lines": [
+      8,
+      14
+     ],
+     "kind": "equation",
+     "label": "Eq (8.23)",
+     "idea": "S(t) satisfies Ṡ = S(B1v1 + ⋯ + Bsvs), S(0) = 1, with fictitious inputs v_j along every basis direction; only the first m correspond to real inputs.",
+     "feynman": "Pretend you have a knob for every move on the bookshelf, even the wiggle ones — later you will fake the extra knobs using real ones.",
+     "visual": "Every book on the shelf gets a ghostly knob v_j (translucent orange for brackets, solid orange for g1, g2).",
+     "scene": "mls-piecewise-steering",
+     "beat": "👻 fictitious knobs on every shelf",
+     "math": [
+      "ode",
+      "matrix"
+     ],
+     "engine": [
+      "NEW: cfsEquation"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "8-377-c",
+     "lines": [
+      15,
+      29
+     ],
+     "kind": "equation",
+     "label": "Eq (8.24)",
+     "idea": "Differentiating the product gives Ṡ = Σ_j S · Ad_{e^{−h1B1}⋯e^{−h_{j−1}B_{j−1}}} ḣ_j B_j, with Ad_{e^{−hB}}B_j = e^{−hB} B_j e^{hB}.",
+     "feynman": "Changing one move in the middle of a dance is like doing that move but \"seen through\" all the moves before it.",
+     "visual": "Ribbon with one segment pulsing; its arrow is transported back through earlier segments (conjugation shown as the arrow rotating/tilting as it passes each segment).",
+     "scene": "mls-piecewise-steering",
+     "beat": "👻 fictitious knobs on every shelf",
+     "math": [
+      "chain-rule",
+      "matrix"
+     ],
+     "engine": [
+      "lie.adjoint"
+     ],
+     "difficulty": 5
+    },
+    {
+     "id": "8-377-d",
+     "lines": [
+      30,
+      40
+     ],
+     "kind": "equation",
+     "label": "Eq (8.25)",
+     "idea": "Ad of a product is the product of Ads; nilpotency makes each a finite polynomial series, so each term equals Σ_k p_{j,k}(h) B_k ḣ_j.",
+     "feynman": "Seen-through-many-moves = seen through one, then the next. Because wiggles stop after k levels, the result is a short list.",
+     "visual": "Matrix of polynomial coefficients p_{j,k}(h) displayed as a triangular grid; most cells empty (zero) thanks to nilpotency.",
+     "scene": "mls-piecewise-steering",
+     "beat": "👻 fictitious knobs on every shelf",
+     "math": [
+      "matrix"
+     ],
+     "engine": [
+      "lie.adjoint",
+      "NEW: cfsEquation"
+     ],
+     "difficulty": 5
+    },
+    {
+     "id": "8-377-e",
+     "lines": [
+      41,
+      46
+     ],
+     "kind": "equation",
+     "idea": "Matching coefficients of each B_k with (8.23): Σ_j p_{j,k}(h) ḣ_j = v_k.",
+     "feynman": "Read off, book by book, how fast each coordinate must change to match the ghost knobs.",
+     "visual": "Each shelf book lights when its equation balances: left-hand polynomial bar equals ghost knob v_k.",
+     "scene": "mls-piecewise-steering",
+     "beat": "👻 fictitious knobs on every shelf",
+     "math": [
+      "matrix"
+     ],
+     "engine": [
+      "NEW: cfsEquation"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "8-377-f",
+     "lines": [
+      47,
+      47
+     ],
+     "kind": "page-number",
+     "idea": "Page number."
+    }
+   ]
+  },
+  {
+   "pdf": 396,
+   "book": 378,
+   "lines": 44,
+   "section": "8.3.4",
+   "summary": "The Chen–Fliess–Sussmann equation ḣ = Q(h)v lives in s ≥ n dimensions; Example 8.5 works it out for a two-input, degree-three nilpotent system on R⁴.",
+   "atoms": [
+    {
+     "id": "8-378-a",
+     "lines": [
+      1,
+      11
+     ],
+     "kind": "equation",
+     "label": "Eq (8.26)",
+     "idea": "Solving gives ḣ = Q(h)v, h(0) = 0, the Chen–Fliess–Sussmann equation: a control system in R^s (s can exceed n) that is the canonical form for the nilpotent algebra.",
+     "feynman": "A bigger, simpler model toy that covers every possible version of your real machine; the real machine is a shadow of it.",
+     "visual": "An s-dimensional bar panel of h_j values (teal), with a projection arrow down to the n-dimensional real state (blue).",
+     "scene": "mls-piecewise-steering",
+     "beat": "👻 fictitious knobs on every shelf",
+     "math": [
+      "ode"
+     ],
+     "engine": [
+      "NEW: cfsEquation"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "8-378-b",
+     "lines": [
+      12,
+      27
+     ],
+     "kind": "example",
+     "label": "Ex 8.5",
+     "idea": "Two inputs, nilpotent of degree 3 on R⁴ with g1, g2, [g1,g2], [g1,[g1,g2]] independent. Basis B1 = g1, B2 = g2, B3 = [g1,g2], B4 = [g1,[g1,g2]], B5 = [g2,[g1,g2]] with v5 ≡ 0; coefficients of ḣ_j: B1; B2 − h1B3 + ½h1²B4; B3 − h2B5 − h1B4; B4; B5.",
+     "feynman": "Four useful moves on the shelf plus one spare that duplicates the others, so its ghost knob is glued at zero.",
+     "visual": "Shelf with five books, book B5 greyed with a 0-locked knob; the coefficient table appears row by row as polynomial chips.",
+     "scene": "mls-piecewise-steering",
+     "beat": "👻 fictitious knobs on every shelf",
+     "math": [
+      "vectors"
+     ],
+     "engine": [
+      "NEW: philipHallBasis",
+      "NEW: cfsEquation"
+     ],
+     "difficulty": 5
+    },
+    {
+     "id": "8-378-c",
+     "lines": [
+      28,
+      34
+     ],
+     "kind": "equation",
+     "idea": "Example: Ad_{e^{−h1B1}}B2 = B2 − h1[B1,B2] + ½h1²[B1,[B1,B2]] = B2 − h1B3 + ½h1²B4.",
+     "feynman": "Seeing g2 through a g1-move tilts it a bit into the wiggle direction, and a bit more into the wiggle-of-wiggle.",
+     "visual": "Arrow B2 passes through a g1 segment of length h1 and picks up colored components along B3 (−h1) and B4 (½h1²); slider h1 shows them grow.",
+     "scene": "mls-piecewise-steering",
+     "beat": "👻 fictitious knobs on every shelf",
+     "math": [
+      "matrix"
+     ],
+     "engine": [
+      "lie.adjoint"
+     ],
+     "difficulty": 5
+    },
+    {
+     "id": "8-378-d",
+     "lines": [
+      35,
+      43
+     ],
+     "kind": "equation",
+     "label": "Eq (8.27)",
+     "idea": "Result: ḣ1 = v1, ḣ2 = v2, ḣ3 = h1v2 + v3, ḣ4 = ½h1²v2 + h1v3 + v4, ḣ5 = h2v3 + h1h2v2.",
+     "feynman": "A tidy chain-like toy model: a few counters each fed by simpler ones.",
+     "visual": "Five teal h bars driven live by the ghost knobs v1…v4 using RK4; v5 slider locked at 0.",
+     "scene": "mls-piecewise-steering",
+     "beat": "👻 fictitious knobs on every shelf",
+     "math": [
+      "ode"
+     ],
+     "engine": [
+      "dynamics.rk4",
+      "NEW: cfsEquation"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "8-378-e",
+     "lines": [
+      44,
+      44
+     ],
+     "kind": "page-number",
+     "idea": "Page number."
+    }
+   ]
+  },
+  {
+   "pdf": 397,
+   "book": 379,
+   "lines": 38,
+   "section": "8.3.4",
+   "summary": "The canonical system lives in R⁵ although the state is in R⁴; Example 8.6 computes the Chen–Fliess–Sussmann coefficients for the five-state chain (nilpotent of degree 4).",
+   "atoms": [
+    {
+     "id": "8-379-a",
+     "lines": [
+      1,
+      2
+     ],
+     "kind": "remark",
+     "idea": "The canonical system evolves in R⁵ even though the real state space is R⁴.",
+     "feynman": "The model toy has one extra dial that the real machine doesn’t show.",
+     "visual": "Five bars vs four real readouts, with one bar ghosted in the projection.",
+     "scene": "mls-piecewise-steering",
+     "beat": "👻 fictitious knobs on every shelf",
+     "math": [
+      "ode"
+     ],
+     "engine": [
+      "NEW: cfsEquation"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-379-b",
+     "lines": [
+      3,
+      23
+     ],
+     "kind": "example",
+     "label": "Ex 8.6",
+     "idea": "Five-state two-input chain (g1 = (1,0,q2,q3,q4), g2 = e2) is nilpotent of degree 4. Philip Hall basis: g1, g2; [g1,g2]; [g1,[g1,g2]], [g2,[g1,g2]]; three degree-4 brackets. g1, g2, ad g2, ad² g2, ad³ g2 span R⁵.",
+     "feynman": "The five-trailer train: its bookshelf has eight moves, but only five of them actually point somewhere new.",
+     "visual": "Bookshelf with 8 books on 4 shelves; 5 books glow lime (spanning), 3 grey (dependent); the chain-bead picture from the chained scene sits beside it.",
+     "scene": "mls-piecewise-steering",
+     "beat": "🗂️ Philip Hall shelf of directions",
+     "math": [
+      "vectors"
+     ],
+     "engine": [
+      "NEW: philipHallBasis"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "8-379-c",
+     "lines": [
+      24,
+      35
+     ],
+     "kind": "equation",
+     "idea": "With v5 = v7 = v8 = 0, the coefficient of ḣ_j is the composed Ad of the earlier exponentials applied to B_j; e.g. for ḣ3: B3 − h1B4 − h2B5 + ½h1²B6 + h1h2B7 + ½h2²B8.",
+     "feynman": "Look at move 3 through moves 1 and 2: it leaks into deeper wiggle directions by amounts that grow with how much of moves 1 and 2 you did.",
+     "visual": "Arrow B3 passing through two segments (h1, h2) and collecting colored components on shelves 3 and 4 with polynomial magnitudes.",
+     "scene": "mls-piecewise-steering",
+     "beat": "👻 fictitious knobs on every shelf",
+     "math": [
+      "matrix"
+     ],
+     "engine": [
+      "lie.adjoint"
+     ],
+     "difficulty": 5
+    },
+    {
+     "id": "8-379-d",
+     "lines": [
+      36,
+      37
+     ],
+     "kind": "prose",
+     "idea": "The remaining coefficients follow the same way (left as a reader exercise).",
+     "feynman": "Same trick for the rest — try it yourself.",
+     "visual": "Remaining rows of the coefficient table appear with a \"challenge\" border; learner predicts each before reveal.",
+     "scene": "mls-piecewise-steering",
+     "beat": "👻 fictitious knobs on every shelf",
+     "math": [
+      "matrix"
+     ],
+     "engine": [
+      "NEW: cfsEquation"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "8-379-e",
+     "lines": [
+      38,
+      38
+     ],
+     "kind": "page-number",
+     "idea": "Page number."
+    }
+   ]
+  },
+  {
+   "pdf": 398,
+   "book": 380,
+   "lines": 48,
+   "section": "8.3.4",
+   "summary": "Full coefficient table and the eight-dimensional Chen–Fliess–Sussmann equation for the five-state chain; real inputs generate fictitious ones via bracket loops such as Eq (8.28).",
+   "atoms": [
+    {
+     "id": "8-380-a",
+     "lines": [
+      1,
+      13
+     ],
+     "kind": "equation",
+     "idea": "Coefficient table for ḣ1…ḣ8 (e.g. ḣ2: B2 − h1B3 + ½h1²B4 − ⅙h1³B6; ḣ4: B4 − h1B6 − h2B7; ḣ6…ḣ8: themselves).",
+     "feynman": "The full answer key for \"how does each move look after the earlier ones\".",
+     "visual": "Triangular table of polynomial chips; hover a chip to highlight its source segments on the ribbon.",
+     "scene": "mls-piecewise-steering",
+     "beat": "👻 fictitious knobs on every shelf",
+     "math": [
+      "matrix"
+     ],
+     "engine": [
+      "NEW: cfsEquation"
+     ],
+     "difficulty": 5
+    },
+    {
+     "id": "8-380-b",
+     "lines": [
+      14,
+      32
+     ],
+     "kind": "equation",
+     "idea": "Resulting system in R⁸ with h(0) = 0: ḣ1 = v1, ḣ2 = v2, ḣ3 = h1v2 + v3, ḣ4 = ½h1²v2 + h1v3 + v4, ḣ5 = h1h2v2 + h2v3, ḣ6 = ⅙h1³v2 + ½h1²v3 + h1v4 + v6, ḣ7 = ½h1²h2v2 + h1h2v3 + h2v4, ḣ8 = ½h1h2²v2 + ½h2²v3.",
+     "feynman": "An eight-counter abacus where each counter is fed by polynomials of the earlier ones — still just bookkeeping.",
+     "visual": "Eight h bars driven by ghost knobs (v5, v7, v8 locked at 0); live RK4 integration.",
+     "scene": "mls-piecewise-steering",
+     "beat": "👻 fictitious knobs on every shelf",
+     "math": [
+      "ode"
+     ],
+     "engine": [
+      "dynamics.rk4",
+      "NEW: cfsEquation"
+     ],
+     "difficulty": 5
+    },
+    {
+     "id": "8-380-c",
+     "lines": [
+      33,
+      40
+     ],
+     "kind": "prose",
+     "idea": "To steer: pick any path from q0 to qf, plug it into (8.23) to read off fictitious inputs along the first n independent basis directions, then realize those using the real inputs — which needs a generalized bracket construction.",
+     "feynman": "Draw the route you wish you could drive (even sideways), work out which ghost knobs it needs, then fake each ghost knob with real wiggles.",
+     "visual": "Gold straight-line wish path; a panel shows required ghost-knob signals v_j(t); each ghost knob gets replaced by a small orange loop icon of real-input switches.",
+     "scene": "mls-piecewise-steering",
+     "beat": "🔁 box loop buys a bracket",
+     "math": [
+      "trajectory"
+     ],
+     "engine": [
+      "NEW: piecewiseInputs"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "8-380-d",
+     "lines": [
+      41,
+      47
+     ],
+     "kind": "equation",
+     "label": "Eq (8.28)",
+     "idea": "For v3 (direction [g1,g2]) use four segments of √ε seconds: (u1,u2) = (1,0), (0,1), (−1,0), (0,−1); the flow is e^{√ε g1}e^{√ε g2}e^{−√ε g1}e^{−√ε g2}.",
+     "feynman": "East, north, west, south: you come back nearly to start, shifted by the \"wiggle\" direction an amount equal to the square’s area.",
+     "visual": "Blue cart traces a square of side √ε with orange segments; the net displacement arrow (gold) lies along [g1,g2] with length ε; side slider shows displacement scales as side².",
+     "scene": "mls-piecewise-steering",
+     "beat": "🔁 box loop buys a bracket",
+     "math": [
+      "vectors",
+      "screw-exp"
+     ],
+     "engine": [
+      "NEW: piecewiseInputs",
+      "NEW: lieBracket"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "8-380-e",
+     "lines": [
+      48,
+      48
+     ],
+     "kind": "page-number",
+     "idea": "Page number."
+    }
+   ]
+  },
+  {
+   "pdf": 399,
+   "book": 381,
+   "lines": 43,
+   "section": "8.3.4",
+   "summary": "The Campbell–Baker–Hausdorff formula (Thm 8.5) explains what a box loop produces; nilpotency makes it exact; without nilpotency the method only approximates.",
+   "atoms": [
+    {
+     "id": "8-381-a",
+     "lines": [
+      1,
+      12
+     ],
+     "kind": "theorem",
+     "label": "Thm 8.5, Eq (8.29)",
+     "idea": "CBH: e^{g1}e^{g2} = exp(g1 + g2 + ½[g1,g2] + (1/12)([g1,[g1,g2]] − [g2,[g1,g2]]) + ⋯), further terms by matching formal power series.",
+     "feynman": "Doing move A then move B is like doing A and B blended together, plus half a wiggle, plus a tiny wiggle-of-wiggle correction, and so on.",
+     "visual": "Two flow arrows composed (orange then orange) vs a single blended arrow plus correction arrows (teal ½ bracket, smaller purple 1/12 terms); a toggle adds terms and the endpoints converge (lime).",
+     "scene": "mls-piecewise-steering",
+     "beat": "🔁 box loop buys a bracket",
+     "math": [
+      "screw-exp",
+      "matrix"
+     ],
+     "engine": [
+      "lie.expSE3",
+      "NEW: bchSeries"
+     ],
+     "difficulty": 5
+    },
+    {
+     "id": "8-381-b",
+     "lines": [
+      13,
+      27
+     ],
+     "kind": "prose",
+     "idea": "Applying CBH to the box loop gives h = (0, 0, ε, h4(ε)) with h4 higher order: the loop moves along [g1,g2] but also leaks into [g1,[g1,g2]], while h1, h2 stay put. An eight-segment loop with ∛ε pieces targets the deeper direction; nilpotency makes the series finite, so the construction is exact and generalizes.",
+     "feynman": "Your square parking wiggle mostly slides you sideways but also twists you slightly; a bigger, two-level wiggle fixes the twist. Since the toy has finitely many hidden directions, a finite set of wiggles does it exactly.",
+     "visual": "Box loop leaves a gold arrow (ε, along shelf 2) plus a small purple leak arrow on shelf 3. Switch to the eight-leg loop (∛ε): the shelf-2 arrow vanishes and a clean shelf-3 arrow appears.",
+     "scene": "mls-piecewise-steering",
+     "beat": "🔁 box loop buys a bracket",
+     "math": [
+      "vectors"
+     ],
+     "engine": [
+      "NEW: bchSeries",
+      "NEW: piecewiseInputs"
+     ],
+     "difficulty": 5
+    },
+    {
+     "id": "8-381-c",
+     "lines": [
+      28,
+      33
+     ],
+     "kind": "prose",
+     "idea": "Without nilpotency the algorithm only steers approximately: the Philip Hall basis is infinite and the CBH series doesn’t terminate.",
+     "feynman": "If every wiggle reveals a new hidden direction forever, you can’t list them all — you can only get closer and closer.",
+     "visual": "Bookshelf grows endless shelves fading upward; CBH term counter keeps climbing (∞ icon in purple).",
+     "scene": "mls-piecewise-steering",
+     "beat": "♾️ not nilpotent: get closer",
+     "math": [
+      "vectors"
+     ],
+     "engine": [
+      "NEW: bchSeries"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "8-381-d",
+     "lines": [
+      34,
+      42
+     ],
+     "kind": "prose",
+     "idea": "Remedies: transform inputs with a matrix β so the new fields g̃ = β g form a nilpotent system, or use nilpotent approximations of the system; see Lafferriere–Sussmann for details.",
+     "feynman": "Mix your knobs into new combos that behave like the finite toy, or pretend your machine is the toy and fix errors by repeating.",
+     "visual": "Input-mixing matrix sliders β; a nilpotency meter shows higher shelves emptying for good choices; repeated passes halve the coral distance to gold.",
+     "scene": "mls-piecewise-steering",
+     "beat": "♾️ not nilpotent: get closer",
+     "math": [
+      "matrix",
+      "optimization"
+     ],
+     "engine": [
+      "NEW: lafferriereSussmannStep"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "8-381-e",
+     "lines": [
+      43,
+      43
+     ],
+     "kind": "page-number",
+     "idea": "Page number."
+    }
+   ]
+  },
+  {
+   "pdf": 400,
+   "book": 382,
+   "lines": 26,
+   "section": "8.4",
+   "summary": "A three-fingered hand (Fig 8.2) motivates repositioning fingertips by rolling; the grasp constraint J_h θ̇ = Gᵀẋ splits into object motion and internal (null-space) finger motion.",
+   "atoms": [
+    {
+     "id": "8-382-a",
+     "lines": [
+      1,
+      3
+     ],
+     "kind": "figure",
+     "label": "Fig 8.2",
+     "idea": "A three-fingered hand grasping an ellipsoidal object; small circles under each finger depict the internal squeezing forces.",
+     "feynman": "Holding an egg with three fingers: each finger pushes inward a little so the egg doesn’t drop, and the pushes cancel each other.",
+     "visual": "3D: slate ellipsoid held by three fingers (orange joints, pink tips); under each finger a small purple circle sized by its internal force; forces sum to zero (lime readout).",
+     "scene": "mls-finger-repositioning",
+     "beat": "✋ hold still, walk the fingers",
+     "math": [
+      "statics",
+      "forward-kinematics"
+     ],
+     "engine": [
+      "kinematics.poeFK"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "8-382-b",
+     "lines": [
+      4,
+      4
+     ],
+     "kind": "heading",
+     "idea": "Section 8.4 Dynamic finger repositioning."
+    },
+    {
+     "id": "8-382-c",
+     "lines": [
+      5,
+      10
+     ],
+     "kind": "prose",
+     "idea": "Goal: move fingertips over the object without lifting them, by pure rolling of spherical fingertips on flat faces (Chapter 7 showed this is possible); several solutions follow.",
+     "feynman": "Shift your grip on a ball by rolling your fingertips over it instead of letting go.",
+     "visual": "One pink fingertip ball rolls along a slate box face, leaving a teal contact trail; the box never drops (contact lock icon lime).",
+     "scene": "mls-finger-repositioning",
+     "beat": "✋ hold still, walk the fingers",
+     "math": [
+      "rotation"
+     ],
+     "engine": [
+      "NEW: rollingContactStep"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "8-382-d",
+     "lines": [
+      11,
+      11
+     ],
+     "kind": "heading",
+     "idea": "Section 8.4.1 Problem description."
+    },
+    {
+     "id": "8-382-e",
+     "lines": [
+      12,
+      18
+     ],
+     "kind": "equation",
+     "label": "Eq (8.30)",
+     "idea": "Rolling-contact grasp constraints (from Chapter 5) in local coordinates: J_h(θ,x)θ̇ = Gᵀ(θ,x)ẋ, θ finger joints, x object pose.",
+     "feynman": "The fingertips must move exactly as the object surface moves under them — like hands on a steering wheel.",
+     "visual": "Joint-speed arrows (orange) mapped by J_h and object-speed arrows (blue) mapped by Gᵀ meet at teal contact points; a balance readout shows both sides equal.",
+     "scene": "mls-finger-repositioning",
+     "beat": "✋ hold still, walk the fingers",
+     "math": [
+      "jacobian"
+     ],
+     "engine": [
+      "kinematics.spaceJacobian"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-382-f",
+     "lines": [
+      19,
+      25
+     ],
+     "kind": "prose",
+     "idea": "If the grasp is manipulable, any object velocity is achievable; when J_h has a null space, finger velocities are not unique — internal motions leave the object still. Let u1 drive the object and u2 parameterize internal motions.",
+     "feynman": "Your fingers can shuffle around a mug you’re holding still — there are extra ways to move that the mug doesn’t feel.",
+     "visual": "Null-space slider (orange) wiggles the fingers while the object stays perfectly still (object velocity readout = 0, lime); a second slider moves the object.",
+     "scene": "mls-finger-repositioning",
+     "beat": "🔀 null-space wiggles",
+     "math": [
+      "jacobian",
+      "svd"
+     ],
+     "engine": [
+      "linalg.svd"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-382-g",
+     "lines": [
+      26,
+      26
+     ],
+     "kind": "page-number",
+     "idea": "Page number."
+    }
+   ]
+  },
+  {
+   "pdf": 401,
+   "book": 383,
+   "lines": 43,
+   "section": "8.4.1",
+   "summary": "Grasp kinematics as a control system (Eq 8.31); the redundant case lets fingers move with the object fixed, reducing to one sphere-tipped finger rolling on a plane (Eq 8.32).",
+   "atoms": [
+    {
+     "id": "8-383-a",
+     "lines": [
+      1,
+      5
+     ],
+     "kind": "equation",
+     "label": "Eq (8.31)",
+     "idea": "Control form: ẋ = u1, θ̇ = J_h⁺Gᵀu1 + Ku2, with columns of K spanning null(J_h).",
+     "feynman": "One knob moves the held object; the other only reshuffles the fingers.",
+     "visual": "Two orange knobs: u1 moves the slate object and the fingers follow; u2 moves fingers along null-space directions (purple arrows) with object fixed.",
+     "scene": "mls-finger-repositioning",
+     "beat": "🔀 null-space wiggles",
+     "math": [
+      "jacobian",
+      "svd"
+     ],
+     "engine": [
+      "linalg.pinv",
+      "linalg.svd"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-383-b",
+     "lines": [
+      6,
+      11
+     ],
+     "kind": "prose",
+     "idea": "Dynamic finger repositioning: steer (θ0,x0) to (θf,xf); fingertip contact locations follow from forward kinematics.",
+     "feynman": "Start holding the cup one way and end holding it another way, without letting go.",
+     "visual": "Ghost start grasp (translucent) and gold goal grasp; contact points computed live from joint angles.",
+     "scene": "mls-finger-repositioning",
+     "beat": "✋ hold still, walk the fingers",
+     "math": [
+      "forward-kinematics"
+     ],
+     "engine": [
+      "kinematics.poeFK"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "8-383-c",
+     "lines": [
+      12,
+      25
+     ],
+     "kind": "prose",
+     "idea": "General case is hard. Special cases: (1) no redundancy — only object motion u1, and moving contacts needs a closed loop in x; (2) redundancy — move fingers with ẋ = u1 = 0 using only K directions; then fingers decouple and one finger suffices. The second case is studied.",
+     "feynman": "Either juggle the cup in a little circle so it rolls under your fingers, or keep it still and let each finger walk on its own.",
+     "visual": "Toggle: case 1 shows the object tracing a small closed loop while contacts creep; case 2 freezes the object and isolates one finger with a spotlight.",
+     "scene": "mls-finger-repositioning",
+     "beat": "🔀 null-space wiggles",
+     "math": [
+      "jacobian"
+     ],
+     "engine": [
+      "NEW: rollingContactStep"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-383-d",
+     "lines": [
+      26,
+      26
+     ],
+     "kind": "heading",
+     "idea": "Section 8.4.2 Steering using sinusoids."
+    },
+    {
+     "id": "8-383-e",
+     "lines": [
+      27,
+      38
+     ],
+     "kind": "equation",
+     "label": "Eq (8.32)",
+     "idea": "One spherical finger rolling on a plane: η̇ = (0, sec q1, −sin q5, −cos q5, −tan q1)u1 + (−1, 0, −cos q5, sin q5, 0)u2, with q1,q2 the contact on the finger, q3,q4 on the plane, q5 the contact angle.",
+     "feynman": "Roll a marble under your palm: two ways to roll it, but five things change — where on the marble, where on the table, and how it’s twisted.",
+     "visual": "Ball on table with five readouts (two pink finger-contact coords, two teal table coords, one orange twist angle); two orange roll knobs.",
+     "scene": "mls-finger-repositioning",
+     "beat": "⚽ ball-tip as a chain",
+     "math": [
+      "ode",
+      "rotation"
+     ],
+     "engine": [
+      "NEW: rollingContactStep"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-383-f",
+     "lines": [
+      39,
+      42
+     ],
+     "kind": "equation",
+     "idea": "Change of state: z1 = q1, z2 = q2, z3 = −q5, z4 = q3 − q1, z5 = q4 + q2, tracking Taylor terms to obtain a two-chain.",
+     "feynman": "Relabel the five readouts so they line up as two short trailer chains.",
+     "visual": "Five readouts slide into two bead chains (z1→z3→… and z2→…), labeled by color.",
+     "scene": "mls-finger-repositioning",
+     "beat": "⚽ ball-tip as a chain",
+     "math": [
+      "linearize"
+     ],
+     "engine": [
+      "NEW: rollingContactStep"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-383-g",
+     "lines": [
+      43,
+      43
+     ],
+     "kind": "page-number",
+     "idea": "Page number."
+    }
+   ]
+  },
+  {
+   "pdf": 402,
+   "book": 384,
+   "lines": 36,
+   "section": "8.4.2",
+   "summary": "Fig 8.3: sinusoidal steering slides a ball fingertip down an object face while the finger contact loops back; with v = (−u2, sec q1 u1), the rolling system is a two-chain plus higher-order terms.",
+   "atoms": [
+    {
+     "id": "8-384-a",
+     "lines": [
+      1,
+      12
+     ],
+     "kind": "figure",
+     "label": "Fig 8.3",
+     "idea": "Multifingered hand on a box: finger-contact coordinates (u_f, v_f) trace a closed figure-eight while object-contact coordinates (u_o, v_o) trace a loop that ends displaced downward.",
+     "feynman": "Walking a fingertip down a box by rocking it: the spot on your finger goes around and returns, but the spot on the box ends up lower.",
+     "visual": "Two live plots: pink (u_f,v_f) figure-eight closing on itself; teal (u_o,v_o) curve whose end is below its start (gold marker); 3D hand on box on the left.",
+     "scene": "mls-finger-repositioning",
+     "beat": "∞ figure-eight walks the tip",
+     "math": [
+      "trajectory"
+     ],
+     "engine": [
+      "NEW: rollingContactStep"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-384-b",
+     "lines": [
+      13,
+      22
+     ],
+     "kind": "equation",
+     "label": "Eq (8.33)",
+     "idea": "With v1 = −u2, v2 = sec q1 u1: ż1 = v1, ż2 = v2, ż3 = z1v2 + ψ1, ż4 = z3v2 + …, ż5 = z3v1 + …, where ψ_i are quadratic or higher; dropping them leaves a two-chain steerable by sinusoids.",
+     "feynman": "Up close (small rolls), the marble behaves exactly like two little trailer chains; the leftovers are tiny.",
+     "visual": "Two-chain bead diagram; coral \"ψ\" leftover arrows on beads 3–5 shrink as the roll amplitude slider decreases.",
+     "scene": "mls-finger-repositioning",
+     "beat": "⚽ ball-tip as a chain",
+     "math": [
+      "linearize",
+      "ode"
+     ],
+     "engine": [
+      "NEW: rollingContactStep"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "8-384-c",
+     "lines": [
+      23,
+      28
+     ],
+     "kind": "prose",
+     "idea": "Unlike the hopper or car, the Fourier coefficients for z4, z5 are hard to get in closed form, so a numerical search over integer-frequency sines/cosines steers the finger; Fig 8.3 shows a path down an object side.",
+     "feynman": "When you can’t compute the right wiggle by hand, try wiggles and adjust their sizes until it works.",
+     "visual": "Coefficient sliders for sin/cos at 1× and 2×; a solver nudges them until the teal endpoint hits the gold mark on the face.",
+     "scene": "mls-finger-repositioning",
+     "beat": "∞ figure-eight walks the tip",
+     "math": [
+      "optimization",
+      "convolution"
+     ],
+     "engine": [
+      "dynamics.numJacobian",
+      "linalg.solve"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-384-d",
+     "lines": [
+      29,
+      35
+     ],
+     "kind": "prose",
+     "idea": "In the figure, the finger contact (q1,q2) returns to its start while the object contact (q3,q4) shifts in the v_o direction.",
+     "feynman": "Same spot on your fingertip, new spot on the box.",
+     "visual": "Pink loop closes (lime ✓ on finger contact), teal endpoint offset arrow along v_o (gold).",
+     "scene": "mls-finger-repositioning",
+     "beat": "∞ figure-eight walks the tip",
+     "math": [
+      "trajectory"
+     ],
+     "engine": [
+      "NEW: rollingContactStep"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "8-384-e",
+     "lines": [
+      36,
+      36
+     ],
+     "kind": "page-number",
+     "idea": "Page number."
+    }
+   ]
+  },
+  {
+   "pdf": 403,
+   "book": 385,
+   "lines": 41,
+   "section": "8.4.3",
+   "summary": "Geometric phase: for a sphere rolling on a plane, the contact angle changes at rate −sin u_f · v̇_f, independent of radius; Gauss–Bonnet gives Δψ = −(enclosed area).",
+   "atoms": [
+    {
+     "id": "8-385-a",
+     "lines": [
+      1,
+      1
+     ],
+     "kind": "heading",
+     "idea": "Section 8.4.3 Geometric phase algorithm."
+    },
+    {
+     "id": "8-385-b",
+     "lines": [
+      2,
+      4
+     ],
+     "kind": "prose",
+     "idea": "Classical differential geometry gives a direct method for rolling a spherical finger on a plane.",
+     "feynman": "Old geometry from map-makers turns out to solve the finger-rolling puzzle.",
+     "visual": "Globe with latitude/longitude grid next to a flat table.",
+     "scene": "mls-ch8-geometric-phase",
+     "beat": "🌐 roll a ball on the table",
+     "math": [
+      "rotation"
+     ],
+     "engine": [
+      "NEW: rollingContactStep"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "8-385-c",
+     "lines": [
+      5,
+      12
+     ],
+     "kind": "equation",
+     "label": "Eq (8.34)",
+     "idea": "Contact configuration η = (α_f, α_o, ψ): local coordinates on finger and object surfaces plus the contact angle. Rolling without slipping: M_f α̇_f − R_ψ M_o α̇_o = 0 and T_f M_f α̇_f + T_o M_o α̇_o − ψ̇ = 0.",
+     "feynman": "Two surfaces touching and rolling: the contact spot moves the same distance on both, and the twist follows from how the surfaces curve.",
+     "visual": "Ball on table: pink contact trail on the ball and teal trail on the table always equal length (two length readouts match); orange twist dial ψ.",
+     "scene": "mls-ch8-geometric-phase",
+     "beat": "🌐 roll a ball on the table",
+     "math": [
+      "rotation",
+      "ode"
+     ],
+     "engine": [
+      "NEW: rollingContactStep"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-385-d",
+     "lines": [
+      13,
+      18
+     ],
+     "kind": "equation",
+     "idea": "Sphere of radius ρ on a plane: M_o = I, T_o = 0, M_f = diag(ρ, ρ cos u_f), T_f = (0, −tan u_f / ρ).",
+     "feynman": "On a globe, moving one degree east covers less ground near the poles (cos of latitude); the table is flat so nothing changes there.",
+     "visual": "Globe grid cells shrinking toward the poles; a cos u_f bar beside the latitude slider.",
+     "scene": "mls-ch8-geometric-phase",
+     "beat": "🌐 roll a ball on the table",
+     "math": [
+      "rotation"
+     ],
+     "engine": [
+      "NEW: rollingContactStep"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-385-e",
+     "lines": [
+      19,
+      29
+     ],
+     "kind": "equation",
+     "label": "Eq (8.35)",
+     "idea": "Since M_f, R_ψ M_o are invertible, any finger path α_f(t) lifts uniquely to a contact path: α̇_f = u, α̇_o = M_o⁻¹R_ψ M_f u, ψ̇ = (T_f + T_o R_ψ)M_f u — a lifting map from S_f to Q.",
+     "feynman": "Decide how the spot moves on the ball, and the table spot and twist are completely determined.",
+     "visual": "Draw a pink path on the ball with the mouse; the teal table path and the orange twist dial are computed live.",
+     "scene": "mls-ch8-geometric-phase",
+     "beat": "🌐 roll a ball on the table",
+     "math": [
+      "ode"
+     ],
+     "engine": [
+      "dynamics.rk4",
+      "NEW: rollingContactStep"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-385-f",
+     "lines": [
+      30,
+      34
+     ],
+     "kind": "equation",
+     "label": "Eq (8.36)",
+     "idea": "For sphere on plane: ψ̇ = −sin u_f · u2 (u2 = v̇_f), independent of the radius ρ, so results for the unit sphere hold for all radii.",
+     "feynman": "How much the ball twists depends only on the angles you roll through, not on how big the ball is.",
+     "visual": "Radius slider changes the ball’s size; the twist readout for the same angular path does not change (lime).",
+     "scene": "mls-ch8-geometric-phase",
+     "beat": "📐 twist = enclosed area",
+     "math": [
+      "derivative"
+     ],
+     "engine": [
+      "NEW: rollingContactStep"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-385-g",
+     "lines": [
+      35,
+      40
+     ],
+     "kind": "theorem",
+     "label": "Thm 8.6, Eq (8.37)",
+     "idea": "Gauss–Bonnet: if the finger path is a closed curve on the unit sphere enclosing a cap Ω, rolling along it changes the contact angle by Δψ = −Area(Ω).",
+     "feynman": "Carry a pencil around a closed loop on a globe without ever turning it relative to the surface: when you return, it points in a new direction, and the turn equals the area you circled.",
+     "visual": "Draw a closed pink loop on the ball; the enclosed cap fills gold; area readout and twist readout show equal magnitudes (opposite sign).",
+     "scene": "mls-ch8-geometric-phase",
+     "beat": "📐 twist = enclosed area",
+     "math": [
+      "rotation"
+     ],
+     "engine": [
+      "NEW: sphereCapArea"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "8-385-h",
+     "lines": [
+      41,
+      41
+     ],
+     "kind": "page-number",
+     "idea": "Page number."
+    }
+   ]
+  },
+  {
+   "pdf": 404,
+   "book": 386,
+   "lines": 34,
+   "section": "8.4.3",
+   "summary": "Proof via Green’s theorem that the phase equals minus the enclosed spherical area; geometric phase is radius independent; Prop 8.7 starts a planar recipe for moving the contact point.",
+   "atoms": [
+    {
+     "id": "8-386-a",
+     "lines": [
+      1,
+      3
+     ],
+     "kind": "figure",
+     "label": "Fig 8.4",
+     "idea": "A closed path α_f(t) on a sphere bounding a cap Ω.",
+     "feynman": "A loop drawn around the top of an orange: the peel inside is the area.",
+     "visual": "3D unit sphere with a pink loop near the north pole and the gold cap Ω shaded.",
+     "scene": "mls-ch8-geometric-phase",
+     "beat": "📐 twist = enclosed area",
+     "math": [
+      "rotation"
+     ],
+     "engine": [
+      "NEW: sphereCapArea"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "8-386-b",
+     "lines": [
+      4,
+      5
+     ],
+     "kind": "theorem",
+     "idea": "The area is measured on the curved unit sphere.",
+     "feynman": "Measure the peel, not its flat shadow.",
+     "visual": "Toggle between the curved cap and its flat projection; only the curved area matches the twist.",
+     "scene": "mls-ch8-geometric-phase",
+     "beat": "📐 twist = enclosed area",
+     "math": [
+      "rotation"
+     ],
+     "engine": [
+      "NEW: sphereCapArea"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "8-386-c",
+     "lines": [
+      6,
+      17
+     ],
+     "kind": "proof",
+     "idea": "ψ̇ = −sin u_f v̇_f; integrate around the loop and apply Green’s theorem: Δψ = ∮ −sin u_f dv_f = −∬_Ω cos u_f du_f dv_f = −Area(Ω), since cos u_f du dv is the unit-sphere area element.",
+     "feynman": "Adding up tiny twists along the fence equals adding up tiny patches of the field inside the fence.",
+     "visual": "Staircase: (1) the loop is split into small arcs with twist ticks; (2) the interior tiles into small patches with area chips weighted by cos u_f; (3) the two running totals fill bars of equal height.",
+     "scene": "mls-ch8-geometric-phase",
+     "beat": "📐 twist = enclosed area",
+     "math": [
+      "derivative"
+     ],
+     "engine": [
+      "NEW: sphereCapArea"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "8-386-d",
+     "lines": [
+      18,
+      23
+     ],
+     "kind": "prose",
+     "idea": "The net change in contact angle depends only on the enclosed unit-sphere area, whatever the ball’s radius; Δψ is the geometric phase (nonholonomy) of the path and tells how big a loop to trace to get a desired twist.",
+     "feynman": "Want 30° of twist? Draw a loop that encloses the matching patch — size of the ball doesn’t matter.",
+     "visual": "Twist target dial (gold); learner draws a loop; a meter turns lime when the enclosed area equals the target.",
+     "scene": "mls-ch8-geometric-phase",
+     "beat": "📐 twist = enclosed area",
+     "math": [
+      "rotation"
+     ],
+     "engine": [
+      "NEW: sphereCapArea"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-386-e",
+     "lines": [
+      24,
+      30
+     ],
+     "kind": "prose",
+     "idea": "Next: generate finger motions by tracing a closed path α_o on the object plane — the object surface motion that repositions the finger and produces phase changes, derived purely geometrically.",
+     "feynman": "Instead of drawing on the ball, slide the table under it in a closed shape.",
+     "visual": "Switch drawing to the table: a teal closed path on the plane; the ball rolls along and its pink contact spot moves.",
+     "scene": "mls-ch8-geometric-phase",
+     "beat": "🟦 a square on the table moves the spot",
+     "math": [
+      "rotation"
+     ],
+     "engine": [
+      "NEW: rollingContactStep"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-386-f",
+     "lines": [
+      31,
+      33
+     ],
+     "kind": "proposition",
+     "label": "Prop 8.7",
+     "idea": "Sphere rolling on a plane (statement begins): two points on the sphere at geodesic distance l < π/2 …",
+     "feynman": "Pick two spots on the ball, not too far apart …",
+     "visual": "Two pink dots on the ball’s equator with a geodesic arc of length l between them.",
+     "scene": "mls-ch8-geometric-phase",
+     "beat": "🟦 a square on the table moves the spot",
+     "math": [
+      "rotation"
+     ],
+     "engine": [
+      "NEW: sphereCapArea"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-386-g",
+     "lines": [
+      34,
+      34
+     ],
+     "kind": "page-number",
+     "idea": "Page number."
+    }
+   ]
+  },
+  {
+   "pdf": 405,
+   "book": 387,
+   "lines": 43,
+   "section": "8.4.3",
+   "summary": "Prop 8.7: a four-leg planar loop (x, π/2, π/2, x) moves the contact point a distance l = 2(x − atan(2x/π)) on the sphere; proof by tracing the path on the sphere.",
+   "atoms": [
+    {
+     "id": "8-387-a",
+     "lines": [
+      1,
+      12
+     ],
+     "kind": "figure",
+     "label": "Fig 8.5",
+     "idea": "Planar loop A→B→C→D→A (AB = x, BC = π/2, CD = π/2 at angle θ, DA = x) and the induced path on the sphere: α_f → B′ → north pole C′ → D′ on the equator → α̃_f.",
+     "feynman": "Walk a kite-shaped loop on the floor while pushing a ball; the ball’s touching spot goes up to the top and back down somewhere new.",
+     "visual": "Left: teal four-leg path on the table; right: pink induced path on the sphere through the north pole; synced animation with a cursor on both.",
+     "scene": "mls-ch8-geometric-phase",
+     "beat": "🟦 a square on the table moves the spot",
+     "math": [
+      "rotation"
+     ],
+     "engine": [
+      "NEW: rollingContactStep"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-387-b",
+     "lines": [
+      13,
+      20
+     ],
+     "kind": "proposition",
+     "idea": "… rolling along ABCDA with |AB| = |DA| = x and |BC| = |CD| = π/2 takes α_f to α̃_f if 2(x − atan(x/(π/2))) = l.",
+     "feynman": "Choose the side length x so the ball’s spot lands exactly where you want.",
+     "visual": "Drag the l slider (gold target spot on the equator); x is solved live and the floor path redraws.",
+     "scene": "mls-ch8-geometric-phase",
+     "beat": "🟦 a square on the table moves the spot",
+     "math": [
+      "rotation"
+     ],
+     "engine": [
+      "NEW: solveGeometricPhaseX"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "8-387-c",
+     "lines": [
+      21,
+      31
+     ],
+     "kind": "proof",
+     "idea": "Join α_f and α̃_f by a great circle. AB then BC on the plane carry the spot from α_f to B′ (distance x, right angle) and up to the north pole C′; CD at angle θ brings it down a meridian to D′ on the equator with d(B′,D′) = θ; DA runs back along the equator a distance x.",
+     "feynman": "Rolling a ball a quarter-turn sends its touching spot from the equator to the top; turning and rolling another quarter-turn brings it down a different meridian.",
+     "visual": "Staircase on the sphere: leg 1 (equator arc x), leg 2 (meridian up to pole), leg 3 (meridian down at angle θ), leg 4 (equator back x); each leg highlighted on both panels.",
+     "scene": "mls-ch8-geometric-phase",
+     "beat": "🟦 a square on the table moves the spot",
+     "math": [
+      "rotation"
+     ],
+     "engine": [
+      "NEW: rollingContactStep"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "8-387-d",
+     "lines": [
+      32,
+      38
+     ],
+     "kind": "proof",
+     "idea": "Hence d(α_f, α̃_f) = 2x − θ = 2x − 2 atan(x/(π/2)) =: f(x); f(0) = 0, f(π/2) = π/2 > l, f′ > 0, so a unique x ∈ [0, π/2] solves f(x) = l.",
+     "feynman": "The farther you walk the side legs, the farther the spot moves, steadily — so exactly one length works.",
+     "visual": "Plot f(x) rising monotonically (blue) with horizontal gold line at l; their single crossing marks x (lime dot).",
+     "scene": "mls-ch8-geometric-phase",
+     "beat": "🟦 a square on the table moves the spot",
+     "math": [
+      "derivative"
+     ],
+     "engine": [
+      "NEW: solveGeometricPhaseX"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-387-e",
+     "lines": [
+      39,
+      42
+     ],
+     "kind": "prose",
+     "idea": "Geometry plus Green’s theorem yields rolling strategies to place the fingertip and set the contact angle; the method looks problem-specific …",
+     "feynman": "A clever trick that seems tailored to balls on tables …",
+     "visual": "Summary card: square-loop icon → spot moved; loop-area icon → twist set.",
+     "scene": "mls-ch8-geometric-phase",
+     "beat": "🛰️ same trick: satellites & cilia",
+     "math": [
+      "rotation"
+     ],
+     "engine": [
+      "NEW: sphereCapArea"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "8-387-f",
+     "lines": [
+      43,
+      43
+     ],
+     "kind": "page-number",
+     "idea": "Page number."
+    }
+   ]
+  },
+  {
+   "pdf": 406,
+   "book": 388,
+   "lines": 8,
+   "section": "8.4.3",
+   "summary": "The geometric-phase idea generalizes beyond rolling fingers: satellite reorientation and ciliary swimming.",
+   "atoms": [
+    {
+     "id": "8-388-a",
+     "lines": [
+      1,
+      7
+     ],
+     "kind": "prose",
+     "idea": "… but it generalizes to other geometries as the geometric phase method, explaining satellite reorientation and how cyclic cilia beats propel a paramecium.",
+     "feynman": "A falling cat twists its body in loops and lands feet-down without anything to push against; a satellite spins little wheels in a loop and ends up pointing elsewhere.",
+     "visual": "Three panels sharing one rule: a cat with shape-space loop, a satellite with reaction wheels tracing a loop, a paramecium with cilia beating in loops; each shows a gold net turn or drift equal to enclosed loop area.",
+     "scene": "mls-ch8-geometric-phase",
+     "beat": "🛰️ same trick: satellites & cilia",
+     "math": [
+      "rotation"
+     ],
+     "engine": [
+      "NEW: sphereCapArea"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "8-388-b",
+     "lines": [
+      8,
+      8
+     ],
+     "kind": "page-number",
+     "idea": "Page number."
+    }
+   ]
+  },
+  {
+   "pdf": 407,
+   "book": 389,
+   "lines": 37,
+   "section": "8.5",
+   "summary": "Summary of key ideas: sinusoidal optimal inputs for Brockett systems, integrally related sinusoids for chained form, optimal-input derivative formula and Ritz numerics, piecewise-constant inputs for nilpotent systems.",
+   "atoms": [
+    {
+     "id": "8-389-a",
+     "lines": [
+      1,
+      1
+     ],
+     "kind": "heading",
+     "idea": "Section 8.5 Summary."
+    },
+    {
+     "id": "8-389-b",
+     "lines": [
+      2,
+      9
+     ],
+     "kind": "summary",
+     "idea": "Least-squares optimal inputs for the (2,3) Brockett system are sinusoids; with q1, q2 returning to 0, a single frequency 2π.",
+     "feynman": "To raise the toy without moving it, trace one circle.",
+     "visual": "Recap card 1: thumbnail of the bead rising on a circular floor loop; click replays it.",
+     "scene": "mls-ch8-recap",
+     "beat": "🗺️ six tools on one shelf",
+     "math": [
+      "optimization"
+     ],
+     "engine": [
+      "NEW: steerBrockett"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "8-389-c",
+     "lines": [
+      10,
+      15
+     ],
+     "kind": "summary",
+     "idea": "For q̇ = u, Ẏ = quᵀ − uqᵀ, optimal inputs are sinusoids, at integrally related frequencies when q returns to 0.",
+     "feynman": "More knobs: a band playing 1×, 2×, 3× notes.",
+     "visual": "Recap card 2: spinning dials at 1×, 2×, 3× filling an so(m) grid.",
+     "scene": "mls-ch8-recap",
+     "beat": "🗺️ six tools on one shelf",
+     "math": [
+      "convolution"
+     ],
+     "engine": [
+      "NEW: brockettHarmonics"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "8-389-d",
+     "lines": [
+      16,
+      27
+     ],
+     "kind": "summary",
+     "idea": "Integer-frequency sinusoids (sub-optimal) steer chained systems (one-chain and multi-chain); involutivity conditions tell when a system converts to chained form.",
+     "feynman": "Trailer chains are driven by rhythms; many machines are trailer chains in disguise.",
+     "visual": "Recap card 3: bead chain with oscillators plus the coordinate-morph thumbnail.",
+     "scene": "mls-ch8-recap",
+     "beat": "🗺️ six tools on one shelf",
+     "math": [
+      "ode",
+      "linearize"
+     ],
+     "engine": [
+      "NEW: steerChained"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "8-389-e",
+     "lines": [
+      28,
+      33
+     ],
+     "kind": "summary",
+     "idea": "Closed-form optimal inputs are rare, but their time derivatives have a formula (constant-norm rotation by brackets) and the Ritz method approximates them numerically.",
+     "feynman": "You may not know the perfect drive, but you know the pedal pressure stays fixed, and you can tune a few dials to get close.",
+     "visual": "Recap card 4: constant-radius input dial plus mixer-board sliders.",
+     "scene": "mls-ch8-recap",
+     "beat": "🗺️ six tools on one shelf",
+     "math": [
+      "optimization"
+     ],
+     "engine": [
+      "NEW: ritzInputs"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "8-389-f",
+     "lines": [
+      34,
+      36
+     ],
+     "kind": "summary",
+     "idea": "For nilpotent controllability algebras, piecewise-constant inputs steer in Philip Hall coordinates.",
+     "feynman": "Box-shaped wiggles buy exactly the hidden directions when there are finitely many.",
+     "visual": "Recap card 5: box loop and bookshelf thumbnail.",
+     "scene": "mls-ch8-recap",
+     "beat": "🗺️ six tools on one shelf",
+     "math": [
+      "vectors"
+     ],
+     "engine": [
+      "NEW: piecewiseInputs"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "8-389-g",
+     "lines": [
+      37,
+      37
+     ],
+     "kind": "page-number",
+     "idea": "Page number."
+    }
+   ]
+  },
+  {
+   "pdf": 408,
+   "book": 390,
+   "lines": 28,
+   "section": "8.5",
+   "summary": "Last summary point (finger repositioning via sinusoids and Gauss–Bonnet geometry) and a bibliography sketch of where these ideas came from.",
+   "atoms": [
+    {
+     "id": "8-390-a",
+     "lines": [
+      1,
+      5
+     ],
+     "kind": "summary",
+     "idea": "Fingers can be repositioned by sinusoids; for a sphere on a plane, Gauss–Bonnet geometry places the finger and sets the contact angle.",
+     "feynman": "Walk your fingertip by rocking; twist it by tracing a loop of the right area.",
+     "visual": "Recap card 6: rolling ball with a gold cap area and twist dial.",
+     "scene": "mls-ch8-recap",
+     "beat": "🗺️ six tools on one shelf",
+     "math": [
+      "rotation"
+     ],
+     "engine": [
+      "NEW: sphereCapArea"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "8-390-b",
+     "lines": [
+      6,
+      6
+     ],
+     "kind": "heading",
+     "idea": "Section 8.6 Bibliography."
+    },
+    {
+     "id": "8-390-c",
+     "lines": [
+      7,
+      17
+     ],
+     "kind": "prose",
+     "idea": "History: nonholonomic mechanics is classical, but steering is recent; the link between nonholonomy and constructive controllability arose for mobile robots and for rolling fingers; nonlinear controllability texts review the theory; early constructive results solved least-squares steering for model systems on Rⁿ and SO(3).",
+     "feynman": "Like a family tree: old mechanics at the root, branches for robot cars and robot fingers, leaves for the steering recipes.",
+     "visual": "Timeline of colored dots (classical mechanics → mobile robots & rolling fingers → model-system optimal steering), each dot linked by a thin line to the scene tile it inspired.",
+     "scene": "mls-ch8-recap",
+     "beat": "📜 who found what, when",
+     "math": [
+      "optimization"
+     ],
+     "engine": [
+      "NEW: timeline"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "8-390-d",
+     "lines": [
+      18,
+      27
+     ],
+     "kind": "prose",
+     "idea": "Sources for this chapter: work on rolling-finger steering, sinusoidal steering, optimal-control structure, Ritz numerics, parking a car with N trailers, a collected volume on nonholonomic planning, and texts on nonholonomic mechanics and geometric phase.",
+     "feynman": "A map of who built which tool in the toolbox.",
+     "visual": "Timeline continues with dots for sinusoids, optimal structure, Ritz, N-trailer parking and geometric phase; hovering a dot highlights the matching recap card.",
+     "scene": "mls-ch8-recap",
+     "beat": "📜 who found what, when",
+     "math": [
+      "optimization"
+     ],
+     "engine": [
+      "NEW: timeline"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "8-390-e",
+     "lines": [
+      28,
+      28
+     ],
+     "kind": "page-number",
+     "idea": "Page number."
+    }
+   ]
+  },
+  {
+   "pdf": 409,
+   "book": 391,
+   "lines": 41,
+   "section": "8.7",
+   "summary": "Exercises 1–3: a nilpotent eight-state system and its chain conversion, controllability of a five-state system, and optimal inputs for the so(m) model.",
+   "atoms": [
+    {
+     "id": "8-391-a",
+     "lines": [
+      1,
+      1
+     ],
+     "kind": "heading",
+     "idea": "Section 8.7 Exercises."
+    },
+    {
+     "id": "8-391-b",
+     "lines": [
+      2,
+      21
+     ],
+     "kind": "exercise",
+     "label": "Ex 8.1",
+     "idea": "Show an eight-state two-input polynomial system is controllable and nilpotent of degree four; seek a nonlinear coordinate change to one-chained form.",
+     "feynman": "Prove this abacus has finitely many hidden directions, then try to rearrange it into a trailer chain.",
+     "visual": "Challenge mode of the piecewise scene: learner fills the bookshelf by computing brackets (bracket button per pair); a nilpotency meter must hit zero at shelf 5; bonus: drag coordinate-change tiles until the chain picture matches.",
+     "scene": "mls-piecewise-steering",
+     "beat": "🗂️ Philip Hall shelf of directions",
+     "math": [
+      "vectors"
+     ],
+     "engine": [
+      "NEW: philipHallBasis"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "8-391-c",
+     "lines": [
+      22,
+      27
+     ],
+     "kind": "exercise",
+     "label": "Ex 8.2",
+     "idea": "Show a five-state two-input system (Brockett plus two quadratic-weighted area states) is controllable and nilpotent.",
+     "feynman": "Check that the extra counters can all be wound independently, and that wiggles stop revealing new directions.",
+     "visual": "Challenge mode of the second-order scene: learner adds bracket arrows until the rank bar reaches 5 (lime), and shows the next shelf is empty.",
+     "scene": "mls-second-order-steering",
+     "beat": "🔺 one more bracket level",
+     "math": [
+      "vectors"
+     ],
+     "engine": [
+      "NEW: lieBracket"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "8-391-d",
+     "lines": [
+      28,
+      40
+     ],
+     "kind": "exercise",
+     "label": "Ex 8.3",
+     "idea": "For q̇ = u, Ẏ = quᵀ − uqᵀ: (a) derive Euler–Lagrange equations for ½∫uᵀu; (b) with q(0)=q(1)=0, Y(0)=0 and Y(1) given by a 3-vector, solve for optimal inputs.",
+     "feynman": "Find the cheapest three-finger loop that winds three area counters to set values.",
+     "visual": "Challenge mode of the Brockett scene (m = 3): learner sets dial speeds and amplitudes to fill the so(3) grid to the gold pattern while the cost bar stays minimal.",
+     "scene": "mls-brockett-sinusoids",
+     "beat": "🎼 more knobs, more harmonics",
+     "math": [
+      "lagrange-dynamics",
+      "optimization"
+     ],
+     "engine": [
+      "NEW: steerBrockett"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "8-391-e",
+     "lines": [
+      41,
+      41
+     ],
+     "kind": "page-number",
+     "idea": "Page number."
+    }
+   ]
+  },
+  {
+   "pdf": 410,
+   "book": 392,
+   "lines": 37,
+   "section": "8.7",
+   "summary": "Exercises 3(c)–6: general so(m) steering, simultaneous sinusoidal steering via polynomial equations, the two-input two-chained system, and orthogonality of solutions of u̇ = Ωu.",
+   "atoms": [
+    {
+     "id": "8-392-a",
+     "lines": [
+      1,
+      2
+     ],
+     "kind": "exercise",
+     "idea": "Ex 3(c): find inputs steering (0,0) to (0, Ỹ) in R^m × so(m).",
+     "feynman": "Wind any requested pattern of area counters and bring the toy home.",
+     "visual": "Challenge: random gold so(m) target pattern; learner picks harmonics per dial; success when grid matches and bead returns to origin.",
+     "scene": "mls-brockett-sinusoids",
+     "beat": "🎼 more knobs, more harmonics",
+     "math": [
+      "rotation"
+     ],
+     "engine": [
+      "NEW: brockettHarmonics"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "8-392-b",
+     "lines": [
+      3,
+      15
+     ],
+     "kind": "exercise",
+     "label": "Ex 8.4",
+     "idea": "For the m = 2 second-order system, apply two-harmonic inputs with eight coefficients, integrate q121 and q122 over a period to obtain polynomial equations, and propose a solution method.",
+     "feynman": "Write down how loud each note must be so both deep counters land on target at once.",
+     "visual": "Challenge mode of the second-order scene: eight coefficient sliders; learner must hit both gold targets in one period; a polynomial residual meter guides them.",
+     "scene": "mls-second-order-steering",
+     "beat": "🎯 nudge one state at a time",
+     "math": [
+      "optimization"
+     ],
+     "engine": [
+      "NEW: steerSecondOrder"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "8-392-c",
+     "lines": [
+      16,
+      33
+     ],
+     "kind": "exercise",
+     "label": "Ex 8.5",
+     "idea": "Two-input two-chained system (an x-chain fed by u1 and a y-chain fed by u2): prove controllability, show which sinusoid pairs move each x_k and y_k with explicit amounts, and give a steering algorithm.",
+     "feynman": "Two trailer trains sharing one pair of knobs: figure out the rhythm that moves each trailer.",
+     "visual": "Challenge mode of the chained scene: two bead chains side by side; learner chooses frequency pairs to move one targeted bead in each chain to gold.",
+     "scene": "mls-chained-form",
+     "beat": "⛓️ each link copies the one before",
+     "math": [
+      "ode",
+      "convolution"
+     ],
+     "engine": [
+      "NEW: steerChained"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "8-392-d",
+     "lines": [
+      34,
+      36
+     ],
+     "kind": "exercise",
+     "label": "Ex 8.6",
+     "idea": "If u̇ = Ω(t)u with Ω skew-symmetric …",
+     "feynman": "If something only gets turned, never stretched …",
+     "visual": "Challenge setup: a time-varying skew matrix field drives the input arrow.",
+     "scene": "mls-optimal-steering",
+     "beat": "⭕ effort stays on a circle",
+     "math": [
+      "rotation"
+     ],
+     "engine": [
+      "lie.expSO3"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-392-e",
+     "lines": [
+      37,
+      37
+     ],
+     "kind": "page-number",
+     "idea": "Page number."
+    }
+   ]
+  },
+  {
+   "pdf": 411,
+   "book": 393,
+   "lines": 37,
+   "section": "8.7",
+   "summary": "Exercises 6–11: rotation solutions of u̇ = Ωu, higher derivatives of optimal inputs, minimum-time and Brockett optimal inputs, Engel-type problems, and systems with drift.",
+   "atoms": [
+    {
+     "id": "8-393-a",
+     "lines": [
+      1,
+      3
+     ],
+     "kind": "exercise",
+     "idea": "… prove its solution is u(t) = U(t)u(0) with U(t) ∈ SO(m).",
+     "feynman": "… show that it stays the same length and orientation-handedness forever.",
+     "visual": "Challenge mode of the optimal scene: learner must show the length readout stays fixed for any skew Ω they draw; try a non-skew Ω and see it break (coral).",
+     "scene": "mls-optimal-steering",
+     "beat": "⭕ effort stays on a circle",
+     "math": [
+      "rotation",
+      "ode"
+     ],
+     "engine": [
+      "lie.expSO3"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "8-393-b",
+     "lines": [
+      4,
+      8
+     ],
+     "kind": "exercise",
+     "label": "Ex 8.7",
+     "idea": "Extend the proof of Prop 8.4 to get ü (and ideally u⁽ⁿ⁾) in terms of Lie brackets of the input fields.",
+     "feynman": "Find how the steering’s turning rate itself changes.",
+     "visual": "Challenge: predict the curvature of the input dial’s tip path using bracket arrows; overlay prediction vs simulation.",
+     "scene": "mls-optimal-steering",
+     "beat": "⭕ effort stays on a circle",
+     "math": [
+      "derivative"
+     ],
+     "engine": [
+      "NEW: lieBracket"
+     ],
+     "difficulty": 5
+    },
+    {
+     "id": "8-393-c",
+     "lines": [
+      9,
+      15
+     ],
+     "kind": "exercise",
+     "label": "Ex 8.8",
+     "idea": "Show the normalized optimal input u/|u(0)| solves minimum-time steering with |u|² ≤ 1.",
+     "feynman": "If you always press the pedal equally, the cheapest trip at full pedal is also the fastest.",
+     "visual": "Challenge: rescale the optimal input to unit norm; a stopwatch readout must beat every other unit-norm input the learner tries.",
+     "scene": "mls-optimal-steering",
+     "beat": "⭕ effort stays on a circle",
+     "math": [
+      "optimization"
+     ],
+     "engine": [
+      "NEW: controlEnergy"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "8-393-d",
+     "lines": [
+      16,
+      20
+     ],
+     "kind": "exercise",
+     "label": "Ex 8.9",
+     "idea": "Apply the optimal-control machinery of Section 3.3 to Brockett’s system to recover its optimal inputs.",
+     "feynman": "Re-derive the circle answer with the compass-and-Hamiltonian method.",
+     "visual": "Challenge mode of the optimal scene with Brockett preset: learner shoots the initial costate so the path closes into a circle lifting to gold.",
+     "scene": "mls-optimal-steering",
+     "beat": "🧭 costate compass & Hamiltonian",
+     "math": [
+      "optimization",
+      "energy"
+     ],
+     "engine": [
+      "NEW: shootingSolve"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "8-393-e",
+     "lines": [
+      21,
+      22
+     ],
+     "kind": "exercise",
+     "label": "Ex 8.10",
+     "idea": "Extend the Engel-system method to find optimal inputs for the Exercise 2 system.",
+     "feynman": "Find the pendulum hidden in the new system.",
+     "visual": "Challenge: identify which costate components are constant and match the input angle to a pendulum preset.",
+     "scene": "mls-optimal-steering",
+     "beat": "🌊 Engel: pendulum-like swing",
+     "math": [
+      "energy"
+     ],
+     "engine": [
+      "NEW: engelOptimal"
+     ],
+     "difficulty": 5
+    },
+    {
+     "id": "8-393-f",
+     "lines": [
+      23,
+      36
+     ],
+     "kind": "exercise",
+     "label": "Ex 8.11",
+     "idea": "Least-squares steering with drift q̇ = f(q) + Σ g_i u_i: (a) find H* and show u̇ = Ω(q,p)u + (pᵀ[f,g_i])_i.",
+     "feynman": "Steering a boat in a current: the current adds its own push to how your steering must change.",
+     "visual": "Challenge mode: add a slate current field f; the input dial now drifts off its circle by an amount shown as bracket-with-current arrows.",
+     "scene": "mls-optimal-steering",
+     "beat": "🧭 costate compass & Hamiltonian",
+     "math": [
+      "optimization",
+      "ode"
+     ],
+     "engine": [
+      "NEW: optimalHamiltonian"
+     ],
+     "difficulty": 5
+    },
+    {
+     "id": "8-393-g",
+     "lines": [
+      37,
+      37
+     ],
+     "kind": "page-number",
+     "idea": "Page number."
+    }
+   ]
+  },
+  {
+   "pdf": 412,
+   "book": 394,
+   "lines": 31,
+   "section": "8.7",
+   "summary": "Exercises 11(b)–14: second derivatives with drift, a Jacobian test for Fourier-parameterized controllability, and Chen–Fliess–Sussmann equations for the chain and Engel systems.",
+   "atoms": [
+    {
+     "id": "8-394-a",
+     "lines": [
+      1,
+      2
+     ],
+     "kind": "exercise",
+     "idea": "Ex 11(b): compute second derivatives of the optimal inputs with drift.",
+     "feynman": "How the steering’s turning rate changes when there’s a current.",
+     "visual": "Challenge: predict the dial-tip acceleration with drift and compare to simulation.",
+     "scene": "mls-optimal-steering",
+     "beat": "🧭 costate compass & Hamiltonian",
+     "math": [
+      "derivative"
+     ],
+     "engine": [
+      "NEW: optimalHamiltonian"
+     ],
+     "difficulty": 5
+    },
+    {
+     "id": "8-394-b",
+     "lines": [
+      3,
+      16
+     ],
+     "kind": "exercise",
+     "label": "Ex 8.12",
+     "idea": "For the three-state chain with inputs built from a constant plus first-harmonic sine and cosine: (a) integrate to get q(1) as a function of the six coefficients and its 3×6 Jacobian; (b) show full rank implies controllability with such inputs.",
+     "feynman": "If nudging the six dials can push the end point in all three directions, you can reach anything nearby.",
+     "visual": "Challenge mode of the Ritz mixer: six sliders; a Jacobian ellipsoid at the endpoint must be full (no flat direction) — learner finds slider settings where it collapses (coral).",
+     "scene": "mls-optimal-steering",
+     "beat": "🎛️ Ritz: tune Fourier knobs",
+     "math": [
+      "jacobian",
+      "svd"
+     ],
+     "engine": [
+      "dynamics.numJacobian",
+      "linalg.svd"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "8-394-c",
+     "lines": [
+      17,
+      19
+     ],
+     "kind": "exercise",
+     "label": "Ex 8.13",
+     "idea": "Derive the Chen–Fliess–Sussmann equation for the one-chain system with basis g1, g2, ad^k g2.",
+     "feynman": "Write the master toy model for a trailer chain.",
+     "visual": "Challenge mode of the piecewise scene: learner fills the coefficient table for the chain preset; each correct polynomial chip lights lime.",
+     "scene": "mls-piecewise-steering",
+     "beat": "👻 fictitious knobs on every shelf",
+     "math": [
+      "matrix"
+     ],
+     "engine": [
+      "NEW: cfsEquation"
+     ],
+     "difficulty": 5
+    },
+    {
+     "id": "8-394-d",
+     "lines": [
+      20,
+      30
+     ],
+     "kind": "exercise",
+     "label": "Ex 8.14",
+     "idea": "For Engel’s system: (a) derive its Chen–Fliess–Sussmann equation; (b) with constant-plus-first-harmonic inputs, find polynomial equations for the amplitudes from initial and final states.",
+     "feynman": "Build the master model for Engel’s toy, then solve for how loud to play each note.",
+     "visual": "Challenge: coefficient table for Engel preset, then six amplitude sliders tuned until the endpoint lands on gold.",
+     "scene": "mls-piecewise-steering",
+     "beat": "👻 fictitious knobs on every shelf",
+     "math": [
+      "optimization"
+     ],
+     "engine": [
+      "NEW: cfsEquation"
+     ],
+     "difficulty": 5
+    },
+    {
+     "id": "8-394-e",
+     "lines": [
+      31,
+      31
+     ],
+     "kind": "page-number",
+     "idea": "Page number."
+    }
+   ]
+  }
+ ]
+}

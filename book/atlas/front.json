@@ -1,0 +1,1114 @@
+{
+ "id": "front",
+ "title": "Front Matter",
+ "pdfPages": [
+  1,
+  18
+ ],
+ "sections": [
+  {
+   "id": "title",
+   "title": "Title and dedication",
+   "book": null
+  },
+  {
+   "id": "contents",
+   "title": "Contents",
+   "book": null
+  },
+  {
+   "id": "preface",
+   "title": "Preface",
+   "book": null
+  },
+  {
+   "id": "acknowledgements",
+   "title": "Acknowledgements",
+   "book": null
+  }
+ ],
+ "scenes": [
+  {
+   "id": "mls-front-book-map",
+   "title": "Book Map",
+   "icon": "🗺️",
+   "section": "contents",
+   "pages": null,
+   "pdf": [
+    5,
+    9
+   ],
+   "uses": [
+    "rigid-transform",
+    "screw-exp",
+    "forward-kinematics",
+    "lagrange-dynamics",
+    "statics",
+    "cspace"
+   ],
+   "beats": [
+    "🗺️ nine stations",
+    "🔩 move a block",
+    "🦾 one arm",
+    "✋ many fingers",
+    "🛞 roll & steer",
+    "🔭 future & toolbox"
+   ],
+   "brief": "A subway map of the whole book on a slate background. Nine stations (one per chapter) sit on colored lines; each station is a circle whose area is proportional to its page count, and its sub-sections orbit it as small moons. A reader token (orange) is dragged from station to station; every station it reaches lights lime, and any station whose prerequisites are not yet lit flashes coral. Tapping a moon plays a 2-second preview of the idea (a cube spinning, an arm reaching, fingers squeezing, a cart wiggling). A slate toolbox at the bottom holds the appendices, with thin threads to every station that borrows a tool. Readouts: pages read / 456, stations lit / 9."
+  },
+  {
+   "id": "mls-front-who-for",
+   "title": "Who It's For",
+   "icon": "🧑‍🔬",
+   "section": "preface",
+   "pages": null,
+   "pdf": [
+    11,
+    13
+   ],
+   "uses": [
+    "matrix",
+    "rigid-transform",
+    "forward-kinematics",
+    "graph-search"
+   ],
+   "beats": [
+    "🚀 robots spread out",
+    "🧩 four kinds of readers",
+    "🏔️ abstraction pays off",
+    "🛤️ reading routes",
+    "🧭 left out on purpose"
+   ],
+   "brief": "Four reader avatars (⚡ electrical, 💻 computing, ⚙️ mechanical, ➗ math) sit around a table, each with a puzzle board missing one coral piece. A gold \"shared core\" piece dragged onto the table fills all four holes at once. A plot compares total effort vs problems solved: a coral straight line (ad-hoc tricks) and a lime curve (abstraction: steep start, then flat) with a gold crossing marker. A mini book map shows three toggleable reading routes with week clocks, a Chapter-2 height gate that opens when the reader carries the 🔲 and 〰️ badges, and two ghosted districts (planning, sensing) that point out to other Crucible scenes."
+  },
+  {
+   "id": "mls-front-idea-lineage",
+   "title": "Idea Family Tree",
+   "icon": "🌳",
+   "section": "acknowledgements",
+   "pages": null,
+   "pdf": [
+    15,
+    17
+   ],
+   "uses": [
+    "screw-exp",
+    "poe"
+   ],
+   "beats": [
+    "🤝 research partners",
+    "🔩 roots of the formula",
+    "💬 sparks from talks",
+    "🧪 testers & backers",
+    "🏡 thanks at home"
+   ],
+   "brief": "A tree drawn in slate whose branches are chapter groups (🔩 Ch2–3, ✋ Ch5–6, 🛞 Ch7–8). Contributors are anonymous teal dots (no names on canvas) clustered at the base of the branch they fed; tapping a branch lights its dots and shows a count. One big gold root (🔩 exp) pumps lime sap into every branch that uses the product-of-exponentials idea. Sparks ✨ on a year axis mark the talks that ignited interest; watering cans (funding) raise a soil-moisture bar; tester tokens dragged over draft pages erase coral bug dots. A small 🏡 sits at the foot of the trunk."
+  }
+ ],
+ "pages": [
+  {
+   "pdf": 1,
+   "book": null,
+   "lines": 16,
+   "section": "title",
+   "summary": "Title page: book title, the three authors, the 1994 copyright line, where the electronic and print editions come from, and a notice forbidding reproduction.",
+   "atoms": [
+    {
+     "id": "f-1-a",
+     "lines": [
+      1,
+      2
+     ],
+     "kind": "front",
+     "idea": "The book title: a mathematical introduction to robots that manipulate objects."
+    },
+    {
+     "id": "f-1-b",
+     "lines": [
+      3,
+      8
+     ],
+     "kind": "front",
+     "idea": "The names of the three authors, each with an affiliation line."
+    },
+    {
+     "id": "f-1-c",
+     "lines": [
+      9,
+      16
+     ],
+     "kind": "front",
+     "idea": "Copyright 1994 with the publisher; pointers to the free electronic edition and the printed edition; personal use only, no reproduction without written consent."
+    }
+   ]
+  },
+  {
+   "pdf": 2,
+   "book": null,
+   "lines": 1,
+   "section": "title",
+   "summary": "Back of the title page; only the roman page number.",
+   "atoms": [
+    {
+     "id": "f-2-a",
+     "lines": [
+      1,
+      1
+     ],
+     "kind": "page-number",
+     "idea": "Roman page number ii of the front matter."
+    }
+   ]
+  },
+  {
+   "pdf": 3,
+   "book": null,
+   "lines": 3,
+   "section": "title",
+   "summary": "Dedication page: each author dedicates the book to someone close.",
+   "atoms": [
+    {
+     "id": "f-3-a",
+     "lines": [
+      1,
+      3
+     ],
+     "kind": "front",
+     "idea": "Three short dedications, one per author: two to partners and one in memory of a father."
+    }
+   ]
+  },
+  {
+   "pdf": 4,
+   "book": null,
+   "lines": 1,
+   "section": "title",
+   "summary": "Back of the dedication; only the roman page number.",
+   "atoms": [
+    {
+     "id": "f-4-a",
+     "lines": [
+      1,
+      1
+     ],
+     "kind": "page-number",
+     "idea": "Roman page number vi of the front matter."
+    }
+   ]
+  },
+  {
+   "pdf": 5,
+   "book": null,
+   "lines": 31,
+   "section": "contents",
+   "summary": "Table of contents, first page: front-matter entries, Chapter 1 (history, hands, outline, bibliography) and most of Chapter 2 (rotations, rigid motions, velocities, wrenches).",
+   "atoms": [
+    {
+     "id": "f-5-a",
+     "lines": [
+      1,
+      4
+     ],
+     "kind": "heading",
+     "idea": "Contents header plus the entries for the contents, preface and acknowledgements."
+    },
+    {
+     "id": "f-5-b",
+     "lines": [
+      5,
+      13
+     ],
+     "kind": "table",
+     "idea": "Chapter 1 (book pages 1–18) holds a short history of robots, a section on multifingered hands and dexterity, a three-part outline of the book, and a reading list.",
+     "feynman": "Like the signboard at the entrance of a hiking park: it tells the story of the park and shows which trails exist before you start walking.",
+     "visual": "The map's first station is a small slate start dot with an ⏳ badge. Tapping it fans out four sub-dots (history, hands, outline, books) sized by page count; the pages-read counter jumps to 18 / 456 and the three later colored lines (🦾, ✋, 🛞) blink once to preview the outline.",
+     "scene": "mls-front-book-map",
+     "beat": "🗺️ nine stations",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "f-5-c",
+     "lines": [
+      14,
+      30
+     ],
+     "kind": "table",
+     "idea": "Chapter 2 builds rigid-body motion: rigid transformations, rotations (their properties, exponential coordinates, other representations), rigid motions (homogeneous form, twists, screws), body velocities and the start of wrenches.",
+     "feynman": "Before you build a tower you learn everything you can do with one wooden block: slide it, spin it, and drive it along like a bolt being screwed in.",
+     "visual": "Station 2 is a large blue cube ringed by moons: 🔄 rotation, 📦 homogeneous matrix, 🔩 twist/screw, 💨 velocity, 💪 wrench. Tapping a moon makes the cube do that motion (spin about a red/green/blue axis, slide, or corkscrew). It is drawn wider than the rest and every later colored line visibly passes through it, so the reader sees it is the gateway.",
+     "scene": "mls-front-book-map",
+     "beat": "🔩 move a block",
+     "math": [
+      "rotation",
+      "rigid-transform",
+      "screw-exp"
+     ],
+     "engine": [
+      "lie.expSO3",
+      "lie.expSE3"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "f-5-d",
+     "lines": [
+      31,
+      31
+     ],
+     "kind": "page-number",
+     "idea": "Roman page number vii of the front matter."
+    }
+   ]
+  },
+  {
+   "pdf": 6,
+   "book": null,
+   "lines": 44,
+   "section": "contents",
+   "summary": "Contents continued: end of Chapter 2 (reciprocal screws, summary, exercises), all of Chapter 3 (forward and inverse kinematics, Jacobian, redundant and parallel arms) and the start of Chapter 4 (Lagrange, rigid-body inertia, open-chain dynamics).",
+   "atoms": [
+    {
+     "id": "f-6-a",
+     "lines": [
+      1,
+      5
+     ],
+     "kind": "table",
+     "idea": "The tail of Chapter 2: wrench screw coordinates, reciprocal screws, then the standard chapter ending of summary, bibliography and exercises.",
+     "feynman": "Every level of a video game ends the same way: a recap screen, a list of secrets to find, and a bonus challenge door.",
+     "visual": "Every station on the map ends in the same three tiles: 📝 recap, 📚 books, 🏆 challenges, the 🏆 tile pulsing gold. On station 2 the reciprocal-screw moon shows a pink twist arrow and a purple wrench arrow that can be dragged; a work meter reads exactly 0 whenever they are reciprocal.",
+     "scene": "mls-front-book-map",
+     "beat": "🔩 move a block",
+     "math": [
+      "screw-exp",
+      "statics"
+     ],
+     "engine": [
+      "lie.adjoint"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "f-6-b",
+     "lines": [
+      6,
+      30
+     ],
+     "kind": "table",
+     "idea": "Chapter 3 is manipulator kinematics: forward kinematics by the product of exponentials and the workspace; inverse kinematics via a planar example, the Paden–Kahan subproblems and general methods; the Jacobian for velocities, forces, singularities and manipulability; then redundant and parallel mechanisms (four-bar, Stewart platform).",
+     "feynman": "Your shoulder, elbow and wrist angles decide where your fingertip lands; going backwards, you figure out how to bend to touch your nose.",
+     "visual": "Station 3 is an arm with orange joints and a pink tip. Moons: FK (drag the joints, the tip moves), IK (drag a gold target, ghost arms show every solution), Jacobian (a velocity ellipse that flattens with a 🚫 flash at a singularity), parallel (a mini Stewart platform). A lime thread runs back to station 2's 🔩 moon to show where the formula comes from.",
+     "scene": "mls-front-book-map",
+     "beat": "🦾 one arm",
+     "math": [
+      "forward-kinematics",
+      "poe",
+      "ik",
+      "jacobian",
+      "manipulability"
+     ],
+     "engine": [
+      "kinematics.poeFK",
+      "kinematics.planarIK",
+      "kinematics.manipulability"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "f-6-c",
+     "lines": [
+      31,
+      43
+     ],
+     "kind": "table",
+     "idea": "The first half of Chapter 4: Lagrange's equations, the inertia of rigid bodies, a two-link arm example, Newton–Euler equations, open-chain dynamics written with the product of exponentials, and the start of Lyapunov stability.",
+     "feynman": "After learning where an arm can reach, you learn how heavy it feels to swing it, the way a swing feels different from a door.",
+     "visual": "Station 4 shows a two-link arm swinging under gravity, simulated live. Its moons: 🎢 kinetic/potential energy bars trading height, Newton–Euler force arrows on each link, and a 🥣 bowl with a ball. A dashed edge from station 3 lights to show dynamics reuses the kinematics.",
+     "scene": "mls-front-book-map",
+     "beat": "🦾 one arm",
+     "math": [
+      "lagrange-dynamics",
+      "newton-euler",
+      "energy"
+     ],
+     "engine": [
+      "dynamics.twoLink",
+      "dynamics.rk4"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "f-6-d",
+     "lines": [
+      44,
+      44
+     ],
+     "kind": "page-number",
+     "idea": "Roman page number viii of the front matter."
+    }
+   ]
+  },
+  {
+   "pdf": 7,
+   "book": null,
+   "lines": 40,
+   "section": "contents",
+   "summary": "Contents continued: rest of Chapter 4 (Lyapunov methods, computed torque, PD and workspace control, constrained arms) and all of Chapter 5 (contact models, grasp map, force-closure, grasp planning, finger kinematics, rolling contact).",
+   "atoms": [
+    {
+     "id": "f-7-a",
+     "lines": [
+      1,
+      17
+     ],
+     "kind": "table",
+     "idea": "The second half of Chapter 4: Lyapunov's direct and indirect methods, examples and LaSalle's principle, then trajectory tracking with computed torque, PD and workspace control, and arms constrained by contact (with a slot example).",
+     "feynman": "A dog on a leash: the controller tugs the arm back toward its path, and a ball-in-a-bowl argument proves it settles down instead of running off.",
+     "visual": "Station 4's control moons: a pink tip chases a gold moving curve while a coral error bar shrinks to zero; the 🥣 moon shows a ball whose energy bar only ever falls; a slot moon confines the pink tip to a slate groove with purple constraint-force arrows.",
+     "scene": "mls-front-book-map",
+     "beat": "🦾 one arm",
+     "math": [
+      "lyapunov",
+      "computed-torque",
+      "pd-gravity"
+     ],
+     "engine": [
+      "dynamics.twoLinkTau"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "f-7-b",
+     "lines": [
+      18,
+      39
+     ],
+     "kind": "table",
+     "idea": "Chapter 5 is multifingered hand kinematics: contact models and the grasp map, force-closure (definition and tests), how many contacts are needed and how to place them, finger kinematics and grasp properties (a two-finger SCARA example), and rolling contact.",
+     "feynman": "Holding a cup with your fingers: where you press, and how many fingers you need so it cannot slip out in any direction.",
+     "visual": "Station 5: a blue object with teal contact dots and orange-jointed fingers you drag around its outline. A wrench-cone hull fills in; when it wraps around the center it turns lime (force-closure), otherwise a coral gap shows the escape direction. A second moon rolls a fingertip over the surface leaving a teal trail.",
+     "scene": "mls-front-book-map",
+     "beat": "✋ many fingers",
+     "math": [
+      "statics"
+     ],
+     "engine": [
+      "NEW: grasp.forceClosure"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "f-7-c",
+     "lines": [
+      40,
+      40
+     ],
+     "kind": "page-number",
+     "idea": "Roman page number ix of the front matter."
+    }
+   ]
+  },
+  {
+   "pdf": 8,
+   "book": null,
+   "lines": 44,
+   "section": "contents",
+   "summary": "Contents continued: Chapter 6 (constrained Lagrange equations, hand dynamics, redundancy, tendons, hierarchical control), Chapter 7 (Frobenius, Lie brackets, controllability, nonholonomic examples) and the start of Chapter 8 (steering with sinusoids).",
+   "atoms": [
+    {
+     "id": "f-8-a",
+     "lines": [
+      1,
+      24
+     ],
+     "kind": "table",
+     "idea": "Chapter 6 is hand dynamics and control: Lagrange's equations with Pfaffian constraints and multipliers, the Lagrange–d'Alembert form, why some constraints are nonholonomic, hand dynamics and internal forces, redundant and nonmanipulable grasps, tendon actuation, and hierarchical hand controllers.",
+     "feynman": "Several friends carrying a couch: each moves on their own, but the couch forces them to move together, and squeezing it harder does not move it at all.",
+     "visual": "Station 6: two orange-jointed fingers pinch a blue box. Dragging the box makes purple constraint-force arrows appear at the contacts. An internal-squeeze slider grows opposing purple arrows while a net-force readout stays at 0 and the box does not budge. A tendon moon shows cables running over pulleys to the joints.",
+     "scene": "mls-front-book-map",
+     "beat": "✋ many fingers",
+     "math": [
+      "lagrange-dynamics",
+      "statics"
+     ],
+     "engine": [
+      "NEW: dynamics.constrainedLagrange"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "f-8-b",
+     "lines": [
+      25,
+      38
+     ],
+     "kind": "table",
+     "idea": "Chapter 7 is nonholonomic behavior: vector fields and flows, Lie brackets and Frobenius' theorem, nonlinear controllability, worked examples, classification of nonholonomic distributions and the Philip Hall basis.",
+     "feynman": "A shopping cart cannot slide sideways, yet you can still park it anywhere by rolling forward and turning in a little pattern.",
+     "visual": "Station 7: a cart with a lime forward arrow and a coral sideways arrow. The reader plays a four-move loop (go A, go B, undo A, undo B); the cart does not return home, and the leftover sideways gap is highlighted gold: the Lie bracket.",
+     "scene": "mls-front-book-map",
+     "beat": "🛞 roll & steer",
+     "math": [
+      "ode",
+      "cspace"
+     ],
+     "engine": [
+      "NEW: lie.bracket"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "f-8-c",
+     "lines": [
+      39,
+      43
+     ],
+     "kind": "table",
+     "idea": "The start of Chapter 8: nonholonomic motion planning, beginning with steering by sinusoids for first-order (Brockett's) and second-order controllable systems.",
+     "feynman": "Wiggling a car into a tight parking spot with a rhythm of steer-left, steer-right.",
+     "visual": "Station 8 moon: two orange sine sliders drive the cart; the path draws loops, and a readout shows the sideways drift growing in step with the area each loop encloses.",
+     "scene": "mls-front-book-map",
+     "beat": "🛞 roll & steer",
+     "math": [
+      "ode"
+     ],
+     "engine": [
+      "dynamics.rk4"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "f-8-d",
+     "lines": [
+      44,
+      44
+     ],
+     "kind": "page-number",
+     "idea": "Roman page number x of the front matter."
+    }
+   ]
+  },
+  {
+   "pdf": 9,
+   "book": null,
+   "lines": 39,
+   "section": "contents",
+   "summary": "Contents, last page: rest of Chapter 8 (chained form, general steering, finger repositioning), Chapter 9 (future prospects), Appendix A (Lie groups and the geometry of SE(3)), Appendix B (symbolic screw package), bibliography and index.",
+   "atoms": [
+    {
+     "id": "f-9-a",
+     "lines": [
+      1,
+      13
+     ],
+     "kind": "table",
+     "idea": "The rest of Chapter 8: chained-form systems, general steering methods (Fourier, conversion to chained form, optimal steering, piecewise-constant inputs), and repositioning a fingertip by rolling (sinusoids and a geometric-phase method).",
+     "feynman": "A dancer learns a few standard step patterns that can be chained to reach any spot on the floor; a fingertip can do the same rolling over a ball.",
+     "visual": "Station 8's sub-dots: a cart pulling trailers driven by chained-form inputs, a zigzag path from piecewise-constant inputs, and a fingertip rolling on a blue sphere whose teal contact point drifts to a gold target after the finger traces one closed loop.",
+     "scene": "mls-front-book-map",
+     "beat": "🛞 roll & steer",
+     "math": [
+      "ode",
+      "cspace"
+     ],
+     "engine": [
+      "NEW: steer.chainedForm"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "f-9-b",
+     "lines": [
+      14,
+      17
+     ],
+     "kind": "table",
+     "idea": "Chapter 9 looks ahead: robots in hazardous places, medical uses of multifingered hands, and microrobotics.",
+     "feynman": "The \"coming soon\" corner of a park map, where the paths end in dotted lines.",
+     "visual": "Station 9 is drawn dashed: three dotted branches end in ☢️, 🩺 and 🔬 icons that fade out. Tapping 🔬 shrinks a scale bar from meters to micrometers while the robot icon shrinks with it.",
+     "scene": "mls-front-book-map",
+     "beat": "🔭 future & toolbox",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "f-9-c",
+     "lines": [
+      18,
+      38
+     ],
+     "kind": "table",
+     "idea": "The back matter: Appendix A on manifolds, tangent and cotangent spaces, vector fields and forms, Lie groups and algebras, the exponential map, canonical coordinates, group actions, and the geometry, metrics and volume forms of SE(3); Appendix B on a symbolic screw-calculus package; then the bibliography and index.",
+     "feynman": "A toolbox in the trunk of the car: you do not open it every trip, but every tool you used on the road came out of it.",
+     "visual": "A slate toolbox under the map. Dragging it open shows tools (🔩 exp map, 📐 tangent arrows, 🌐 group) each tied by a lime thread to the stations that used it (2, 3, 7, 8). A 💻 tile for the symbolic package turns a pink twist into a 4×4 matrix on tap.",
+     "scene": "mls-front-book-map",
+     "beat": "🔭 future & toolbox",
+     "math": [
+      "screw-exp",
+      "rigid-transform"
+     ],
+     "engine": [
+      "lie.expSE3",
+      "lie.logSE3"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "f-9-d",
+     "lines": [
+      39,
+      39
+     ],
+     "kind": "page-number",
+     "idea": "Roman page number xi of the front matter."
+    }
+   ]
+  },
+  {
+   "pdf": 10,
+   "book": null,
+   "lines": 1,
+   "section": "contents",
+   "summary": "Blank back of the contents; only the roman page number.",
+   "atoms": [
+    {
+     "id": "f-10-a",
+     "lines": [
+      1,
+      1
+     ],
+     "kind": "page-number",
+     "idea": "Roman page number xii of the front matter."
+    }
+   ]
+  },
+  {
+   "pdf": 11,
+   "book": null,
+   "lines": 35,
+   "section": "preface",
+   "summary": "Preface opening: robotics has boomed and matured over two decades, it is now widely studied with many textbooks, and the authors wanted a more mathematical treatment, for single robots and for hands, aimed at a mixed audience of engineers, computer scientists and mathematicians.",
+   "atoms": [
+    {
+     "id": "f-11-a",
+     "lines": [
+      1,
+      1
+     ],
+     "kind": "heading",
+     "idea": "Preface heading."
+    },
+    {
+     "id": "f-11-b",
+     "lines": [
+      2,
+      13
+     ],
+     "kind": "prose",
+     "idea": "Over roughly twenty years robotics grabbed public imagination and matured technically: from pick-and-place, painting and welding machines, to chip-placing assembly robots, to delivery carts. Several kinds are now routine in factories, and growth into hazardous sites, minimally invasive surgery and micro-machines is about to take off.",
+     "feynman": "Kitchen gadgets grew the same way: a hand whisk, then an electric mixer, then a robot vacuum that cleans by itself; each generation does more on its own.",
+     "visual": "A slate timeline with an orange year slider from 1970 to 1993. As it moves, robot icons pop onto the track: 🖌️ painter, 🔥 welder, 🔌 chip placer, 🛒 delivery cart. Past 1993 three dotted gold arrows point to ☢️, 🩺 and 🔬. A counter of robot kinds ticks upward.",
+     "scene": "mls-front-who-for",
+     "beat": "🚀 robots spread out",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "f-11-c",
+     "lines": [
+      14,
+      22
+     ],
+     "kind": "prose",
+     "idea": "Alongside this growth, robotics became a standard subject in engineering, computing and mathematics, studied at several levels with different emphases, and many good textbooks appeared on kinematics, dynamics, control, sensing and planning.",
+     "feynman": "When a new sport catches on, soon every town has a team, and coaches start writing how-to books.",
+     "visual": "Five topic bubbles (🦾 kinematics, 🎢 dynamics, 🎛️ control, 👁️ sensing, 🗺️ planning) float over four discipline islands (⚡, 💻, ⚙️, ➗). As the year slider moves, tiny book icons drop into each bubble; a total-books counter climbs.",
+     "scene": "mls-front-who-for",
+     "beat": "🚀 robots spread out",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "f-11-d",
+     "lines": [
+      23,
+      34
+     ],
+     "kind": "prose",
+     "idea": "Given this maturity and the variety of readers, the authors aimed for a more abstract, mathematical account of kinematics, dynamics and control, covering not just one robot but multifingered hands seen as cooperating robots. The audience they had in mind mixed electrical engineers new to mechanisms, computer scientists new to control, mechanical engineers wary of heavy derivations for ordinary arms, and mathematicians short on time for long prerequisites.",
+     "feynman": "Writing one cookbook for a baker, a grill cook, a chemist and a curious kid: you explain the shared rule (heat changes food) once, cleanly, so all four can follow.",
+     "visual": "Four reader avatars sit around a table: ⚡, 💻, ⚙️, ➗. Each has a puzzle board with one coral hole (mechanisms, control, patience for derivations, prerequisites). Dragging the gold \"shared core\" piece onto the table fills all four holes at once and they turn lime; a readout counts readers ready: 4 / 4.",
+     "scene": "mls-front-who-for",
+     "beat": "🧩 four kinds of readers",
+     "math": [
+      "matrix",
+      "rigid-transform"
+     ],
+     "engine": [],
+     "difficulty": 2
+    },
+    {
+     "id": "f-11-e",
+     "lines": [
+      35,
+      35
+     ],
+     "kind": "page-number",
+     "idea": "Roman page number xiii of the front matter."
+    }
+   ]
+  },
+  {
+   "pdf": 12,
+   "book": null,
+   "lines": 45,
+   "section": "preface",
+   "summary": "Preface continued: abstraction is an up-front investment that pays off; topics climb from single arms to hands to nonholonomic planning; suggested reading routes through the chapters; prerequisites; exercises and a symbolic toolkit; and the main topics left out.",
+   "atoms": [
+    {
+     "id": "f-12-a",
+     "lines": [
+      1,
+      1
+     ],
+     "kind": "prose",
+     "idea": "Closing the previous point: the mathematicians wanted to get into robotics without first building a long tower of background.",
+     "feynman": "The last guest at the table just wants to start playing without reading the whole rulebook first.",
+     "visual": "The ➗ avatar has a purple \"background needed\" bar; when the gold core piece lands, the bar shrinks to a stub and a lime start arrow lights next to station 2.",
+     "scene": "mls-front-who-for",
+     "beat": "🧩 four kinds of readers",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "f-12-b",
+     "lines": [
+      2,
+      15
+     ],
+     "kind": "prose",
+     "idea": "The authors' bet: abstraction costs effort and patience at first but saves time later. The topics climb from single-robot kinematics and dynamics, to grasping with multifingered hands, to nonholonomic planning: from basics to the research frontier. The material was refined over several years of teaching it in different places.",
+     "feynman": "Learning to touch-type is slow for a week, then you overtake anyone who hunts for keys with one finger, forever.",
+     "visual": "A plot of total effort (up) against problems solved (right). A coral straight line is the ad-hoc route; a lime curve is the abstract route (a big step at the start, then almost flat). Dragging the orange \"problems\" slider right moves a gold marker to the crossing point where abstraction wins. Under the plot, a three-step staircase 🦾 → ✋ → 🛞 lights step by step.",
+     "scene": "mls-front-who-for",
+     "beat": "🏔️ abstraction pays off",
+     "math": [
+      "optimization"
+     ],
+     "engine": [],
+     "difficulty": 2
+    },
+    {
+     "id": "f-12-c",
+     "lines": [
+      16,
+      27
+     ],
+     "kind": "prose",
+     "idea": "Suggested routes: advanced students can do Chapters 1–4 in about twelve weeks, with lab work on planning and controlling industrial arms and offline simulation; a kinematics-heavy version swaps parts of Chapter 4 for Chapter 5; Chapters 5–8 fit in about ten weeks for a more advanced group, alongside other topics.",
+     "feynman": "A cookbook with suggested menus: a weeknight menu, a vegetarian swap for one dish, and a big holiday feast.",
+     "visual": "A mini book map with three route overlays you toggle. Route A lights stations 1→2→3→4 with a 12-week clock; route B animates a swap arrow replacing station 4 by station 5; route C lights 5→6→7→8 with a 10-week clock. A week counter totals the active route, and a 🧪 lab badge attaches to route A.",
+     "scene": "mls-front-who-for",
+     "beat": "🛤️ reading routes",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "f-12-d",
+     "lines": [
+      28,
+      33
+     ],
+     "kind": "prose",
+     "idea": "Prerequisites: a solid grounding in linear algebra and some signals and systems; an introduction to control helps but is optional; some mathematical maturity is useful. Whoever masters Chapter 2 can handle the rest.",
+     "feynman": "A height bar at a theme park: if you clear the bar at the first big ride (Chapter 2), every ride after it is open to you.",
+     "visual": "A gate with a height bar stands at station 2. The orange reader token carries badges 🔲 (matrices) and 〰️ (signals); with both, the gate swings open lime and every downstream station lights in a ripple; drop a badge and the gate turns coral. An optional 🎛️ badge only adds a speed boost.",
+     "scene": "mls-front-who-for",
+     "beat": "🛤️ reading routes",
+     "math": [
+      "matrix"
+     ],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "f-12-e",
+     "lines": [
+      34,
+      42
+     ],
+     "kind": "prose",
+     "idea": "Exercises follow Chapters 2–8. A symbolic-math toolkit for the problems of Chapters 2, 3 and partly 5 is described in Appendix B. Numerical exercises are left out on purpose: when teaching, the authors take numbers from real lab robots, which keeps problems fresh.",
+     "feynman": "A music teacher who gives you scales from the book but chooses this week's song from what is on the radio.",
+     "visual": "Each station's 🏆 tile opens a challenge with blank purple number slots. Spinning an orange \"lab robot\" dial fills the slots with that robot's dimensions; the challenge shape stays identical while the numbers change. A 💻 tile links stations 2, 3 and 5 to the toolbox.",
+     "scene": "mls-front-who-for",
+     "beat": "🛤️ reading routes",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "f-12-f",
+     "lines": [
+      43,
+      44
+     ],
+     "kind": "prose",
+     "idea": "The one big manipulation topic not covered is planning motions and avoiding collisions.",
+     "feynman": "A driving manual that explains the engine and steering wheel but leaves the road map to a separate atlas.",
+     "visual": "On the mini map, a ghosted slate district (a little maze with obstacles) sits beside station 3, joined by a dotted edge to a 📕 icon outside the book; Crucible's own A* and RRT scene icons glow as where to go next.",
+     "scene": "mls-front-who-for",
+     "beat": "🧭 left out on purpose",
+     "math": [
+      "cspace",
+      "graph-search"
+     ],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "f-12-g",
+     "lines": [
+      45,
+      45
+     ],
+     "kind": "page-number",
+     "idea": "Roman page number xiv of the front matter."
+    }
+   ]
+  },
+  {
+   "pdf": 13,
+   "book": null,
+   "lines": 19,
+   "section": "preface",
+   "summary": "Preface end: motion planning and sensing are left to other sources; the content was chosen to stay foundational; Chapter 9 sketches new directions; signed by the three authors in August 1993.",
+   "atoms": [
+    {
+     "id": "f-13-a",
+     "lines": [
+      1,
+      8
+     ],
+     "kind": "prose",
+     "idea": "When teaching, the authors still cover some motion planning, and point advanced readers to a dedicated planning book. Sensing (vision, touch sensing, signal processing) is also left out and studied separately.",
+     "feynman": "A city bus route map that shows where the bus goes, but leaves weather forecasts to the radio.",
+     "visual": "A second ghosted district appears with 📷 vision and 👆 touch icons, dotted edges leaving the book toward Crucible's camera and Kalman-filter scenes, which light teal when tapped.",
+     "scene": "mls-front-who-for",
+     "beat": "🧭 left out on purpose",
+     "math": [
+      "camera",
+      "kalman"
+     ],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "f-13-b",
+     "lines": [
+      9,
+      15
+     ],
+     "kind": "prose",
+     "idea": "The topics were picked to stay foundational as technology changes; Chapter 9 gives a glimpse of new directions, and the authors hope readers share their excitement about both the prospects of robotics and the elegance of its theory.",
+     "feynman": "Learning to swim instead of learning one particular pool: the skill keeps working in any pool you find.",
+     "visual": "An orange time slider moves past 1993: robot icons on the timeline swap rapidly (hardware keeps changing), but the core stations 2, 3 and 4 on the map stay lit lime the whole time; a readout of \"core still valid\" stays at ✓.",
+     "scene": "mls-front-who-for",
+     "beat": "🏔️ abstraction pays off",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "f-13-c",
+     "lines": [
+      16,
+      18
+     ],
+     "kind": "front",
+     "idea": "Signed by the three authors, dated August 1993."
+    },
+    {
+     "id": "f-13-d",
+     "lines": [
+      19,
+      19
+     ],
+     "kind": "page-number",
+     "idea": "Roman page number xv of the front matter."
+    }
+   ]
+  },
+  {
+   "pdf": 14,
+   "book": null,
+   "lines": 1,
+   "section": "preface",
+   "summary": "Blank back of the preface; only the roman page number.",
+   "atoms": [
+    {
+     "id": "f-14-a",
+     "lines": [
+      1,
+      1
+     ],
+     "kind": "page-number",
+     "idea": "Roman page number xvi of the front matter."
+    }
+   ]
+  },
+  {
+   "pdf": 15,
+   "book": null,
+   "lines": 35,
+   "section": "acknowledgements",
+   "summary": "Acknowledgements: collaborators behind the rigid-motion, hand and nonholonomic chapters; the product-of-exponentials idea and its originator's influence; seminars that sparked the authors' interest.",
+   "atoms": [
+    {
+     "id": "f-15-a",
+     "lines": [
+      1,
+      1
+     ],
+     "kind": "heading",
+     "idea": "Acknowledgements heading."
+    },
+    {
+     "id": "f-15-b",
+     "lines": [
+      2,
+      17
+     ],
+     "kind": "prose",
+     "idea": "Thanks to research collaborators: much of Chapters 2–3 grew from one collaborator's doctoral thesis; the hand research behind Chapters 5–6 was joint work with several people; the nonholonomic planning work was done with a further group of collaborators.",
+     "feynman": "The credits at the end of a movie, grouped by department: who helped build which part.",
+     "visual": "The idea tree has three branches (🔩 Ch2–3, ✋ Ch5–6, 🛞 Ch7–8). Tapping a branch lights anonymous teal dots at its base with a count readout (1, 5 and 8 dots respectively); the dots pulse in the branch's color.",
+     "scene": "mls-front-idea-lineage",
+     "beat": "🤝 research partners",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "f-15-c",
+     "lines": [
+      18,
+      25
+     ],
+     "kind": "prose",
+     "idea": "The core of Chapters 2–3 is deriving kinematics with the product-of-exponentials formula introduced by Brockett; the authors credit his broader work on kinematics, rolling contact and nonholonomic control, and his style of nonlinear control, as shaping the whole book.",
+     "feynman": "A grandparent's recipe that every later dish in the family cookbook quietly builds on.",
+     "visual": "A big gold root under the tree marked 🔩 exp. Tapping it pumps lime sap up the trunk into the branches that use it (Ch 2, 3, 4, 5, 7, 8); a readout counts chapters fed = 6. Muting the root drains color from those branches.",
+     "scene": "mls-front-idea-lineage",
+     "beat": "🔩 roots of the formula",
+     "math": [
+      "poe",
+      "screw-exp"
+     ],
+     "engine": [
+      "kinematics.poeFK"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "f-15-d",
+     "lines": [
+      26,
+      34
+     ],
+     "kind": "prose",
+     "idea": "Seminars that sparked interest: a 1983 talk arguing for the beauty of the product of exponentials, conversations linking classical mechanics with modern mathematics and control, and a 1987 seminar on multifingered hands and cooperating robots.",
+     "feynman": "One good story at a sleepover can set the kids building forts all summer.",
+     "visual": "Spark icons ✨ sit on a slate year axis at 1983 and 1987. Tapping a spark sends a glow along a curved path into the branch it ignited (🔩 for 1983, ✋ for 1987), which thickens.",
+     "scene": "mls-front-idea-lineage",
+     "beat": "💬 sparks from talks",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "f-15-e",
+     "lines": [
+      35,
+      35
+     ],
+     "kind": "page-number",
+     "idea": "Roman page number xvii of the front matter."
+    }
+   ]
+  },
+  {
+   "pdf": 16,
+   "book": null,
+   "lines": 45,
+   "section": "acknowledgements",
+   "summary": "Acknowledgements continued: discussion partners, supportive colleagues in many places, help with photographs, funding agencies and employers, early testers and reviewers, and students who debugged drafts.",
+   "atoms": [
+    {
+     "id": "f-16-a",
+     "lines": [
+      1,
+      9
+     ],
+     "kind": "prose",
+     "idea": "More thanks to researchers they discussed kinematics, optimal control, redundant mechanisms and nonholonomic planning with.",
+     "feynman": "Friends you talk shop with over lunch: no single chat writes the book, but each sharpens an idea.",
+     "visual": "Speech bubbles 💬 orbit the branches; each bubble drifts into the branch matching its topic (🦾 kinematics, 🎛️ optimal control, 🐍 redundancy, 🛞 nonholonomy) and a tally on that branch ticks up.",
+     "scene": "mls-front-idea-lineage",
+     "beat": "💬 sparks from talks",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "f-16-b",
+     "lines": [
+      10,
+      25
+     ],
+     "kind": "prose",
+     "idea": "Colleagues in many cities and countries gave technical and moral support during the writing, and a few people helped with the photographs.",
+     "feynman": "Neighbors who drop by to help hang a picture, or just to cheer you on.",
+     "visual": "A slate world map with teal pins lighting up one by one, each tied by a thin line to the tree trunk; a 📷 pin links to Chapter 1's photo figures. A readout counts pins lit.",
+     "scene": "mls-front-idea-lineage",
+     "beat": "💬 sparks from talks",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "f-16-c",
+     "lines": [
+      26,
+      36
+     ],
+     "kind": "prose",
+     "idea": "Funding came from national science and army research agencies, several industry foundations and a Hong Kong research grant; the authors' employers also supported building new programs, and a former engineering dean is singled out.",
+     "feynman": "Water and sunlight for a garden: they are not the plants, but nothing grows without them.",
+     "visual": "Gold watering cans pour into the soil under the tree; a soil-moisture bar rises and every branch thickens. Removing cans one at a time makes the bar fall and the leaves tint coral.",
+     "scene": "mls-front-idea-lineage",
+     "beat": "🧪 testers & backers",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "f-16-d",
+     "lines": [
+      37,
+      43
+     ],
+     "kind": "prose",
+     "idea": "Several instructors taught from draft versions and sent comments, and three outside reviewers gave careful reviews.",
+     "feynman": "Friends who taste-test a new recipe and tell you it needs less salt before the dinner party.",
+     "visual": "Draft pages in blue with coral bug dots scattered on them; each tester token dragged across a page erases bugs and a bug counter falls toward zero.",
+     "scene": "mls-front-idea-lineage",
+     "beat": "🧪 testers & backers",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "f-16-e",
+     "lines": [
+      44,
+      44
+     ],
+     "kind": "prose",
+     "idea": "Start of the thanks to students who worked through early versions and found mistakes.",
+     "feynman": "Kids who play a board game before it ships and find the rule that does not work.",
+     "visual": "A stream of small student tokens enters from the left heading toward the draft pages with the bugs.",
+     "scene": "mls-front-idea-lineage",
+     "beat": "🧪 testers & backers",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "f-16-f",
+     "lines": [
+      45,
+      45
+     ],
+     "kind": "page-number",
+     "idea": "Roman page number xviii of the front matter."
+    }
+   ]
+  },
+  {
+   "pdf": 17,
+   "book": null,
+   "lines": 11,
+   "section": "acknowledgements",
+   "summary": "Acknowledgements end: student debuggers, help building the screw-calculus software of Appendix B, and thanks to the authors' families.",
+   "atoms": [
+    {
+     "id": "f-17-a",
+     "lines": [
+      1,
+      8
+     ],
+     "kind": "prose",
+     "idea": "The students who debugged the drafts are named, one of them helped write the symbolic screw-calculus package behind Appendix B, and unnamed others are thanked too.",
+     "feynman": "A crowd of beta-testers, plus one who also built the game's level editor.",
+     "visual": "Student tokens sweep across the draft pages and the last coral bugs vanish (counter hits 0). One token peels off and drops a 💻 tile into the slate toolbox of the book map.",
+     "scene": "mls-front-idea-lineage",
+     "beat": "🧪 testers & backers",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "f-17-b",
+     "lines": [
+      9,
+      10
+     ],
+     "kind": "prose",
+     "idea": "A personal thank-you to their families for support during the project.",
+     "feynman": "The people at home who keep the lights on while you build a treehouse.",
+     "visual": "A small 🏡 at the foot of the trunk glows warm gold; tapping it makes the whole tree sway gently once.",
+     "scene": "mls-front-idea-lineage",
+     "beat": "🏡 thanks at home",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "f-17-c",
+     "lines": [
+      11,
+      11
+     ],
+     "kind": "page-number",
+     "idea": "Roman page number xix of the front matter."
+    }
+   ]
+  },
+  {
+   "pdf": 18,
+   "book": null,
+   "lines": 1,
+   "section": "acknowledgements",
+   "summary": "Blank back of the acknowledgements; only the roman page number.",
+   "atoms": [
+    {
+     "id": "f-18-a",
+     "lines": [
+      1,
+      1
+     ],
+     "kind": "page-number",
+     "idea": "Roman page number xx of the front matter."
+    }
+   ]
+  }
+ ]
+}

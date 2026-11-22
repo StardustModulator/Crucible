@@ -13,15 +13,15 @@
 //   slate                obstacles, walls
 
 const dark = {
-  bg: '#0d1220', panel: '#151c2e', panel2: '#1c2540', ink: '#eef2ff', muted: '#9aa6c7',
-  faint: '#3a4566', grid: '#222c48', shadow: 'rgba(0,0,0,0.35)',
+  bg: '#0b0e1f', panel: '#151a33', panel2: '#1d2347', ink: '#f1f3ff', muted: '#9aa5cf',
+  faint: '#343c6b', grid: '#1f2650', shadow: 'rgba(0,0,0,0.35)',
   red: '#ff5d6c', green: '#3ddc84', blue: '#4ea8ff', orange: '#ffa94d', pink: '#ff6ad5',
   gold: '#ffd43b', teal: '#2ee6d6', purple: '#b18cff', lime: '#a3e635', coral: '#ff7b54',
   slate: '#6b7896', white: '#ffffff', black: '#000000',
 };
 const light = {
-  bg: '#fbf8f1', panel: '#ffffff', panel2: '#f1ece0', ink: '#1d2340', muted: '#5d6687',
-  faint: '#c9cfdf', grid: '#e8e3d6', shadow: 'rgba(30,30,60,0.15)',
+  bg: '#fbf6ea', panel: '#fffdf7', panel2: '#f4eddc', ink: '#1d2340', muted: '#5d6687',
+  faint: '#d6cfbd', grid: '#ece3cf', shadow: 'rgba(30,30,60,0.15)',
   red: '#e03140', green: '#16a35a', blue: '#1f7ae0', orange: '#ec7a00', pink: '#d6339f',
   gold: '#d49b00', teal: '#0aa595', purple: '#7a4fe0', lime: '#5c9a0b', coral: '#e8532d',
   slate: '#7a8399', white: '#ffffff', black: '#000000',

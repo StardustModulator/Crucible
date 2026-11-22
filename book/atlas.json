@@ -1,5 +1,10 @@
 {
  "parts": [
+  "front",
+  "ch01",
+  "ch03a",
+  "ch03b",
+  "ch08",
   "ch09"
  ],
  "built": []

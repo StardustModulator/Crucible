@@ -1,0 +1,2278 @@
+{
+ "id": "ch01",
+ "title": "Introduction",
+ "pdfPages": [
+  19,
+  36
+ ],
+ "sections": [
+  {
+   "id": "1",
+   "title": "Introduction",
+   "book": 1
+  },
+  {
+   "id": "1.1",
+   "title": "Brief History",
+   "book": 1
+  },
+  {
+   "id": "1.2",
+   "title": "Multifingered Hands and Dextrous Manipulation",
+   "book": 8
+  },
+  {
+   "id": "1.3",
+   "title": "Outline of the Book",
+   "book": 13
+  },
+  {
+   "id": "1.3.1",
+   "title": "Manipulation using single robots",
+   "book": 14
+  },
+  {
+   "id": "1.3.2",
+   "title": "Coordinated manipulation using multifingered robot hands",
+   "book": 15
+  },
+  {
+   "id": "1.3.3",
+   "title": "Nonholonomic behavior in robotic systems",
+   "book": 16
+  },
+  {
+   "id": "1.4",
+   "title": "Bibliography",
+   "book": 18
+  }
+ ],
+ "scenes": [
+  {
+   "id": "mls-ch1-robot-timeline",
+   "title": "Robot Timeline",
+   "icon": "⏳",
+   "section": "1.1",
+   "pages": [
+    1,
+    8
+   ],
+   "uses": [
+    "forward-kinematics",
+    "jacobian",
+    "gearing",
+    "computed-torque",
+    "impedance",
+    "newton-euler"
+   ],
+   "exists": "gearing",
+   "beats": [
+    "🎭 dream vs reality",
+    "🎮 copy my hand",
+    "📼 replay a program",
+    "👀 add senses",
+    "⚙️ joints & control",
+    "🔭 what comes next"
+   ],
+   "brief": "A slate timeline from 1920 to 1995 with a draggable orange year knob. Passing each era builds a robot and unlocks a mini-toy: a master–slave pair where dragging the master (orange) makes the slave (pink) mirror it; a programmable arm that records a pink path and replays it; badges for touch (teal pressure dots) and vision (an eye); a geared vs direct-drive joint with a backlash dead-zone readout; an error fan showing how a tiny wobble at the base becomes a big miss at the tip; and a two-link arm tracking a gold curve under computed torque. After 1990 the track turns dotted and splits into ☢️, 🪐 and 🔬 branches. Readouts: year, joints count, tip error."
+  },
+  {
+   "id": "mls-ch1-why-fingers",
+   "title": "Why Fingers?",
+   "icon": "✋",
+   "section": "1.2",
+   "pages": [
+    8,
+    13
+   ],
+   "uses": [
+    "forward-kinematics",
+    "jacobian",
+    "statics",
+    "manipulability"
+   ],
+   "exists": "statics",
+   "beats": [
+    "🦀 clumsy gripper",
+    "🧠 the brain's hand map",
+    "🦿 prosthetic hands",
+    "🎮 remote hands",
+    "🤖 research hands"
+   ],
+   "brief": "Split screen: the same six-joint arm (orange joints) twice, holding a blue part, once with a two-jaw gripper and once with a three-finger hand. A gold ghost of the part shows a target twist; the learner drags it. The gripper arm must swing its big shoulder joints (an energy/time meter climbs, coral), the fingered arm turns the part with small finger joints (meter barely moves, lime). Other beats: a body map whose part sizes match how much brain controls them (hands huge); a sorter that drops four kinds of prosthetic hands into bins; a teleoperation mirror where your drag on a local hand drives a remote hand behind a slate wall; and a family tree of research hands with finger × joint counts."
+  },
+  {
+   "id": "mls-ch1-chapter-roadmap",
+   "title": "Chapter Roadmap",
+   "icon": "🧭",
+   "section": "1.3",
+   "pages": [
+    13,
+    17
+   ],
+   "uses": [
+    "rigid-transform",
+    "screw-exp",
+    "poe",
+    "jacobian",
+    "lagrange-dynamics",
+    "lyapunov",
+    "statics",
+    "manipulability",
+    "cspace"
+   ],
+   "exists": "poe",
+   "beats": [
+    "🗂️ the plan",
+    "🔩 rigid motion",
+    "🦾 one arm",
+    "✋ grasping hands",
+    "🛞 roll & steer",
+    "🔭 open frontier"
+   ],
+   "brief": "A dependency graph of the book's key ideas (not its table of contents): exp map → twist/wrench → product of exponentials → Jacobian → Lagrangian → Lyapunov → grasp map → force-closure/manipulability → Pfaffian constraint → Lie bracket → sinusoid steering. Chapters are colored regions behind the nodes. Dual pairs pulse as twins (pink twist ↔ purple wrench, force-closure ↔ manipulability, nonholonomy ↔ controllability). Dragging any node lights all its ancestors lime back to the exp map; a readout counts the prerequisites. Each beat zooms into one region and plays a 3-second live toy from that chapter."
+  },
+  {
+   "id": "mls-ch1-bookshelf",
+   "title": "Robotics Bookshelf",
+   "icon": "📚",
+   "section": "1.4",
+   "pages": [
+    18,
+    18
+   ],
+   "uses": [
+    "forward-kinematics",
+    "statics",
+    "cspace"
+   ],
+   "beats": [
+    "📚 too many to list",
+    "🦾 single-arm texts",
+    "✋ hand monographs",
+    "📎 paper collections"
+   ],
+   "brief": "A slate bookshelf whose spines are colored by topic (orange = single-arm mechanics and control, pink = hands and grasping, gold = edited collections, teal = vision/sensing kept off the shelf). An orange year knob fills the shelf in publication order. Tapping a spine lights the roadmap regions it overlaps. Readouts: spines per color. No titles or names on the canvas."
+  }
+ ],
+ "pages": [
+  {
+   "pdf": 19,
+   "book": 1,
+   "lines": 30,
+   "section": "1",
+   "summary": "Chapter opening: robots went from film fantasy to everyday industrial tools in twenty years, though not humanlike; our impatience with robots comes from underrating our own motor control. Section 1 begins with the 1921 play that coined the word robot.",
+   "atoms": [
+    {
+     "id": "1-1-a",
+     "lines": [
+      1,
+      2
+     ],
+     "kind": "heading",
+     "idea": "Chapter 1 title: Introduction."
+    },
+    {
+     "id": "1-1-b",
+     "lines": [
+      3,
+      10
+     ],
+     "kind": "prose",
+     "idea": "In about twenty years robots moved from science fiction to real computer-controlled machines in many industries: welding and painting car bodies, stuffing circuit boards, inspecting nuclear, undersea and underground structures, and even harvesting fruit.",
+     "feynman": "Like the microwave oven: once a sci-fi idea, now a plain box in every kitchen doing one job well.",
+     "visual": "An orange year knob on a slate track: as it slides, a factory scene fills with robots doing their jobs: a pink sparkle where a welder works, a paint trail, components dropping onto a green board, an inspection arm on a pipe, a 🍊 picked off a tree. A counter of job types climbs.",
+     "scene": "mls-ch1-robot-timeline",
+     "beat": "🎭 dream vs reality",
+     "math": [
+      "forward-kinematics"
+     ],
+     "engine": [
+      "kinematics.planarFK"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "1-1-c",
+     "lines": [
+      11,
+      20
+     ],
+     "kind": "prose",
+     "idea": "Few of these robots look human, though people still imagine humanoids. Progress with simple robots and crude end-effectors is real; our impatience with robotics mostly reflects how little we appreciate the power and subtlety of our own biological motor control.",
+     "feynman": "Catching a ball feels easy to you, but try writing down the instructions for every muscle and you see why a robot struggles.",
+     "visual": "Two panels: a human arm catching a ball, with a tiny bar showing \"effort you notice\" (near 0), and a robot arm attempting the same catch with a huge stack of orange joint commands scrolling by; a counter of commands per second races up while the human bar stays flat.",
+     "scene": "mls-ch1-robot-timeline",
+     "beat": "🎭 dream vs reality",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "1-1-d",
+     "lines": [
+      21,
+      21
+     ],
+     "kind": "heading",
+     "idea": "Section 1 heading: Brief History."
+    },
+    {
+     "id": "1-1-e",
+     "lines": [
+      22,
+      29
+     ],
+     "kind": "prose",
+     "idea": "The word \"robot\" comes from a 1921 satirical play by Karel Čapek about tireless humanlike workers that end up destroying their makers; it seeded decades of fiction portraying robots as intelligent, humanlike characters.",
+     "feynman": "A nickname from a story that sticks so well everyone uses it, even for things that look nothing like the original.",
+     "visual": "At the far left of the timeline, a 🎭 stage at 1921 releases a cloud of humanlike robot silhouettes that drift right as fiction; when they meet the real-robot icons of later decades, the size mismatch (tall humanoid ghost vs small arm) is shown side by side.",
+     "scene": "mls-ch1-robot-timeline",
+     "beat": "🎭 dream vs reality",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "1-1-f",
+     "lines": [
+      30,
+      30
+     ],
+     "kind": "page-number",
+     "idea": "Page number 1."
+    }
+   ]
+  },
+  {
+   "pdf": 20,
+   "book": 2,
+   "lines": 22,
+   "section": "1.1",
+   "summary": "Real robots look primitive next to fiction; a decade-by-decade history follows. Post-war teleoperators for radioactive material: a master arm whose motions a slave arm copied, first via linkages, later electric or hydraulic, with force feedback added in 1949.",
+   "atoms": [
+    {
+     "id": "1-2-a",
+     "lines": [
+      1,
+      2
+     ],
+     "kind": "figure",
+     "label": "Fig 1.1",
+     "idea": "Photo of an early six-axis research arm with one sliding joint, a classic laboratory manipulator of the 1960s–70s.",
+     "feynman": "An old family photo of the first bike in the family: clunky, but everything later is built on it.",
+     "visual": "Hovering the 1969 notch on the timeline pops up a line-drawing of this arm with its five orange revolute joints and one orange prismatic slide; dragging the slide extends the pink tip in a straight line.",
+     "scene": "mls-ch1-robot-timeline",
+     "beat": "👀 add senses",
+     "math": [
+      "forward-kinematics"
+     ],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "1-2-b",
+     "lines": [
+      3,
+      8
+     ],
+     "kind": "prose",
+     "idea": "Compared with screen robots, real ones look primitive. The chapter then gives a short history by decade, from the 1950s to the 1980s, based on two earlier textbooks.",
+     "feynman": "Like flipping through a family album by decade to see how the baby grew up.",
+     "visual": "The timeline snaps into decade bins (50s, 60s, 70s, 80s) shown as alternating slate bands; the year knob snaps between bands, each with its own robot silhouette.",
+     "scene": "mls-ch1-robot-timeline",
+     "beat": "🎭 dream vs reality",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "1-2-c",
+     "lines": [
+      9,
+      20
+     ],
+     "kind": "prose",
+     "idea": "After World War II, national laboratories built remote manipulators for radioactive material: a person moved a master arm and a slave arm repeated the motion, first through mechanical linkages, later through electric or hydraulic coupling (\"teleoperators\"). Force feedback, added in 1949, kept the slave from crushing glassware.",
+     "feynman": "Puppets on strings: your hand moves, the puppet copies; add a spring that pushes back on your hand and you can feel when the puppet bumps something.",
+     "visual": "Master–slave toy: a two-link orange master arm on the left, an identical pink slave arm behind a slate shield on the right handling a fragile 🧪. Drag the master; the slave mirrors it. Toggle force feedback: when the slave touches the vial, a purple push-back arrow appears on the master and a squeeze meter on the vial stays below the coral \"crack\" line; with feedback off the meter shoots into coral and the vial cracks.",
+     "scene": "mls-ch1-robot-timeline",
+     "beat": "🎮 copy my hand",
+     "math": [
+      "forward-kinematics",
+      "impedance"
+     ],
+     "engine": [
+      "kinematics.planarFK"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "1-2-d",
+     "lines": [
+      21,
+      21
+     ],
+     "kind": "prose",
+     "idea": "Transition: alongside teleoperators, another technology was developing (continued on the next page).",
+     "feynman": "Two streams flowing side by side before they join into one river.",
+     "visual": "Two parallel lanes appear on the timeline: the upper lane carries teleoperator icons 🎮, the lower lane starts carrying machine-tool icons 🏭; they visibly converge at 1954.",
+     "scene": "mls-ch1-robot-timeline",
+     "beat": "📼 replay a program",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "1-2-e",
+     "lines": [
+      22,
+      22
+     ],
+     "kind": "page-number",
+     "idea": "Page number 2."
+    }
+   ]
+  },
+  {
+   "pdf": 21,
+   "book": 3,
+   "lines": 24,
+   "section": "1.1",
+   "summary": "Numerically controlled machine tools plus teleoperator arms gave the first programmable robot (1954), commercialized by Unimation (first installed 1961). The open-chain arm reaches a big workspace but is hard to keep stiff and accurate, since errors at the base grow toward the tip.",
+   "atoms": [
+    {
+     "id": "1-3-a",
+     "lines": [
+      1,
+      2
+     ],
+     "kind": "figure",
+     "label": "Fig 1.2",
+     "idea": "Photo of a 1970s hydraulic industrial arm built by a machine-tool maker, nicknamed \"the tomorrow tool\".",
+     "feynman": "A big strong forklift-like arm: built to lift heavy things on a factory line.",
+     "visual": "At the 1974 notch, a heavy six-joint arm silhouette appears; its orange joints are drawn thick to show hydraulic power, and a weight icon on the pink gripper reads its payload.",
+     "scene": "mls-ch1-robot-timeline",
+     "beat": "📼 replay a program",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "1-3-b",
+     "lines": [
+      3,
+      14
+     ],
+     "kind": "prose",
+     "idea": "Computer numerically controlled machine tools were being built to mill aircraft parts. In 1954 George Devol replaced the human master of the teleoperator with the program of a numerically controlled machine: a \"programmed articulated transfer device\". Joseph Engelberger bought the rights and founded Unimation (1956), which installed its first robot in a General Motors plant in 1961. The key idea was programmability: cheap retooling for many tasks.",
+     "feynman": "A player piano: instead of a pianist pressing keys live, a punched roll plays the song, and swapping the roll gives a new song.",
+     "visual": "Record & replay toy: drag the orange joints of a two-link arm to trace a pink path through three gold waypoints; press ⏺ then ▶; the arm repeats the path on its own forever. Swap the tape 📼 (a new set of waypoints) and it does a different job with no rebuilding; a \"tasks done\" counter climbs while a \"retool cost\" counter stays flat.",
+     "scene": "mls-ch1-robot-timeline",
+     "beat": "📼 replay a program",
+     "math": [
+      "forward-kinematics",
+      "trajectory"
+     ],
+     "engine": [
+      "kinematics.planarFK",
+      "control.cubic"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "1-3-c",
+     "lines": [
+      15,
+      23
+     ],
+     "kind": "prose",
+     "idea": "The Unimation arm broke with conventional machine design by being an open kinematic chain: a cantilevered beam with many degrees of freedom. That gives a big workspace for a small footprint, but makes it hard to control the end point accurately and to keep the arm stiff, because errors at the base are amplified further out; hydraulic actuators with high power and precision were used to help (sentence ends on the next page).",
+     "feynman": "Holding a long fishing rod by its handle: a tiny wiggle of your wrist becomes a big swing at the tip.",
+     "visual": "Error fan: a three-link arm with orange joints; a slider adds a tiny jitter to the base joint only. A coral cone of possible tip positions fans out from the pink tip, its width growing with arm length; a readout shows base error (degrees) vs tip error (mm). Moving the same jitter to the last joint shrinks the fan, showing base errors matter most.",
+     "scene": "mls-ch1-robot-timeline",
+     "beat": "⚙️ joints & control",
+     "math": [
+      "forward-kinematics",
+      "jacobian"
+     ],
+     "engine": [
+      "kinematics.planarFK",
+      "kinematics.planarJacobian"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "1-3-d",
+     "lines": [
+      24,
+      24
+     ],
+     "kind": "page-number",
+     "idea": "Page number 3."
+    }
+   ]
+  },
+  {
+   "pdf": 22,
+   "book": 4,
+   "lines": 22,
+   "section": "1.1",
+   "summary": "Hydraulic actuators drove the joints. In the 1960s sensing arrived: force sensing to stack blocks (1962), pressure sensing for grasp patterns, binary vision (1963), many new arm designs, a walking machine (1969), voice-commanded robots, and licensing into Japan (1968).",
+   "atoms": [
+    {
+     "id": "1-4-a",
+     "lines": [
+      1,
+      2
+     ],
+     "kind": "figure",
+     "label": "Fig 1.3",
+     "idea": "Photo of a popular electric six-joint assembly arm from the late 1970s.",
+     "feynman": "The classic desk lamp of robot arms: you have seen its shape everywhere.",
+     "visual": "At the 1978 notch, a six-joint arm appears with numbered orange joints 1–6 lighting up in order from base to wrist; the pink gripper rotates as joints 4–6 (the wrist) turn.",
+     "scene": "mls-ch1-robot-timeline",
+     "beat": "⚙️ joints & control",
+     "math": [
+      "forward-kinematics"
+     ],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "1-4-b",
+     "lines": [
+      3,
+      3
+     ],
+     "kind": "prose",
+     "idea": "End of the previous point: hydraulic actuators powered the joints of those first arms.",
+     "feynman": "Like a car jack: pushing fluid gives huge force in a small package.",
+     "visual": "The thick orange joints of the 1961 arm get a small 💧 badge; tapping it shows a piston pushing a lever with a force bar much taller than the motor's.",
+     "scene": "mls-ch1-robot-timeline",
+     "beat": "⚙️ joints & control",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "1-4-c",
+     "lines": [
+      4,
+      14
+     ],
+     "kind": "prose",
+     "idea": "Sensory feedback quickly made robots more flexible: a 1962 robot with force sensing could stack blocks, the first known robot to deal with an unstructured setting; a pressure sensor let a hand squeeze an object and choose between two grasp patterns; and a 1963 binary vision system let a robot react to obstacles.",
+     "feynman": "Walking through a dark room with your hands out: feeling the wall tells you when to stop, instead of following steps memorized blind.",
+     "visual": "Block-stacking toy: an arm lowers a blue block onto a slate pile whose height is random. Without sensing (badge off) it releases at a fixed height and the block drops or crashes (coral flash). Turn on the teal force badge: a force bar rises at contact and the arm releases exactly then; stacks come out neat (lime). An 👁️ badge adds coarse black/white pixels that mark a slate obstacle to steer around.",
+     "scene": "mls-ch1-robot-timeline",
+     "beat": "👀 add senses",
+     "math": [
+      "impedance"
+     ],
+     "engine": [
+      "NEW: sim.contactForce"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "1-4-d",
+     "lines": [
+      15,
+      21
+     ],
+     "kind": "prose",
+     "idea": "Many other arm designs appeared at that time in several countries, a walking machine was built for the army in 1969, robots responding to voice commands and stacking scattered blocks were shown, and robots reached Japan via a 1968 license from Unimation.",
+     "feynman": "A family tree that suddenly sprouts many cousins once the first child proves the idea works.",
+     "visual": "A small robot family tree branches off the 1960s band: several arm silhouettes with different joint layouts, a four-legged walker, a 🗣️ speech badge, and a 🇯🇵 branch growing from the Unimation node in 1968.",
+     "scene": "mls-ch1-robot-timeline",
+     "beat": "👀 add senses",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "1-4-e",
+     "lines": [
+      22,
+      22
+     ],
+     "kind": "page-number",
+     "idea": "Page number 4."
+    }
+   ]
+  },
+  {
+   "pdf": 23,
+   "book": 5,
+   "lines": 3,
+   "section": "1.1",
+   "summary": "Two photo pages: a SCARA-style assembly robot and an early direct-drive arm.",
+   "atoms": [
+    {
+     "id": "1-5-a",
+     "lines": [
+      1,
+      1
+     ],
+     "kind": "figure",
+     "label": "Fig 1.4",
+     "idea": "Photo of a fast SCARA-type assembly robot (two horizontal rotary joints plus a vertical slide).",
+     "feynman": "A desk lamp that only swings flat across the table, then pokes straight down: perfect for placing things on a board.",
+     "visual": "A top-down SCARA: two orange rotary joints swing the pink tool over a green board; a vertical slider dips it to place a chip. The vertical axis is drawn rigid (lime) while the horizontal joints are springy (orange), hinting at its \"compliant sideways, stiff downward\" design.",
+     "scene": "mls-ch1-robot-timeline",
+     "beat": "⚙️ joints & control",
+     "math": [
+      "forward-kinematics"
+     ],
+     "engine": [
+      "kinematics.planarFK"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "1-5-b",
+     "lines": [
+      2,
+      2
+     ],
+     "kind": "figure",
+     "label": "Fig 1.5",
+     "idea": "Photo of an early direct-drive arm, whose motors turn the joints without gearboxes.",
+     "feynman": "A bicycle with the pedals bolted straight to the wheel, like a kid's tricycle: no chain, no gears.",
+     "visual": "At the 1981 notch, the arm's joints are drawn as big flat motor discs with no gear wheels; toggling to \"geared\" adds small gear icons between motor and link.",
+     "scene": "mls-ch1-robot-timeline",
+     "beat": "⚙️ joints & control",
+     "math": [
+      "gearing"
+     ],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "1-5-c",
+     "lines": [
+      3,
+      3
+     ],
+     "kind": "page-number",
+     "idea": "Page number 5."
+    }
+   ]
+  },
+  {
+   "pdf": 24,
+   "book": 6,
+   "lines": 22,
+   "section": "1.1",
+   "summary": "The 1970s: the first robot programming language (1973), a heavy computer-controlled arm that tracks a moving line (1974), robot assembly of pumps and typewriters with touch sensing, the remote-center-compliance device, the PUMA (1978), space teleoperation, and the SCARA (1979). Different actuation for different jobs follows.",
+   "atoms": [
+    {
+     "id": "1-6-a",
+     "lines": [
+      1,
+      2
+     ],
+     "kind": "figure",
+     "label": "Fig 1.6",
+     "idea": "Photo of a six-legged walking robot from the 1980s.",
+     "feynman": "A beetle walking: always three legs on the ground forming a stable tripod while the other three step.",
+     "visual": "A hexapod on slate ground: legs alternate in two tripods (lime = on ground, orange = swinging); a support triangle under the body stays lime as long as the body's center dot is inside it.",
+     "scene": "mls-ch1-robot-timeline",
+     "beat": "⚙️ joints & control",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "1-6-b",
+     "lines": [
+      3,
+      8
+     ],
+     "kind": "prose",
+     "idea": "In 1973 the first robot motion language (WAVE) let people command arms with high-level instructions, and in 1974 a machine-tool maker sold its first computer-controlled arm, able to lift about 100 lb and to follow objects on a moving assembly line.",
+     "feynman": "Telling a friend \"pass the salt\" instead of describing every arm muscle to move.",
+     "visual": "High-level command toy: drag 🧩 command blocks (move-to, grasp, place) into a slot; the arm executes the sequence. A second toggle sets a conveyor moving; the pink gripper's target (gold) slides along with the belt and the arm keeps matching its speed, tip error readout near 0.",
+     "scene": "mls-ch1-robot-timeline",
+     "beat": "📼 replay a program",
+     "math": [
+      "trajectory"
+     ],
+     "engine": [
+      "control.quintic"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "1-6-c",
+     "lines": [
+      9,
+      13
+     ],
+     "kind": "prose",
+     "idea": "Later in the 1970s, robots assembled water pumps and a twenty-part typewriter using touch and force sensing, and a remote center compliance (RCC) device was developed to make peg-in-hole insertion forgiving.",
+     "feynman": "Putting a key in a lock in the dark: you wiggle gently and let the key slide in, instead of jamming it straight.",
+     "visual": "Peg-in-hole toy: a blue peg on a springy pink wrist approaches a slate hole with a small offset. Rigid wrist (stiffness slider high): the peg jams, coral contact forces spike. RCC on (soft lateral springs, center near the peg tip): the peg tilts and slides in, contact force bar stays low and lime.",
+     "scene": "mls-ch1-robot-timeline",
+     "beat": "👀 add senses",
+     "math": [
+      "impedance",
+      "statics"
+     ],
+     "engine": [
+      "NEW: sim.pegInHole"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "1-6-d",
+     "lines": [
+      14,
+      19
+     ],
+     "kind": "prose",
+     "idea": "In 1978 Unimation released the PUMA assembly arm based on an automaker study; a space-teleoperation program began in the mid-1970s; and in 1979 the SCARA assembly robot appeared in Japan and then the United States.",
+     "feynman": "New car models arriving each year, each one good at a different job: a family car, a pickup, a race car.",
+     "visual": "The 1970s band fills with three icons: PUMA (six joints, elbow-up), a space arm floating with 🪐 badge connected by a dotted line to an operator on Earth, and a SCARA seen from above. Tapping each plays its signature motion.",
+     "scene": "mls-ch1-robot-timeline",
+     "beat": "⚙️ joints & control",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "1-6-e",
+     "lines": [
+      20,
+      21
+     ],
+     "kind": "prose",
+     "idea": "As industrial uses grew, robots diversified, and with them the way their joints are driven (continued on the next page).",
+     "feynman": "Different tools for different chores: a hand drill for small holes, a jackhammer for concrete.",
+     "visual": "Joint-driver selector under the timeline with three tiles: 💧 hydraulic (heavy loads), ⚡ electric (light, clean), 🧲 direct drive; the selected tile tints the robot's orange joints.",
+     "scene": "mls-ch1-robot-timeline",
+     "beat": "⚙️ joints & control",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "1-6-f",
+     "lines": [
+      22,
+      22
+     ],
+     "kind": "page-number",
+     "idea": "Page number 6."
+    }
+   ]
+  },
+  {
+   "pdf": 25,
+   "book": 7,
+   "lines": 45,
+   "section": "1.1",
+   "summary": "Electric motors need gearing, which adds friction and backlash, motivating direct-drive arms (1981). The 1980s focused on control algorithms: recursive dynamics, computed torque, force and compliant control, flexible joints. The 1990s brought reconfigurable modules, mobile robots for hazards, and the promise of micro-scale sensing and actuation.",
+   "atoms": [
+    {
+     "id": "1-7-a",
+     "lines": [
+      1,
+      9
+     ],
+     "kind": "prose",
+     "idea": "Electric robots were cheaper and cleaner for light work, but electric motors give peak power at high speed, so they need gear reduction, which adds friction, backlash and cost. The search for driving joints without gearing led to a direct-drive arm in 1981 (Asada).",
+     "feynman": "A bicycle in its lowest gear: easy to push, but your legs spin fast while the wheel barely turns, and the chain has a little slack you feel when you reverse.",
+     "visual": "Gear toy: an orange motor wheel and a pink link wheel joined by a gear train with ratio slider N. Turning the motor shows the link turning N times slower and N times stronger (torque bar). A backlash slider opens a small dead zone: reversing direction, the motor turns but the link waits (coral gap readout in degrees). Toggle direct drive: dead zone vanishes, but the torque bar drops by N.",
+     "scene": "mls-ch1-robot-timeline",
+     "beat": "⚙️ joints & control",
+     "math": [
+      "gearing"
+     ],
+     "engine": [
+      "NEW: gearing.backlash"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "1-7-b",
+     "lines": [
+      10,
+      17
+     ],
+     "kind": "prose",
+     "idea": "In the 1980s the goal was better fine manipulation, either actively (feedback for accurate positioning and programmable compliance) or passively (redesigning the arm). Few new robot types appeared; most research went into algorithms for control, trajectory planning and fusing sensor data.",
+     "feynman": "A decade spent teaching the same old dog smarter tricks rather than buying new dogs.",
+     "visual": "The 1980s band shows the same arm silhouette repeated, but a brain-like 🧠 badge on it grows layers labeled by icons (🎛️ control, 🗺️ planning, 📡 sensing) as the knob moves through the decade; a \"new robot types\" counter stays nearly flat while an \"algorithm\" counter climbs.",
+     "scene": "mls-ch1-robot-timeline",
+     "beat": "⚙️ joints & control",
+     "math": [],
+     "engine": [],
+     "difficulty": 2
+    },
+    {
+     "id": "1-7-c",
+     "lines": [
+      18,
+      20
+     ],
+     "kind": "prose",
+     "idea": "Among the first active control tools were efficient recursive (Lagrangian/Newton–Euler style) ways to compute the gravity and Coriolis terms of an arm's dynamics.",
+     "feynman": "Passing a bucket down a line: each link hands the motion outward and the forces back inward, so you never have to compute everything from scratch.",
+     "visual": "Recursive dynamics toy: a three-link arm; an outward sweep animates teal velocity arrows link by link from base to tip, then an inward sweep animates purple force/torque arrows from tip to base. The resulting joint torques (orange bars) equal those of the full formula, shown side by side; a counter shows how few operations the recursion used.",
+     "scene": "mls-ch1-robot-timeline",
+     "beat": "⚙️ joints & control",
+     "math": [
+      "newton-euler",
+      "lagrange-dynamics"
+     ],
+     "engine": [
+      "dynamics.twoLinkG",
+      "dynamics.twoLinkC",
+      "NEW: dynamics.rne"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "1-7-d",
+     "lines": [
+      21,
+      25
+     ],
+     "kind": "prose",
+     "idea": "Computed torque: use state feedback to cancel the arm's nonlinear dynamics exactly so it behaves like a simple linear system; it gives precise transient guarantees but is computationally heavy, and in practice the cancellation is only approximate or must be adaptive.",
+     "feynman": "Carrying a full cup on a bumpy bus: if you know exactly how the bus will lurch, you move your hand to cancel it and the coffee stays still.",
+     "visual": "Two-link arm chasing a gold curve. The computed-torque controller adds the exact gravity/Coriolis torque (purple) so the coral error bar decays like a simple spring. A \"model error\" slider makes the cancellation imperfect: the error bar no longer reaches zero and wiggles.",
+     "scene": "mls-ch1-robot-timeline",
+     "beat": "⚙️ joints & control",
+     "math": [
+      "computed-torque",
+      "lagrange-dynamics"
+     ],
+     "engine": [
+      "dynamics.twoLinkTau",
+      "dynamics.twoLinkAccel",
+      "dynamics.rk4"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "1-7-e",
+     "lines": [
+      26,
+      28
+     ],
+     "kind": "prose",
+     "idea": "Many projects addressed controlling position and force together for robots touching their environment, known as hybrid or compliant control.",
+     "feynman": "Wiping a table: you control where your hand moves along the table, and separately how hard you press down.",
+     "visual": "A pink tool on a slate table: sideways motion is position-controlled (follows a gold path), downward is force-controlled (a teal force bar held at a gold level). Dragging the table up and down changes nothing in the force bar.",
+     "scene": "mls-ch1-robot-timeline",
+     "beat": "⚙️ joints & control",
+     "math": [
+      "impedance"
+     ],
+     "engine": [
+      "NEW: control.hybridForce"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "1-7-f",
+     "lines": [
+      29,
+      32
+     ],
+     "kind": "prose",
+     "idea": "Chasing precision, designers made links lighter and used harmonic drives in the joints; this made joints and links flexible, which in turn required new control methods for flexible robots.",
+     "feynman": "A fishing rod is light and fast, but when you stop moving it the tip keeps wobbling.",
+     "visual": "A link drawn as a springy bar between an orange motor and a pink tip mass: a stiffness slider; stop the motor quickly and the tip overshoots and rings (coral oscillation trace); low stiffness = bigger ringing.",
+     "scene": "mls-ch1-robot-timeline",
+     "beat": "⚙️ joints & control",
+     "math": [
+      "ode",
+      "poles"
+     ],
+     "engine": [
+      "dynamics.rk4"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "1-7-g",
+     "lines": [
+      33,
+      38
+     ],
+     "kind": "prose",
+     "idea": "In the 1990s the trend was toward robots reconfigurable for different assembly jobs, e.g. a system of four-degree-of-freedom modules hovering on air bearings under a planar linear motor, each fitted with whatever end-effector the task needs.",
+     "feynman": "Like a kitchen mixer with swappable attachments: whisk, dough hook, or blender on the same base.",
+     "visual": "Several small module robots glide on an overhead slate grid; dragging an end-effector icon (gripper, screwdriver, suction cup) onto a module swaps its pink tool, and a task-match light turns lime.",
+     "scene": "mls-ch1-robot-timeline",
+     "beat": "🔭 what comes next",
+     "math": [],
+     "engine": [],
+     "difficulty": 2
+    },
+    {
+     "id": "1-7-h",
+     "lines": [
+      39,
+      44
+     ],
+     "kind": "prose",
+     "idea": "For hazardous settings, mobile robots for planetary exploration, waste cleanup and agriculture made big strides; with reconfigurable and hazardous-environment robots growing, the authors expect a big jump from milli- and micro-scale sensors and actuators plus better computing and control (continued next page).",
+     "feynman": "Sending a remote-control car into a place too dangerous or too far for you to walk.",
+     "visual": "Past 1990 the timeline track turns dotted and splits: a 🪐 rover branch, a ☢️ cleanup branch, a 🌾 field branch; a scale slider shrinks a gripper toward the 🔬 micro scale.",
+     "scene": "mls-ch1-robot-timeline",
+     "beat": "🔭 what comes next",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "1-7-i",
+     "lines": [
+      45,
+      45
+     ],
+     "kind": "page-number",
+     "idea": "Page number 7."
+    }
+   ]
+  },
+  {
+   "pdf": 26,
+   "book": 8,
+   "lines": 39,
+   "section": "1.2",
+   "summary": "Most robots have six rotary or sliding joints and a simple end-effector; grippers are task-specific, and the arm-plus-gripper is clumsy in four ways (no in-hand dexterity, few grasps, big arm motions for small hand motions, poor fine force control). Multifingered hands promise a fix.",
+   "atoms": [
+    {
+     "id": "1-8-a",
+     "lines": [
+      1,
+      3
+     ],
+     "kind": "prose",
+     "idea": "End of the outlook: these future prospects are discussed in Chapter 9.",
+     "feynman": "The \"to be continued\" card at the end of an episode.",
+     "visual": "The dotted future branches end in a 📖 9 marker that, when tapped, flies to station 9 of the book map.",
+     "scene": "mls-ch1-robot-timeline",
+     "beat": "🔭 what comes next",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "1-8-b",
+     "lines": [
+      4,
+      5
+     ],
+     "kind": "heading",
+     "idea": "Section 2 heading: Multifingered Hands and Dextrous Manipulation."
+    },
+    {
+     "id": "1-8-c",
+     "lines": [
+      6,
+      14
+     ],
+     "kind": "prose",
+     "idea": "Most working robots have six joints, rotary or prismatic, with a simple end-effector, used for pick-and-place, carrying cameras and inspection tools, and delicate assembly. Far from science fiction, but useful for welding, painting, moving material, circuit boards and hazardous inspection.",
+     "feynman": "A grabber stick (the kind for picking up litter): one squeeze, one job, and it does it reliably.",
+     "visual": "A six-joint arm with orange joints marked R (rotary) or P (prismatic) and a simple pink two-jaw gripper; a carousel of job icons (🔥, 🖌️, 📦, 🔌, 🔍) cycles and the arm performs each with the same gripper.",
+     "scene": "mls-ch1-why-fingers",
+     "beat": "🦀 clumsy gripper",
+     "math": [
+      "forward-kinematics"
+     ],
+     "engine": [
+      "kinematics.poeFK"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "1-8-d",
+     "lines": [
+      15,
+      23
+     ],
+     "kind": "prose",
+     "idea": "The \"hand\" or end-effector is the interface between the arm and the world. Most are simple (two- or three-jaw grippers, pincers, tongs, compliance devices) and designed ad hoc for one part: suction cups for glass that fail on machined parts, air-driven jaws for metal that would crush plastic.",
+     "feynman": "A kitchen drawer of single-use gadgets: an egg slicer, a garlic press, a cherry pitter, each great at one thing and useless at the others.",
+     "visual": "A tool rack of pink end-effectors (suction cup, two-jaw, tongs). Drag one onto the arm, then try parts from a tray (glass plate, metal block, plastic cup): matching pairs glow lime; mismatches flash coral (plate slips, cup cracks).",
+     "scene": "mls-ch1-why-fingers",
+     "beat": "🦀 clumsy gripper",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "1-8-e",
+     "lines": [
+      24,
+      28
+     ],
+     "kind": "prose",
+     "idea": "A six-degree-of-freedom arm with such a simple hand is clumsy. First, it lacks dexterity: it can hold a part securely but cannot reorient or move it within the grip.",
+     "feynman": "Holding a pencil in a fist: it will not fall, but you cannot twirl it to write.",
+     "visual": "The gripper holds a blue part; a gold ghost shows the part rotated by 30° in the hand. Attempting it with the gripper: the jaws cannot turn the part relative to themselves (in-hand motion readout = 0). With the three-finger hand, small finger motions turn the part to the ghost (lime).",
+     "scene": "mls-ch1-why-fingers",
+     "beat": "🦀 clumsy gripper",
+     "math": [
+      "jacobian"
+     ],
+     "engine": [],
+     "difficulty": 2
+    },
+    {
+     "id": "1-8-f",
+     "lines": [
+      29,
+      30
+     ],
+     "kind": "prose",
+     "idea": "Second, a gripper allows only a few grasps, so tools must be swapped often for different tasks.",
+     "feynman": "A wrench set: every bolt size needs a different wrench, so you keep reaching back into the box.",
+     "visual": "A task queue of parts scrolls by; a \"tool changes\" counter (coral) climbs every time the gripper must be swapped, while the multifingered hand handles the whole queue with zero changes (lime).",
+     "scene": "mls-ch1-why-fingers",
+     "beat": "🦀 clumsy gripper",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "1-8-g",
+     "lines": [
+      31,
+      34
+     ],
+     "kind": "prose",
+     "idea": "Third, small motions of the end-effector can require large arm motions, and since the motors near the base are the biggest, these motions are slow and wasteful.",
+     "feynman": "To nudge a cup one centimeter, you would not swing your whole body; you would just move your fingers.",
+     "visual": "Drag the gold target a tiny bit. On the gripper arm, the big shoulder joints (large orange discs) must rotate, an energy/time meter climbs coral; on the fingered arm only small finger joints move and the meter barely rises (lime). The ratio of the two meters is shown.",
+     "scene": "mls-ch1-why-fingers",
+     "beat": "🦀 clumsy gripper",
+     "math": [
+      "jacobian",
+      "statics"
+     ],
+     "engine": [
+      "kinematics.planarJacobian"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "1-8-h",
+     "lines": [
+      35,
+      36
+     ],
+     "kind": "prose",
+     "idea": "Fourth, there is little fine force control, which limits assembly to the crudest tasks.",
+     "feynman": "Trying to thread a needle wearing oven mitts.",
+     "visual": "A force bar on a delicate part: the gripper's force jumps in coarse steps (coral staircase) and overshoots the gold \"just right\" band; the fingered hand's force rises smoothly into the band (lime).",
+     "scene": "mls-ch1-why-fingers",
+     "beat": "🦀 clumsy gripper",
+     "math": [
+      "impedance"
+     ],
+     "engine": [],
+     "difficulty": 2
+    },
+    {
+     "id": "1-8-i",
+     "lines": [
+      37,
+      38
+     ],
+     "kind": "prose",
+     "idea": "A multifingered, articulated hand offers a way to give a robot dexterity and versatility (continued after the figure).",
+     "feynman": "Trading the grabber stick for a real hand.",
+     "visual": "The pink two-jaw gripper morphs into a three-finger hand with orange knuckle joints; the four coral \"clumsy\" badges above the arm turn lime one by one.",
+     "scene": "mls-ch1-why-fingers",
+     "beat": "🦀 clumsy gripper",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "1-8-j",
+     "lines": [
+      39,
+      39
+     ],
+     "kind": "page-number",
+     "idea": "Page number 8."
+    }
+   ]
+  },
+  {
+   "pdf": 27,
+   "book": 9,
+   "lines": 62,
+   "section": "1.2",
+   "summary": "Figure of the motor-cortex body map; multifingered hands reduce tool changes, move objects fast and precisely with light actuators, and allow fine force control, mirroring how we use arms to place hands and fingers to do fine work; hand control takes a big share of the motor cortex.",
+   "atoms": [
+    {
+     "id": "1-9-a",
+     "lines": [
+      1,
+      45
+     ],
+     "kind": "figure",
+     "label": "Fig 1.7",
+     "idea": "Fig 1.7 is the classic homunculus: body parts laid along a slice of the motor cortex, each drawn at a size proportional to how much cortex controls it; hand, fingers, lips and tongue are huge.",
+     "feynman": "If your body were drawn by how much brain attention each part gets, you would have giant hands and lips and a tiny back.",
+     "visual": "A body map you can toggle between \"real proportions\" and \"brain proportions\": in brain mode, the hand and fingers (pink) inflate enormously, lips and tongue grow, trunk and legs shrink. A slate arc (the cortex strip) below shows each part's segment length; tapping a part highlights its segment.",
+     "scene": "mls-ch1-why-fingers",
+     "beat": "🧠 the brain's hand map",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "1-9-b",
+     "lines": [
+      46,
+      51
+     ],
+     "kind": "prose",
+     "idea": "A multifingered hand can reshape itself into many grasps, reducing tool changes; its many lightweight actuators allow fast, precise, energy-efficient object motion and high-bandwidth fine force control.",
+     "feynman": "A Swiss army knife beats a drawer of single tools, and small finger muscles react faster than your shoulder.",
+     "visual": "Readout panel for the two arms on the same task queue: tool changes, energy, time to reorient, force-control smoothness. Each meter shows the hand version (lime) beating the gripper version (coral).",
+     "scene": "mls-ch1-why-fingers",
+     "beat": "🦀 clumsy gripper",
+     "math": [
+      "manipulability"
+     ],
+     "engine": [],
+     "difficulty": 2
+    },
+    {
+     "id": "1-9-c",
+     "lines": [
+      52,
+      56
+     ],
+     "kind": "prose",
+     "idea": "The idea is borrowed from us: we move the arm to put the hand in a region, then use wrist and fingers for intricate interaction, preshaping into grasps that pinch, wrap, or immobilize an object and switching grasps as we act.",
+     "feynman": "Reaching for a cup: your arm does the long trip, your fingers do the last careful centimeter.",
+     "visual": "Coarse-to-fine toy: drag a gold target across the screen; the arm (big orange joints) moves first and stops near it, then the fingers (small orange joints) finish the job. A grasp selector cycles pinch 🤏, wrap ✊, and clamp shapes, and each preshapes the fingers before contact.",
+     "scene": "mls-ch1-why-fingers",
+     "beat": "🦀 clumsy gripper",
+     "math": [
+      "forward-kinematics"
+     ],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "1-9-d",
+     "lines": [
+      57,
+      61
+     ],
+     "kind": "prose",
+     "idea": "One measure of a mammal's intelligence is the share of motor cortex devoted to its hands, found by careful neurological mapping that yields a homunculus like Fig 1.7; for humans the share is the largest (continued next page).",
+     "feynman": "How much of a company's staff works on a product tells you how important that product is.",
+     "visual": "A pie of the motor cortex with the hand slice in pink; tapping 🧑 shows a big slice, preparing the comparison on the next page.",
+     "scene": "mls-ch1-why-fingers",
+     "beat": "🧠 the brain's hand map",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "1-9-e",
+     "lines": [
+      62,
+      62
+     ],
+     "kind": "page-number",
+     "idea": "Page number 9."
+    }
+   ]
+  },
+  {
+   "pdf": 28,
+   "book": 10,
+   "lines": 21,
+   "section": "1.2",
+   "summary": "Humans devote 30–40% of motor cortex to hands, monkeys 20–30%, dogs and cats under 10%. The first multifingered hands were prostheses, starting with a 1509 spring hand for a knight; prostheses fall into four classes, beginning with cosmetic and passive.",
+   "atoms": [
+    {
+     "id": "1-10-a",
+     "lines": [
+      1,
+      1
+     ],
+     "kind": "figure",
+     "label": "Fig 1.8",
+     "idea": "Photo of a four-fingered, tendon-driven, humanlike research hand gently holding a light bulb.",
+     "feynman": "A hand made of pulleys and strings, like a marionette's hand, but strong and careful enough to hold a light bulb.",
+     "visual": "A four-finger hand model (three fingers and a thumb) wraps around a blue bulb; tendon lines (orange) run from each knuckle back into the forearm; a grip-force bar stays in a narrow gold band so the bulb is neither dropped nor crushed.",
+     "scene": "mls-ch1-why-fingers",
+     "beat": "🤖 research hands",
+     "math": [
+      "statics"
+     ],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "1-10-b",
+     "lines": [
+      2,
+      3
+     ],
+     "kind": "prose",
+     "idea": "For humans about 30–40% of motor cortex runs the hands, versus 20–30% for most monkeys and under 10% for dogs and cats.",
+     "feynman": "How much of each animal's \"control room\" is reserved for paws or hands: we spend the most because our hands do the most.",
+     "visual": "Three side-by-side cortex pies (🧑, 🐒, 🐕) with the hand slice in pink sized 35%, 25%, 8%; a slider morphs between animals and a dexterity icon (✍️, 🍌, 🦴) appears next to each.",
+     "scene": "mls-ch1-why-fingers",
+     "beat": "🧠 the brain's hand map",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "1-10-c",
+     "lines": [
+      4,
+      8
+     ],
+     "kind": "prose",
+     "idea": "Historically, multifingered hands first appeared as prostheses: a 1509 spring-loaded hand was built for a knight who lost his hand in battle; it worked in battle but was not handy for daily tasks.",
+     "feynman": "A spring clip that locks tight around a sword grip: great for holding one thing, bad for buttoning a shirt.",
+     "visual": "An iron hand with fingers on springs: drag a knob to latch the fingers closed around a slate sword handle (lime lock); try daily tasks (🍴, 👕, 🔑) and each flashes coral because the fingers cannot be adjusted.",
+     "scene": "mls-ch1-why-fingers",
+     "beat": "🦿 prosthetic hands",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "1-10-d",
+     "lines": [
+      9,
+      14
+     ],
+     "kind": "prose",
+     "idea": "Many hand designs followed over the centuries; some are passive (springs), some body-powered (arm flexion or shrug control), some closing voluntarily and others involuntarily. A survey sorts them into four types.",
+     "feynman": "Sorting toys into bins by how they move: wind-up, push-along, battery, or statue.",
+     "visual": "A sorting machine with four bins labeled by icons (🗿 cosmetic, ✋ passive, 💪 body-powered, 🔋 externally powered). Prosthetic hand cards drop from the top; drag each into its bin, which glows lime if right.",
+     "scene": "mls-ch1-why-fingers",
+     "beat": "🦿 prosthetic hands",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "1-10-e",
+     "lines": [
+      15,
+      17
+     ],
+     "kind": "prose",
+     "idea": "Type 1, cosmetic: no active motion, but usable for pushing or as something for the other hand to press against.",
+     "feynman": "A doorstop: it does not move, but it gives you something to push against.",
+     "visual": "The 🗿 bin: a still blue hand acts as a fixed slate anvil; the real hand (pink) presses a part against it to hold it steady; no orange joints are drawn at all.",
+     "scene": "mls-ch1-why-fingers",
+     "beat": "🦿 prosthetic hands",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "1-10-f",
+     "lines": [
+      18,
+      20
+     ],
+     "kind": "prose",
+     "idea": "Type 2, passive: the other, natural hand has to adjust the prosthesis's grasp by hand; these were the earliest, including the 1509 knight's hand.",
+     "feynman": "A bendy desk lamp: you position it with your other hand and it stays put.",
+     "visual": "The ✋ bin: the pink natural hand drags each orange finger joint of the prosthesis into place; when released, the joints stay where they were set (a lock icon on each).",
+     "scene": "mls-ch1-why-fingers",
+     "beat": "🦿 prosthetic hands",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "1-10-g",
+     "lines": [
+      21,
+      21
+     ],
+     "kind": "page-number",
+     "idea": "Page number 10."
+    }
+   ]
+  },
+  {
+   "pdf": 29,
+   "book": 11,
+   "lines": 25,
+   "section": "1.2",
+   "summary": "Prosthetic types 3 and 4 (body-powered via cables, externally powered by battery or gas). Powered prostheses grew after 1960; myoelectric devices followed, but their dexterity comes from the wearer's visual feedback, not the device. Teleoperation in hazardous places also drove hand development.",
+   "atoms": [
+    {
+     "id": "1-11-a",
+     "lines": [
+      1,
+      2
+     ],
+     "kind": "figure",
+     "label": "Fig 1.9",
+     "idea": "Photo of a three-fingered, cable-driven research hand with one thumb-like finger opposing two others.",
+     "feynman": "Like a claw arcade machine with three jointed fingers instead of rigid prongs.",
+     "visual": "A three-finger hand: two fingers on one side, an opposing thumb on the other, each finger with three orange joints; cables (orange lines) run back to a motor pack.",
+     "scene": "mls-ch1-why-fingers",
+     "beat": "🤖 research hands",
+     "math": [
+      "forward-kinematics"
+     ],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "1-11-b",
+     "lines": [
+      3,
+      8
+     ],
+     "kind": "prose",
+     "idea": "Type 3, body powered: body motion pulls a cable that operates the hand, typically by moving the arm forward (arm-flexion control) or rounding the shoulders (shrug control).",
+     "feynman": "A bike brake: squeeze one lever and a cable closes the brake pads somewhere else.",
+     "visual": "The 💪 bin: a stick figure with a cable from shoulder to hand; dragging the shoulders forward (orange knob) tightens the cable and the pink fingers close; releasing opens them. A cable-length readout matches finger closure.",
+     "scene": "mls-ch1-why-fingers",
+     "beat": "🦿 prosthetic hands",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "1-11-c",
+     "lines": [
+      9,
+      11
+     ],
+     "kind": "prose",
+     "idea": "Type 4, externally powered: energy comes from a battery or compressed gas; these had not yet replaced body-powered hands.",
+     "feynman": "A battery-powered toy car versus a wind-up one.",
+     "visual": "The 🔋 bin: a battery icon feeds a motor at the wrist; a charge bar drains as the fingers open and close.",
+     "scene": "mls-ch1-why-fingers",
+     "beat": "🦿 prosthetic hands",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "1-11-d",
+     "lines": [
+      12,
+      16
+     ],
+     "kind": "prose",
+     "idea": "Powered hands appeared after 1920 but were used widely only from the 1960s; one hand (Tomović and Boni) was made for veterans who lost arms to illness, and others for children born without limbs due to a drug.",
+     "feynman": "A technology that sits on the shelf for decades until a real need makes everyone build it.",
+     "visual": "A small prosthetics timeline under the bins: a dot at 1920 grows into a thick lime bar after 1960 as hand icons multiply.",
+     "scene": "mls-ch1-why-fingers",
+     "beat": "🦿 prosthetic hands",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "1-11-e",
+     "lines": [
+      17,
+      22
+     ],
+     "kind": "prose",
+     "idea": "Myoelectric prostheses (controlled by muscle signals) advanced into impressive grasping devices, but their dexterity comes from the wearer watching and adjusting, not from feedback built into the device.",
+     "feynman": "Steering a car with your eyes: the car has no idea where the lane is; you are the feedback loop.",
+     "visual": "Feedback-loop diagram: muscle signal (orange) → hand (pink) → object. Toggle the 👁️ wearer loop: with it, a teal arrow from the object back to the wearer closes the loop and grasp error shrinks; without it, the hand overshoots (coral) because there is no sensor loop inside the device.",
+     "scene": "mls-ch1-why-fingers",
+     "beat": "🦿 prosthetic hands",
+     "math": [
+      "pid"
+     ],
+     "engine": [],
+     "difficulty": 2
+    },
+    {
+     "id": "1-11-f",
+     "lines": [
+      23,
+      24
+     ],
+     "kind": "prose",
+     "idea": "As with robots, teleoperation in hazardous or hard-to-reach places pushed hand development (continued next page).",
+     "feynman": "Wearing a glove that controls a robot hand far away.",
+     "visual": "A slate wall separates an operator glove (orange) on the left from a pink robot hand on the right; a list of hazard icons (☢️, 🌊, 🪐, ⛏️) cycles behind the wall.",
+     "scene": "mls-ch1-why-fingers",
+     "beat": "🎮 remote hands",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "1-11-g",
+     "lines": [
+      25,
+      25
+     ],
+     "kind": "page-number",
+     "idea": "Page number 11."
+    }
+   ]
+  },
+  {
+   "pdf": 30,
+   "book": 12,
+   "lines": 26,
+   "section": "1.2",
+   "summary": "Teleoperation, including surgery, drove dextrous hands. Research hands sit between prosthesis, teleoperation and smart end-effector; early three-finger hands tightened nuts or grasped odd shapes; later hands are listed, starting with a three-finger, cable-driven hand.",
+   "atoms": [
+    {
+     "id": "1-12-a",
+     "lines": [
+      1,
+      2
+     ],
+     "kind": "figure",
+     "label": "Fig 1.10",
+     "idea": "Photo of a two-fingered planar research hand (1988) pinching a box between two direct-drive fingers on a table.",
+     "feynman": "Two chopsticks driven by motors, squeezing a box on a table.",
+     "visual": "Top-down view: two two-link fingers with orange direct-drive joints pinch a blue box; dragging the box shows the fingers follow while purple contact forces stay pointed inward.",
+     "scene": "mls-ch1-why-fingers",
+     "beat": "🤖 research hands",
+     "math": [
+      "forward-kinematics",
+      "statics"
+     ],
+     "engine": [
+      "kinematics.planarFK"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "1-12-b",
+     "lines": [
+      3,
+      8
+     ],
+     "kind": "prose",
+     "idea": "Teleoperation in nuclear, underwater, space, mining and recently surgical settings strongly drove dextrous hands: the operator's hand motions are relayed to a remote multifingered device; in surgery that device is inside the patient's body.",
+     "feynman": "Playing a claw machine through the glass, but the claw copies your actual fingers.",
+     "visual": "Mirror toy: drag the orange operator fingers; the pink remote fingers behind the slate wall copy them with a small delay. A scene selector swaps the remote world (☢️ room, 🌊 seabed, 🩺 inside a body shown as a small soft cavity).",
+     "scene": "mls-ch1-why-fingers",
+     "beat": "🎮 remote hands",
+     "math": [
+      "forward-kinematics"
+     ],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "1-12-c",
+     "lines": [
+      9,
+      14
+     ],
+     "kind": "prose",
+     "idea": "Many research hands sit between teleoperation, prosthesis and dextrous end-effector, reflecting two viewpoints: copying our own hands, or making smarter tools for robots.",
+     "feynman": "Designing a new kind of kitchen tool: do you copy a cook's hand, or invent a better gadget?",
+     "visual": "A slider between two poles 🧑 (humanlike) and 🤖 (tool-like); research hand icons sit along it at their positions, morphing as you drag.",
+     "scene": "mls-ch1-why-fingers",
+     "beat": "🤖 research hands",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "1-12-d",
+     "lines": [
+      15,
+      20
+     ],
+     "kind": "prose",
+     "idea": "Early research hands included a three-finger cable-driven hand that could screw a nut onto a bolt, and a hand with three elastic fingers driven by a single motor that stably held oddly shaped objects.",
+     "feynman": "Three fingers threading a nut like you do; or a soft three-pronged grabber that molds itself around a lumpy potato.",
+     "visual": "Two challenges: (1) turn a blue nut onto a slate bolt using three finger tips; a rotation counter climbs as the nut screws down. (2) one orange motor knob closes three springy fingers around a random lumpy blob; each finger stops where it touches (teal contact dots) and a stability light turns lime when all three are in contact.",
+     "scene": "mls-ch1-why-fingers",
+     "beat": "🤖 research hands",
+     "math": [
+      "statics"
+     ],
+     "engine": [],
+     "difficulty": 2
+    },
+    {
+     "id": "1-12-e",
+     "lines": [
+      21,
+      25
+     ],
+     "kind": "prose",
+     "idea": "Later research hands include a three-finger cable-driven hand (three joints per finger), a four-finger humanlike tendon hand, a planar four-finger hand, and the two-finger Styx; the three-finger hand places one finger opposite the other two (continued next page).",
+     "feynman": "A family photo of robot hands, each with a different number of fingers and knuckles.",
+     "visual": "The hand family tree: nodes for each hand showing fingers × joints (3×3, 4×4, 4×planar, 2×2); tapping a node shows its finger layout and lights its actuators (cables, pistons, steppers, direct drive).",
+     "scene": "mls-ch1-why-fingers",
+     "beat": "🤖 research hands",
+     "math": [
+      "forward-kinematics"
+     ],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "1-12-f",
+     "lines": [
+      26,
+      26
+     ],
+     "kind": "page-number",
+     "idea": "Page number 12."
+    }
+   ]
+  },
+  {
+   "pdf": 31,
+   "book": 13,
+   "lines": 43,
+   "section": "1.3",
+   "summary": "Details of later research hands (thumb opposition, tendons driven by motors or pistons, planar and direct-drive testbeds); hands now at many scales, from orange picking to piano playing, limited by lightweight high-torque actuators. Section 3 begins: book structure and Chapter 2 on rigid motion.",
+   "atoms": [
+    {
+     "id": "1-13-a",
+     "lines": [
+      1,
+      6
+     ],
+     "kind": "prose",
+     "idea": "The three-finger hand has a thumb opposing two fingers; the four-finger humanlike hand has four joints per finger; both are tendon-driven, one with electric motors pulling the cables and the other with pneumatic pistons.",
+     "feynman": "Your own fingers are moved by strings (tendons) pulled by muscles in your forearm; these hands work the same way, with motors or air pistons as the muscles.",
+     "visual": "Tendon toy: a single finger with orange joints and two tendons (flexor and extensor) drawn as cables over pulleys; pulling the flexor tab curls the finger, pulling the extensor straightens it. A switch changes the \"muscle\" icon between ⚡ motor and 💨 piston; tension bars on each cable stay positive (tendons can only pull).",
+     "scene": "mls-ch1-why-fingers",
+     "beat": "🤖 research hands",
+     "math": [
+      "statics"
+     ],
+     "engine": [
+      "NEW: tendon.couplingMap"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "1-13-b",
+     "lines": [
+      7,
+      10
+     ],
+     "kind": "prose",
+     "idea": "Another hand has four fingers moving in a plane driven by stepper motors, and Styx has two fingers with two direct-drive joints each; both served as testbeds for hand-control experiments.",
+     "feynman": "A practice kitchen where cooks try new recipes before serving them.",
+     "visual": "A flat testbed: switch between a four-finger planar hand and a two-finger hand; both pinch a blue box while a control panel shows an orange controller dial whose changes visibly alter how smoothly the box tracks a gold path.",
+     "scene": "mls-ch1-why-fingers",
+     "beat": "🤖 research hands",
+     "math": [
+      "forward-kinematics"
+     ],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "1-13-c",
+     "lines": [
+      11,
+      19
+     ],
+     "kind": "prose",
+     "idea": "Multifingered hands are now built at many scales, down to millimeters and micrometers, some as custom end-effectors: one picks oranges, another plays piano. A key obstacle is lightweight, high-torque motors; muscle-like, inch-worm and other new actuators are being studied.",
+     "feynman": "Kitchen tools come in big and tiny sizes, but the smaller you make a motor, the weaker it gets, like a tiny wind-up toy that cannot lift much.",
+     "visual": "A scale slider shrinks a hand from meters to micrometers; a torque-per-weight bar for an ordinary motor drops coral as it shrinks, while new actuator icons (💪 artificial muscle, 🐛 inch-worm) appear with lime bars. Side vignettes: a hand picking a 🍊, a hand pressing 🎹 keys.",
+     "scene": "mls-ch1-why-fingers",
+     "beat": "🤖 research hands",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "1-13-d",
+     "lines": [
+      20,
+      22
+     ],
+     "kind": "prose",
+     "idea": "One future use relying on such actuators is minimally invasive surgery, discussed in Chapter 9.",
+     "feynman": "Tiny robotic fingers doing work through a keyhole so the doctor does not need a big opening.",
+     "visual": "A slate wall with a small hole; a tiny pink hand passes through on a stick and manipulates a blue object inside; a 📖 9 marker links to the future-prospects chapter.",
+     "scene": "mls-ch1-why-fingers",
+     "beat": "🤖 research hands",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "1-13-e",
+     "lines": [
+      23,
+      23
+     ],
+     "kind": "heading",
+     "idea": "Section 3 heading: Outline of the Book."
+    },
+    {
+     "id": "1-13-f",
+     "lines": [
+      24,
+      29
+     ],
+     "kind": "prose",
+     "idea": "Eight more chapters follow; most end with a summary and exercises, and numerical exercises are deliberately omitted because the authors prefer numbers from real lab robots.",
+     "feynman": "A board game box with eight levels, each ending with a recap card and a puzzle, but you supply your own dice.",
+     "visual": "The roadmap's eight colored regions (Ch2–9) appear; each region ends in 📝 and 🏆 tiles. The 🏆 tile shows blank purple number slots that fill from an orange \"lab robot\" dial.",
+     "scene": "mls-ch1-chapter-roadmap",
+     "beat": "🗂️ the plan",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "1-13-g",
+     "lines": [
+      30,
+      36
+     ],
+     "kind": "prose",
+     "idea": "Chapter 2 presents a geometric view of how a rigid body translates and rotates. It is a common but often misunderstood topic, because describing rigid motion carefully is subtle; the viewpoint is classical, the mathematics modern.",
+     "feynman": "Turning a book 90° about one edge and then about another lands it differently than doing it in the opposite order: rotation is trickier than it looks.",
+     "visual": "Two identical blue books side by side; buttons apply a red-axis turn then a green-axis turn to one, and the reverse order to the other; the two end poses differ and a coral \"difference\" readout is nonzero.",
+     "scene": "mls-ch1-chapter-roadmap",
+     "beat": "🔩 rigid motion",
+     "math": [
+      "rotation",
+      "rigid-transform"
+     ],
+     "engine": [
+      "lie.rotX",
+      "lie.rotY"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "1-13-h",
+     "lines": [
+      37,
+      42
+     ],
+     "kind": "prose",
+     "idea": "After defining rotations, Chapter 2 uses the exponential map to coordinatize them (Euler's theorem: every rotation is a turn about some axis), generalizes to rigid motions via screws and twists and their link to homogeneous matrices, and then studies infinitesimal motions, using twists for velocities (continued next page).",
+     "feynman": "A spinning top: any final orientation can be reached by spinning about one fixed stick; add sliding along the stick and you get a screw, like a bolt going in.",
+     "visual": "The 🔩 node: drag an orange axis ω and an angle slider θ; a blue body turns about the axis (exp map). Add a pitch slider and it corkscrews (twist → screw). A 4×4 homogeneous matrix beside it updates live, its rotation block in red/green/blue columns.",
+     "scene": "mls-ch1-chapter-roadmap",
+     "beat": "🔩 rigid motion",
+     "math": [
+      "screw-exp",
+      "rotation",
+      "rigid-transform"
+     ],
+     "engine": [
+      "lie.expSO3",
+      "lie.expSE3"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "1-13-i",
+     "lines": [
+      43,
+      43
+     ],
+     "kind": "page-number",
+     "idea": "Page number 13."
+    }
+   ]
+  },
+  {
+   "pdf": 32,
+   "book": 14,
+   "lines": 44,
+   "section": "1.3",
+   "summary": "Chapter 2 continued: wrenches as duals of twists and reciprocal screws, to be read slowly; classical screw theory with modern extensions in Appendix A. The rest of the book has three parts; part 1 starts with Chapter 3: product-of-exponentials kinematics, Paden–Kahan inverse kinematics, and the Jacobian whose columns are twists.",
+   "atoms": [
+    {
+     "id": "1-14-a",
+     "lines": [
+      1,
+      6
+     ],
+     "kind": "prose",
+     "idea": "Wrenches (generalized forces) are the dual of twists, and the chapter ends with reciprocal screws. The authors find Chapter 2 needs a slow pace for the subtleties to sink in.",
+     "feynman": "Turning a door handle (motion) and pushing on it (force) are two sides of one coin: push along the direction it can move and it moves; push across, and nothing happens, no work done.",
+     "visual": "Dual twins: a pink twist arrow and a purple wrench arrow on a blue body; a power meter shows their pairing (force · velocity + torque · angular velocity). Rotate the wrench until the meter reads exactly 0: the two are reciprocal, and a lime ring snaps around them.",
+     "scene": "mls-ch1-chapter-roadmap",
+     "beat": "🔩 rigid motion",
+     "math": [
+      "screw-exp",
+      "statics"
+     ],
+     "engine": [
+      "lie.adjoint"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "1-14-b",
+     "lines": [
+      7,
+      12
+     ],
+     "kind": "prose",
+     "idea": "Screw theory dates from about 1900, and Chasles' theorem (every rigid motion is a screw motion) and its force dual, Poinsot's theorem (every force system is a wrench along an axis), are older still; the treatment extends to the more abstract formulations of Appendix A.",
+     "feynman": "Any way you move a chess piece in 3D (lift, turn, slide) can be redone as a single twist-and-slide along one hidden bolt.",
+     "visual": "Chasles toy: drag a blue body from pose A to pose B anywhere; the hidden screw axis appears as a slate rod and the body replays the move as one corkscrew along it (pitch readout). A twin toggle does the same for forces: a cluster of purple pushes collapses into one wrench on one axis. A 📎 link points to the appendix toolbox.",
+     "scene": "mls-ch1-chapter-roadmap",
+     "beat": "🔩 rigid motion",
+     "math": [
+      "screw-exp",
+      "rigid-transform"
+     ],
+     "engine": [
+      "lie.logSE3",
+      "lie.screwAxis"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "1-14-c",
+     "lines": [
+      13,
+      16
+     ],
+     "kind": "prose",
+     "idea": "After Chapter 2, the book splits into three parts: manipulation by a single robot, coordinated manipulation with a multifingered hand, and nonholonomic motion planning.",
+     "feynman": "A three-act play: one actor alone, then an ensemble, then a chase scene where the rules of motion get strange.",
+     "visual": "The roadmap collapses into three colored regions: 🦾 (orange, Ch3–4), ✋ (pink, Ch5–6), 🛞 (lime, Ch7–8), each fed by an arrow from the 🔩 Chapter-2 hub.",
+     "scene": "mls-ch1-chapter-roadmap",
+     "beat": "🗂️ the plan",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "1-14-d",
+     "lines": [
+      17,
+      17
+     ],
+     "kind": "heading",
+     "idea": "Subsection 3.1 heading: Manipulation using single robots."
+    },
+    {
+     "id": "1-14-e",
+     "lines": [
+      18,
+      25
+     ],
+     "kind": "prose",
+     "idea": "Chapter 3 describes a single arm's kinematics, i.e. the gripper's position and orientation as a function of joint angles, as a natural outgrowth of Chapter 2's exponential coordinates: the forward kinematics of an open chain is a product of exponentials, g(θ) = e^{ξ̂₁θ₁}⋯e^{ξ̂ₙθₙ} g(0), a formalism due to Brockett.",
+     "feynman": "Bending your shoulder, then your elbow, then your wrist: each joint carries everything beyond it along with its own twist, so the final hand pose is all those twists stacked.",
+     "visual": "PoE toy: a three-joint arm with orange joint axes drawn as twist lines; turning one joint's knob swings everything outward of it; a stack of three colored exp tiles multiplies left to right and the pink tip frame lands exactly where the product says (frame overlay matches).",
+     "scene": "mls-ch1-chapter-roadmap",
+     "beat": "🦾 one arm",
+     "math": [
+      "poe",
+      "forward-kinematics",
+      "screw-exp"
+     ],
+     "engine": [
+      "kinematics.poeFK",
+      "kinematics.poeFrames"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "1-14-f",
+     "lines": [
+      26,
+      37
+     ],
+     "kind": "prose",
+     "idea": "Unlike most texts, which use Denavit–Hartenberg parameters, this book uses product of exponentials; the payoff is a clean set of canonical subproblems (Paden–Kahan) for inverse kinematics, finding every joint solution for a given gripper pose for many industrial arms. More general arms need tools from algebraic geometry, discussed briefly.",
+     "feynman": "Solving a big jigsaw by spotting a few standard piece shapes (edges, corners) you already know how to place.",
+     "visual": "IK toy: drag a gold target; the arm's IK is solved by chaining subproblem tiles (🔄 rotate a point onto another, 🔄🔄 two rotations, 📏 rotate to a distance). Each tile animates its little circle-intersection picture; at the end, all ghost arms (up to 8) that reach the target appear in lime, with a solution count readout.",
+     "scene": "mls-ch1-chapter-roadmap",
+     "beat": "🦾 one arm",
+     "math": [
+      "ik",
+      "poe",
+      "dh"
+     ],
+     "engine": [
+      "kinematics.poeFK",
+      "NEW: ik.padenKahan"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "1-14-g",
+     "lines": [
+      38,
+      43
+     ],
+     "kind": "prose",
+     "idea": "The product of exponentials also makes differentiating the kinematics easy: the columns of the manipulator Jacobian are the current joint twist axes, so singularities can be described geometrically. The same formula also gives the kinematics of closed chains (continued next page).",
+     "feynman": "The speed of your fingertip is the sum of what each joint contributes, and each joint's contribution points around its own hinge.",
+     "visual": "Jacobian toy: each orange joint shows its current twist axis as a column arrow; the pink tip velocity ellipse is built from those columns. Drag the arm until two axes line up: the ellipse flattens to a line with a 🚫 flash (singularity) and a det readout hits 0.",
+     "scene": "mls-ch1-chapter-roadmap",
+     "beat": "🦾 one arm",
+     "math": [
+      "jacobian",
+      "manipulability"
+     ],
+     "engine": [
+      "kinematics.spaceJacobian",
+      "kinematics.manipulability"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "1-14-h",
+     "lines": [
+      44,
+      44
+     ],
+     "kind": "page-number",
+     "idea": "Page number 14."
+    }
+   ]
+  },
+  {
+   "pdf": 33,
+   "book": 15,
+   "lines": 43,
+   "section": "1.3",
+   "summary": "Closed chains (Stewart platform, four-bar) finish Chapter 3. Chapter 4: Lagrangian and Newton–Euler dynamics, the open-chain Lagrangian via PoE, and Lyapunov stability of computed-torque and PD control. Part 2 begins: Chapter 5 on contact models, the grasp map, force-closure, manipulability and rolling; Chapter 6 on constrained hand dynamics.",
+   "atoms": [
+    {
+     "id": "1-15-a",
+     "lines": [
+      1,
+      2
+     ],
+     "kind": "prose",
+     "idea": "The same formula handles arms with closed loops, such as a Stewart platform or a planar four-bar linkage.",
+     "feynman": "A folding table's legs: when the loop closes, moving one leg forces the others to move too.",
+     "visual": "A four-bar linkage: drag the orange input crank; the coupler and output link follow, with a lime loop-closure check that stays satisfied. A Stewart platform icon nearby moves its blue top plate as six orange legs extend.",
+     "scene": "mls-ch1-chapter-roadmap",
+     "beat": "🦾 one arm",
+     "math": [
+      "forward-kinematics",
+      "poe"
+     ],
+     "engine": [],
+     "difficulty": 2
+    },
+    {
+     "id": "1-15-b",
+     "lines": [
+      3,
+      11
+     ],
+     "kind": "prose",
+     "idea": "Chapter 4 covers single-robot dynamics and control: Lagrange's equations for rigid bodies, specialized to the Newton–Euler equations of one body, all in a modern geometric framework; the product of exponentials then yields the Lagrangian of an open-chain arm and shows how kinematic structure shapes it.",
+     "feynman": "A swing: energy sloshes between height and speed, and writing down that bookkeeping gives you the equations of motion.",
+     "visual": "Two-link arm swinging freely (rk4). Bars for kinetic (pink) and potential (gold) energy trade back and forth while their sum stays flat (lime line). A mass-matrix ellipse at the tip reshapes as the elbow bends.",
+     "scene": "mls-ch1-chapter-roadmap",
+     "beat": "🦾 one arm",
+     "math": [
+      "lagrange-dynamics",
+      "newton-euler",
+      "energy"
+     ],
+     "engine": [
+      "dynamics.twoLink",
+      "dynamics.twoLinkEnergy",
+      "dynamics.twoLinkM"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "1-15-c",
+     "lines": [
+      12,
+      17
+     ],
+     "kind": "prose",
+     "idea": "Chapter 4 also reviews Lyapunov theory to prove stability of controllers, and uses it for two control laws: computed torque and PD (proportional + derivative).",
+     "feynman": "A marble in a bowl: if you can show the marble's energy only ever goes down, it must end up at the bottom.",
+     "visual": "A two-link arm under PD control heading to a gold pose; beside it a bowl with a ball whose height is the Lyapunov function V; the V bar only ever decreases while the coral error vanishes. Toggle computed torque: the arm's error decays along a straight line on a log scale.",
+     "scene": "mls-ch1-chapter-roadmap",
+     "beat": "🦾 one arm",
+     "math": [
+      "lyapunov",
+      "pd-gravity",
+      "computed-torque"
+     ],
+     "engine": [
+      "dynamics.twoLinkTau",
+      "dynamics.rk4"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "1-15-d",
+     "lines": [
+      18,
+      19
+     ],
+     "kind": "heading",
+     "idea": "Subsection 3.2 heading: Coordinated manipulation using multifingered robot hands."
+    },
+    {
+     "id": "1-15-e",
+     "lines": [
+      20,
+      28
+     ],
+     "kind": "prose",
+     "idea": "Chapter 5 introduces grasp kinematics: contact models, the grasp map G (relating finger contact forces to the net wrench on the object), force-closure grasps (which hold an object robustly against any disturbance), and how to place fingers to achieve force-closure.",
+     "feynman": "Holding a sandwich: where and how you squeeze decides whether a bump in any direction can knock it out of your hand.",
+     "visual": "Grasp toy: a blue object with draggable teal contact points; each contact shows its purple friction cone. The cones' combined wrenches fill a hull; when the hull encloses the origin, a lime ✓ appears and a random bump arrow is always resisted; otherwise a coral arrow shows the escape direction.",
+     "scene": "mls-ch1-chapter-roadmap",
+     "beat": "✋ grasping hands",
+     "math": [
+      "statics"
+     ],
+     "engine": [
+      "NEW: grasp.graspMap",
+      "NEW: grasp.forceClosure"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "1-15-f",
+     "lines": [
+      29,
+      38
+     ],
+     "kind": "prose",
+     "idea": "The second half of Chapter 5 flips from forces to motion: how object motion relates to finger motion, coupling grasp properties with finger kinematics. Manipulability is defined as the dual of force-closure. Finally, fingertips rolling on the object are studied as a way to reposition fingers and improve a grasp.",
+     "feynman": "The same fingers that squeeze to hold a ball can move together to turn it; and you can roll a fingertip over the ball to change where you touch without letting go.",
+     "visual": "Twin panels in one picture: left shows forces (purple cones, force-closure ✓), right shows motions (pink object velocity arrows reached by orange finger joint velocities, manipulability ✓). A link icon pulses between the two checks. A third mini panel rolls a fingertip over a blue sphere, leaving a teal trail of contact points.",
+     "scene": "mls-ch1-chapter-roadmap",
+     "beat": "✋ grasping hands",
+     "math": [
+      "statics",
+      "manipulability",
+      "jacobian"
+     ],
+     "engine": [],
+     "difficulty": 3
+    },
+    {
+     "id": "1-15-g",
+     "lines": [
+      39,
+      42
+     ],
+     "kind": "prose",
+     "idea": "Chapter 6 derives the dynamics and control of multifingered hands, which amounts to writing equations of motion for systems with constraints (those imposed by the grasp) (continued next page).",
+     "feynman": "Several people carrying one table: each person can move, but the table ties their motions together.",
+     "visual": "Two orange-jointed fingers hold a blue box; dragging one finger alone is resisted by purple constraint-force arrows at the contacts unless the other finger moves compatibly; a \"constraint violated\" meter stays at 0 (lime).",
+     "scene": "mls-ch1-chapter-roadmap",
+     "beat": "✋ grasping hands",
+     "math": [
+      "lagrange-dynamics"
+     ],
+     "engine": [
+      "NEW: dynamics.constrainedLagrange"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "1-15-h",
+     "lines": [
+      43,
+      43
+     ],
+     "kind": "page-number",
+     "idea": "Page number 15."
+    }
+   ]
+  },
+  {
+   "pdf": 34,
+   "book": 16,
+   "lines": 44,
+   "section": "1.3",
+   "summary": "Chapter 6: Lagrange equations with Pfaffian (velocity) constraints, which may not reduce to configuration constraints; hand dynamics mirror single-arm dynamics; computed-torque and PD controllers for hands; tendon-driven hands; and hierarchical control with fan-out of commands and fan-in of sensing. Section 3.3 begins: rolling fingertips raise a planning question Chapter 6 cannot answer.",
+   "atoms": [
+    {
+     "id": "1-16-a",
+     "lines": [
+      1,
+      5
+     ],
+     "kind": "prose",
+     "idea": "Chapter 6 builds Lagrange's equations for systems with Pfaffian constraints A(q) q̇ = 0, and explains why such velocity constraints cannot always be reduced to constraints on position alone, the subject of Chapters 7 and 8.",
+     "feynman": "A shopping cart's wheels forbid sliding sideways at every instant, yet you can still get the cart anywhere in the store: the rule restricts speed, not where you can end up.",
+     "visual": "A cart with lime forward arrow and coral sideways arrow (the constraint). Drive it with two orange knobs (speed, turn); its trail covers the whole floor over time, and a \"reachable area\" readout keeps growing, proving the constraint does not pin it to a curve.",
+     "scene": "mls-ch1-chapter-roadmap",
+     "beat": "✋ grasping hands",
+     "math": [
+      "lagrange-dynamics",
+      "cspace"
+     ],
+     "engine": [
+      "NEW: dynamics.constrainedLagrange"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "1-16-b",
+     "lines": [
+      6,
+      15
+     ],
+     "kind": "prose",
+     "idea": "With this machinery, the hand-plus-object system gets equations of motion that look like a single robot's; they are especially simple for nonredundant, manipulable grasps, and need real changes otherwise. Computed-torque and PD controllers for the hand are proposed and proven to work.",
+     "feynman": "A team carrying a couch moves like one big body once you treat the couch and arms together.",
+     "visual": "The two-finger box toy runs a controller that tracks a gold box path; a side panel shows the equation tiles M q̈ + C q̇ + N = τ for the single arm and the matching tiles for the hand, with identical shapes and colors. Toggle redundant/nonmanipulable: one tile turns coral and needs an extra term.",
+     "scene": "mls-ch1-chapter-roadmap",
+     "beat": "✋ grasping hands",
+     "math": [
+      "lagrange-dynamics",
+      "computed-torque",
+      "pd-gravity"
+     ],
+     "engine": [],
+     "difficulty": 3
+    },
+    {
+     "id": "1-16-c",
+     "lines": [
+      16,
+      21
+     ],
+     "kind": "prose",
+     "idea": "Many hands, including our own, are driven by networks of tendons rather than motors at each joint, so the equations must account for how tendon tensions become joint torques; Chapter 6 develops tendon-driven hand dynamics.",
+     "feynman": "Puppet strings: pulling one string can bend several joints at once, and strings can only pull, never push.",
+     "visual": "A finger with three orange joints and four tendons (orange cables over pulleys); pulling tendon tabs sets tension bars (never negative); the resulting joint torque bars equal the tendon map times the tensions, shown as a little matrix grid that highlights the active entries.",
+     "scene": "mls-ch1-chapter-roadmap",
+     "beat": "✋ grasping hands",
+     "math": [
+      "statics",
+      "matrix"
+     ],
+     "engine": [
+      "NEW: tendon.couplingMap"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "1-16-d",
+     "lines": [
+      22,
+      36
+     ],
+     "kind": "prose",
+     "idea": "For systems with many degrees of freedom, control should be hierarchical: computed torque and PD are expensive, so, like the body (coarse at the cortex, finer at spine and muscles), commands fan out from high to low levels while sensor data fans in from low to high. The book sketches a programming framework for such multi-robot control.",
+     "feynman": "A restaurant kitchen: the head chef says \"make dinner for table 5\", station cooks split it into dishes, and each cook's hands handle the details; reports flow back up the chain.",
+     "visual": "A tree of controller boxes: one gold top node, branches to \"hand\" and \"arm\" nodes, then leaves for each joint (orange). Pressing a gold command sends orange pulses fanning down; teal sensor pulses fan back up. A compute meter shows the hierarchy handles many joints with less work at the top than one flat controller.",
+     "scene": "mls-ch1-chapter-roadmap",
+     "beat": "✋ grasping hands",
+     "math": [],
+     "engine": [],
+     "difficulty": 3
+    },
+    {
+     "id": "1-16-e",
+     "lines": [
+      37,
+      37
+     ],
+     "kind": "heading",
+     "idea": "Subsection 3.3 heading: Nonholonomic behavior in robotic systems."
+    },
+    {
+     "id": "1-16-f",
+     "lines": [
+      38,
+      43
+     ],
+     "kind": "prose",
+     "idea": "Chapter 6 shows how to fold Pfaffian constraints into Lagrange's equations, but leaves open how to plan trajectories for systems with nonholonomic constraints; for a hand grasping an object (continued next page) ...",
+     "feynman": "You know how to hold the ball steady; the open question is how to roll your fingers to a new spot on it.",
+     "visual": "The grasp toy with a \"?\" on a rolling fingertip: the object tracks its gold path, but a gold target spot on the object's surface for the fingertip remains unreached (coral marker).",
+     "scene": "mls-ch1-chapter-roadmap",
+     "beat": "🛞 roll & steer",
+     "math": [],
+     "engine": [],
+     "difficulty": 3
+    },
+    {
+     "id": "1-16-g",
+     "lines": [
+      44,
+      44
+     ],
+     "kind": "page-number",
+     "idea": "Page number 16."
+    }
+   ]
+  },
+  {
+   "pdf": 35,
+   "book": 17,
+   "lines": 44,
+   "section": "1.3",
+   "summary": "Rolling fingertips cannot be steered with Chapter 6 tools, motivating Chapter 7: nonholonomy from rolling or conserved angular momentum, examples (parking, mobile and space robots, a hopping robot), classification, and duality with controllability. Chapter 8: steering via sinusoids and Lie brackets, chained form, piecewise-constant and Ritz methods, finger repositioning. Chapter 9: growth areas.",
+   "atoms": [
+    {
+     "id": "1-17-a",
+     "lines": [
+      1,
+      8
+     ],
+     "kind": "prose",
+     "idea": "Controllers can make the grasped object follow a desired pose, but if fingertips roll freely, the tools of Chapter 6 cannot control where they roll to, so fingers cannot be moved between contact points. This motivates the study of nonholonomic behavior in Chapter 7.",
+     "feynman": "Rolling a ball between your palms: you control the ball fine, but steering exactly which spot of the ball ends up touching your palm takes a clever wiggle.",
+     "visual": "A fingertip on a blue sphere: the object follows its gold pose (lime check), while the teal contact point drifts unpredictably. Try straight-line finger motions: the contact never lands on the gold spot; a loop motion (unlocked in Ch8) is greyed out with a 📖 8 badge.",
+     "scene": "mls-ch1-chapter-roadmap",
+     "beat": "🛞 roll & steer",
+     "math": [
+      "cspace"
+     ],
+     "engine": [],
+     "difficulty": 3
+    },
+    {
+     "id": "1-17-b",
+     "lines": [
+      9,
+      14
+     ],
+     "kind": "prose",
+     "idea": "Nonholonomic behavior has two sources: bodies rolling without slipping, and conservation of angular momentum. Chapter 7 gives examples beyond hands: parking a car, mobile robots, space robots, and a hopping robot in flight.",
+     "feynman": "A car cannot slide sideways (rolling); a falling cat twists itself to land on its feet without anything to push against (angular momentum).",
+     "visual": "Example carousel: (1) a car you drive with orange speed/steer knobs and a lime/coral allowed-direction arrow pair; (2) a free-floating two-body space robot: moving its arm in a loop turns the base (blue) though total angular momentum stays 0 (readout); (3) a hopper in flight swinging its leg to reorient.",
+     "scene": "mls-ch1-chapter-roadmap",
+     "beat": "🛞 roll & steer",
+     "math": [
+      "ode",
+      "cspace"
+     ],
+     "engine": [],
+     "difficulty": 3
+    },
+    {
+     "id": "1-17-c",
+     "lines": [
+      15,
+      21
+     ],
+     "kind": "prose",
+     "idea": "Chapter 7 classifies such systems as holonomic (integrable) or partially/completely nonholonomic (nonintegrable), using basic differential geometry and nonlinear controllability, and shows that nonholonomy of a Pfaffian system and controllability are dual ideas.",
+     "feynman": "If a rule just fences you in, you stay on a line; if it only limits which way you can go at each moment, you can still wiggle anywhere, and the more you can wiggle, the less the rule really traps you.",
+     "visual": "Bracket test: two orange input arrows (drive, turn) on the cart; play go A, go B, undo A, undo B; the gold leftover gap (Lie bracket) appears. A dimension counter shows how many independent directions the inputs plus brackets span; when it reaches 3 the whole floor tints lime (controllable / nonholonomic); a contrasting holonomic system leaves the counter at 2 and the reachable set stays a coral surface.",
+     "scene": "mls-ch1-chapter-roadmap",
+     "beat": "🛞 roll & steer",
+     "math": [
+      "ode",
+      "cspace"
+     ],
+     "engine": [
+      "NEW: lie.bracket"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "1-17-d",
+     "lines": [
+      22,
+      30
+     ],
+     "kind": "prose",
+     "idea": "Chapter 8 introduces motion planning for nonholonomic systems: after an overview, it uses sinusoidal inputs to generate Lie-bracket motions, motivated by optimal-control solutions for a simple model class.",
+     "feynman": "Parallel parking: a rhythm of steer-and-back, steer-and-forward slides the car sideways, a direction it can never move in directly.",
+     "visual": "Sinusoid steering: two orange sliders set amplitudes of sine inputs u₁, u₂ at frequency ω and 2ω (or equal ω for Brockett's system); the state trace loops and the net sideways drift (gold) equals the loop area, readout in real time. Hit the gold target pose exactly by tuning one amplitude.",
+     "scene": "mls-ch1-chapter-roadmap",
+     "beat": "🛞 roll & steer",
+     "math": [
+      "ode",
+      "optimization"
+     ],
+     "engine": [
+      "dynamics.rk4",
+      "NEW: steer.sinusoids"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "1-17-e",
+     "lines": [
+      31,
+      38
+     ],
+     "kind": "prose",
+     "idea": "It extends the model class to chained-form systems, then covers general steering with piecewise-constant inputs and Ritz basis functions, applies these to Chapter 7's examples, and returns to repositioning fingers by rolling them on a grasped object.",
+     "feynman": "Learning to back up a truck with trailers: once you know the pattern for one trailer, the same pattern extended handles a whole train.",
+     "visual": "A car with 0–3 trailers in chained form: a piecewise-constant input staircase (orange bars) drives it to a gold parking spot. A final panel closes the loop from earlier: a finger rolls over the blue sphere along a closed path and the teal contact point lands on the gold spot.",
+     "scene": "mls-ch1-chapter-roadmap",
+     "beat": "🛞 roll & steer",
+     "math": [
+      "ode",
+      "cspace"
+     ],
+     "engine": [
+      "NEW: steer.chainedForm"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "1-17-f",
+     "lines": [
+      39,
+      43
+     ],
+     "kind": "prose",
+     "idea": "Chapter 9 surveys technological growth areas; on the research side the authors hope the book shows how much of manipulation remains unexplored.",
+     "feynman": "A map whose edges are still blank: the most exciting places are the ones nobody has drawn yet.",
+     "visual": "The roadmap's outer edge fades into dotted, unlit regions; tapping them shows ☢️, 🩺, 🔬 icons and a \"?\" glow; a counter of explored nodes vs dotted nodes shows plenty left.",
+     "scene": "mls-ch1-chapter-roadmap",
+     "beat": "🔭 open frontier",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "1-17-g",
+     "lines": [
+      44,
+      44
+     ],
+     "kind": "page-number",
+     "idea": "Page number 17."
+    }
+   ]
+  },
+  {
+   "pdf": 36,
+   "book": 18,
+   "lines": 37,
+   "section": "1.4",
+   "summary": "Chapter 1 bibliography: a short survey of robotics textbooks on single arms, monographs on multifingered hands, and edited collections, with vision and mobile-robot books left out.",
+   "atoms": [
+    {
+     "id": "1-18-a",
+     "lines": [
+      1,
+      1
+     ],
+     "kind": "heading",
+     "idea": "Section 4 heading: Bibliography."
+    },
+    {
+     "id": "1-18-b",
+     "lines": [
+      2,
+      5
+     ],
+     "kind": "prose",
+     "idea": "So many robotics books appeared in the previous fifteen years that the authors list only those they know best.",
+     "feynman": "A library too big to show at once, so the librarian hands you a short favorites list.",
+     "visual": "A huge greyed shelf fades out behind a small lit shelf in front; a counter shows \"listed / existing\" with the listed fraction small.",
+     "scene": "mls-ch1-bookshelf",
+     "beat": "📚 too many to list",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "1-18-c",
+     "lines": [
+      6,
+      18
+     ],
+     "kind": "prose",
+     "idea": "Single-robot textbooks: an early one on the math, programming and control of robots, followed by several others on mechanics, dynamics and control (one also covering vision, sensing and intelligence), a gentle treatment of dynamics and control, further books, one forthcoming, and a collected volume on robot control schemes.",
+     "feynman": "Cookbooks for one dish, the robot arm, written by different chefs with different emphases.",
+     "visual": "Orange spines fill the shelf in year order as the knob moves; tapping one lights the 🦾 region of the roadmap (Ch3–4) plus, for the one covering vision, a teal 👁️ halo.",
+     "scene": "mls-ch1-bookshelf",
+     "beat": "🦾 single-arm texts",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "1-18-d",
+     "lines": [
+      19,
+      25
+     ],
+     "kind": "prose",
+     "idea": "Books on multifingered hands: the first monograph covered grasp formulation and the design and control of a three-finger hand; later monographs and an edited volume followed.",
+     "feynman": "A shorter shelf for a younger topic: the hands books.",
+     "visual": "Pink spines slot onto the shelf; tapping lights the ✋ region (Ch5–6) of the roadmap and the three-finger hand node in the hand family tree.",
+     "scene": "mls-ch1-bookshelf",
+     "beat": "✋ hand monographs",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "1-18-e",
+     "lines": [
+      26,
+      33
+     ],
+     "kind": "prose",
+     "idea": "Edited collections: one based on a 1990 mathematics society short program, a broad collection on manipulation, and a nonholonomic motion planning collection from a 1991 robotics conference tutorial.",
+     "feynman": "Mixtapes: many authors' best tracks gathered on one album.",
+     "visual": "Gold spines appear as thicker binders; each one opens into a fan of thin sheets, and tapping lights the roadmap regions it touches (all regions for the general one, 🛞 for the nonholonomic one).",
+     "scene": "mls-ch1-bookshelf",
+     "beat": "📎 paper collections",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "1-18-f",
+     "lines": [
+      34,
+      36
+     ],
+     "kind": "prose",
+     "idea": "Books on computer vision and mobile robots are not included, though those fields are also thriving.",
+     "feynman": "Another aisle of the library, just around the corner.",
+     "visual": "A teal-tinted second shelf sits beside the main one, dimmed; a dotted arrow points from it to Crucible's camera and SLAM scenes.",
+     "scene": "mls-ch1-bookshelf",
+     "beat": "📚 too many to list",
+     "math": [
+      "camera",
+      "ekf"
+     ],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "1-18-g",
+     "lines": [
+      37,
+      37
+     ],
+     "kind": "page-number",
+     "idea": "Page number 18."
+    }
+   ]
+  }
+ ]
+}

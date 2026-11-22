@@ -25,7 +25,7 @@ jobs:
       - name: Assemble site (no build step — plain ES modules)
         run: |
           mkdir -p _site/book
-          cp -r index.html styles src _site/
+          cp -r index.html styles src vendor _site/
           cp -r book/atlas book/atlas.json book/days.json book/lines.json _site/book/
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
