@@ -55,12 +55,11 @@ export default {
       set: (p) => { s.drag = [clamp(p[0], B2[0] + 0.3, B2[2] - 0.3), clamp(p[1], B2[1] + 1.4, B2[3] - 0.3)]; },
       onEnd: () => { s.resume = true; } });
 
-    const beats = ui.beats(['🚗', '⚖️', '🎯', '🙈'], (b) => {
+    ui.beats(['🚗', '⚖️', '🎯', '🙈'], (b) => {
       s.beat = b; s.t = 0;
       g.setBounds(b < 2 ? B1 : B2);
       if (b < 2) reset1(); else reset2();
     });
-    void beats;
     ui.slider({ icon: '🌫️', color: 'purple', min: 0.02, max: 0.6, value: s.q, title: 'model wobble (Q)', onInput: (v) => { s.q = v; if (s.kf) s.kf.Q = Qcv(1 / 30, v * 2.5); } });
     ui.slider({ icon: '📡', color: 'teal', min: 0.08, max: 1.2, value: s.rr, title: 'sensor noise (R)', onInput: (v) => { s.rr = v; if (s.kf) s.kf.R = [[v * v, 0], [0, v * v]]; } });
     ui.readout(() => fmt(s.beat < 2 ? (s.fused?.k ?? s.lastK ?? 0) : (s.kf?.K ? s.kf.K[0][0] : 0), 2), { icon: '⚖️', color: 'gold', title: 'Kalman gain' });

@@ -9,7 +9,7 @@ import { fmt } from '../viz/ui.js';
 const SPOTS = ['🛏️', '📦', '🪴', '🧺', '🚪', '🛋️'];
 const PRIOR0 = [0.1, 0.24, 0.08, 0.3, 0.1, 0.18];
 const DETECT = 0.8;
-const BAR_H = 4.2; // world height of probability 1
+let BAR_H = 4.2; // world height of probability 1 (taller on phones)
 const SPOT_Y = -1.6;
 
 export default {
@@ -45,7 +45,7 @@ export default {
     };
     resetTeddy();
 
-    const bounds = () => (s.beat === 0 ? [-6.2, -2.4, 6.2, 3.6] : s.beat === 1 ? [-5.5, -0.6, 5.5, 4.0] : (stage.portrait ? [-3, -5.9, 3, 5.6] : [-6.2, -3.2, 6.2, 3.3]));
+    const bounds = () => (s.beat === 0 ? (stage.portrait ? [-6.2, -2.6, 6.2, 6.4] : [-6.2, -2.4, 6.2, 3.6]) : s.beat === 1 ? [-5.5, -0.6, 5.5, 4.0] : (stage.portrait ? [-3, -5.9, 3, 5.6] : [-6.2, -3.2, 6.2, 3.3]));
     const fit = () => { const b = bounds(); if (!s.b || s.b.join() !== b.join()) { s.b = b; g.setBounds(b); } };
 
     // beat 0: drag bar tops to set the prior (others rescale)
@@ -94,6 +94,7 @@ export default {
       },
       draw() {
         fit();
+        BAR_H = stage.portrait ? 8 : 4.2;
         if (s.beat === 0) drawTeddy(); else if (s.beat === 1) drawCurves(); else drawTest();
       },
       dispose() { offDown(); },
@@ -116,9 +117,10 @@ export default {
         if (s.found && i === s.teddy) { g.emoji('🧸', [x + 0.35, SPOT_Y + 0.25], 34); g.emoji('🎉', [x, SPOT_Y + 1.0 + h], 30); }
       });
       if (!s.found) g.emoji('👉', [spotX(best) - 0.9, SPOT_Y + 0.15], 22);
-      g.emoji('🔦', [-5.7, 3.1], 26);
-      g.emoji('🧸', [-4.95, 3.1], 26);
-      g.text('?', [-4.45, 3.15], { color: 'purple', size: 26, weight: 800 });
+      const ty = g.view[3] - 0.6;
+      g.emoji('🔦', [-5.7, ty], 26);
+      g.emoji('🧸', [-4.95, ty], 26);
+      g.text('?', [-4.45, ty + 0.05], { color: 'purple', size: 26, weight: 800 });
     }
 
     // ---------------------------------------------------------------- 🔔

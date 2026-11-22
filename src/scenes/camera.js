@@ -3,7 +3,7 @@
 // grows; far things look small. K turns that picture into pixel numbers, and
 // calibration finds K by staring at checkerboards until the coral arrows vanish.
 import { View3D } from '../viz/view3d.js';
-import { C, alpha, col, mix } from '../viz/palette.js';
+import { alpha, col, mix } from '../viz/palette.js';
 import { project } from '../core/estimation.js';
 import { expSO3 } from '../core/lie.js';
 import { mmul, mvec, T, vadd, solve } from '../core/linalg.js';
@@ -356,7 +356,6 @@ export default {
         ...kSpot(), digits: 0, title: 'K̂', titleColor: 'blue',
         colorAt: (r, c) => (r === 2 || (r !== c && c !== 2) ? 'muted' : c === 2 ? 'gold' : 'orange'),
       });
-      void C;
     }
   },
 };

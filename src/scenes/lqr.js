@@ -155,7 +155,8 @@ function drawCart(g, st, u, { ghost = false, fallen = false }) {
 
 function drawK(hud, area, rows, colors) {
   const ctx = hud.ctx, cw = 58, ch = 26;
-  const X = area.x + area.w - cw * 4 - 36, Y = area.y + 12;
+  // on narrow panels, sit below the cost bar instead of beside it
+  const X = area.x + area.w - cw * 4 - 36, Y = area.y + (area.w < 520 ? 40 : 12);
   ctx.save();
   ctx.fillStyle = alpha('panel', 0.92);
   ctx.beginPath(); ctx.roundRect(X, Y, cw * 4 + 26, ch * rows.length + 12, 10); ctx.fill();

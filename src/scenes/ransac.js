@@ -1,7 +1,7 @@
 // RANSAC: lots of dots, some are junk. Pick two at random, draw the line through
 // them, and let every dot VOTE if it sits inside the stripe. Most votes wins.
 // Plain least squares listens to everybody — so the junk drags it off.
-import { C, alpha, col } from '../viz/palette.js';
+import { alpha } from '../viz/palette.js';
 import { ransacLine, ransacIterations, fitLineOLS, fitLineTLS } from '../core/estimation.js';
 import { rng, clamp } from '../core/random.js';
 import { fmt } from '../viz/ui.js';
@@ -192,7 +192,6 @@ export default {
       const xN = 0.8 + (N - 1) * bw + bw * 0.4;
       R.text(`N = ${N}`, [Math.min(xN, 8.6), yv((1 - w * w) ** N) + 0.55], { color: 'gold', size: 18 });
       R.text(`w = ${fmt(w, 2)}`, [9.7, 0.35], { color: 'teal', size: 13, align: 'right' });
-      void C; void col;
     }
   },
 };

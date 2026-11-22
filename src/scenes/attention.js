@@ -75,7 +75,7 @@ export default {
     return {
       update(dt) { dt = Math.max(0, dt); s.t += dt; },
       draw() {
-        hs.forEach((h, id) => (h.color = id === s.q ? 'gold' : alpha('muted', 0.45)));
+        hs.forEach((h, id) => { h.color = id === s.q ? 'gold' : alpha('muted', 0.45); h.r = clamp(Lp.px(0.36), 10, 17); });
         const m = compute();
         drawTokens(m);
         if (s.beat === 0) drawMatrix(m.h1.weights, 'blue', [0.4, 6.6], 0.95);
@@ -110,7 +110,7 @@ export default {
         const x = s.drag === id ? s.dragX : j;
         g.circle([x, 0], 0.36, { fill: 'panel' });
         if (id === s.q) g.circle([x, 0], 0.42, { fill: alpha('gold', 0.25) });
-        g.emoji(TOK[id], [x, 0], 30);
+        g.emoji(TOK[id], [x, 0], clamp(g.px(0.62), 16, 30));
         if (s.beat === 3) g.rrect(x - 0.2, -0.95, 0.4, 0.28, 5, { fill: VAL[id] });
       });
       // positional waves under the tokens

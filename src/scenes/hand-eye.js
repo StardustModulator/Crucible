@@ -5,7 +5,7 @@
 import { View3D } from '../viz/view3d.js';
 import { alpha, col } from '../viz/palette.js';
 import { kabsch } from '../core/estimation.js';
-import { expSO3, logSO3, homog, invSE3, rotOf, transOf, rotX, rotY, rotZ } from '../core/lie.js';
+import { expSO3, logSO3, homog, invSE3, rotOf, transOf, rotX, rotZ } from '../core/lie.js';
 import { mmul, mvec, vadd, vsub, vscale, vnorm, cross, lstsq, T } from '../core/linalg.js';
 import { rng, smoothstep } from '../core/random.js';
 import { fmt } from '../viz/ui.js';
@@ -97,7 +97,7 @@ export default {
     ui.beats(['🤝', '➕', '📏', '🚫'], (b) => {
       s.beat = b; s.t = 0;
       if (b === 0) { s.n = 0; s.cyc = 0; }
-      if (b === 1) { s.n = 0; goTo(0); }
+      if (b === 1) { s.n = 0; s.cyc = 1.2; goTo(0); }
       if (b === 2) { s.n = s.list.length - 1; if (s.noise === 0) { s.noise = 1.5; noiseS.set(1.5); } }
       // 🚫: the one motion turns the camera about its own lens axis → that spin can't be seen
       s.list = b === 3 ? [POSES[0], SPIN, ...POSES.slice(2)] : POSES;
@@ -106,9 +106,8 @@ export default {
       measure(); resolve(false);
     });
     ui.button({ icon: '➕', title: 'add a motion', onClick: () => {
-      if (s.beat === 0) s.beat = 1;
       if (s.n >= s.list.length - 1) s.n = 0;
-      s.n++; goTo(s.n); resolve();
+      s.n++; s.cyc = 0; goTo(s.n); resolve();
     } });
     ui.button({ icon: '🔁', title: 'start over with no motions', onClick: () => { s.n = 0; goTo(0); resolve(); } });
     const noiseS = ui.slider({ icon: '📏', color: 'purple', min: 0, max: 5, value: 0, title: 'camera noise', onInput: (x) => { s.noise = x; measure(); resolve(false); } });
@@ -123,6 +122,15 @@ export default {
         s.t += dt; v.tick(dt);
         s.move = Math.min(1, s.move + dt / 1.1);
         s.xk = Math.min(1, s.xk + dt / 0.8);
+        if (s.beat === 1) {
+          // keep adding wiggles by itself (➕ is faster); start over when all are used
+          s.cyc += dt;
+          if (s.cyc > (s.n >= s.list.length - 1 ? 4 : 2.4)) {
+            s.cyc = 0;
+            if (s.n >= s.list.length - 1) s.n = 0; else s.n++;
+            goTo(s.n); resolve();
+          }
+        }
         if (s.beat === 0) {
           // tour the poses so you can see the camera ride along
           s.cyc += dt;
@@ -185,21 +193,21 @@ export default {
     function at(Tm, l) { return vadd(mvec(rotOf(Tm), l), transOf(Tm)); }
     function gripper(H) {
       const R = rotOf(H);
-      v.cylinder(at(H, [0, 0, -0.55]), at(H, [0, 0, -0.03]), 0.03, { color: 'slate', sides: 8 });
-      v.box(R, at(H, [0, 0, 0]), [0.03, 0.08, 0.025], { color: 'pink' });
-      v.box(R, at(H, [0, 0.065, 0.06]), [0.015, 0.012, 0.045], { color: 'pink' });
-      v.box(R, at(H, [0, -0.065, 0.06]), [0.015, 0.012, 0.045], { color: 'pink' });
-      v.frameT(H, 0.12, { width: 2.5 });
+      v.cylinder(at(H, [0, 0, -0.6]), at(H, [0, 0, -0.035]), 0.035, { color: 'slate', sides: 8 });
+      v.box(R, at(H, [0, 0, 0]), [0.04, 0.1, 0.03], { color: 'pink' });
+      v.box(R, at(H, [0, 0.085, 0.075]), [0.02, 0.015, 0.055], { color: 'pink' });
+      v.box(R, at(H, [0, -0.085, 0.075]), [0.02, 0.015, 0.055], { color: 'pink' });
+      v.frameT(H, 0.14, { width: 2.5 });
     }
     function cam(Cm, o = {}) {
       const R = rotOf(Cm);
-      v.box(R, at(Cm, [0, 0, -0.03]), [0.045, 0.035, 0.03], { color: o.color, alpha: o.alpha, stroke: o.ghost ? col('blue') : undefined });
-      v.cylinder(at(Cm, [0, 0, 0]), at(Cm, [0, 0, 0.035]), 0.02, { color: o.ghost ? 'blue' : 'ink', alpha: o.alpha, sides: 8 });
+      v.box(R, at(Cm, [0, 0, -0.035]), [0.055, 0.042, 0.035], { color: o.color, alpha: o.alpha, stroke: o.ghost ? col('blue') : undefined });
+      v.cylinder(at(Cm, [0, 0, 0]), at(Cm, [0, 0, 0.04]), 0.024, { color: o.ghost ? 'blue' : 'ink', alpha: o.alpha, sides: 8 });
     }
     function loop3D(Xg) {
       const i = Math.max(1, Math.min(s.n, s.target ?? s.n));
-      const { As, Bs } = motions(i);
-      const A = As[i - 1], B = Bs[i - 1];
+      const { Bs } = motions(i);
+      const B = Bs[i - 1];
       const H0 = s.list[0], Hi = s.list[i];
       const end1 = mmul(Hi, Xg), end2 = mmul(mmul(H0, Xg), B);
       const p0 = transOf(H0), pi = transOf(Hi), c0 = transOf(mmul(H0, Xg));
@@ -210,7 +218,6 @@ export default {
       v.arrow(c0, transOf(end2), { color: 'teal', width: 3 });              // B
       const gap = vnorm(vsub(transOf(end1), transOf(end2)));
       if (gap > 0.015) v.line(transOf(end1), transOf(end2), { color: 'coral', width: 4 });
-      void A;
     }
     // The commuting square, flat: ✋₀ →A→ ✋ᵢ →X→ 📷ᵢ  vs  ✋₀ →X→ 📷₀ →B→ 📷ᵢ
     function squareHUD(Xg) {

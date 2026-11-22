@@ -24,10 +24,10 @@ export default {
   setup({ stage, ui }) {
     const g = stage.g;
     const R = rng(11);
-    const s = { beat: 0, field: 'sink', leaves: [], p1: [1.3, 0.35], h: 0.6, start: [2, 0], eu: [], rk: [], tick: 0, spray: 0 };
+    const s = { beat: 0, field: 'sink', leaves: [], p1: [0.9, 0.25], h: 0.6, start: [2, 0], eu: [], rk: [], tick: 0, spray: 0 };
     const F = () => FIELDS[s.field];
     const fitBounds = () => {
-      const want = s.beat === 2 ? CB : s.beat === 1 ? (F().B2 ??= F().B.map((v) => v * 0.5)) : F().B;
+      const want = s.beat === 2 ? CB : s.beat === 1 ? (F().B2 ??= F().B.map((v) => v * 0.36)) : F().B;
       if (g.bounds !== want) g.setBounds(want);
     };
     const CB = [-3.6, -3, 3.6, 3];

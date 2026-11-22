@@ -75,13 +75,12 @@ export default {
       s.acc = 0; s.zr = BEAMS.map((b) => castRay(s.rb[0], s.rb[1], s.rb[2] + b)); s.ess = s.n2; s.fast = 0; s.slow = 0;
     };
 
-    const beatsApi = ui.beats(['🚪', '🗺️', '🫳'], (b) => {
+    ui.beats(['🚪', '🗺️', '🫳'], (b) => {
       s.beat = b; g.setBounds(b === 0 ? B1 : B2);
       if (b === 0) reset1(); else reset2();
       s.inject = b === 2; injT.set(s.inject, false);
       if (b === 2) s.kidT = 6;
     });
-    void beatsApi;
     ui.button({ icon: '🫳', title: 'kidnap the robot', onClick: () => kidnap() });
     const injT = ui.toggle({ icon: '✨', title: 'sprinkle random particles', value: false, color: 'blue', onChange: (v) => (s.inject = v) });
     ui.button({ icon: '🌪️', title: 'scatter all particles', onClick: () => { if (s.beat === 0) reset1(); else reset2(true); } });
@@ -199,7 +198,6 @@ export default {
       }
       g.line([0, 0], [HALL, 0], { color: 'muted', width: 2 });
       // robot (truth)
-      const seen = s.phase === 'sense' && s.z;
       if (s.phase === 'sense') {
         g.circle([s.x, 0.8], 0.55 + 0.25 * Math.sin(s.ph * 10), { color: alpha('teal', 0.8), width: 3 });
         g.text(s.z ? '🚪' : '🧱', [s.x, tall ? 3.3 : 2.95], { size: 26 });
@@ -208,7 +206,6 @@ export default {
       g.emoji('🤖', [s.x, 0.62], Math.min(40, g.px(1.2)));
       g.dot([s.x, -0.12], 5, { color: 'lime' });
       if (s.kid > 0) g.emoji('🫳', [s.x, 2.1], 30);
-      void seen;
       // particles (dot size = weight)
       const rows = tall ? 5.4 : 2.6;
       const wmax = Math.max(...s.W);

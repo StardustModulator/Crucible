@@ -106,12 +106,14 @@ export default {
           const tip = [r.prev[0] + (r.x[0] - r.prev[0]) * f, r.prev[1] + (r.x[1] - r.prev[1]) * f];
           A.dot(tip, 9, { color: 'pink', ring: 'bg', ringWidth: 2.5 });
           A.emoji('🖊️', [tip[0] + 0.14, tip[1] + 0.16], 20);
+          fitB(B);
           drawTimeline(B, r, s.k);
         } else {
           s.runners.forEach((r) => {
             A.path(r.trail, { color: alpha(MODE_COL[r.mode], 0.85), width: 3 });
             A.dot(r.x, 7, { color: MODE_COL[r.mode], ring: 'bg' });
           });
+          fitB(B);
           drawCompare(B, s.runners);
         }
       },
@@ -119,13 +121,20 @@ export default {
   },
 };
 
+// keep the side panel filled on wide-and-short (phone) layouts: world is 10 × Ht
+function fitB(B) {
+  const ht = clamp((10 * (B.area.h - 28)) / Math.max(1, B.area.w - 28), 4.2, 10);
+  if (Math.abs(ht - B.bounds[3]) > 0.05) B.setBounds([0, 0, 10, ht]);
+}
+
 function drawTimeline(B, r, k) {
   // time runs left → right; each chunk is a ribbon covering the steps it predicts
+  const ky = B.bounds[3] / 10;
   const win = 50, i0 = r.i - 32;
   const X = (step) => 0.4 + ((step - i0) / win) * 9.2;
   const rows = r.mode === 'chunk' ? 1 : Math.max(1, k);
-  const rowH = Math.min(1.1, 7.6 / rows);
-  const yOf = (c) => (r.mode === 'chunk' ? 5 : 9 - ((c.start % rows) + 0.5) * (8 / rows));
+  const rowH = Math.min(1.1, 7.6 / rows) * ky;
+  const yOf = (c) => (r.mode === 'chunk' ? 5 : 9 - ((c.start % rows) + 0.5) * (8 / rows)) * ky;
   B.clip(() => {
     const hist = (r.hist = (r.hist ?? []).filter((c) => c.start + c.acts.length > i0));
     r.chunks.forEach((c) => { if (!hist.includes(c)) hist.push(c); });
@@ -141,21 +150,22 @@ function drawTimeline(B, r, k) {
     });
   });
   // "now" cursor
-  B.line([X(r.i), 0.3], [X(r.i), 9.7], { color: 'pink', width: 3 });
-  B.emoji('⏱️', [X(r.i), 0.25], 18);
+  B.line([X(r.i), 0.6 * ky], [X(r.i), 9.7 * ky], { color: 'pink', width: 3 });
+  B.emoji('⏱️', [X(r.i), 0.3 * ky], 18);
 }
 
 function drawCompare(B, runners) {
   const items = runners.map((r) => ({ c: MODE_COL[r.mode], j: Math.sqrt(r.jerk / Math.max(1, r.n)), e: r.err / Math.max(1, r.n), ic: r.mode === 'chunk' ? '🍫' : r.mode === 'newest' ? '🔁' : '🧈' }));
   const jm = Math.max(...items.map((x) => x.j), 1e-6), em = Math.max(...items.map((x) => x.e), 1e-6);
-  B.emoji('🫨', [1.0, 9.3], 24);
-  B.emoji('🎯', [1.0, 4.3], 24);
+  const ky = B.bounds[3] / 10;
+  B.emoji('🫨', [1.0, 9.3 * ky], 24);
+  B.emoji('🎯', [1.0, 4.3 * ky], 24);
   items.forEach((it, k) => {
     const x = 2.2 + k * 2.5;
-    B.bar(x, 5.6, 1.4, (it.j / jm) * 3.4, { color: it.c });
-    B.bar(x, 0.6, 1.4, (it.e / em) * 3.4, { color: it.c });
-    B.emoji(it.ic, [x + 0.7, 5.15], 20);
+    B.bar(x, 5.6 * ky, 1.4, (it.j / jm) * 3.4 * ky, { color: it.c });
+    B.bar(x, 0.6 * ky, 1.4, (it.e / em) * 3.4 * ky, { color: it.c });
+    B.emoji(it.ic, [x + 0.7, 5.15 * ky], 20);
   });
-  B.line([1.8, 5.6], [9.6, 5.6], { color: alpha('muted', 0.4), width: 1 });
-  B.line([1.8, 0.6], [9.6, 0.6], { color: alpha('muted', 0.4), width: 1 });
+  B.line([1.8, 5.6 * ky], [9.6, 5.6 * ky], { color: alpha('muted', 0.4), width: 1 });
+  B.line([1.8, 0.6 * ky], [9.6, 0.6 * ky], { color: alpha('muted', 0.4), width: 1 });
 }
