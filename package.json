@@ -1,0 +1,14 @@
+{
+  "name": "crucible",
+  "version": "1.0.0",
+  "description": "A visual mathematics engine for robotics and machine learning: every concept, from rotations to diffusion policies, as something you can see and touch.",
+  "type": "module",
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "test": "node --test tests/*.test.js",
+    "serve": "node scripts/serve.mjs",
+    "smoke": "node scripts/smoke.mjs"
+  },
+  "engines": { "node": ">=18" }
+}
