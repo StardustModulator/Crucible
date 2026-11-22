@@ -560,8 +560,12 @@ export class Pen {
   heat(f, o = {}) {
     const [x0, y0, x1, y1] = o.range ?? this.view;
     const res = o.res ?? 90;
+    // Several heat maps can share one pen: give each its own `slot`.
+    this._heat ??= new Map();
+    const slot = this._heat.get(o.slot ?? 0) ?? {};
+    this._heat.set(o.slot ?? 0, slot);
     const key = o.cacheKey;
-    if (!key || this._heatKey !== key || !this._heatCanvas) {
+    if (!key || slot.key !== key || !slot.canvas) {
       const aspect = (y1 - y0) / (x1 - x0);
       const nx = res, ny = Math.max(2, Math.round(res * aspect));
       const vals = new Float64Array(nx * ny);
@@ -573,7 +577,7 @@ export class Pen {
           if (Number.isFinite(v)) { mn = Math.min(mn, v); mx = Math.max(mx, v); }
         }
       mn = o.min ?? mn; mx = o.max ?? mx;
-      const cv = this._heatCanvas ?? document.createElement('canvas');
+      const cv = slot.canvas ?? document.createElement('canvas');
       cv.width = nx; cv.height = ny;
       const cx = cv.getContext('2d');
       const img = cx.createImageData(nx, ny);
@@ -585,13 +589,13 @@ export class Pen {
         img.data[4 * k + 3] = Math.round(255 * (o.alphaFn ? o.alphaFn(t) : (o.alpha ?? 1)));
       }
       cx.putImageData(img, 0, 0);
-      this._heatCanvas = cv; this._heatKey = key;
+      slot.canvas = cv; slot.key = key;
     }
     const a = this.toScreen([x0, y1]), b = this.toScreen([x1, y0]);
     const ctx = this.ctx;
     ctx.save();
     ctx.imageSmoothingEnabled = o.smooth !== false;
-    ctx.drawImage(this._heatCanvas, a[0], a[1], b[0] - a[0], b[1] - a[1]);
+    ctx.drawImage(slot.canvas, a[0], a[1], b[0] - a[0], b[1] - a[1]);
     ctx.restore();
   }
 

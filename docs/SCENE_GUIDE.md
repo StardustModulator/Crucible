@@ -91,7 +91,7 @@ Every scene should have:
 - Robotics: `arm(points,o)` (pretty planar arm: `{width, color, colors[], jointColor, hand, base}`),
   `frame(origin, angle, len)` (2D RGB frame), `spring(a,b,o)`, `damper(a,b,o)`.
 - Fields & data: `grid({step})`, `warpedGrid(f,{range,step,color})`, `heat(f,{cacheKey,cmap,res,min,max,alpha})`
-  (**always pass a `cacheKey` that changes only when the field changes**),
+  (**always pass a `cacheKey` that changes only when the field changes**; use `slot` for several maps on one pen),
   `cells(M, topLeft, size, o)` (matrices / images / attention maps), `plot(f | pts, o)`,
   `band(xs, lo, hi, o)`, `meter(icon, value, max, {slot,color})`.
 - Text: `text(str, p, {size,color})`, `emoji(ch, p, size)` — symbols & numbers only.
@@ -111,6 +111,10 @@ to orbit, wheel to zoom. Each frame: `v.begin()` … queue primitives … `v.flu
 
 **UI** (`ui`): `slider`, `button`, `toggle`, `choice({options:[{icon,value,title}]})`,
 `beats(icons, onChange)` (returns `{index, set(i), next()}`), `readout(fn, {icon,color})`.
+Per-beat controls: create them inside `const grp = ui.group()` (pass `into: grp`) and toggle
+`grp.style.display`. Pens scale x and y equally — draw non-square plots in normalized
+coordinates or in pixels inside `pen.area`. Declare every `const` used by `draw()` *before*
+the `return { … }` in `setup`.
 
 ## 4. The math engine (`src/core`)
 
