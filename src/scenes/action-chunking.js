@@ -50,7 +50,8 @@ function stepRunner(r, k, sigma, m) {
   r.trail.push(a); if (r.trail.length > 140) r.trail.shift();
   const jx = r.x[0] - 2 * r.prev[0] + r.prev2[0], jy = r.x[1] - 2 * r.prev[1] + r.prev2[1];
   const e = ref(r.i * DT);
-  r.jerk += jx * jx + jy * jy; // jerk energy: big jumps count a lot r.err += Math.hypot(r.x[0] - e[0], r.x[1] - e[1]); r.n++;
+  r.jerk += jx * jx + jy * jy; // jerk energy: big jumps count a lot
+  r.err += Math.hypot(r.x[0] - e[0], r.x[1] - e[1]); r.n++;
 }
 
 export default {

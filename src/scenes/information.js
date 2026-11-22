@@ -6,7 +6,7 @@ import { C, alpha } from '../viz/palette.js';
 import { rng, clamp } from '../core/random.js';
 import { fmt } from '../viz/ui.js';
 
-const BIT = 0.55;             // world height of one bit
+let BIT = 0.75;               // world height of one bit
 const S = (p) => -Math.log2(Math.max(p, 1e-9));
 const ANIMALS = ['🐶', '🐱', '🐭', '🐹', '🐰', '🦊', '🐻', '🐼', '🐨', '🐯', '🦁', '🐮', '🐷', '🐸', '🐵', '🐔', '🐧', '🐦', '🐤', '🦆', '🦉', '🐺', '🐗', '🐴', '🦄', '🐝', '🐛', '🦋', '🐌', '🐞', '🐢', '🐙'];
 const FRUIT = ['🍎', '🍌', '🍇', '🍊'];
@@ -33,13 +33,13 @@ export default {
     const B = () => {
       if (s.beat <= 1) return stage.portrait ? [-5, -2.4, 5, 5.4] : [-5.4, -2.6, 5.4, 4.3];
       if (s.beat === 2) return stage.portrait ? [-5, -3, 5, 4.6] : [-5.4, -2.6, 5.4, 4.0];
-      return stage.portrait ? [-5, -5.6, 5, 4.6] : [-5.6, -1.6, 5.8, 4.4];
+      return stage.portrait ? [-5, -5.6, 5, 5.4] : [-5.6, -1.7, 5.8, 3.9];
     };
     const fit = () => { const b = B(); if (!s.b || s.b.join() !== b.join()) { s.b = b; g.setBounds(b); } };
 
     // KL beat: drag the tops of the blue (guess) bars; lime (truth) too
     const barX = (i, which) => (stage.portrait ? -4.4 + i * 2.4 + (which ? 0.75 : 0) : -5.2 + i * 1.35 + (which ? 0.5 : 0));
-    const BAR_Y = () => (stage.portrait ? 1.2 : 0), BAR_K = 3.4;
+    const BAR_Y = () => (stage.portrait ? 1.2 : -0.6), BAR_K = 4.2;
     for (const which of [0, 1]) [0, 1, 2, 3].forEach((i) => stage.handle({
       pen: g, color: which ? 'blue' : 'lime', r: 8, kind: which ? 'square' : 'ring', visible: () => s.beat === 3,
       get: () => [barX(i, which) + 0.22, BAR_Y() + (which ? s.Q : s.P)[i] * BAR_K],
@@ -81,6 +81,7 @@ export default {
       },
       draw() {
         fit();
+        BIT = s.beat === 3 ? 0.62 : 0.75;
         if (s.beat <= 1) drawCoin(); else if (s.beat === 2) drawQuestions(); else drawKL();
       },
     };
@@ -183,7 +184,7 @@ export default {
         g.emoji(FRUIT[i], [barX(i, 0) + 0.47, by - 0.4], 22);
       }
       // surprise towers, each as wide as how often the thing REALLY happens (p)
-      const tx0 = P ? -4.6 : 0.4, tx1 = P ? 2.4 : 4.0, ty = P ? -5.0 : -0.9;
+      const tx0 = P ? -4.6 : 0.4, tx1 = P ? 2.4 : 4.0, ty = P ? -5.0 : -1.0;
       const W = tx1 - tx0;
       let x = tx0;
       for (let i = 0; i < 4; i++) {
@@ -203,7 +204,7 @@ export default {
       g.bar(sx + 0.55, ty, 0.4, Hp * BIT, { color: alpha('lime', 0.5) });
       g.bar(sx + 0.55, ty + Hp * BIT, 0.4, (Hpq - Hp) * BIT, { color: 'coral' });
       g.text(fmt(Hpq - Hp, 2), [sx + 0.75, ty + Hpq * BIT + 0.3], { color: 'coral', size: 16, weight: 800 });
-      g.text(fmt(Hp, 2), [sx + 0.2, ty + Hp * BIT + 0.3], { color: 'lime', size: 14, weight: 800 });
+      g.text(fmt(Hp, 2), [sx + 0.2, ty + Hp * BIT + 0.3], { color: 'lime', size: 14, weight: 800, dx: -10 });
       if (Hpq - Hp < 0.005) g.emoji('🎯', [sx + 0.75, ty + Hpq * BIT + 0.85], 24);
       g.text('p', [barX(0, 0) + 0.22, by + s.P[0] * BAR_K + 0.35], { color: 'lime', size: 18, weight: 800 });
       g.text('q', [barX(0, 1) + 0.22, by + s.Q[0] * BAR_K + 0.35], { color: 'blue', size: 18, weight: 800 });
