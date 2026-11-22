@@ -1,0 +1,455 @@
+{
+ "id": "bib",
+ "title": "Bibliography",
+ "pdfPages": [
+  459,
+  466
+ ],
+ "sections": [
+  {
+   "id": "Bib",
+   "title": "Bibliography",
+   "book": 441
+  }
+ ],
+ "scenes": [
+  {
+   "id": "mls-bib-citation-map",
+   "title": "Citation Map",
+   "icon": "📚",
+   "section": "Bib",
+   "pages": [
+    441,
+    448
+   ],
+   "uses": [
+    "graph-search"
+   ],
+   "beats": [
+    "🕰️ a timeline of sources",
+    "🕸️ which chapter cites what",
+    "🧭 jump to the scene"
+   ],
+   "brief": "A horizontal timeline from 1900 to 1994 with one dot per reference (123 dots), stacked by year. Dot color = topic family: blue kinematics & screws, teal grasping & contact, purple nonholonomic systems, orange control & dynamics, gold differential geometry & Lie theory, slate hardware & micro-robots. A second layer draws thin threads from each dot to the chapter cards (1–9, A, B) that cite it; hovering a chapter card lights its sources and shows a year histogram. Clicking a dot zooms to the atlas scenes whose atoms cite that number (e.g. [88] → the exp/log scene, [63] → the no-fair-ruler scene). No titles on canvas: only numbers, years and colors."
+  }
+ ],
+ "pages": [
+  {
+   "pdf": 459,
+   "book": 441,
+   "lines": 34,
+   "section": "Bib",
+   "summary": "Bibliography entries 1–14: kinematics and control texts, classical screw theory, contact sensing, nonholonomic stabilization, differential geometry, and the origin of the product-of-exponentials formula.",
+   "atoms": [
+    {
+     "id": "R-441-a",
+     "lines": [
+      1,
+      1
+     ],
+     "kind": "heading",
+     "idea": "Bibliography heading."
+    },
+    {
+     "id": "R-441-b",
+     "lines": [
+      2,
+      13
+     ],
+     "kind": "references",
+     "idea": "Entries 1–6: kinematics and robot-control textbooks (1980s), nonlinear optimal control and redundancy resolution, and a classic treatise on screws from 1900.",
+     "scene": "mls-bib-citation-map",
+     "beat": "🕰️ a timeline of sources"
+    },
+    {
+     "id": "R-441-c",
+     "lines": [
+      14,
+      21
+     ],
+     "kind": "references",
+     "idea": "Entries 7–9: contact sensing from force measurements, control of nonholonomic dynamic systems, and a standard differential-manifolds textbook.",
+     "scene": "mls-bib-citation-map",
+     "beat": "🕰️ a timeline of sources"
+    },
+    {
+     "id": "R-441-d",
+     "lines": [
+      22,
+      33
+     ],
+     "kind": "references",
+     "idea": "Entries 10–14: theoretical kinematics, control and sub-Riemannian geometry, the 1984 product-of-exponentials paper, an applied-math robotics symposium volume, and elliptic functions in nonholonomic control.",
+     "scene": "mls-bib-citation-map",
+     "beat": "🕸️ which chapter cites what"
+    },
+    {
+     "id": "R-441-e",
+     "lines": [
+      34,
+      34
+     ],
+     "kind": "page-number",
+     "idea": "Page 441"
+    }
+   ]
+  },
+  {
+   "pdf": 460,
+   "book": 442,
+   "lines": 43,
+   "section": "Bib",
+   "summary": "Entries 15–31: geometric chain dynamics, micro-rovers, Jacobian-transpose inverse kinematics, artificial hands, teleoperated force sensing, grasping, redundancy, the 1955 link-parameter notation, and micro-actuators.",
+   "atoms": [
+    {
+     "id": "R-442-a",
+     "lines": [
+      1,
+      8
+     ],
+     "kind": "references",
+     "idea": "Entries 15–17: geometric dynamics of kinematic chains, a robot-on-a-chip proposal, and closed-loop Jacobian-transpose inverse kinematics.",
+     "scene": "mls-bib-citation-map",
+     "beat": "🕰️ a timeline of sources"
+    },
+    {
+     "id": "R-442-b",
+     "lines": [
+      9,
+      19
+     ],
+     "kind": "references",
+     "idea": "Entries 18–21: early artificial hand mechanisms, cable-driven teleoperated manipulators with force sensing, a multivolume robot-technology series, and an introductory robotics text.",
+     "scene": "mls-bib-citation-map",
+     "beat": "🕰️ a timeline of sources"
+    },
+    {
+     "id": "R-442-c",
+     "lines": [
+      20,
+      31
+     ],
+     "kind": "references",
+     "idea": "Entries 22–26: grasping and fine manipulation, gradient methods for redundancy, multifinger planar manipulation experiments, the 1955 matrix notation for lower-pair linkages, and biomechanical finger design.",
+     "scene": "mls-bib-citation-map",
+     "beat": "🕸️ which chapter cites what"
+    },
+    {
+     "id": "R-442-d",
+     "lines": [
+      32,
+      42
+     ],
+     "kind": "references",
+     "idea": "Entries 27–31: curves-and-surfaces geometry, mechanism and manipulator analysis, mechanism design, and sub-millimeter micro-actuators.",
+     "scene": "mls-bib-citation-map",
+     "beat": "🕰️ a timeline of sources"
+    },
+    {
+     "id": "R-442-e",
+     "lines": [
+      43,
+      43
+     ],
+     "kind": "page-number",
+     "idea": "Page 442"
+    }
+   ]
+  },
+  {
+   "pdf": 461,
+   "book": 443,
+   "lines": 43,
+   "section": "Bib",
+   "summary": "Entries 32–49: space-platform attitude control by internal motion, nonholonomic planning, control and robotics texts, nilpotent Lie algebras, group theory, compliant hands, controllability, and nonlinear systems.",
+   "atoms": [
+    {
+     "id": "R-443-a",
+     "lines": [
+      1,
+      10
+     ],
+     "kind": "references",
+     "idea": "Entries 32–35: attitude control and near-optimal planning for coupled rigid bodies, a feedback-control textbook, and a robotics control/sensing/vision text.",
+     "scene": "mls-bib-citation-map",
+     "beat": "🕰️ a timeline of sources"
+    },
+    {
+     "id": "R-443-b",
+     "lines": [
+      11,
+      23
+     ],
+     "kind": "references",
+     "idea": "Entries 36–41: manipulator modeling (in French), free nilpotent Lie algebras, group theory, an elastic-finger hand for assembly, nonlinear controllability and observability, and motor-redundancy studies.",
+     "scene": "mls-bib-citation-map",
+     "beat": "🕸️ which chapter cites what"
+    },
+    {
+     "id": "R-443-c",
+     "lines": [
+      24,
+      42
+     ],
+     "kind": "references",
+     "idea": "Entries 42–49: kinematic geometry of mechanisms, nonlinear control systems, a dextrous-hand progress report, spatial-operator multibody dynamics, computational geometry lectures, compliant quasi-static manipulation, a multifingered-hand thesis, and a nonlinear-systems text.",
+     "scene": "mls-bib-citation-map",
+     "beat": "🕰️ a timeline of sources"
+    },
+    {
+     "id": "R-443-d",
+     "lines": [
+      43,
+      43
+     ],
+     "kind": "page-number",
+     "idea": "Page 443"
+    }
+   ]
+  },
+  {
+   "pdf": 462,
+   "book": 444,
+   "lines": 44,
+   "section": "Bib",
+   "summary": "Entries 50–67: operational-space control, natural motion, exact linearization, geometric motion planning, nonholonomic mobile robots, dextrous hands, rolling contact, compliant mechanisms on Lie groups, 6R inverse kinematics, and mechanics.",
+   "atoms": [
+    {
+     "id": "R-444-a",
+     "lines": [
+      1,
+      12
+     ],
+     "kind": "references",
+     "idea": "Entries 50–54: unified motion/force (operational-space) control, natural arm motion, control fundamentals, exact linearization, and differential-geometric motion planning.",
+     "scene": "mls-bib-citation-map",
+     "beat": "🕰️ a timeline of sources"
+    },
+    {
+     "id": "R-444-b",
+     "lines": [
+      13,
+      22
+     ],
+     "kind": "references",
+     "idea": "Entries 55–58: smooth collision-free paths for a nonholonomic robot, elliptic functions, a vector theory of mechanisms, and a dextrous-hand thesis.",
+     "scene": "mls-bib-citation-map",
+     "beat": "🕰️ a timeline of sources"
+    },
+    {
+     "id": "R-444-c",
+     "lines": [
+      23,
+      33
+     ],
+     "kind": "references",
+     "idea": "Entries 59–63: geometric aspects of robot kinematics, rolling contact between rigid bodies, a nonholonomic-planning collection, coordinated multifinger manipulation, and a thesis on compliant mechanisms via Lie groups (source of Appendix A §3).",
+     "scene": "mls-bib-citation-map",
+     "beat": "🕸️ which chapter cites what"
+    },
+    {
+     "id": "R-444-d",
+     "lines": [
+      34,
+      43
+     ],
+     "kind": "references",
+     "idea": "Entries 64–67: real-time 6R inverse kinematics, an arm with sixteen inverse solutions, grasping geometry, and lectures on mechanics.",
+     "scene": "mls-bib-citation-map",
+     "beat": "🕰️ a timeline of sources"
+    },
+    {
+     "id": "R-444-e",
+     "lines": [
+      44,
+      44
+     ],
+     "kind": "page-number",
+     "idea": "Page 444"
+    }
+   ]
+  },
+  {
+   "pdf": 463,
+   "book": 445,
+   "lines": 44,
+   "section": "Bib",
+   "summary": "Entries 68–83: symmetry reduction and phases, hand mechanics, theoretical kinematics, positive grips, contact kinematics, nilpotent bases, control primitives, grasping experiments, steering with sinusoids, redundancy, and force-closure.",
+   "atoms": [
+    {
+     "id": "R-445-a",
+     "lines": [
+      1,
+      14
+     ],
+     "kind": "references",
+     "idea": "Entries 68–73: reduction and geometric phases in mechanics, robot-hand mechanics, theoretical kinematics, existence of positive multifinger grips, and kinematics of contact (with and without compliance).",
+     "scene": "mls-bib-citation-map",
+     "beat": "🕰️ a timeline of sources"
+    },
+    {
+     "id": "R-445-b",
+     "lines": [
+      15,
+      31
+     ],
+     "kind": "references",
+     "idea": "Entries 74–78: nilpotent bases for trajectory generation, control primitives, planar grasping experiments, multifingered grasping and manipulation, and steering nonholonomic systems with sinusoids.",
+     "scene": "mls-bib-citation-map",
+     "beat": "🕸️ which chapter cites what"
+    },
+    {
+     "id": "R-445-c",
+     "lines": [
+      32,
+      43
+     ],
+     "kind": "references",
+     "idea": "Entries 79–83: redundancy and optimization, coordinating multiple mechanisms, nonholonomic dynamics, constructing force-closure grasps, and nonlinear control theory.",
+     "scene": "mls-bib-citation-map",
+     "beat": "🕰️ a timeline of sources"
+    },
+    {
+     "id": "R-445-d",
+     "lines": [
+      44,
+      44
+     ],
+     "kind": "page-number",
+     "idea": "Page 445"
+    }
+   ]
+  },
+  {
+   "pdf": 464,
+   "book": 446,
+   "lines": 45,
+   "section": "Bib",
+   "summary": "Entries 84–100: finger control, optimal 6R design, Lie-group dynamics, product-of-exponentials computation, analytical dynamics, micro-hinges and air-bearing actuators, linkage equations, 6R inverse kinematics, convex analysis, spatial operators, and manipulator design.",
+   "atoms": [
+    {
+     "id": "R-446-a",
+     "lines": [
+      1,
+      17
+     ],
+     "kind": "references",
+     "idea": "Entries 84–90: multijointed finger control, a kinematics-and-control thesis, optimal kinematic design of 6R arms, a Lie-group formulation of dynamics, computational aspects of the product of exponentials, analytical dynamics, and a classic manipulator text.",
+     "scene": "mls-bib-citation-map",
+     "beat": "🕸️ which chapter cites what"
+    },
+    {
+     "id": "R-446-b",
+     "lines": [
+      18,
+      28
+     ],
+     "kind": "references",
+     "idea": "Entries 91–94: hinged polysilicon micro-structures, a planar air-bearing electrostatic actuator, micro-fabricated hinges, and the input-output equation of a general 7R linkage.",
+     "scene": "mls-bib-citation-map",
+     "beat": "🕰️ a timeline of sources"
+    },
+    {
+     "id": "R-446-c",
+     "lines": [
+      29,
+      44
+     ],
+     "kind": "references",
+     "idea": "Entries 95–100: a survey of manipulator kinematics, inverse kinematics of the general 6R arm, convex analysis, spatial-operator algebra, analytical dynamics, and early design of computer-controlled manipulators (1973).",
+     "scene": "mls-bib-citation-map",
+     "beat": "🕰️ a timeline of sources"
+    },
+    {
+     "id": "R-446-d",
+     "lines": [
+      45,
+      45
+     ],
+     "kind": "page-number",
+     "idea": "Page 446"
+    }
+   ]
+  },
+  {
+   "pdf": 465,
+   "book": 447,
+   "lines": 42,
+   "section": "Bib",
+   "summary": "Entries 101–118: articulated hands, adaptive control, optimal steering, Lie algebras, redundant repeatability, prehension design, differential geometry, robot dynamics and control, the six-DOF platform, trailers, early adaptive hands, sheep-shearing robots, representations, and distributions.",
+   "atoms": [
+    {
+     "id": "R-447-a",
+     "lines": [
+      1,
+      16
+     ],
+     "kind": "references",
+     "idea": "Entries 101–107: kinematic and force analysis of articulated hands, adaptive control, optimal steering control, Lie algebras and groups, repeatability of redundant arms, multiple-prehension design, and adaptive manipulator control.",
+     "scene": "mls-bib-citation-map",
+     "beat": "🕰️ a timeline of sources"
+    },
+    {
+     "id": "R-447-b",
+     "lines": [
+      17,
+      30
+     ],
+     "kind": "references",
+     "idea": "Entries 108–113: a comprehensive differential-geometry treatise, a robot-control collection, a dynamics-and-control text, the 1960s six-DOF platform, N-trailer trajectory generation, and a 1962 adaptive artificial hand.",
+     "scene": "mls-bib-citation-map",
+     "beat": "🕸️ which chapter cites what"
+    },
+    {
+     "id": "R-447-c",
+     "lines": [
+      31,
+      41
+     ],
+     "kind": "references",
+     "idea": "Entries 114–118: robots for shearing sheep, Lie groups and representations, a dextrous-hands collection, nonholonomic problems and distributions, and nonlinear systems analysis.",
+     "scene": "mls-bib-citation-map",
+     "beat": "🕰️ a timeline of sources"
+    },
+    {
+     "id": "R-447-d",
+     "lines": [
+      42,
+      42
+     ],
+     "kind": "page-number",
+     "idea": "Page 447"
+    }
+   ]
+  },
+  {
+   "pdf": 466,
+   "book": 448,
+   "lines": 14,
+   "section": "Bib",
+   "summary": "Entries 119–123: reorienting linked bodies by internal motion, manipulator control laws, a symbolic-math system, robotics foundations, and calculus of variations.",
+   "atoms": [
+    {
+     "id": "R-448-a",
+     "lines": [
+      1,
+      13
+     ],
+     "kind": "references",
+     "idea": "Entries 119–123: reorienting linked rigid bodies by internal motions, new manipulator control laws, the symbolic-math system used in Appendix B, a robotics-foundations text, and calculus of variations and optimal control.",
+     "scene": "mls-bib-citation-map",
+     "beat": "🧭 jump to the scene"
+    },
+    {
+     "id": "R-448-b",
+     "lines": [
+      14,
+      14
+     ],
+     "kind": "page-number",
+     "idea": "Page 448"
+    }
+   ]
+  }
+ ]
+}

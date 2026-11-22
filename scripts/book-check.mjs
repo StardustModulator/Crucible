@@ -68,6 +68,7 @@ export function check({ only = null, all = false } = {}) {
         if (!KINDS.includes(a.kind)) E(at, `kind "${a.kind}" not in ${KINDS.join('|')}`);
         const trivial = ['page-number', 'references', 'index', 'front', 'heading'].includes(a.kind);
         for (const k of trivial ? ['idea'] : ['idea', 'feynman', 'visual']) if (!a[k] || String(a[k]).length < 8) E(at, `missing "${k}"`);
+        if (trivial && a.scene) scenes.get(a.scene)?.atoms.push(a.id); // e.g. references → the citation-map scene
         if (!trivial) {
           if (!a.scene) E(at, 'missing scene');
           else if (!scenes.has(a.scene) && !CONCEPT_IDS.has(a.scene)) E(at, `scene "${a.scene}" is not declared in any atlas file and is not a Crucible concept`);

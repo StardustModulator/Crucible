@@ -1,0 +1,510 @@
+{
+ "id": "index",
+ "title": "Index",
+ "pdfPages": [
+  467,
+  474
+ ],
+ "sections": [
+  {
+   "id": "Idx",
+   "title": "Index",
+   "book": 449
+  }
+ ],
+ "scenes": [
+  {
+   "id": "mls-index-explorer",
+   "title": "Index Explorer",
+   "icon": "🔎",
+   "section": "Idx",
+   "pages": [
+    449,
+    456
+   ],
+   "uses": [
+    "graph-search"
+   ],
+   "beats": [
+    "🔤 browse A to Z",
+    "🕸️ term → pages → scenes",
+    "🎯 jump to the picture"
+   ],
+   "brief": "An A–Z wheel of letter tiles; spinning to a letter fans out its terms as small chips (only math symbols and icons drawn, e.g. ⊕ for adjoint, 🔩 for screw, ✋ for grasp). Each chip has threads to the page numbers it lists (a ribbon of 1–456 along the bottom, colored by chapter), and from pages to the atlas scenes covering them. Selecting a chip pulses every linked scene thumbnail; a second click jumps into that scene's beat. A search box filters chips; a heat strip shows which book pages are referenced most (Chapters 2 and A light up)."
+  }
+ ],
+ "pages": [
+  {
+   "pdf": 467,
+   "book": 449,
+   "lines": 47,
+   "section": "Idx",
+   "summary": "Index entries for A, B and the start of C, in two columns.",
+   "atoms": [
+    {
+     "id": "I-449-a",
+     "lines": [
+      1,
+      1
+     ],
+     "kind": "heading",
+     "idea": "Index heading."
+    },
+    {
+     "id": "I-449-b",
+     "lines": [
+      2,
+      18
+     ],
+     "kind": "index",
+     "idea": "Left column: Lie-group actions, actuators, the AdeptOne arm, and the many uses of the adjoint transformation; right column: early C terms (trailers, Carathéodory, Cayley parameters, chained form, Chasles, Chen–Fliess, Chow, Christoffel symbols, closed chains, coadjoint action, friction).",
+     "scene": "mls-index-explorer",
+     "beat": "🔤 browse A to Z"
+    },
+    {
+     "id": "I-449-c",
+     "lines": [
+      19,
+      30
+     ],
+     "kind": "index",
+     "idea": "Left column: admissible velocities, antipodal grasps, stability, atan2, and axes of screws, twists and wrenches; right column: commutators, workspace, computed torque, condition number, configuration space, constrained manipulators.",
+     "scene": "mls-index-explorer",
+     "beat": "🕸️ term → pages → scenes"
+    },
+    {
+     "id": "I-449-d",
+     "lines": [
+      31,
+      46
+     ],
+     "kind": "index",
+     "idea": "Left column: B terms (ball joints, base frame, biological motor control, body velocity/frame/wrench) and the Campbell–Baker–Hausdorff formula; right column: constraint types (holonomic, Pfaffian, nonholonomic) and contact coordinates, forces, frames, kinematics and models.",
+     "scene": "mls-index-explorer",
+     "beat": "🔤 browse A to Z"
+    },
+    {
+     "id": "I-449-e",
+     "lines": [
+      47,
+      47
+     ],
+     "kind": "page-number",
+     "idea": "Page 449"
+    }
+   ]
+  },
+  {
+   "pdf": 468,
+   "book": 450,
+   "lines": 85,
+   "section": "Idx",
+   "summary": "Index entries for the rest of C, D and most of E, in two columns.",
+   "atoms": [
+    {
+     "id": "I-450-a",
+     "lines": [
+      1,
+      20
+     ],
+     "kind": "index",
+     "idea": "Left column: control-related entries, convex hull, coordinate transformations; right column: driftless control systems and dextrous multifingered hands with their structural properties.",
+     "scene": "mls-index-explorer",
+     "beat": "🔤 browse A to Z"
+    },
+    {
+     "id": "I-450-b",
+     "lines": [
+      21,
+      44
+     ],
+     "kind": "index",
+     "idea": "Left column: remaining C–D terms (coordinate changes, cylindrical joints, degrees of freedom); right column: eigenvalues of rotations, elbow manipulators, end-effector velocity, inverse kinematics via the manipulator Jacobian, redundant and parallel cases.",
+     "scene": "mls-index-explorer",
+     "beat": "🕸️ term → pages → scenes"
+    },
+    {
+     "id": "I-450-c",
+     "lines": [
+      45,
+      64
+     ],
+     "kind": "index",
+     "idea": "Right column: equilibrium points, equivalent wrenches, Euler angles and Euler's equations, exact one-forms, exponential coordinates; left column continues D terms.",
+     "scene": "mls-index-explorer",
+     "beat": "🔤 browse A to Z"
+    },
+    {
+     "id": "I-450-d",
+     "lines": [
+      65,
+      84
+     ],
+     "kind": "index",
+     "idea": "Right column: the exponential map for rotations, rigid motions and general Lie groups, and its surjectivity; left column: diffeomorphisms and distributions.",
+     "scene": "mls-index-explorer",
+     "beat": "🕸️ term → pages → scenes"
+    },
+    {
+     "id": "I-450-e",
+     "lines": [
+      85,
+      85
+     ],
+     "kind": "page-number",
+     "idea": "Page 450"
+    }
+   ]
+  },
+  {
+   "pdf": 469,
+   "book": 451,
+   "lines": 57,
+   "section": "Idx",
+   "summary": "Index entries for E–I, in two columns.",
+   "atoms": [
+    {
+     "id": "I-451-a",
+     "lines": [
+      1,
+      14
+     ],
+     "kind": "index",
+     "idea": "Left column: matrix exponential, extensions, falling-cat example, feedforward, fingertip frames; right column: the grasp map and grasp kinematics, statics and dynamics.",
+     "scene": "mls-index-explorer",
+     "beat": "🔤 browse A to Z"
+    },
+    {
+     "id": "I-451-b",
+     "lines": [
+      15,
+      30
+     ],
+     "kind": "index",
+     "idea": "Left column: fixed contacts, foliations, forward-kinematics variants (product of exponentials, base frames); right column: definitions in grasping and Gruebler's formula.",
+     "scene": "mls-index-explorer",
+     "beat": "🕸️ term → pages → scenes"
+    },
+    {
+     "id": "I-451-c",
+     "lines": [
+      31,
+      46
+     ],
+     "kind": "index",
+     "idea": "Left column: frictionless contact and the fundamental grasp constraint; right column: hazardous environments, holonomic constraints, the homunculus diagram, hybrid force control.",
+     "scene": "mls-index-explorer",
+     "beat": "🔤 browse A to Z"
+    },
+    {
+     "id": "I-451-d",
+     "lines": [
+      47,
+      56
+     ],
+     "kind": "index",
+     "idea": "Left column: the general linear group, generalized coordinates and forces, grasp constraints; right column: Lyapunov's indirect method and the inertia tensor.",
+     "scene": "mls-index-explorer",
+     "beat": "🔤 browse A to Z"
+    },
+    {
+     "id": "I-451-e",
+     "lines": [
+      57,
+      57
+     ],
+     "kind": "page-number",
+     "idea": "Page 451"
+    }
+   ]
+  },
+  {
+   "pdf": 470,
+   "book": 452,
+   "lines": 63,
+   "section": "Idx",
+   "summary": "Index entries for I–M, in two columns.",
+   "atoms": [
+    {
+     "id": "I-452-a",
+     "lines": [
+      1,
+      16
+     ],
+     "kind": "index",
+     "idea": "Left column: infinite-pitch screws, integral manifolds, internal forces, intersecting joint axes; right column: kinematics entries and Lagrange's and Lagrange–d'Alembert equations.",
+     "scene": "mls-index-explorer",
+     "beat": "🔤 browse A to Z"
+    },
+    {
+     "id": "I-452-b",
+     "lines": [
+      17,
+      32
+     ],
+     "kind": "index",
+     "idea": "Left column: inverse-kinematics solution counts for special arms and platforms, isotropic points; right column: leaves of foliations, length scale, Lie brackets and Lie derivatives, linearization.",
+     "scene": "mls-index-explorer",
+     "beat": "🕸️ term → pages → scenes"
+    },
+    {
+     "id": "I-452-c",
+     "lines": [
+      33,
+      52
+     ],
+     "kind": "index",
+     "idea": "Left column: Jacobian transpose, joint space versus workspace; right column: local controllability, loop equations, skew-symmetry of energy terms, Lyapunov stability and its methods.",
+     "scene": "mls-index-explorer",
+     "beat": "🔤 browse A to Z"
+    },
+    {
+     "id": "I-452-d",
+     "lines": [
+      53,
+      62
+     ],
+     "kind": "index",
+     "idea": "Left column: joint types, the Killing form, kinematic redundancy, four-bar mechanisms; right column: magnitude of twists and wrenches, the manipulator Jacobian.",
+     "scene": "mls-index-explorer",
+     "beat": "🕸️ term → pages → scenes"
+    },
+    {
+     "id": "I-452-e",
+     "lines": [
+      63,
+      63
+     ],
+     "kind": "page-number",
+     "idea": "Page 452"
+    }
+   ]
+  },
+  {
+   "pdf": 471,
+   "book": 453,
+   "lines": 56,
+   "section": "Idx",
+   "summary": "Index entries for M–P, in two columns.",
+   "atoms": [
+    {
+     "id": "I-453-a",
+     "lines": [
+      1,
+      16
+     ],
+     "kind": "index",
+     "idea": "Left column: manipulator-Jacobian sub-entries (body, spatial, redundant, force mapping); right column: subproblems for inverse kinematics, palm frame, perspective transformations.",
+     "scene": "mls-index-explorer",
+     "beat": "🔤 browse A to Z"
+    },
+    {
+     "id": "I-453-b",
+     "lines": [
+      17,
+      32
+     ],
+     "kind": "index",
+     "idea": "Left column: matrix exponential, maximal manipulability, microrobotics; right column: Pfaffian integrability, pitch of screws and wrenches, planar rotations and rigid motions, point contacts.",
+     "scene": "mls-index-explorer",
+     "beat": "🕸️ term → pages → scenes"
+    },
+    {
+     "id": "I-453-c",
+     "lines": [
+      33,
+      48
+     ],
+     "kind": "index",
+     "idea": "Left column: Newton's laws, nonholonomic systems, nonmanipulable grasps; right column: points versus vectors, positive dependence, prismatic joints, product-of-exponentials formula.",
+     "scene": "mls-index-explorer",
+     "beat": "🔤 browse A to Z"
+    },
+    {
+     "id": "I-453-d",
+     "lines": [
+      49,
+      55
+     ],
+     "kind": "index",
+     "idea": "Left column: one-forms, optimal steering, orthogonal matrices; right column: dynamics via the product of exponentials and projection maps.",
+     "scene": "mls-index-explorer",
+     "beat": "🕸️ term → pages → scenes"
+    },
+    {
+     "id": "I-453-e",
+     "lines": [
+      56,
+      56
+     ],
+     "kind": "page-number",
+     "idea": "Page 453"
+    }
+   ]
+  },
+  {
+   "pdf": 472,
+   "book": 454,
+   "lines": 57,
+   "section": "Idx",
+   "summary": "Index entries for P–S, in two columns.",
+   "atoms": [
+    {
+     "id": "I-454-a",
+     "lines": [
+      1,
+      16
+     ],
+     "kind": "index",
+     "idea": "Left column: pseudo-inverse, the PUMA arm, pure quaternions, push forward, rank of structure equations; right column: rigid displacements, robot origins, Rodrigues' formula, rolling contact, twist coordinates of rotations.",
+     "scene": "mls-index-explorer",
+     "beat": "🔤 browse A to Z"
+    },
+    {
+     "id": "I-454-b",
+     "lines": [
+      17,
+      32
+     ],
+     "kind": "index",
+     "idea": "Left column: reciprocal products, reference configurations, regular distributions, relative motion; right column: rotation matrices (actions on points, exponential coordinates, quaternions), body versus spatial velocity.",
+     "scene": "mls-index-explorer",
+     "beat": "🕸️ term → pages → scenes"
+    },
+    {
+     "id": "I-454-c",
+     "lines": [
+      33,
+      48
+     ],
+     "kind": "index",
+     "idea": "Left column: revolute joints, kinetic energy, rigid-body dynamics; right column: rotational velocity, Jacobian links, screw theory.",
+     "scene": "mls-index-explorer",
+     "beat": "🔤 browse A to Z"
+    },
+    {
+     "id": "I-454-d",
+     "lines": [
+      49,
+      56
+     ],
+     "kind": "index",
+     "idea": "Left column: rigid-body transformations and velocities; right column: twists and wrenches associated with screws, bi-invariant forms on SE(3).",
+     "scene": "mls-index-explorer",
+     "beat": "🕸️ term → pages → scenes"
+    },
+    {
+     "id": "I-454-e",
+     "lines": [
+      57,
+      57
+     ],
+     "kind": "page-number",
+     "idea": "Page 454"
+    }
+   ]
+  },
+  {
+   "pdf": 473,
+   "book": 455,
+   "lines": 57,
+   "section": "Idx",
+   "summary": "Index entries for S–V, in two columns.",
+   "atoms": [
+    {
+     "id": "I-455-a",
+     "lines": [
+      1,
+      16
+     ],
+     "kind": "index",
+     "idea": "Left column: volume forms and the lack of bi-invariant metrics on SE(3), se(3), second-order terms, singular configurations; right column: Steinitz's theorem, structural properties, supporting hyperplanes, teleoperation.",
+     "scene": "mls-index-explorer",
+     "beat": "🔤 browse A to Z"
+    },
+    {
+     "id": "I-455-b",
+     "lines": [
+      17,
+      32
+     ],
+     "kind": "index",
+     "idea": "Left column: skew-symmetric matrices, sliding, soft-finger contact; right column: trajectory generation and tracking, Jacobian transpose, geometric attributes of twists and reciprocity.",
+     "scene": "mls-index-explorer",
+     "beat": "🕸️ term → pages → scenes"
+    },
+    {
+     "id": "I-455-c",
+     "lines": [
+      33,
+      48
+     ],
+     "kind": "index",
+     "idea": "Left column: spatial manipulator Jacobian, spatial velocity and its addition, rolling spheres; right column: twist transformation and dynamics, U-joints, underwater robots, unit quaternions.",
+     "scene": "mls-index-explorer",
+     "beat": "🔤 browse A to Z"
+    },
+    {
+     "id": "I-455-d",
+     "lines": [
+      49,
+      56
+     ],
+     "kind": "index",
+     "idea": "Left column: special Euclidean group and workspace effects, stability definitions, two classic early research arms; right column: variable-geometry trusses, velocity.",
+     "scene": "mls-index-explorer",
+     "beat": "🕸️ term → pages → scenes"
+    },
+    {
+     "id": "I-455-e",
+     "lines": [
+      57,
+      57
+     ],
+     "kind": "page-number",
+     "idea": "Page 455"
+    }
+   ]
+  },
+  {
+   "pdf": 474,
+   "book": 456,
+   "lines": 26,
+   "section": "Idx",
+   "summary": "Final index entries for V–Z in a single column.",
+   "atoms": [
+    {
+     "id": "I-456-a",
+     "lines": [
+      1,
+      12
+     ],
+     "kind": "index",
+     "idea": "Velocity sub-entries, virtual displacements and virtual work.",
+     "scene": "mls-index-explorer",
+     "beat": "🔤 browse A to Z"
+    },
+    {
+     "id": "I-456-b",
+     "lines": [
+      13,
+      25
+     ],
+     "kind": "index",
+     "idea": "Workspace control and dextrous workspace, wrench bases for contacts, wrench sub-entries (addition, body/spatial forms, reciprocity, screw coordinates, transformation), zero-pitch screws.",
+     "scene": "mls-index-explorer",
+     "beat": "🎯 jump to the picture"
+    },
+    {
+     "id": "I-456-c",
+     "lines": [
+      26,
+      26
+     ],
+     "kind": "page-number",
+     "idea": "Page 456"
+    }
+   ]
+  }
+ ]
+}
