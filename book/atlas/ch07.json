@@ -75,7 +75,7 @@
  "scenes": [
   {
    "id": "mls-ch7-roadmap",
-   "title": "Chapter Map",
+   "title": "Chapter 7 Map",
    "icon": "🗺️",
    "section": "7",
    "pages": [
@@ -831,7 +831,7 @@
       8
      ],
      "kind": "prose",
-     "idea": "In control language: constraints are completely nonholonomic iff the system (7.6) can be steered between any two points; holonomic ones keep it on a constraint surface. So integrability is studied through controllability.",
+     "idea": "Seen as control: constraints are completely nonholonomic exactly when system (7.6) can be driven from any configuration to any other; holonomic ones trap it on a surface. So integrability questions become controllability questions.",
      "feynman": "Can a toy with only two buttons get to every spot on the play mat? If yes, its rules are fully nonholonomic; if it is stuck on one stripe, they are holonomic.",
      "visual": "Teal start, gold goal anywhere in the box; press \"steer\". Holonomic mode: the planner fails unless the goal lies on the start’s gold level sheet. Nonholonomic mode: every goal gets reached (lime).",
      "scene": "mls-ch7-holonomic-test",
@@ -1439,7 +1439,7 @@
       27
      ],
      "kind": "definition",
-     "idea": "A distribution assigns a subspace of the tangent space to each point smoothly; e.g. Δ = span{g1,…,gm} over smooth functions, giving Δ_q = span{gᵢ(q)} ⊂ T_qℝⁿ.",
+     "idea": "A distribution smoothly attaches to every point a subspace of the tangent space there; e.g. Δ = span{g1,…,gm} over smooth functions, so Δ_q = span{gᵢ(q)} ⊂ T_qℝⁿ.",
      "feynman": "At every spot on an ice rink, the set of directions a skate blade can glide is a line; together those lines are a distribution.",
      "visual": "At each grid point, a small translucent blue tile spanned by two orange arrows g1(q), g2(q); move the mouse to see tiles tilt as q changes.",
      "scene": "mls-ch7-frobenius-leaves",
@@ -4373,7 +4373,7 @@
      ],
      "kind": "exercise",
      "label": "Exercise 5",
-     "idea": "Derive the rolling equations for a unit sphere rolling on a sphere of radius ρ with the same inputs as Ex 7.6, and show it is controllable iff ρ ≠ 1.",
+     "idea": "Exercise: write the rolling equations for a unit ball rolling on a ball of radius ρ, using the same inputs as Ex 7.6, and show it is controllable exactly when ρ ≠ 1.",
      "feynman": "Roll one ball on another of the same size and the contact pattern is too symmetric to twist freely; any size difference restores full freedom.",
      "visual": "Challenge mode of Ball on Table: replace the table with a slate sphere of radius slider ρ; learner tries to reach a gold target orientation; rank meter drops (coral) exactly at ρ = 1.",
      "scene": "mls-ch7-ball-rolling",

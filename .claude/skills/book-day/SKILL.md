@@ -38,7 +38,7 @@ Use the `book-audit` skill for day N. It ends with a table where every page of t
 ## 4. Ship
 
 ```bash
-npm test && node scripts/book-check.mjs && node scripts/smoke.mjs $(node scripts/book-day.mjs <N> --ids)
+npm test && node scripts/book-check.mjs --all && node scripts/book-originality.mjs && node scripts/book-manifest.mjs && node scripts/smoke.mjs $(node scripts/book-day.mjs <N> --ids)
 git add -A && git commit -m "Book day <N>: <theme>" && git push
 ```
 

@@ -3549,7 +3549,7 @@
       32
      ],
      "kind": "remark",
-     "idea": "Definitions are local; global stability holds for all initial conditions. For time-invariant systems stability implies uniform stability.",
+     "idea": "These definitions are local; 'global' means they hold from every starting state. When the system doesn't change with time, plain stability is automatically uniform.",
      "feynman": "A bowl that catches marbles from anywhere on the table versus only near its rim.",
      "visual": "Drag the start point far away: in a global system it still returns (lime), in a local one it escapes beyond a shaded basin (coral).",
      "scene": "mls-lyapunov-ball",

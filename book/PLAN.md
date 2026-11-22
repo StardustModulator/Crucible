@@ -30,6 +30,30 @@
 > our explanations, visuals, and structural references (page, section and equation numbers).
 > The PDF stays in `book/source/` (gitignored), and no book text is ever committed.
 
+## The atlas: complete ✅
+
+All **474 / 474 pages** and **18,554 / 18,554 lines** are broken into **2,877 atoms** across **135 scenes**. `npm test` enforces this.
+
+| part | pages | atoms | scenes |
+|---|---|---|---|
+| Front matter | 18 | 58 | 3 |
+| 1 Introduction | 18 | 119 | 4 |
+| 2 Rigid Body Motion | 62 | 394 | 17 |
+| 3 Manipulator Kinematics | 74 | 459 | 21 |
+| 4 Robot Dynamics and Control | 56 | 355 | 15 |
+| 5 Multifingered Hand Kinematics | 54 | 338 | 15 |
+| 6 Hand Dynamics and Control | 52 | 314 | 16 |
+| 7 Nonholonomic Behavior | 38 | 236 | 13 |
+| 8 Nonholonomic Motion Planning | 40 | 240 | 11 |
+| 9 Future Prospects | 8 | 44 | 4 |
+| A Lie Groups and Robot Kinematics | 32 | 214 | 12 |
+| B Screw-Calculus Package | 6 | 35 | 2 |
+| Bibliography · Index | 16 | 71 | 2 |
+
+- **What each atom holds:** every proof is a staircase of pictures; every exercise is a challenge mode; every figure is a live scene.
+- **Originality:** `node scripts/book-originality.mjs` proves that no atlas text copies an 8-word run from the book.
+- **Per-day roster:** every scene, its beats and the engine additions it needs, day by day, are in **[ROSTER.md](ROSTER.md)**.
+
 ## The week
 
 | day | PDF | book pages | chapters | theme | lines |
@@ -84,6 +108,7 @@ node scripts/book-day.mjs --scene mls-x   # full build spec for one scene (atoms
 node scripts/book-day.mjs --page 27       # the atoms of book page 27
 node scripts/book-text.mjs 27 30          # numbered canonical lines (needs the local PDF)
 node scripts/book-check.mjs [--all]       # validate the atlas (--all: every page must exist)
+node scripts/book-originality.mjs         # prove no atlas text copies the book (needs the local PDF)
 node scripts/book-merge.mjs <part>        # assemble book/atlas/<part>.json from per-page work files
 node scripts/book-manifest.mjs            # refresh book/atlas.json (part list + which scenes are built)
 ```

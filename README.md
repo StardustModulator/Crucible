@@ -48,6 +48,22 @@ see that web three ways:
 * **▦ Grid** — every math idea × every algorithm, solid for direct use, faint for
   "somewhere underneath".
 
+## 📕 The Book: every line of a robotics classic, as pictures
+
+*A Mathematical Introduction to Robotic Manipulation* (Murray, Li, Sastry, 1994) is mapped **line by line**. That is all 474 pages and 18,554 lines, cut into 2,877 Feynman "atoms". Each atom carries:
+
+- a precise paraphrase;
+- an everyday analogy;
+- the exact picture that teaches it.
+
+The atoms are grouped into 135 scenes, which a [7-day plan](book/PLAN.md) builds one day at a time.
+
+- **`#/book`:** a world map of the 7 days, with ⭐ stars per day, 💡 "I can explain it" stamps and a 🔥 study streak.
+- **`#/book/p/<page>`:** the original page, rendered from *your own* copy of the PDF, beside its atoms. Hover an atom and its lines light up on the page.
+- **Daily driver:** say "do day N". The `book-day` skill in `.claude/skills/` builds, verifies, audits and ships that day.
+
+The book is © CRC Press. This repo contains only original explanations and visuals, and the PDF is never committed. Load your copy in the app, or get the authors' free electronic edition.
+
 ## The concept web
 **Math Core:** ➡️ Arrows · 🔲 Matrix · 🧭 Eigenvectors · 🥚 SVD · 📏 Least Squares · 🔄 Rotations · 🌐 Quaternions · 📦 Rigid Moves · 🔩 Twists & exp · 🛝 Slopes · ⚙️ Chain Rule · 🔍 Zoom = Flat · 🌊 Flows · 🎢 Energy · 🥣 Stability Bowl · 📍 Poles · 🔔 Bell Curves · 🔎 Bayes · 🎲 Sampling · ⛰️ Optimization · 🧽 Convolution · 🪜 Bellman · 😮 Surprise & KL
 

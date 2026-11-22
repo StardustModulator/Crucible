@@ -4417,7 +4417,7 @@
       15
      ],
      "kind": "summary",
-     "idea": "For q̇ = u, Ẏ = quᵀ − uqᵀ, optimal inputs are sinusoids, at integrally related frequencies when q returns to 0.",
+     "idea": "For q̇ = u, Ẏ = quᵀ − uqᵀ, the best inputs turn out to be sinusoids; when q must come back to 0 their frequencies are whole-number multiples of each other.",
      "feynman": "More knobs: a band playing 1×, 2×, 3× notes.",
      "visual": "Recap card 2: spinning dials at 1×, 2×, 3× filling an so(m) grid.",
      "scene": "mls-ch8-recap",

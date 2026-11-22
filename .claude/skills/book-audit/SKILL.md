@@ -10,6 +10,7 @@ There are three layers, and each must be ✅.
 1. **Lines → atoms (mechanical).**
    - Run `node scripts/book-check.mjs` (0 errors), which proves the atoms tile every canonical line.
    - For the final day add `--all`, which proves all 474 PDF pages are covered.
+   - Run `node scripts/book-originality.mjs`, which proves no atlas text copies an 8-word run from the book. Rewrite anything it flags.
 2. **Atoms → scenes (mechanical).**
    - Run `node scripts/book-day.mjs <N>`. Every scene the day needs must show 🧱 built.
    - Run `node scripts/smoke.mjs $(node scripts/book-day.mjs <N> --ids) --shots <dir>` with 0 errors. The smoke test also checks that each `mls-*` scene shows as many beats as its atlas card.

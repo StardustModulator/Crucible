@@ -436,7 +436,7 @@
       26
      ],
      "kind": "prose",
-     "idea": "Revolute, prismatic and helical joints are each a single screw motion (pitch 0, infinite, finite nonzero). A cylindrical joint stacks a revolute and a prismatic joint on one axis, giving two freedoms. Revolute and prismatic joints are by far the most common.",
+     "idea": "Hinge (revolute), slider (prismatic) and screw (helical) joints are each one screw motion, with pitch zero, infinite, and finite. A cylindrical joint puts a hinge and a slider on the same axis, so it has two freedoms. In practice, hinges and sliders are the joints you see almost everywhere.",
      "feynman": "A screw is the master joint: if the thread is flat it only spins (hinge); if the thread is infinitely steep it only slides (drawer). A jar lid is in between.",
      "visual": "One screw toy with a pitch slider: at 0 the blue nut just spins (hinge), at large pitch it rides fast along the axis, at ∞ it only slides. A second slider unlocks the coupling so spin and slide move independently: the cylinder joint, freedom counter = 2.",
      "scene": "mls-lower-pairs",
@@ -705,7 +705,7 @@
       30
      ],
      "kind": "prose",
-     "idea": "The joint space Q is the set of all possible joint-variable values; it is also the configuration space of the robot (sentence continues).",
+     "idea": "The joint space Q collects every allowed setting of the joint variables; it doubles as the robot's configuration space (the thought continues on the next page).",
      "feynman": "The full set of dial positions on a safe: every combination is a point, and each combination sets the whole mechanism.",
      "visual": "A small right panel showing a point in joint space; dragging it updates the arm on the left.",
      "scene": "mls-fk-problem",
@@ -1548,7 +1548,7 @@
       11
      ],
      "kind": "prose",
-     "idea": "For ξ1 the point q1 = (0,0,l0) was used, but the origin or any other point on the same axis gives the same twist.",
+     "idea": "For ξ1 the axis point q1 = (0,0,l0) was chosen, but any point along that axis, including the origin, produces exactly the same twist.",
      "feynman": "To tell someone where a flagpole is, any spot on the pole works.",
      "visual": "Drag the teal point along axis ξ1 from the origin up to (0,0,l0) and beyond: the twist beads do not change (lime steady meter).",
      "scene": "mls-poe-formula",
@@ -1951,7 +1951,7 @@
       44
      ],
      "kind": "equation",
-     "idea": "Each DH link transform depends on four scalars (twist α_i, length a_i, offset d_i, angle φ_i) in a fixed 4×4 pattern; φ_i is the joint variable for revolute joints, d_i for prismatic ones. DH tables exist for standard industrial robots and are used by most commercial software.",
+     "idea": "Every DH link transform is a fixed 4×4 recipe in four numbers (twist α_i, length a_i, offset d_i, angle φ_i); the joint variable is φ_i for a hinge and d_i for a slider. Industrial arms usually ship with DH tables, and most commercial robot software expects them.",
      "feynman": "Four knobs per link: how much the next hinge is tilted, how far apart the hinges are, how far along you slide, and how much you turn.",
      "visual": "Open a DH card: a ruler-and-protractor glyph per link with four sliders (α, a, d, φ); moving each slider animates one elementary motion (turn about z, slide along z, slide along x, turn about x) composing into the link transform. The joint's own slider is orange.",
      "scene": "mls-ch3-frame-choices",
@@ -2811,7 +2811,7 @@
      ],
      "kind": "figure",
      "label": "Fig 3.8",
-     "idea": "Subproblem 1 picture: (a) p swings about the axis of ξ to q, with u and v drawn from r; (b) the projections u′ and v′ onto the plane normal to the axis and the angle θ between them.",
+     "idea": "Subproblem 1 picture: (a) point p swings about the axis of ξ until it lands on q, with u and v measured from r; (b) squash u and v flat, dropping their along-axis parts, to get u′ and v′, then read the angle θ from u′ to v′.",
      "feynman": "Looking down on a carousel from above: the horse's path is a circle, and the turn angle is the slice between \"now\" and \"goal\".",
      "visual": "Two views: 3D (axis, ring, u, v) and a top-down disc (u′ pink, v′ gold, orange θ arc). A camera button flies from the 3D view to the top-down view.",
      "scene": "mls-pk-swing-to-point",

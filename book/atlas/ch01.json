@@ -199,7 +199,7 @@
       20
      ],
      "kind": "prose",
-     "idea": "Few of these robots look human, though people still imagine humanoids. Progress with simple robots and crude end-effectors is real; our impatience with robotics mostly reflects how little we appreciate the power and subtlety of our own biological motor control.",
+     "idea": "Real robots rarely look like people, even though our imaginations expect humanoids. Simple robots with basic grippers already do useful work; if robotics feels slow, it's because we underrate how clever our own nervous system is at moving our bodies.",
      "feynman": "Catching a ball feels easy to you, but try writing down the instructions for every muscle and you see why a robot struggles.",
      "visual": "Two panels: a human arm catching a ball, with a tiny bar showing \"effort you notice\" (near 0), and a robot arm attempting the same catch with a huge stack of orange joint commands scrolling by; a counter of commands per second races up while the human bar stays flat.",
      "scene": "mls-ch1-robot-timeline",
@@ -365,7 +365,7 @@
       14
      ],
      "kind": "prose",
-     "idea": "Computer numerically controlled machine tools were being built to mill aircraft parts. In 1954 George Devol replaced the human master of the teleoperator with the program of a numerically controlled machine: a \"programmed articulated transfer device\". Joseph Engelberger bought the rights and founded Unimation (1956), which installed its first robot in a General Motors plant in 1961. The key idea was programmability: cheap retooling for many tasks.",
+     "idea": "Factories were already cutting aircraft parts with computer-driven machine tools. In 1954 Devol swapped the human operator of a teleoperator for a stored program, and Engelberger's company Unimation (founded 1956) put its first robot to work on a car assembly line in 1961. The big idea: one machine, reprogrammed cheaply for many jobs.",
      "feynman": "A player piano: instead of a pianist pressing keys live, a punched roll plays the song, and swapping the roll gives a new song.",
      "visual": "Record & replay toy: drag the orange joints of a two-link arm to trace a pink path through three gold waypoints; press ⏺ then ▶; the arm repeats the path on its own forever. Swap the tape 📼 (a new set of waypoints) and it does a different job with no rebuilding; a \"tasks done\" counter climbs while a \"retool cost\" counter stays flat.",
      "scene": "mls-ch1-robot-timeline",
@@ -1129,7 +1129,7 @@
       3
      ],
      "kind": "prose",
-     "idea": "For humans about 30–40% of motor cortex runs the hands, versus 20–30% for most monkeys and under 10% for dogs and cats.",
+     "idea": "A big slice of the human motor cortex (roughly a third) is devoted to the hands; monkeys spend less of theirs on hands, and dogs and cats far less.",
      "feynman": "How much of each animal's \"control room\" is reserved for paws or hands: we spend the most because our hands do the most.",
      "visual": "Three side-by-side cortex pies (🧑, 🐒, 🐕) with the hand slice in pink sized 35%, 25%, 8%; a slider morphs between animals and a dexterity icon (✍️, 🍌, 🦴) appears next to each.",
      "scene": "mls-ch1-why-fingers",
@@ -1402,7 +1402,7 @@
       20
      ],
      "kind": "prose",
-     "idea": "Early research hands included a three-finger cable-driven hand that could screw a nut onto a bolt, and a hand with three elastic fingers driven by a single motor that stably held oddly shaped objects.",
+     "idea": "Early research hands: one with three cable-pulled fingers that could thread a nut onto a bolt, and another whose three springy fingers shared one motor yet could still hold irregular objects steadily.",
      "feynman": "Three fingers threading a nut like you do; or a soft three-pronged grabber that molds itself around a lumpy potato.",
      "visual": "Two challenges: (1) turn a blue nut onto a slate bolt using three finger tips; a rotation counter climbs as the nut screws down. (2) one orange motor knob closes three springy fingers around a random lumpy blob; each finger stops where it touches (teal contact dots) and a stability light turns lime when all three are in contact.",
      "scene": "mls-ch1-why-fingers",
@@ -2061,7 +2061,7 @@
       14
      ],
      "kind": "prose",
-     "idea": "Nonholonomic behavior has two sources: bodies rolling without slipping, and conservation of angular momentum. Chapter 7 gives examples beyond hands: parking a car, mobile robots, space robots, and a hopping robot in flight.",
+     "idea": "Nonholonomy comes from two places: things that roll without slipping, and spinning bodies that must conserve angular momentum. Chapter 7 shows it in parking cars, wheeled robots, robots floating in space, and a hopping robot mid-jump.",
      "feynman": "A car cannot slide sideways (rolling); a falling cat twists itself to land on its feet without anything to push against (angular momentum).",
      "visual": "Example carousel: (1) a car you drive with orange speed/steer knobs and a lime/coral allowed-direction arrow pair; (2) a free-floating two-body space robot: moving its arm in a loop turns the base (blue) though total angular momentum stays 0 (readout); (3) a hopper in flight swinging its leg to reorient.",
      "scene": "mls-ch1-chapter-roadmap",

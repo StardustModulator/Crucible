@@ -294,7 +294,7 @@
   },
   {
    "id": "mls-redundant-dynamics",
-   "title": "Spare Joints",
+   "title": "Spare-Joint Dynamics",
    "icon": "🐍",
    "section": "6.3.1",
    "pages": [
@@ -343,7 +343,7 @@
   },
   {
    "id": "mls-scara-two-finger",
-   "title": "SCARA Pinch",
+   "title": "SCARA Dynamics",
    "icon": "🦀",
    "section": "6.3.3",
    "pages": [
@@ -1842,7 +1842,7 @@
       3
      ],
      "kind": "prose",
-     "idea": "Conclusion: in general substituting Pfaffian constraints into L and then applying the Lagrange–d'Alembert equations gives the wrong dynamics.",
+     "idea": "Conclusion: plugging Pfaffian constraints straight into the Lagrangian before using Lagrange–d'Alembert generally produces incorrect equations of motion.",
      "feynman": "Shortcut = wrong answer, unless the rule is secretly a place rule.",
      "visual": "Coral ✖ stamped on the coral twin's diverged trail.",
      "scene": "mls-nonholonomic-trap",
@@ -2500,7 +2500,7 @@
       16
      ],
      "kind": "prose",
-     "idea": "Any robot system with constraint J(q)θ̇ = Gᵀ(q)ẋ, q = (θ,x), automatically gets dynamics with the same form and structure as one open chain.",
+     "idea": "Any robot system whose constraint reads J(q)θ̇ = Gᵀ(q)ẋ with q = (θ,x) inherits equations of motion shaped exactly like a single open-chain arm's.",
      "feynman": "Fingers, arms, or anything gripping a common thing — same recipe.",
      "visual": "Template card \"J θ̇ = Gᵀ ẋ\" with three skins swiped through: hand, lifting team, welding arm.",
      "scene": "mls-coordinated-robots",

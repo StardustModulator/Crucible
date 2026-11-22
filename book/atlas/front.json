@@ -424,7 +424,7 @@
       24
      ],
      "kind": "table",
-     "idea": "Chapter 6 is hand dynamics and control: Lagrange's equations with Pfaffian constraints and multipliers, the Lagrange–d'Alembert form, why some constraints are nonholonomic, hand dynamics and internal forces, redundant and nonmanipulable grasps, tendon actuation, and hierarchical hand controllers.",
+     "idea": "Chapter 6 covers hand dynamics and control: Lagrange's method with Pfaffian constraints and multipliers, the Lagrange–d'Alembert form, why some constraints are nonholonomic, hand dynamics and squeezing (internal) forces, redundant and nonmanipulable grasps, tendon-driven fingers, and layered hand controllers.",
      "feynman": "Several friends carrying a couch: each moves on their own, but the couch forces them to move together, and squeezing it harder does not move it at all.",
      "visual": "Station 6: two orange-jointed fingers pinch a blue box. Dragging the box makes purple constraint-force arrows appear at the contacts. An internal-squeeze slider grows opposing purple arrows while a net-force readout stays at 0 and the box does not budge. A tendon moon shows cables running over pulleys to the joints.",
      "scene": "mls-front-book-map",
@@ -445,7 +445,7 @@
       38
      ],
      "kind": "table",
-     "idea": "Chapter 7 is nonholonomic behavior: vector fields and flows, Lie brackets and Frobenius' theorem, nonlinear controllability, worked examples, classification of nonholonomic distributions and the Philip Hall basis.",
+     "idea": "Chapter 7 covers nonholonomic behavior: vector fields and their flows, Lie brackets and Frobenius' theorem, controllability of nonlinear systems, worked examples, a classification of nonholonomic distributions, and the Philip Hall basis.",
      "feynman": "A shopping cart cannot slide sideways, yet you can still park it anywhere by rolling forward and turning in a little pattern.",
      "visual": "Station 7: a cart with a lime forward arrow and a coral sideways arrow. The reader plays a four-move loop (go A, go B, undo A, undo B); the cart does not return home, and the leftover sideways gap is highlighted gold: the Lie bracket.",
      "scene": "mls-front-book-map",

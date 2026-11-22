@@ -278,6 +278,7 @@ a { color: inherit; text-decoration: none; }
 @keyframes stamp { 15% { opacity: 1; transform: translate(-50%, -50%) scale(1.15) rotate(-10deg); } 30% { transform: translate(-50%, -50%) scale(1) rotate(-10deg); } 80% { opacity: 1; } 100% { opacity: 0; transform: translate(-50%, -50%) scale(1) rotate(-10deg); } }
 
 @media (max-width: 900px) {
+  .world svg.trail { display: none; }
   .world .levels { grid-template-columns: repeat(4, 1fr); row-gap: 22px; }
   .level:nth-child(odd) { margin-top: 0; }
   .page-view { grid-template-columns: 1fr; }

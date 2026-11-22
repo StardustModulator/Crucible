@@ -24,7 +24,7 @@ description: Break textbook pages into line-level atoms (Feynman explanation + v
    - **Small kinds:** stray figure-label lines and the page number become their own small atoms (`caption`, `page-number`).
    - **Fields:** fill `idea` (your own words), `feynman`, `visual`, `scene`, `beat` (one of the scene's beats), `math`, `engine`, `difficulty`.
 5. **Validate often.** Run `node scripts/book-check.mjs <id>` and fix every ❌. A ⚠️ about length means: tighten it.
-6. **Copyright.** Never paste book sentences. Paraphrase everything. Equations may be restated in your own notation; cite numbers like `Eq (2.14)`.
+6. **Copyright.** Run `node scripts/book-originality.mjs` before finishing. Never paste book sentences. Paraphrase everything. Equations may be restated in your own notation; cite numbers like `Eq (2.14)`.
 
 ## Quality bar
 

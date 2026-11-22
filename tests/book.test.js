@@ -19,9 +19,16 @@ test('the 7 days tile every PDF page exactly once', () => {
   assert.equal(next, 475);
 });
 
-test('atlas: every atom tiles its page lines and points at a real scene', () => {
-  const { errors } = check();
+test('atlas: every line of all 474 pages is tiled by atoms that point at real scenes', () => {
+  const { errors, stats } = check({ all: true });
   assert.deepEqual(errors, []);
+  assert.equal(stats.pages, 474);
+  assert.equal(stats.covered, stats.total);
+});
+
+test('atlas: scene titles are unique', () => {
+  const titles = loadAtlas().flatMap(({ data }) => data.scenes.map((s) => s.title.toLowerCase()));
+  assert.equal(new Set(titles).size, titles.length);
 });
 
 test('atlas manifest lists every part file', () => {
