@@ -167,7 +167,7 @@ export default {
           s.labels.forEach((v, k) => {
             if (k % 3) return;
             const a = v.h + expert(v.f) * 0.3;
-            A.vec(v.p, [Math.cos(a) * 0.17, Math.sin(a) * 0.17], { color: alpha('gold', 0.85), width: 2, head: 7 });
+            A.vec(v.p, [Math.cos(a) * 0.22, Math.sin(a) * 0.22], { color: alpha('gold', 0.9), width: 2.5, head: 8 });
           });
         }
         const showCar = (car, color, trail) => {

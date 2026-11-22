@@ -53,7 +53,7 @@ export default {
     const posOf = (id) => s.order.indexOf(id);
 
     // tokens are handles: tap = make it the query, drag sideways = reorder
-    TOK.forEach((_, id) => stage.handle({
+    const hs = TOK.map((_, id) => stage.handle({
       pen: Lp, color: 'gold', kind: 'ring', r: 17,
       visible: () => true,
       get: () => [s.drag === id ? s.dragX : posOf(id), 0],
@@ -75,13 +75,14 @@ export default {
     return {
       update(dt) { dt = Math.max(0, dt); s.t += dt; },
       draw() {
+        hs.forEach((h, id) => (h.color = id === s.q ? 'gold' : alpha('muted', 0.45)));
         const m = compute();
         drawTokens(m);
         if (s.beat === 0) drawMatrix(m.h1.weights, 'blue', [0.4, 6.6], 0.95);
         else if (s.beat === 1) drawArrows(m);
         else if (s.beat === 2) drawSoftmax(m);
         else if (s.beat === 3) drawMix(m);
-        else { drawMatrix(m.h1.weights, 'blue', [0.15, 6.7], 0.55); drawMatrix(m.h2.weights, 'pink', [3.85, 6.7], 0.55); drawWaveKey(); }
+        else { drawMatrix(m.h1.weights, 'blue', [0.0, 6.7], 0.5); drawMatrix(m.h2.weights, 'pink', [3.6, 6.7], 0.5); drawWaveKey(); }
       },
     };
 
@@ -101,7 +102,7 @@ export default {
           const x = s.drag !== null && s.order[j] === s.drag ? s.dragX : j;
           if (j === qi) { g.circle([x, 0.95 * dir], 0.32, { color: alpha(colr, 0.25 + 0.75 * w), width: 1 + 14 * w }); return; }
           if (dir > 0) arc(g, qi, x, 0.5 + 0.38 * Math.abs(x - qi), { color: alpha(colr, 0.2 + 0.8 * w), width: 1 + 16 * w });
-          else { const pts = []; for (let i = 0; i <= 24; i++) { const t = i / 24; pts.push([qi + (x - qi) * t, -0.55 - (0.4 + 0.3 * Math.abs(x - qi)) * 4 * t * (1 - t)]); } g.path(pts, { color: alpha(colr, 0.2 + 0.8 * w), width: 1 + 16 * w }); }
+          else { const pts = []; for (let i = 0; i <= 24; i++) { const t = i / 24; pts.push([qi + (x - qi) * t, -0.55 - (0.25 + 0.2 * Math.abs(x - qi)) * 4 * t * (1 - t)]); } g.path(pts, { color: alpha(colr, 0.2 + 0.8 * w), width: 1 + 16 * w }); }
         });
       }
       // tokens + their value colors
@@ -110,19 +111,20 @@ export default {
         g.circle([x, 0], 0.36, { fill: 'panel' });
         if (id === s.q) g.circle([x, 0], 0.42, { fill: alpha('gold', 0.25) });
         g.emoji(TOK[id], [x, 0], 30);
-        if (s.beat >= 3) g.rrect(x - 0.2, -0.95, 0.4, 0.28, 5, { fill: VAL[id] });
+        if (s.beat === 3) g.rrect(x - 0.2, -0.95, 0.4, 0.28, 5, { fill: VAL[id] });
       });
       // positional waves under the tokens
       if (s.pe) {
         for (let k = 0; k < 2; k++) {
           const pts = [];
-          for (let i = 0; i <= 100; i++) { const x = -0.3 + 5.6 * i / 100; pts.push([x, -1.75 - k * 0.45 + 0.17 * positionalEncoding(x, 4)[k]]); }
-          g.path(pts, { color: alpha('pink', 0.7), width: 2 });
-          for (let j = 0; j < 6; j++) g.dot([j, -1.75 - k * 0.45 + 0.17 * positionalEncoding(j, 4)[k]], 4, { color: 'pink' });
+          const yw = -1.95 - k * 0.38;
+          for (let i = 0; i <= 100; i++) { const x = -0.3 + 5.6 * i / 100; pts.push([x, yw + 0.15 * positionalEncoding(x, 4)[k]]); }
+          g.path(pts, { color: alpha('pink', 0.55), width: 2 });
+          for (let j = 0; j < 6; j++) g.dot([j, yw + 0.15 * positionalEncoding(j, 4)[k]], 4, { color: 'pink' });
         }
       }
       // the output: blend of value colors
-      if (s.beat >= 3) {
+      if (s.beat === 3) {
         const out = m.h1.out[qi];
         const x = qi;
         g.arrow([x, -1.05], [x, s.pe ? -2.05 : -1.55], { color: 'muted', width: 2 });

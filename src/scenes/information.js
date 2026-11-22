@@ -33,7 +33,7 @@ export default {
     const B = () => {
       if (s.beat <= 1) return stage.portrait ? [-5, -2.4, 5, 5.4] : [-5.4, -2.6, 5.4, 4.3];
       if (s.beat === 2) return stage.portrait ? [-5, -3, 5, 4.6] : [-5.4, -2.6, 5.4, 4.0];
-      return stage.portrait ? [-5, -5.6, 5, 5.4] : [-5.6, -1.7, 5.8, 3.9];
+      return stage.portrait ? [-5, -5.6, 5, 5.4] : [-5.6, -1.7, 5.8, 2.9];
     };
     const fit = () => { const b = B(); if (!s.b || s.b.join() !== b.join()) { s.b = b; g.setBounds(b); } };
 
