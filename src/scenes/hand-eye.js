@@ -66,7 +66,7 @@ export default {
   setup({ stage, ui }) {
     const tall = stage.portrait;
     const g = stage.g;
-    const v = new View3D(g, { yaw: -0.55, pitch: 0.38, dist: tall ? 3.0 : 2.15, target: [0, 0, 0.62] });
+    const v = new View3D(g, { yaw: -0.55, pitch: 0.38, dist: tall ? 2.5 : 2.15, target: [0, 0, 0.62] });
     const s = {
       beat: 0, n: 0, noise: 0, seed: 2, t: 0, move: 1, from: POSES[0], to: POSES[0], cyc: 0, list: POSES,
       Xhat: homog([[1, 0, 0], [0, 1, 0], [0, 0, 1]], [0, 0, 0]), Xshow: null, Xfrom: null, xk: 1, phi: 0,
@@ -102,7 +102,7 @@ export default {
       // 🚫: the one motion turns the camera about its own lens axis → that spin can't be seen
       s.list = b === 3 ? [POSES[0], SPIN, ...POSES.slice(2)] : POSES;
       if (b === 3) { s.n = 1; s.noise = 0; noiseS.set(0); goTo(1); v.target = transOf(mmul(POSES[0], X_TRUE)); v.dist = tall ? 1.7 : 1.25; }
-      else { v.target = [0, 0, 0.62]; v.dist = tall ? 3.0 : 2.15; }
+      else { v.target = [0, 0, 0.62]; v.dist = tall ? 2.5 : 2.15; }
       measure(); resolve(false);
     });
     ui.button({ icon: '➕', title: 'add a motion', onClick: () => {
