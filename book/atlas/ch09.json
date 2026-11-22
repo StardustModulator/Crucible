@@ -1,0 +1,864 @@
+{
+ "id": "ch09",
+ "title": "Future Prospects",
+ "pdfPages": [
+  413,
+  420
+ ],
+ "sections": [
+  {
+   "id": "9",
+   "title": "Future Prospects",
+   "book": 395
+  },
+  {
+   "id": "9.1",
+   "title": "Robots in Hazardous Environments",
+   "book": 396
+  },
+  {
+   "id": "9.2",
+   "title": "Medical Applications for Multifingered Hands",
+   "book": 398
+  },
+  {
+   "id": "9.3",
+   "title": "Robots on a Small Scale: Microrobotics",
+   "book": 399
+  }
+ ],
+ "scenes": [
+  {
+   "id": "mls-ch9-teleop-to-autonomy",
+   "title": "Human or Robot?",
+   "icon": "🧑‍✈️",
+   "section": "9",
+   "pages": [
+    395,
+    396
+   ],
+   "uses": [
+    "virtual-fixtures",
+    "pid",
+    "poles"
+   ],
+   "exists": "virtual-fixtures",
+   "beats": [
+    "🗺️ the robot frontier map",
+    "🧑‍✈️ human in the loop",
+    "⏳ delay breaks the loop",
+    "🥽 feel it from afar"
+   ],
+   "brief": "A zoomable \"frontier map\" with three size bands (meter, millimeter, micrometer) holding robot emoji that open the other chapter-9 scenes. Center stage: a slate pole-balancing task with an orange joystick for the learner (human 🧑) or an autonomous loop (🤖). An orange slider adds round-trip delay; the pink cart response lags, a coral overshoot trace grows, and a phase-lag dial shows the loop going unstable past a threshold. A purple haptic-feedback arrow on the joystick shows force reflected back (telepresence)."
+  },
+  {
+   "id": "mls-ch9-hazard-robots",
+   "title": "Danger Zones",
+   "icon": "☢️",
+   "section": "9.1",
+   "pages": [
+    396,
+    398
+   ],
+   "uses": [
+    "forward-kinematics",
+    "rrt",
+    "occupancy-grid"
+   ],
+   "exists": "forward-kinematics",
+   "beats": [
+    "🚀 space arms",
+    "🌊 under the sea",
+    "☢️ dirty & dangerous jobs",
+    "🔥 fire, farm & field"
+   ],
+   "brief": "A carousel of slate worlds: orbit (long arm on a shuttle bay), seabed (tethered vehicle with a hydraulic arm), reactor/mine (arm on a tracked cart behind a lead wall), burning building (legged bot on stairs), orchard (hand picking gold oranges). Each world has a coral \"human risk\" meter and a \"signal delay\" clock; dragging the world farther from Earth or deeper under water raises the delay until the orange joystick greys out and the robot must plan on its own (blue planned path)."
+  },
+  {
+   "id": "mls-ch9-keyhole-hands",
+   "title": "Keyhole Hands",
+   "icon": "🩺",
+   "section": "9.2",
+   "pages": [
+    398,
+    399
+   ],
+   "uses": [
+    "jacobian",
+    "manipulability",
+    "cspace"
+   ],
+   "exists": "manipulability",
+   "beats": [
+    "🕳️ surgery through a keyhole",
+    "📍 the fulcrum steals freedom",
+    "🫨 shaky hands",
+    "🖐️ a tiny dextrous hand"
+   ],
+   "brief": "Cutaway of a body wall (slate) with a small hole. A straight orange tool passes through the hole; the hole is a fixed pivot so the tool can only slide, twist, and tilt two ways (4 lime arrows; 2 coral crossed-out arrows for the missing tip orientations). The tip-orientation sphere shows only a thin reachable band. A shaky-hand slider adds purple tremor that the fulcrum filters only in the pivot directions. Toggle \"add a wrist/fingers\": a tiny multifingered pink hand at the tip restores full 6 lime arrows and the orientation sphere fills in."
+  },
+  {
+   "id": "mls-ch9-microrobots",
+   "title": "Tiny Robots",
+   "icon": "🔬",
+   "section": "9.3",
+   "pages": [
+    399,
+    401
+   ],
+   "uses": [
+    "statics",
+    "vectors"
+   ],
+   "beats": [
+    "🔬 shrink the robot",
+    "⚡ forces scale differently",
+    "🛸 platforms on an air cushion",
+    "📄 fold flat into 3D"
+   ],
+   "brief": "A size slider (meter → micron) shrinks a robot gripper. Bars for weight (∝ L³), electrostatic pull (∝ L²) and sticky surface forces (∝ L) re-rank as the size shrinks: gravity bar collapses, electrostatic bar wins. Next, a teal chip with blue square platforms floating on purple air jets, pushed by orange electrode pulses; drag a gold target and platforms glide. Last, a flat pink cut-out folds along hinges like origami into a 3D gripper when the water bath is shaken."
+  }
+ ],
+ "pages": [
+  {
+   "pdf": 413,
+   "book": 395,
+   "lines": 32,
+   "section": "9",
+   "summary": "The closing chapter surveys where robotics is heading and frames teleoperation as the natural first step toward autonomy.",
+   "atoms": [
+    {
+     "id": "9-395-a",
+     "lines": [
+      1,
+      2
+     ],
+     "kind": "heading",
+     "idea": "Chapter 9 title: an outlook on future uses of robots."
+    },
+    {
+     "id": "9-395-b",
+     "lines": [
+      3,
+      15
+     ],
+     "kind": "prose",
+     "idea": "The book chose compact mathematics, which hides the excitement: robots are already standard in car welding/painting and electronics assembly, while many other fields are only starting; the chapter surveys those.",
+     "feynman": "Like a chef who taught you knife skills from a textbook and now walks you to the window to show the whole restaurant street you could open a shop on.",
+     "visual": "Frontier map: three horizontal bands (meter, millimeter, micrometer). Lime filled robot icons in the \"factory\" corner (welding sparks, spray paint); hollow orange icons scattered elsewhere pulse as \"still growing\". Tapping an icon zooms into its scene.",
+     "scene": "mls-ch9-teleop-to-autonomy",
+     "beat": "🗺️ the robot frontier map",
+     "math": [
+      "forward-kinematics"
+     ],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "9-395-c",
+     "lines": [
+      16,
+      27
+     ],
+     "kind": "prose",
+     "idea": "Teleoperation and robotics use the same hardware; they differ in whether a human or the machine closes the decision loop. New devices usually appear teleoperated first, but there are reasons to remove the human from the loop.",
+     "feynman": "A remote-control toy car vs. a robot vacuum: same wheels and motors, but in one your thumb decides every turn.",
+     "visual": "Pole-balancing cart: a toggle swaps the brain icon above the loop arrow between 🧑 and 🤖. Same orange motor arrows, same pink cart; only the loop arrow's source changes.",
+     "scene": "mls-ch9-teleop-to-autonomy",
+     "beat": "🧑‍✈️ human in the loop",
+     "math": [
+      "pid"
+     ],
+     "engine": [
+      "control.PID"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "9-395-d",
+     "lines": [
+      28,
+      31
+     ],
+     "kind": "prose",
+     "idea": "Two reasons against a human in the loop: transmission delays for sensing and commanding, and slow human reaction to numerical data.",
+     "feynman": "Steering a car by phone with a friend who describes the road three seconds late: you crash on every curve.",
+     "visual": "Delay slider (orange) on the round-trip link; the pink cart response trails a ghost of the ideal; a coral wobble trace grows and the pole falls once delay passes a marked threshold. A second slider slows the \"human reaction\" stopwatch.",
+     "scene": "mls-ch9-teleop-to-autonomy",
+     "beat": "⏳ delay breaks the loop",
+     "math": [
+      "poles",
+      "pid"
+     ],
+     "engine": [
+      "control.PID",
+      "NEW: delayLoop"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "9-395-e",
+     "lines": [
+      32,
+      32
+     ],
+     "kind": "page-number",
+     "idea": "Page 395"
+    }
+   ]
+  },
+  {
+   "pdf": 414,
+   "book": 396,
+   "lines": 41,
+   "section": "9.1",
+   "summary": "Teleoperators are treated as tomorrow's autonomous robots; telepresence ties to virtual reality; the survey is ordered by robot size, starting with hazardous environments and space.",
+   "atoms": [
+    {
+     "id": "9-396-a",
+     "lines": [
+      1,
+      3
+     ],
+     "kind": "prose",
+     "idea": "The authors treat today's teleoperated machines and tomorrow's autonomous ones as one family.",
+     "feynman": "A bike with training wheels is still the same bike you will ride alone later.",
+     "visual": "In the human/robot toggle, a slow fade lets the 🧑 hand gradually lift off the joystick as the 🤖 loop takes over a growing fraction (orange bar).",
+     "scene": "mls-ch9-teleop-to-autonomy",
+     "beat": "🧑‍✈️ human in the loop",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "9-396-b",
+     "lines": [
+      4,
+      14
+     ],
+     "kind": "prose",
+     "idea": "Virtual reality synthesizes sights, sounds, touch and force; vision and sound are easy to deliver remotely, touch and force are hard. Remote manipulation (telepresence) needs all of them, so most VR work is really telepresence.",
+     "feynman": "Video-calling a friend lets you see and hear their cat, but you can't feel it purr; to pet it remotely you'd need the fur to push back on your hand.",
+     "visual": "Joystick with a purple force-feedback arrow: when the remote pink gripper presses a teal object, the purple arrow pushes back on the orange stick; toggling haptics off makes the gripper crush the object (coral flash).",
+     "scene": "mls-ch9-teleop-to-autonomy",
+     "beat": "🥽 feel it from afar",
+     "math": [
+      "virtual-fixtures",
+      "impedance"
+     ],
+     "engine": [
+      "NEW: hapticReflect"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "9-396-c",
+     "lines": [
+      15,
+      21
+     ],
+     "kind": "prose",
+     "idea": "Progress will span teleoperation, virtual reality and dextrous manipulation; the chapter is organized by robot scale: conventional, millimeter, and micro/nano.",
+     "feynman": "Like a set of nesting dolls: big robot, little robot, tiny robot, each opened in turn.",
+     "visual": "The frontier map's zoom slider snaps through three scale bands (1 m, 1 mm, 1 µm), each lighting up its scene icon.",
+     "scene": "mls-ch9-teleop-to-autonomy",
+     "beat": "🗺️ the robot frontier map",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "9-396-d",
+     "lines": [
+      22,
+      22
+     ],
+     "kind": "heading",
+     "idea": "Section 9.1: robots in hazardous environments."
+    },
+    {
+     "id": "9-396-e",
+     "lines": [
+      23,
+      26
+     ],
+     "kind": "prose",
+     "idea": "Conventional-size robots are most promising where people are at risk.",
+     "feynman": "Send the toy truck, not your hand, into the hot oven.",
+     "visual": "Danger-zone carousel opens; each world shows a coral human-risk meter beside a robot icon.",
+     "scene": "mls-ch9-hazard-robots",
+     "beat": "🚀 space arms",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "9-396-f",
+     "lines": [
+      27,
+      27
+     ],
+     "kind": "heading",
+     "idea": "Subheading: space."
+    },
+    {
+     "id": "9-396-g",
+     "lines": [
+      28,
+      40
+     ],
+     "kind": "prose",
+     "idea": "Space examples: a long six-joint arm on the shuttle, normally teleoperated by sight but able to move in Cartesian mode under computer control; planned two-arm satellite servicers; planetary rovers with sampling arms that must act alone because signal delay is too long.",
+     "feynman": "Playing catch with someone on the Moon: by the time your \"now!\" arrives, the ball has already landed.",
+     "visual": "Orbit world: a long 6-joint arm (orange joints) on a shuttle bay grabs a gold satellite. Drag the world from orbit to Mars: the delay clock grows from 0 s to minutes, the joystick greys out, and the rover's blue planned path to a gold rock appears instead.",
+     "scene": "mls-ch9-hazard-robots",
+     "beat": "🚀 space arms",
+     "math": [
+      "forward-kinematics",
+      "rrt"
+     ],
+     "engine": [
+      "kinematics.poeFK"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "9-396-h",
+     "lines": [
+      41,
+      41
+     ],
+     "kind": "page-number",
+     "idea": "Page 396"
+    }
+   ]
+  },
+  {
+   "pdf": 415,
+   "book": 397,
+   "lines": 41,
+   "section": "9.1",
+   "summary": "Hazardous-environment robots underwater, in nuclear/toxic/mining work, and in firefighting, construction, agriculture and meat processing.",
+   "atoms": [
+    {
+     "id": "9-397-a",
+     "lines": [
+      1,
+      1
+     ],
+     "kind": "heading",
+     "idea": "Subheading: underwater."
+    },
+    {
+     "id": "9-397-b",
+     "lines": [
+      2,
+      13
+     ],
+     "kind": "prose",
+     "idea": "Remotely operated underwater vehicles inspect rigs and explore, replacing costly, risky divers; they are tethered or free platforms with arms, usually hydraulic for strength and corrosion; fully autonomous ones will grow where human reaction is too slow.",
+     "feynman": "A puppet on a long string dangled into a deep well: the deeper it goes, the more you wish it could think for itself.",
+     "visual": "Seabed world: a blue vehicle on a slate umbilical with a hydraulic arm (thick orange joints). Cut-tether toggle: the vehicle must explore by itself, revealing a teal occupancy map of the seafloor.",
+     "scene": "mls-ch9-hazard-robots",
+     "beat": "🌊 under the sea",
+     "math": [
+      "occupancy-grid"
+     ],
+     "engine": [
+      "estimation.rayCells"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "9-397-c",
+     "lines": [
+      14,
+      14
+     ],
+     "kind": "heading",
+     "idea": "Subheading: nuclear, toxic waste and mining."
+    },
+    {
+     "id": "9-397-d",
+     "lines": [
+      15,
+      23
+     ],
+     "kind": "prose",
+     "idea": "Robotics grew partly out of manipulators for radioactive material; mobile robots with arms now inspect, maintain and handle spent fuel; toxic-waste and mining robots will spread.",
+     "feynman": "The long tongs you use to grab a hot coal from a fire, grown into a whole machine.",
+     "visual": "Reactor world: a master arm on the safe side of a slate lead wall mirrors its motion onto a slave arm on the coral hot side moving glowing rods; the coral dose meter stays at zero on the human side.",
+     "scene": "mls-ch9-hazard-robots",
+     "beat": "☢️ dirty & dangerous jobs",
+     "math": [
+      "forward-kinematics"
+     ],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "9-397-e",
+     "lines": [
+      24,
+      24
+     ],
+     "kind": "heading",
+     "idea": "Subheading: firefighting, construction, agriculture."
+    },
+    {
+     "id": "9-397-f",
+     "lines": [
+      25,
+      37
+     ],
+     "kind": "prose",
+     "idea": "Fire robots could get building maps, sense heat/smoke, drag hoses and send video, needing legs as well as wheels for stairs; automated construction is young; vision-guided multifingered hands have picked fruit and harvested crops.",
+     "feynman": "A firefighter dog that already knows the floor plan and carries the hose up the stairs.",
+     "visual": "Fire world: a legged robot follows a gold path up slate stairs where a wheeled one stalls (coral 🚫). Orchard world: a pink multifingered hand closes on a gold orange; a teal camera cone finds it first.",
+     "scene": "mls-ch9-hazard-robots",
+     "beat": "🔥 fire, farm & field",
+     "math": [
+      "graph-search",
+      "camera"
+     ],
+     "engine": [
+      "planning.astar"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "9-397-g",
+     "lines": [
+      38,
+      40
+     ],
+     "kind": "prose",
+     "idea": "Robots have also been used for deboning meat and for shearing sheep, the latter needing a singularity-free wrist.",
+     "feynman": "A barber who must follow the curves of a wiggly customer without ever getting their elbow locked.",
+     "visual": "Wrist close-up: a standard 3-joint wrist sweeps its orientation sphere; at a coral pole it locks (manipulability ellipse flattens). Switch to the redesigned wrist: the coral pole is pushed outside the lime working zone.",
+     "scene": "mls-ch9-hazard-robots",
+     "beat": "🔥 fire, farm & field",
+     "math": [
+      "manipulability",
+      "euler-angles"
+     ],
+     "engine": [
+      "kinematics.manipulability"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "9-397-h",
+     "lines": [
+      41,
+      41
+     ],
+     "kind": "page-number",
+     "idea": "Page 397"
+    }
+   ]
+  },
+  {
+   "pdf": 416,
+   "book": 398,
+   "lines": 42,
+   "section": "9.2",
+   "summary": "Minimally invasive surgery is booming but is limited by tools that pivot at the incision and lack degrees of freedom.",
+   "atoms": [
+    {
+     "id": "9-398-a",
+     "lines": [
+      1,
+      2
+     ],
+     "kind": "prose",
+     "idea": "The shearing robot's wrist was designed to have no singularities inside the workspace [114].",
+     "feynman": "A neck that can look anywhere you need without ever getting stuck staring straight up.",
+     "visual": "Continuation of the wrist close-up: the lime workspace patch on the orientation sphere never touches the coral singular point.",
+     "scene": "mls-ch9-hazard-robots",
+     "beat": "🔥 fire, farm & field",
+     "math": [
+      "manipulability"
+     ],
+     "engine": [
+      "kinematics.manipulability"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "9-398-b",
+     "lines": [
+      3,
+      3
+     ],
+     "kind": "heading",
+     "idea": "Section 9.2: medical applications for multifingered hands."
+    },
+    {
+     "id": "9-398-c",
+     "lines": [
+      4,
+      29
+     ],
+     "kind": "prose",
+     "idea": "Minimally invasive surgery reaches organs through incisions of a few millimeters, cutting recovery time and risk; slender probes carry light, cameras and tools; modern imagers give clear internal views; scope types are matched to body cavities; such procedures, e.g. gall bladder removal, have become routine and may overtake open surgery.",
+     "feynman": "Building a ship in a bottle: everything goes through the neck, and you watch through the glass.",
+     "visual": "Cutaway: a slate body wall with three small ports; a teal camera cone lights a gold organ; orange tools slide in. A counter compares incision length (open vs. keyhole) with a shrinking coral recovery bar.",
+     "scene": "mls-ch9-keyhole-hands",
+     "beat": "🕳️ surgery through a keyhole",
+     "math": [
+      "camera"
+     ],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "9-398-d",
+     "lines": [
+      30,
+      41
+     ],
+     "kind": "prose",
+     "idea": "The bottleneck is manipulator technology: passive tools transmit hand motion poorly and block touch; a tool pivoting in a port has only four freedoms (slide, twist, two tilts), so orientation is not fully controlled and stitches must radiate from the port.",
+     "feynman": "A chopstick pushed through a hole in a cardboard box: you can poke, spin and tip it, but never bend its tip sideways inside.",
+     "visual": "The tool pivots about the hole (fixed orange ring). Four lime arrows (slide, twist, tilt-x, tilt-y); two coral crossed arrows for missing tip yaw/pitch. Drawing a stitch line: only lines through the port's shadow turn lime.",
+     "scene": "mls-ch9-keyhole-hands",
+     "beat": "📍 the fulcrum steals freedom",
+     "math": [
+      "jacobian",
+      "cspace"
+     ],
+     "engine": [
+      "NEW: rcmConstraint"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "9-398-e",
+     "lines": [
+      42,
+      42
+     ],
+     "kind": "page-number",
+     "idea": "Page 398"
+    }
+   ]
+  },
+  {
+   "pdf": 417,
+   "book": 399,
+   "lines": 42,
+   "section": "9.3",
+   "summary": "Fine-motion and tremor limits motivate miniature multifingered surgical hands, teleoperated at first; then microrobotics is introduced.",
+   "atoms": [
+    {
+     "id": "9-399-a",
+     "lines": [
+      1,
+      7
+     ],
+     "kind": "prose",
+     "idea": "Second limit: fine control. Open surgeons brace against tremor; in keyhole surgery the fulcrum damps tremor in pivoting but not in other directions driven by shoulder and elbow shake.",
+     "feynman": "Writing with a long pencil pushed through a hole: wiggles side-to-side get shrunk by the hole, but pushing in and out still shakes.",
+     "visual": "Tremor slider adds purple jitter to the surgeon's hand. Tip trace: jitter is scaled down in the two tilt directions (lever ratio readout) but passes straight through along the slide axis.",
+     "scene": "mls-ch9-keyhole-hands",
+     "beat": "🫨 shaky hands",
+     "math": [
+      "gaussian",
+      "jacobian"
+     ],
+     "engine": [
+      "random.rng"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "9-399-b",
+     "lines": [
+      8,
+      23
+     ],
+     "kind": "prose",
+     "idea": "Many-DOF manipulators would help but are kinematically hard; tiny multifingered hands are proposed. At millimeter size, joints cannot be driven directly, so cables or micro-hydraulics are used, built with chip-fabrication methods; materials are strong enough, but actuators lack range of motion.",
+     "feynman": "A marionette hand moved by strings because there is no room for motors inside the tiny fingers.",
+     "visual": "Toggle \"add fingers\": a pink three-fingered hand unfolds at the tool tip; orange cables run back along the shaft; the orientation sphere fills from a thin band to full lime. A range-of-motion arc per joint shows small coral limits.",
+     "scene": "mls-ch9-keyhole-hands",
+     "beat": "🖐️ a tiny dextrous hand",
+     "math": [
+      "forward-kinematics",
+      "manipulability"
+     ],
+     "engine": [
+      "kinematics.poeFK"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "9-399-c",
+     "lines": [
+      24,
+      30
+     ],
+     "kind": "prose",
+     "idea": "Initially the surgeon would drive the hand by teleoperation: a sensor glove measures finger positions and feeds back touch and force [19].",
+     "feynman": "A glove puppet in reverse: your fingers move and a tiny hand far away copies them and tells you what it feels.",
+     "visual": "Glove on the left: orange finger joints. Mini hand on the right mirrors them; when it touches teal tissue, a purple pressure bubble appears on the matching glove fingertip.",
+     "scene": "mls-ch9-keyhole-hands",
+     "beat": "🖐️ a tiny dextrous hand",
+     "math": [
+      "virtual-fixtures"
+     ],
+     "engine": [
+      "NEW: hapticReflect"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "9-399-d",
+     "lines": [
+      31,
+      34
+     ],
+     "kind": "prose",
+     "idea": "Remote surgery could serve battlefields and space; smarter, sensing manipulators point toward surgical workstations.",
+     "feynman": "A doctor who can operate on a patient on the other side of the world, like a pilot flying a drone.",
+     "visual": "Frontier map link: a dashed line from a surgeon console to a field tent and a space station; the delay clock appears again on the long link.",
+     "scene": "mls-ch9-keyhole-hands",
+     "beat": "🖐️ a tiny dextrous hand",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "9-399-e",
+     "lines": [
+      35,
+      35
+     ],
+     "kind": "heading",
+     "idea": "Section 9.3: microrobotics."
+    },
+    {
+     "id": "9-399-f",
+     "lines": [
+      36,
+      41
+     ],
+     "kind": "prose",
+     "idea": "Handling cells or chip parts needs scales orders of magnitude below surgical millirobots: micro and nano robots.",
+     "feynman": "Lego for ants.",
+     "visual": "Size slider sweeps from a hand (1 m) past a surgical gripper (1 mm) to a cell (10 µm); the robot shrinks alongside with a log-scale ruler.",
+     "scene": "mls-ch9-microrobots",
+     "beat": "🔬 shrink the robot",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "9-399-g",
+     "lines": [
+      42,
+      42
+     ],
+     "kind": "page-number",
+     "idea": "Page 399"
+    }
+   ]
+  },
+  {
+   "pdf": 418,
+   "book": 400,
+   "lines": 44,
+   "section": "9.3",
+   "summary": "Shrinking robots to part size brings gentler forces, accuracy and chip-style fabrication; micromachining and scaling of forces change actuation; an integrated chip of air-bearing platforms is described.",
+   "atoms": [
+    {
+     "id": "9-400-a",
+     "lines": [
+      1,
+      9
+     ],
+     "kind": "prose",
+     "idea": "Small objects can be handled by a huge precise arm or by a miniature robot; shrinking gives gentle forces, better accuracy and batch silicon fabrication.",
+     "feynman": "Picking up a crumb with tweezers instead of a forklift.",
+     "visual": "Split screen: a giant blue arm with a tiny pink tip vs. a micro gripper the size of the teal part. A \"push force\" bar for each: the micro one is naturally gentle.",
+     "scene": "mls-ch9-microrobots",
+     "beat": "🔬 shrink the robot",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "9-400-b",
+     "lines": [
+      10,
+      16
+     ],
+     "kind": "prose",
+     "idea": "Robots on a chip were popularized by several groups [16, 91–93]; they envision micro-teleoperation in cramped spaces and massively parallel handling of tiny parts; challenges are summarized from [31].",
+     "feynman": "An ant colony: many tiny workers each carrying one grain, all at once.",
+     "visual": "A grid of dozens of identical micro grippers each grabs a teal grain simultaneously; a counter shows parts moved per second vs. a single big arm.",
+     "scene": "mls-ch9-microrobots",
+     "beat": "🔬 shrink the robot",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "9-400-c",
+     "lines": [
+      17,
+      30
+     ],
+     "kind": "prose",
+     "idea": "Micro systems need power, propulsion, sensing-plus-control and communication; micromachining builds cilia arrays, tiny grippers, rotary motors and gyros; at small scale electrostatic forces dominate electromagnetic ones, so actuation must be rethought.",
+     "feynman": "A dust speck sticks to your TV screen and ignores gravity: at its size, static cling beats weight.",
+     "visual": "Scaling race: as the size slider shrinks L, bars for weight (∝L³), magnetic (∝L³–L⁴) and electrostatic (∝L²) forces re-rank live; a crossover point flashes when electrostatic becomes the tallest bar.",
+     "scene": "mls-ch9-microrobots",
+     "beat": "⚡ forces scale differently",
+     "math": [
+      "statics"
+     ],
+     "engine": [
+      "NEW: scalingLaws"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "9-400-d",
+     "lines": [
+      31,
+      41
+     ],
+     "kind": "prose",
+     "idea": "An integrated planar manipulation chip [92]: a 1 cm² silicon bed with an air bearing floats 1 mm² platforms driven electrostatically, carrying grippers/probes/tools, with capacitive position sensing; modeled on a macro planar robot system and aimed at aligning and splicing optical fibers (Fig 9.1).",
+     "feynman": "Air-hockey pucks that are steered by invisible tugs from the table instead of by mallets.",
+     "visual": "Teal chip with purple air jets; blue square platforms hover. Orange electrode strips pulse in sequence to tug a platform toward a dragged gold target; teal capacitive sensors read its position (number readout).",
+     "scene": "mls-ch9-microrobots",
+     "beat": "🛸 platforms on an air cushion",
+     "math": [
+      "pid"
+     ],
+     "engine": [
+      "control.PID"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "9-400-e",
+     "lines": [
+      42,
+      43
+     ],
+     "kind": "prose",
+     "idea": "Today's micro-mechanisms are mostly flat.",
+     "feynman": "Like stickers: everything printed lies flat on the sheet.",
+     "visual": "All parts on the chip lie in one plane; tilting the camera shows zero height.",
+     "scene": "mls-ch9-microrobots",
+     "beat": "📄 fold flat into 3D",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "9-400-f",
+     "lines": [
+      44,
+      44
+     ],
+     "kind": "page-number",
+     "idea": "Page 400"
+    }
+   ]
+  },
+  {
+   "pdf": 419,
+   "book": 401,
+   "lines": 27,
+   "section": "9.3",
+   "summary": "Figure of floating probe platforms; micro-hinges let flat-fabricated parts fold up into 3D; outlook on explosive growth of microrobots.",
+   "atoms": [
+    {
+     "id": "9-401-a",
+     "lines": [
+      1,
+      14
+     ],
+     "kind": "figure",
+     "label": "Fig 9.1",
+     "idea": "Figure: several probing platforms floating on a shared air-bearing surface, and a close-up of one platform with its probe, sensing circuitry, air holes and electrodes.",
+     "feynman": "A tray of floating pucks, each with its own little feeler poking out.",
+     "visual": "Exploded view of one blue platform: purple air holes below, orange electrodes at the edges, teal sensing patch, pink probe tip; zoom out to many platforms gliding on one bed.",
+     "scene": "mls-ch9-microrobots",
+     "beat": "🛸 platforms on an air cushion",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "9-401-b",
+     "lines": [
+      15,
+      22
+     ],
+     "kind": "prose",
+     "idea": "3D micro-structures can be made by fabricating flat pieces with micro-hinges that rotate or slide into place; origami-inspired designs can self-assemble when agitated in water after fabrication [93].",
+     "feynman": "A pop-up birthday card: printed flat, it stands up into a castle when you open it.",
+     "visual": "A flat pink cut-out with orange hinge lines; a \"shake\" button jiggles the water bath and the panels rotate about their hinges into a 3D gripper (rotation angles counted up to 90°).",
+     "scene": "mls-ch9-microrobots",
+     "beat": "📄 fold flat into 3D",
+     "math": [
+      "rotation"
+     ],
+     "engine": [
+      "lie.rotX"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "9-401-c",
+     "lines": [
+      23,
+      26
+     ],
+     "kind": "prose",
+     "idea": "Outlook: rapid growth of swimming micro-machined robots and tiny multifingered manipulators for biology and electronics.",
+     "feynman": "Like seeds scattered across a field, a forest of tiny robots is about to sprout.",
+     "visual": "Frontier map finale: the micrometer band fills with swimming robot icons and tiny hands, all pulsing lime.",
+     "scene": "mls-ch9-microrobots",
+     "beat": "📄 fold flat into 3D",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "9-401-d",
+     "lines": [
+      27,
+      27
+     ],
+     "kind": "page-number",
+     "idea": "Page 401"
+    }
+   ]
+  },
+  {
+   "pdf": 420,
+   "book": 402,
+   "lines": 1,
+   "section": "9",
+   "summary": "Blank page carrying only its page number.",
+   "atoms": [
+    {
+     "id": "9-402-a",
+     "lines": [
+      1,
+      1
+     ],
+     "kind": "page-number",
+     "idea": "Page 402"
+    }
+   ]
+  }
+ ]
+}
