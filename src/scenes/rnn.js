@@ -55,9 +55,9 @@ function runLSTM(seq) {
 
 export default {
   eq: [
-    ['RNN:  ', ['hₜ', 'purple'], ' = tanh(', ['W', 'blue'], ' ', ['hₜ₋₁', 'purple'], ' + ', ['U', 'blue'], ' ', ['xₜ', 'teal'], ')'],
+    ['RNN:  ', ['hₜ', 'blue'], ' = tanh(', ['W', 'blue'], ' ', ['hₜ₋₁', 'blue'], ' + ', ['U', 'blue'], ' ', ['xₜ', 'teal'], ')'],
     [['∂h_T/∂hₜ', 'coral'], ' = ∏ diag(1 − h²) ', ['W', 'blue'], '   → shrinks like 0.9ᵏ  🌫️'],
-    ['LSTM:  ', ['cₜ', 'gold'], ' = ', ['f', 'lime'], ' ⊙ ', ['cₜ₋₁', 'gold'], ' + ', ['i', 'lime'], ' ⊙ tanh(…),    ', ['hₜ', 'purple'], ' = ', ['o', 'lime'], ' ⊙ tanh(', ['cₜ', 'gold'], ')'],
+    ['LSTM:  ', ['cₜ', 'gold'], ' = ', ['f', 'lime'], ' ⊙ ', ['cₜ₋₁', 'gold'], ' + ', ['i', 'lime'], ' ⊙ tanh(…),    ', ['hₜ', 'blue'], ' = ', ['o', 'lime'], ' ⊙ tanh(', ['cₜ', 'gold'], ')'],
     ['gates ', ['f, i, o', 'lime'], ' = σ(…) ∈ (0, 1) — door openness;    ', ['∂c_T/∂cₜ', 'coral'], ' = ∏ ', ['f', 'lime'], ' ≈ 1  🚪'],
     ['(gate weights here are set by hand to show the mechanism; training finds similar ones)'],
   ],

@@ -20,12 +20,12 @@ const rgb = (c) => { const h = C[c]; if (h?.startsWith('#')) { const n = parseIn
 
 export default {
   eq: [
-    [['Q', 'gold'], ' = X ', ['W_Q', 'gold'], ',   ', ['K', 'blue'], ' = X ', ['W_K', 'blue'], ',   ', ['V', 'pink'], ' = X ', ['W_V', 'pink']],
+    [['Q', 'gold'], ' = X ', ['W_Q', 'gold'], ',   ', ['K', 'blue'], ' = X ', ['W_K', 'blue'], ',   ', ['V', 'ink'], ' = X W_V   (each token’s value = its color swatch)'],
     ['scores = ', ['Q', 'gold'], ' ', ['Kᵀ', 'blue'], ' / √d        (dot product = how well the arrows line up)'],
     [['A', 'purple'], ' = softmax(scores)  — each row is a pie that sums to 1 (line thickness)'],
-    ['out = ', ['A', 'purple'], ' ', ['V', 'pink'], '        (a blend of the value colors)'],
+    ['out = ', ['A', 'purple'], ' ', ['V', 'ink'], '        (a blend of the value colors)'],
     ['PE(pos, 2i) = sin(pos / 10000^(2i/d)),   PE(pos, 2i+1) = cos(…)   — added so order matters 🌊'],
-    ['multi-head: several (', ['W_Q', 'gold'], ', ', ['W_K', 'blue'], ') pairs look for different things at once'],
+    ['multi-head: several (', ['W_Q', 'gold'], ', ', ['W_K', 'blue'], ') pairs look for different things at once — ', ['meaning head', 'blue'], ',  ', ['position head', 'pink'], ' (looks one step left)'],
   ],
   setup({ stage, ui }) {
     const [Lp, Rp] = stage.split([[-0.8, -2.5, 5.8, 3.3], [-0.2, -0.2, 7.4, 7.0]], [1.15, 1]);

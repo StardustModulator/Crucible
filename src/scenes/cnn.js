@@ -30,7 +30,7 @@ const KN = Object.keys(KERNELS);
 
 export default {
   eq: [
-    [['out', 'pink'], '[i, j] = Σᵤ Σᵥ ', ['K', 'orange'], '[u, v] · ', ['img', 'teal'], '[i+u, j+v]        (one stamp = 9 multiplies + 1 sum)'],
+    [['out', 'pink'], '[i, j] = Σᵤ Σᵥ ', ['K', 'orange'], '[u, v] · ', ['img', 'ink'], '[i+u, j+v]        (one stamp = 9 multiplies + 1 sum)'],
     ['edge stamp  ', ['K', 'orange'], ' = [−1 0 1; −2 0 2; −1 0 1]     blur = all ', ['1/9', 'orange']],
     [['pool', 'gold'], '[i, j] = max of each 2×2 block        (keeps the strongest answer, ¼ the size)'],
     ['receptive field after n stacked 3×3 layers:  (2n + 1) × (2n + 1)  →  3, 5, 7 …'],

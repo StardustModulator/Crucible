@@ -227,6 +227,10 @@ test('DMP reproduces a demo and generalizes to a new goal', () => {
   assert.ok(Math.abs(mid - demo[50]) < 0.15, `mid ${mid} vs ${demo[50]}`);
   const out2 = dmp.rollout({ g: 2, steps: 100 });
   assert.ok(Math.abs(out2.at(-1) - 2) < 0.04);
+  // A loop that returns to its start must keep its shape.
+  const loop = Array.from({ length: 101 }, (_, i) => Math.sin(Math.PI * i / 100) ** 2);
+  const out3 = new ml.DMP({ nBasis: 30 }).fit(loop, 1).rollout({ steps: 100 });
+  assert.ok(Math.max(...out3) > 0.7 && Math.abs(out3.at(-1)) < 0.05, `loop peak ${Math.max(...out3)}`);
 });
 
 test('GMM EM increases likelihood; PCA finds the long axis', () => {

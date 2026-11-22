@@ -332,12 +332,12 @@ export class DMP {
   fit(demo, tau = 1) {
     const n = demo.length, dt = tau / (n - 1);
     const y0 = demo[0], g = demo[n - 1];
-    this.y0 = y0; this.g = g; this.tau = tau;
+    this.y0 = y0; this.g = g; this.tau = tau; this.span = g - y0;
     const yd = demo.map((_, i) => (demo[Math.min(i + 1, n - 1)] - demo[Math.max(i - 1, 0)]) / ((i === 0 || i === n - 1 ? 1 : 2) * dt));
     const ydd = yd.map((_, i) => (yd[Math.min(i + 1, n - 1)] - yd[Math.max(i - 1, 0)]) / ((i === 0 || i === n - 1 ? 1 : 2) * dt));
     const xs = demo.map((_, i) => Math.exp((-this.ax * i * dt) / tau));
     const fTarget = demo.map((y, i) => tau * tau * ydd[i] - this.alpha * (this.beta * (g - y) - tau * yd[i]));
-    const scale = g - y0 || 1;
+    const scale = Math.abs(g - y0) < 1e-9 ? 1 : g - y0; // start == goal → keep the raw shape
     this.w = this.c.map((_, b) => {
       let num = 0, den = 0;
       xs.forEach((x, i) => {
@@ -355,7 +355,9 @@ export class DMP {
     let y = y0, v = 0, x = 1;
     const out = [y];
     for (let k = 0; k < steps * 1.3; k++) {
-      const f = this.forcing(x) * (g - y0);
+      // Same scaling as fit(): by the goal span, or by 1 when the demo started where it ended.
+      const scale = Math.abs(this.span ?? 1) < 1e-9 ? 1 : g - y0;
+      const f = this.forcing(x) * scale;
       const vd = (this.alpha * (this.beta * (g - y) - v) + f) / tau;
       v += vd * dt;
       if (push) v += push(k * dt) * dt;

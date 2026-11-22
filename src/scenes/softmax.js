@@ -12,7 +12,7 @@ const CLS = ['orange', 'pink', 'green', 'blue'];
 
 export default {
   eq: [
-    [['pᵢ', 'purple'], ' = ', ['e', 'ink'], ['^(zᵢ / T)', 'orange'], '  /  Σⱼ e^(zⱼ / T)        (', ['zᵢ', 'orange'], ' = score bars,  ', ['p', 'purple'], ' = pie slices)'],
+    [['pᵢ', 'purple'], ' = ', ['e', 'ink'], ['^(zᵢ / T)', 'orange'], '  /  Σⱼ e^(zⱼ / T)        (zᵢ = score bars,  ', ['p', 'purple'], ' = pie slices / %)'],
     [['T', 'coral'], ' → 0: winner takes all ❄️        ', ['T', 'coral'], ' → ∞: all slices equal 🔥'],
     [['L', 'coral'], ' = −log ', ['p', 'purple'], ['_true', 'gold'], '     (the surprise tower)'],
     [['∂L/∂zᵢ', 'coral'], ' = (', ['pᵢ', 'purple'], ' − ', ['yᵢ', 'lime'], ') / ', ['T', 'coral'], '      push the true score up ⬆, every other score down ⬇'],
