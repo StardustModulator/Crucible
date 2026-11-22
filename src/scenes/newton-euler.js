@@ -93,7 +93,7 @@ export default {
     ['cost: O(n) instead of O(n³)'],
   ],
   setup({ stage, ui }) {
-    const [A, B] = stage.split([[-0.4, -0.95, 2.6, 1.95], [0, 0, 10, 10]], [1.3, 1]);
+    const [A, B] = stage.split([[-0.4, -1.4, 2.65, 1.7], [0, 0, 10, 10]], [1.3, 1]);
     const s = {
       beat: 0, n: 3, mp: 1, t: 0, sweep: 0, auto: true, speed: 1,
       q: [], qd: [], qdd: [], qref: [], target: null,
@@ -131,7 +131,7 @@ export default {
         const n = s.n;
         if (s.auto) {
           const h = home(n);
-          s.qref = h.map((x, i) => x + 0.4 * Math.sin(2.1 * s.t + i * 1.1) * (i === 0 ? 0.6 : 1));
+          s.qref = h.map((x, i) => x + 0.3 * Math.sin(2.1 * s.t + i * 1.3) * (i === 0 ? 0.6 : 1));
         } else if (s.target) {
           for (let k = 0; k < 4; k++) s.qref = planarIKStep(P.l, s.qref, s.target, { lambda: 0.15, gain: 0.5 }).q;
         }
@@ -227,7 +227,7 @@ export default {
           B.text('ω', [0.4, 9.4], { size: 22, color: 'blue' });
         } else {
           // joint torques: orange bars (Newton–Euler) vs lime ticks (M q̈ + C q̇ + g)
-          const y0 = 5, k = 0.11;
+          const y0 = 4.6, k = 0.075;
           B.line([0.5, y0], [9.6, y0], { color: alpha('muted', 0.5), width: 1 });
           for (let i = 0; i < n; i++) {
             const show = s.beat !== 1 || lit(i);

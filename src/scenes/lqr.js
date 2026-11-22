@@ -117,19 +117,23 @@ export default {
         ctx.restore();
 
         // ---------- right: θ(t), p(t), u(t) ----------
+        // keep the plot filling the panel on phones: world is 10 × ht
+        const ht = clamp((10 * (B.area.h - 28)) / Math.max(1, B.area.w - 28), 4.2, 10);
+        if (Math.abs(ht - B.bounds[3]) > 0.05) B.setBounds([0, 0, 10, ht]);
+        const ky = ht / 10;
         const t0 = s.hist.length ? s.hist[0][0] : 0;
         const X = (t) => 0.4 + ((t - t0) / WIN) * 9.2;
         const lane = (y0, h, k, idx, color) => {
-          B.line([0.4, y0], [9.6, y0], { color: alpha('muted', 0.35), width: 1 });
-          B.path(s.hist.filter((r) => r[idx] !== null).map((r) => [X(r[0]), y0 + clamp(r[idx] * k, -h, h)]), { color, width: 2.5 });
+          B.line([0.4, y0 * ky], [9.6, y0 * ky], { color: alpha('muted', 0.35), width: 1 });
+          B.path(s.hist.filter((r) => r[idx] !== null).map((r) => [X(r[0]), (y0 + clamp(r[idx] * k, -h, h)) * ky]), { color, width: 2.5 });
         };
         if (s.bad) lane(8.2, 1.5, 2.2, 4, alpha('coral', 0.8));
         lane(8.2, 1.5, 2.2, 1, 'orange');
         lane(5, 1.4, 0.9, 2, 'gold');
         lane(1.8, 1.5, 0.05, 3, 'pink');
-        B.text('θ', [0.3, 9.6], { size: 16, color: 'orange', align: 'left' });
-        B.text('p', [0.3, 6.4], { size: 16, color: 'gold', align: 'left' });
-        B.text('u', [0.3, 3.3], { size: 16, color: 'pink', align: 'left' });
+        B.text('θ', [0.3, 9.6 * ky], { size: 16, color: 'orange', align: 'left' });
+        B.text('p', [0.3, 6.4 * ky], { size: 16, color: 'gold', align: 'left' });
+        B.text('u', [0.3, 3.3 * ky], { size: 16, color: 'pink', align: 'left' });
       },
     };
   },

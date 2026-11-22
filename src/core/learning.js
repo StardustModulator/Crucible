@@ -154,6 +154,8 @@ export function maxPool(img, size = 2) {
     }
   return out;
 }
+// Like deep-learning "convolution" (and conv2d above) this is cross-correlation:
+// the kernel is NOT flipped. Pass k.slice().reverse() for textbook convolution.
 export const conv1d = (x, k) => x.map((_, i) => k.reduce((s, kk, j) => s + kk * (x[i + j - Math.floor(k.length / 2)] ?? 0), 0));
 
 // ---------- attention ----------

@@ -124,7 +124,8 @@ export class UI {
     const host = this._host({ into });
     const r = el('div', 'ui-readout', { title });
     r.style.setProperty('--tint', col(color));
-    r.innerHTML = `<span class="ui-icon">${icon}</span><span class="v"></span>`;
+    r.innerHTML = '<span class="ui-icon"></span><span class="v"></span>';
+    r.querySelector('.ui-icon').textContent = icon;
     host.appendChild(r);
     const v = r.querySelector('.v');
     this.readouts.push(() => { const s = String(fn()); if (v.textContent !== s) v.textContent = s; });

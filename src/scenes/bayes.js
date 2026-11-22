@@ -109,7 +109,7 @@ export default {
         const x = spotX(i), h = s.shown[i] * BAR_H;
         g.rrect(x - 0.55, SPOT_Y + 0.55, 1.1, BAR_H * 0.62, 8, { fill: alpha('purple', 0.06), stroke: false });
         g.bar(x - 0.45, SPOT_Y + 0.55, 0.9, h, { color: alpha('purple', 0.85) });
-        g.text(Math.round(s.shown[i] * 100) + '%', [x, SPOT_Y + 0.85 + h], { color: 'purple', size: stage.portrait ? 10 : 14, weight: 800 });
+        g.text(Math.round(s.shown[i] * 100) + '%', [x, SPOT_Y + (stage.portrait ? 1.35 : 0.85) + h], { color: 'purple', size: stage.portrait ? 11 : 14, weight: 800 });
         const fl = s.flash && s.flash.i === i ? 1 - s.flash.t / 0.8 : 0;
         if (fl > 0) g.circle([x, SPOT_Y], 0.75 + (1 - fl) * 0.4, { fill: alpha('gold', 0.45 * fl), stroke: false });
         g.emoji(em, [x, SPOT_Y], stage.portrait ? 26 : 40);
