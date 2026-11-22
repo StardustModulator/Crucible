@@ -250,7 +250,8 @@ export function dampedPinv(J, lambda = 0.05) {
   const JJt = mmul(J, T(J));
   const n = JJt.length;
   for (let i = 0; i < n; i++) JJt[i][i] += lambda * lambda;
-  return mmul(T(J), inv(JJt));
+  const Ji = inv(JJt);
+  return Ji ? mmul(T(J), Ji) : pinv(J); // λ = 0 at a singularity → fall back to the pseudo-inverse
 }
 
 // Ordinary least squares: argmin ||A x - b||².
