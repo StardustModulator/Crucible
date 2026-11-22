@@ -101,7 +101,8 @@ export default {
       if (b === 2) { s.n = s.list.length - 1; if (s.noise === 0) { s.noise = 1.5; noiseS.set(1.5); } }
       // 🚫: the one motion turns the camera about its own lens axis → that spin can't be seen
       s.list = b === 3 ? [POSES[0], SPIN, ...POSES.slice(2)] : POSES;
-      if (b === 3) { s.n = 1; s.noise = 0; noiseS.set(0); goTo(1); }
+      if (b === 3) { s.n = 1; s.noise = 0; noiseS.set(0); goTo(1); v.target = transOf(mmul(POSES[0], X_TRUE)); v.dist = tall ? 1.7 : 1.25; }
+      else { v.target = [0, 0, 0.62]; v.dist = tall ? 3.0 : 2.15; }
       measure(); resolve(false);
     });
     ui.button({ icon: '➕', title: 'add a motion', onClick: () => {
@@ -113,8 +114,8 @@ export default {
     const noiseS = ui.slider({ icon: '📏', color: 'purple', min: 0, max: 5, value: 0, title: 'camera noise', onInput: (x) => { s.noise = x; measure(); resolve(false); } });
     ui.button({ icon: '🎲', title: 'new noise', onClick: () => { s.seed++; measure(); resolve(false); } });
     ui.readout(() => s.n, { icon: '🤖', color: 'orange', title: 'motions used' });
-    ui.readout(() => `${fmt(rotErr(rotOf(s.Xhat), rotOf(X_TRUE)), 1)}°`, { icon: '🔄', color: 'coral', title: 'turn error' });
-    ui.readout(() => `${fmt(vnorm(vsub(transOf(s.Xhat), transOf(X_TRUE))) * 1000, 0)} mm`, { icon: '↔️', color: 'coral', title: 'shift error' });
+    ui.readout(() => `${fmt(rotErr(rotOf(s.Xshow ?? s.Xhat), rotOf(X_TRUE)), 1)}°`, { icon: '🔄', color: 'coral', title: 'turn error' });
+    ui.readout(() => `${fmt(vnorm(vsub(transOf(s.Xshow ?? s.Xhat), transOf(X_TRUE))) * 1000, 0)} mm`, { icon: '↔️', color: 'coral', title: 'shift error' });
 
     return {
       update(dt) {
@@ -159,12 +160,12 @@ export default {
         for (const c of [[-0.36, -0.3, 0], [0.36, -0.3, 0], [0.36, 0.3, 0], [-0.36, 0.3, 0]]) v.line(transOf(Ctrue), c, { color: alpha('teal', 0.35), width: 1.2 });
         // ghost ❓ = our estimate of where the camera is bolted
         cam(Cg, { color: 'blue', alpha: 0.4, ghost: true });
-        v.frameT(Cg, 0.14, { width: 2.5, alpha: 0.85 });
+        v.frameT(Cg, s.beat === 3 ? 0.2 : 0.14, { width: 2.5, alpha: 0.85 });
         v.text(s.n >= 2 && rotErr(rotOf(Xg), rotOf(X_TRUE)) < 3 ? '✅' : '❓', vadd(transOf(Cg), [0, 0, 0.16]), { size: 20 });
         if (spinAxis) {
           const c = transOf(Cg);
           v.line(vsub(c, vscale(spinAxis, 0.35)), vadd(c, vscale(spinAxis, 0.35)), { color: 'orange', width: 2.5, dash: [5, 4] });
-          v.circle(c, spinAxis, 0.1, { color: alpha('orange', 0.8), width: 2 });
+          v.circle(c, spinAxis, 0.16, { color: alpha('orange', 0.8), width: 2.5 });
         }
         // the loop: path 1 = A then X (lands at H·X̂), path 2 = X then B (lands at H₀·X̂·B)
         if (s.n >= 1 && s.beat !== 2) loop3D(Xg);
