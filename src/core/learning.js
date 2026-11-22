@@ -207,13 +207,20 @@ export function valueIterationSweep(world, V, gamma = 0.9, slip = 0) {
   return { V: nV, delta };
 }
 
+// argmax that breaks ties at random, so untrained agents don't all drift the same way.
+export function argmaxRandomTie(xs, rand = Math.random) {
+  const m = Math.max(...xs);
+  const best = xs.map((x, i) => (x === m ? i : -1)).filter((i) => i >= 0);
+  return best[Math.floor(rand() * best.length)];
+}
+
 export function qLearningEpisode(world, Q, { start, alpha = 0.3, gamma = 0.9, eps = 0.1, maxSteps = 100, rand = Math.random, slip = 0 }) {
   let s = start.slice();
   const trail = [s.slice()];
   let ret = 0;
   for (let t = 0; t < maxSteps; t++) {
     const qs = Q[s[1]][s[0]];
-    const a = rand() < eps ? Math.floor(rand() * 4) : qs.indexOf(Math.max(...qs));
+    const a = rand() < eps ? Math.floor(rand() * 4) : argmaxRandomTie(qs, rand);
     const st = gridStep(world, s, a, slip, rand);
     const target = st.r + (st.done ? 0 : gamma * Math.max(...Q[st.s[1]][st.s[0]]));
     qs[a] += alpha * (target - qs[a]);
