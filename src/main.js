@@ -2,7 +2,7 @@
 import { C, setTheme, themeName, col, alpha } from './viz/palette.js';
 import { Stage } from './viz/stage.js';
 import { UI } from './viz/ui.js';
-import { CONCEPTS, ISLANDS, BY_ID, dependents } from './graph/concepts.js';
+import { CONCEPTS, ISLANDS, BY_ID, dependents, bridge, ancestry } from './graph/concepts.js';
 import { drawMap, layoutMap } from './graph/map.js';
 
 const $ = (s, r = document) => r.querySelector(s);
@@ -39,18 +39,31 @@ function legendHTML() {
 }
 
 // ---------------------------------------------------------------- map page
-function renderMap() {
-  teardown();
-  document.title = 'Crucible';
-  app.innerHTML = `
+function topbar(extra = '') {
+  return `
     <header class="topbar">
       <a class="brand" href="#/" aria-label="home">⚗️ <b>Crucible</b></a>
       <div class="spacer"></div>
+      ${extra}
       <button class="ui-btn" id="legend-btn" title="color language" aria-label="color language">🎨</button>
-      <button class="ui-btn" id="theme-btn" title="light / dark" aria-label="light / dark">◐</button>
+      <button class="ui-btn" id="theme-btn" title="light / dark" aria-label="light / dark">🌓</button>
     </header>
-    <div class="legend-pop" hidden>${legendHTML()}</div>
+    <div class="legend-pop" hidden>${legendHTML()}</div>`;
+}
+function wireTopbar() {
+  $('#theme-btn').onclick = toggleTheme;
+  $('#legend-btn').onclick = () => { const p = $('.legend-pop'); p.hidden = !p.hidden; };
+}
+
+function renderMap(preset = null) {
+  teardown();
+  document.title = 'Crucible';
+  app.innerHTML = `
+    ${topbar(`
+      <button class="ui-btn" id="bridge-btn" title="connect two ideas" aria-label="connect two ideas" style="--tint:${col('gold')}">🔗</button>
+      <a class="ui-btn" href="#/web" title="math × algorithm grid" aria-label="math × algorithm grid">▦</a>`)}
     <section class="map-wrap"><div class="map-stage"></div></section>
+    <nav class="bridge-strip" hidden></nav>
     <section class="shelves">${Object.entries(ISLANDS).map(([k, isl]) => `
       <div class="shelf" style="--tint:${col(isl.color)}">
         <h2><span>${isl.icon}</span>${isl.name}</h2>
@@ -59,15 +72,29 @@ function renderMap() {
         </div>
       </div>`).join('')}
     </section>`;
-  $('#theme-btn').onclick = toggleTheme;
-  $('#legend-btn').onclick = () => { const p = $('.legend-pop'); p.hidden = !p.hidden; };
+  wireTopbar();
 
   const stage = new Stage($('.map-stage'));
-  const st = { hover: null, focus: null, t: 0 };
+  const st = { hover: null, t: 0, bridgeMode: false, a: null, b: null, path: null };
   let layout = layoutMap(stage);
   stage.ro.disconnect();
   stage.ro = new ResizeObserver(() => { stage._resize(); layout = layoutMap(stage); });
   stage.ro.observe($('.map-stage'));
+  const strip = $('.bridge-strip');
+  const bridgeBtn = $('#bridge-btn');
+  const setBridge = (on) => {
+    st.bridgeMode = on; bridgeBtn.classList.toggle('on', on);
+    if (!on) { st.a = st.b = st.path = null; }
+    renderStrip();
+  };
+  const renderStrip = () => {
+    strip.hidden = !st.bridgeMode;
+    if (!st.bridgeMode) return;
+    const slot = (id) => (id ? chip(BY_ID[id]) : '<span class="chip ghost"><span>❔</span></span>');
+    if (st.path) strip.innerHTML = st.path.map((id) => chip(BY_ID[id])).join('<span class="link-arrow">➜</span>');
+    else strip.innerHTML = `${slot(st.a)}<span class="link-arrow">⋯</span>${slot(st.b)}`;
+  };
+  bridgeBtn.onclick = () => setBridge(!st.bridgeMode);
   const pick = (sx, sy) => {
     let best = null, bd = Infinity;
     for (const n of layout.nodes) {
@@ -76,15 +103,60 @@ function renderMap() {
     }
     return best;
   };
+  const choose = (id) => {
+    if (!st.a || st.b) { st.a = id; st.b = null; st.path = null; }
+    else { st.b = id; st.path = bridge(st.a, st.b); history.replaceState(null, '', `#/bridge/${st.a}/${st.b}`); }
+    renderStrip();
+  };
   stage.on('move', (e) => { st.hover = pick(e.sx, e.sy); stage.canvas.style.cursor = st.hover ? 'pointer' : 'default'; });
-  stage.on('up', (e) => { const n = pick(e.sx, e.sy); if (n) location.hash = `#/s/${n.id}`; });
+  stage.on('up', (e) => {
+    const n = pick(e.sx, e.sy);
+    if (!n) return;
+    if (st.bridgeMode) choose(n.id); else location.hash = `#/s/${n.id}`;
+  });
   stage.canvas.addEventListener('pointerleave', () => (st.hover = null));
   stage.run((dt) => { st.t += dt; }, () => drawMap(stage, layout, st));
   document.querySelectorAll('.card').forEach((a) => {
     a.addEventListener('mouseenter', () => (st.hover = layout.nodes.find((n) => n.id === a.dataset.id)));
     a.addEventListener('mouseleave', () => (st.hover = null));
+    a.addEventListener('click', (e) => { if (st.bridgeMode) { e.preventDefault(); choose(a.dataset.id); } });
   });
-  current = { stage, repaint: () => renderMap() };
+  if (preset) { setBridge(true); choose(preset[0]); choose(preset[1]); }
+  current = { stage, repaint: () => route() };
+}
+
+// ---------------------------------------------------------------- math × algorithm grid
+function renderWeb() {
+  teardown();
+  document.title = 'Grid · Crucible';
+  const math = CONCEPTS.filter((c) => c.island === 'math');
+  const algos = CONCEPTS.filter((c) => c.island !== 'math');
+  app.innerHTML = `${topbar('<a class="ui-btn" href="#/" title="map" aria-label="map">🌌</a>')}
+    <section class="web-wrap"><div class="web">
+      <div class="corner">🧮 × 🤖</div>
+      ${algos.map((a, j) => `<a class="colh" href="#/s/${a.id}" style="--tint:${col(ISLANDS[a.island].color)};grid-column:${j + 2}" title="${a.name}" data-c="${j}">${a.icon}</a>`).join('')}
+      ${math.map((m, i) => {
+        const anc = (a) => ancestry(a.id);
+        return `<a class="rowh" href="#/s/${m.id}" style="grid-row:${i + 2}" title="${m.name}" data-r="${i}"><span>${m.icon}</span><em>${m.name}</em></a>` +
+          algos.map((a, j) => {
+            const direct = a.uses.includes(m.id), deep = !direct && anc(a).has(m.id);
+            return `<a class="cell ${direct ? 'd' : deep ? 't' : ''}" href="#/s/${a.id}" style="--tint:${col(ISLANDS[a.island].color)};grid-row:${i + 2};grid-column:${j + 2}" data-r="${i}" data-c="${j}" title="${m.name} → ${a.name}"></a>`;
+          }).join('');
+      }).join('')}
+    </div></section>
+    <div class="web-key"><span><i class="cell d"></i>⬅ 1</span><span><i class="cell t"></i>⬅ ⋯</span></div>`;
+  wireTopbar();
+  const web = $('.web');
+  web.style.gridTemplateColumns = `minmax(120px, auto) repeat(${algos.length}, 26px)`;
+  web.addEventListener('mouseover', (e) => {
+    const t = e.target.closest('[data-r],[data-c]');
+    web.querySelectorAll('.hl').forEach((x) => x.classList.remove('hl'));
+    if (!t) return;
+    const { r, c } = t.dataset;
+    if (r !== undefined) web.querySelectorAll(`[data-r="${r}"]`).forEach((x) => x.classList.add('hl'));
+    if (c !== undefined) web.querySelectorAll(`[data-c="${c}"]`).forEach((x) => x.classList.add('hl'));
+  });
+  current = { repaint: () => renderWeb() };
 }
 
 // ---------------------------------------------------------------- scene page
@@ -122,7 +194,7 @@ async function renderScene(id) {
       <div class="spacer"></div>
       <button class="ui-btn" id="eq-btn" title="grown-up math" aria-label="grown-up math">∑</button>
       <button class="ui-btn" id="legend-btn" title="color language" aria-label="color language">🎨</button>
-      <button class="ui-btn" id="theme-btn" title="light / dark" aria-label="light / dark">◐</button>
+      <button class="ui-btn" id="theme-btn" title="light / dark" aria-label="light / dark">🌓</button>
     </header>
     <div class="legend-pop" hidden>${legendHTML()}</div>
     <nav class="links">
@@ -187,7 +259,11 @@ async function renderScene(id) {
 function route() {
   const h = location.hash || '#/';
   const m = h.match(/^#\/s\/([\w-]+)/);
-  if (m) renderScene(m[1]); else renderMap();
+  const b = h.match(/^#\/bridge\/([\w-]+)\/([\w-]+)/);
+  if (m) renderScene(m[1]);
+  else if (h.startsWith('#/web')) renderWeb();
+  else if (b && BY_ID[b[1]] && BY_ID[b[2]]) renderMap([b[1], b[2]]);
+  else renderMap();
 }
 addEventListener('hashchange', route);
 addEventListener('keydown', (e) => {

@@ -132,3 +132,24 @@ export function ancestry(id, seen = new Set()) {
   return seen;
 }
 export const neighbors = (island) => CONCEPTS.filter((c) => c.island === island);
+
+// Shortest chain of ideas linking any two concepts (undirected over uses/next edges).
+// e.g. bridge('svd', 'lora') or bridge('jacobian', 'backprop') → [ids…]
+export function bridge(a, b) {
+  if (!BY_ID[a] || !BY_ID[b]) return null;
+  const adj = new Map(CONCEPTS.map((c) => [c.id, new Set()]));
+  for (const c of CONCEPTS) for (const u of [...c.uses, ...c.next]) { adj.get(c.id).add(u); adj.get(u)?.add(c.id); }
+  const prev = new Map([[a, null]]);
+  const queue = [a];
+  while (queue.length) {
+    const x = queue.shift();
+    if (x === b) break;
+    // Prefer walking through the Math Core: visit math neighbours first.
+    const nb = [...adj.get(x)].sort((p, q) => (BY_ID[p].island === 'math' ? 0 : 1) - (BY_ID[q].island === 'math' ? 0 : 1));
+    for (const y of nb) if (!prev.has(y)) { prev.set(y, x); queue.push(y); }
+  }
+  if (!prev.has(b)) return null;
+  const path = [];
+  for (let x = b; x !== null; x = prev.get(x)) path.push(x);
+  return path.reverse();
+}

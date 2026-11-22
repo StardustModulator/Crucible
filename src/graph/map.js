@@ -7,13 +7,13 @@ export function layoutMap(stage) {
   const W = stage.width, H = stage.height;
   const cx = W / 2, cy = H / 2;
   const m = Math.min(W, H);
-  const nodeR = Math.max(11, Math.min(21, m * 0.028));
+  const nodeR = Math.max(11, Math.min(20, m * 0.026));
   const nodes = [];
   const math = CONCEPTS.filter((c) => c.island === 'math');
-  const ringR = Math.min(W * 0.2, H * 0.24, m * 0.27);
+  const ringR = Math.min(W * 0.21, H * 0.27, m * 0.29);
   // Math core: two concentric rings so 23 nodes don't crowd.
   const inner = math.slice(0, 9), outer = math.slice(9);
-  inner.forEach((c, i) => nodes.push({ ...c, x: cx + Math.cos((i / inner.length) * 2 * Math.PI - Math.PI / 2) * ringR * 0.48, y: cy + Math.sin((i / inner.length) * 2 * Math.PI - Math.PI / 2) * ringR * 0.48, r: nodeR }));
+  inner.forEach((c, i) => nodes.push({ ...c, x: cx + Math.cos((i / inner.length) * 2 * Math.PI - Math.PI / 2) * ringR * 0.56, y: cy + Math.sin((i / inner.length) * 2 * Math.PI - Math.PI / 2) * ringR * 0.56, r: nodeR }));
   outer.forEach((c, i) => nodes.push({ ...c, x: cx + Math.cos((i / outer.length) * 2 * Math.PI - Math.PI / 2 + 0.1) * ringR, y: cy + Math.sin((i / outer.length) * 2 * Math.PI - Math.PI / 2 + 0.1) * ringR, r: nodeR }));
   const islands = {};
   for (const [k, isl] of Object.entries(ISLANDS)) {
@@ -50,11 +50,19 @@ const qpt = (a, q, b, t) => [(1 - t) ** 2 * a.x + 2 * (1 - t) * t * q[0] + t * t
 
 export function drawMap(stage, L, st) {
   const ctx = stage.ctx;
-  const focus = st.hover;
+  const focus = st.path ? null : st.hover;
   let lit = null;
-  if (focus) {
-    lit = new Set([focus.id, ...ancestry(focus.id), ...dependents(focus.id).map((d) => d.id)]);
-  }
+  const onPath = st.path ? new Set(st.path) : null;
+  const pathEdge = (x, y) => {
+    if (!st.path) return false;
+    for (let i = 1; i < st.path.length; i++) {
+      const p = st.path[i - 1], q = st.path[i];
+      if ((p === x && q === y) || (p === y && q === x)) return true;
+    }
+    return false;
+  };
+  if (onPath) lit = onPath;
+  else if (focus) lit = new Set([focus.id, ...ancestry(focus.id), ...dependents(focus.id).map((d) => d.id)]);
   // island halos
   for (const [k, isl] of Object.entries(ISLANDS)) {
     const I = L.islands[k];
@@ -78,12 +86,12 @@ export function drawMap(stage, L, st) {
   ctx.save();
   for (const e of L.edges) {
     // Lit = the focused concept's whole family tree: all math beneath it + what it feeds.
-    const on = lit && lit.has(e.a.id) && lit.has(e.b.id);
+    const on = onPath ? pathEdge(e.a.id, e.b.id) : lit && lit.has(e.a.id) && lit.has(e.b.id);
     const colr = ISLANDS[e.b.island].color;
     ctx.beginPath();
     const q = curve(ctx, e.a, e.b, L.cx, L.cy, e.kind === 'next' ? -0.15 : 0.3);
-    ctx.lineWidth = on ? 2.4 : 1;
-    ctx.strokeStyle = on ? alpha(colr, 0.95) : alpha(colr, lit ? 0.04 : 0.13);
+    ctx.lineWidth = on ? (onPath ? 5 : 2.4) : 1;
+    ctx.strokeStyle = on ? (onPath ? col('gold') : alpha(colr, 0.95)) : alpha(colr, lit ? 0.04 : 0.13);
     ctx.setLineDash(e.kind === 'next' ? [4, 5] : []);
     ctx.stroke();
     if (on) {
@@ -101,7 +109,7 @@ export function drawMap(stage, L, st) {
   for (const n of L.nodes) {
     const isl = ISLANDS[n.island];
     const dim = lit && !lit.has(n.id);
-    const hov = focus && focus.id === n.id;
+    const hov = (focus && focus.id === n.id) || st.a === n.id || st.b === n.id;
     const r = n.r * (hov ? 1.3 : 1) * (1 + (hov ? 0.04 * Math.sin(st.t * 5) : 0));
     ctx.save();
     ctx.globalAlpha = dim ? 0.22 : 1;
