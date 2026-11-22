@@ -2,3 +2,7 @@ node_modules/
 .DS_Store
 *.log
 /shots/
+
+# The textbook PDF is copyrighted: keep it local, never commit it.
+book/source/
+book/atlas/_work/

@@ -4,6 +4,7 @@ import { Stage } from './viz/stage.js';
 import { UI } from './viz/ui.js';
 import { CONCEPTS, ISLANDS, BY_ID, dependents, bridge, ancestry } from './graph/concepts.js';
 import { drawMap, layoutMap } from './graph/map.js';
+import { renderBookHome, renderBookDay, renderBookPage, bookSceneMeta } from './book/book.js';
 
 const $ = (s, r = document) => r.querySelector(s);
 const app = $('#app');
@@ -61,7 +62,8 @@ function renderMap(preset = null) {
   app.innerHTML = `
     ${topbar(`
       <button class="ui-btn" id="bridge-btn" title="connect two ideas" aria-label="connect two ideas" style="--tint:${col('gold')}">🔗</button>
-      <a class="ui-btn" href="#/web" title="math × algorithm grid" aria-label="math × algorithm grid">▦</a>`)}
+      <a class="ui-btn" href="#/web" title="math × algorithm grid" aria-label="math × algorithm grid">▦</a>
+      <a class="ui-btn" href="#/book" title="the textbook" aria-label="the textbook">📕</a>`)}
     <section class="map-wrap"><div class="map-stage"></div></section>
     <nav class="bridge-strip" hidden></nav>
     <section class="shelves">${Object.entries(ISLANDS).map(([k, isl]) => `
@@ -173,17 +175,30 @@ function formulaHTML(eq) {
 }
 const esc = (s) => String(s).replace(/[&<>"]/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch]));
 
-async function renderScene(id) {
+async function renderScene(id, beat = null) {
   teardown();
-  const c = BY_ID[id];
-  if (!c) { location.hash = '#/'; return; }
+  let c = BY_ID[id], prev, next, uses, feeds, isl, pageRow = '';
+  if (c) {
+    isl = ISLANDS[c.island];
+    const same = CONCEPTS.filter((x) => x.island === c.island);
+    const idx = same.indexOf(c);
+    prev = same[(idx - 1 + same.length) % same.length]; next = same[(idx + 1) % same.length];
+    uses = c.uses.map((u) => BY_ID[u]).filter(Boolean);
+    feeds = dependents(id);
+  } else if (id.startsWith('mls-')) {
+    // A textbook scene: metadata comes from the atlas.
+    const meta = await bookSceneMeta(id).catch(() => null);
+    if (!meta) { location.hash = '#/book'; return; }
+    c = { id, name: meta.title, icon: meta.icon };
+    isl = { color: 'gold' };
+    prev = { id: meta.prev, name: meta.neighborTitle(meta.prev) };
+    next = { id: meta.next, name: meta.neighborTitle(meta.next) };
+    uses = (meta.uses ?? []).map((u) => BY_ID[u]).filter(Boolean);
+    if (meta.exists && BY_ID[meta.exists] && !uses.includes(BY_ID[meta.exists])) uses.unshift(BY_ID[meta.exists]);
+    feeds = [];
+    pageRow = `<div class="link-row"><span class="arrow" title="book pages">📕</span>${meta.pageLinks.map((p) => `<a class="chip" href="#/book/p/${p.pdf}" style="--tint:${col('gold')}"><span>📄</span><em>${p.label}</em></a>`).join('')}</div>`;
+  } else { location.hash = '#/'; return; }
   document.title = `${c.name} · Crucible`;
-  const isl = ISLANDS[c.island];
-  const same = CONCEPTS.filter((x) => x.island === c.island);
-  const idx = same.indexOf(c);
-  const prev = same[(idx - 1 + same.length) % same.length], next = same[(idx + 1) % same.length];
-  const uses = c.uses.map((u) => BY_ID[u]).filter(Boolean);
-  const feeds = dependents(id);
 
   app.innerHTML = `
     <header class="topbar scene-top" style="--tint:${col(isl.color)}">
@@ -200,6 +215,7 @@ async function renderScene(id) {
     <nav class="links">
       ${uses.length ? `<div class="link-row"><span class="arrow" title="made of">🧱⬅</span>${uses.map((u) => chip(u)).join('')}</div>` : ''}
       ${feeds.length ? `<div class="link-row"><span class="arrow" title="builds into">➡🏗️</span>${feeds.map((u) => chip(u)).join('')}</div>` : ''}
+      ${pageRow}
     </nav>
     <main class="scene-main">
       <div class="stage-wrap"></div>
@@ -214,7 +230,7 @@ async function renderScene(id) {
 
   let mod = null;
   try { mod = await import(`./scenes/${id}.js`); } catch (e) { console.warn('scene missing', id, e); }
-  if (location.hash !== `#/s/${id}`) return; // navigated away while loading
+  if (!location.hash.startsWith(`#/s/${id}`)) return; // navigated away while loading
   const msg = $('.scene-msg');
   if (!mod?.default?.setup) {
     msg.hidden = false; msg.innerHTML = '<span class="big">🚧</span>';
@@ -253,14 +269,35 @@ async function renderScene(id) {
   stage.run((dt, t) => inst.update?.(dt, t), () => { inst.draw?.(); ui.refresh(); });
   current = { stage, ui, dispose: () => inst.dispose?.(), id, inst };
   window.__scene = current; // handy for tests / debugging
+  if (beat !== null) document.querySelectorAll('.story .ui-beat')[beat]?.click(); // deep link: #/s/<id>?beat=k
+}
+
+// ---------------------------------------------------------------- the textbook
+async function renderBook(kind, n) {
+  teardown();
+  document.title = 'Book · Crucible';
+  app.innerHTML = `${topbar('<a class="ui-btn" href="#/" title="map" aria-label="map">🌌</a>')}<div class="book"></div>`;
+  wireTopbar();
+  const el = $('.book');
+  current = { repaint: () => route() };
+  try {
+    if (kind === 'day') await renderBookDay(el, n);
+    else if (kind === 'page') await renderBookPage(el, n);
+    else await renderBookHome(el);
+  } catch (e) {
+    console.error(e);
+    el.innerHTML = '<div class="scene-msg" style="position:relative;min-height:300px"><span class="big">🧩</span></div>';
+  }
 }
 
 // ---------------------------------------------------------------- router
 function route() {
   const h = location.hash || '#/';
-  const m = h.match(/^#\/s\/([\w-]+)/);
+  const m = h.match(/^#\/s\/([\w-]+)(?:\?beat=(\d+))?/);
   const b = h.match(/^#\/bridge\/([\w-]+)\/([\w-]+)/);
-  if (m) renderScene(m[1]);
+  const bk = h.match(/^#\/book(?:\/(day|p)\/(\d+))?/);
+  if (m) renderScene(m[1], m[2] !== undefined ? Number(m[2]) : null);
+  else if (bk) renderBook(bk[1] === 'p' ? 'page' : bk[1], Number(bk[2]));
   else if (h.startsWith('#/web')) renderWeb();
   else if (b && BY_ID[b[1]] && BY_ID[b[2]]) renderMap([b[1], b[2]]);
   else renderMap();

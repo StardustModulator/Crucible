@@ -4,14 +4,19 @@
 //   node scripts/smoke.mjs svd eigen --shots /tmp/shots
 import { serve } from './serve.mjs';
 import { CONCEPTS } from '../src/graph/concepts.js';
+import { loadAtlas } from './book-check.mjs';
+
+// Textbook scenes (mls-*) are checked too: they must show every beat of their atlas card.
+const ATLAS = new Map(loadAtlas().flatMap(({ data }) => data.scenes ?? []).map((s) => [s.id, s]));
 import { mkdir } from 'node:fs/promises';
+import { existsSync } from 'node:fs';
 
 const args = process.argv.slice(2);
 const shotIdx = args.indexOf('--shots');
 const shots = shotIdx >= 0 ? args[shotIdx + 1] : null;
 const portrait = args.includes('--portrait');
 const ids = args.filter((a, i) => !a.startsWith('--') && (shotIdx < 0 || i !== shotIdx + 1));
-const list = ids.length ? ids : CONCEPTS.map((c) => c.id);
+const list = ids.length ? ids : [...CONCEPTS.map((c) => c.id), ...[...ATLAS.keys()].filter((id) => existsSync(new URL(`../src/scenes/${id}.js`, import.meta.url)))];
 
 import { createRequire } from 'node:module';
 // Playwright may be installed globally (CommonJS + NODE_PATH); fall back to ESM import.
@@ -35,6 +40,10 @@ for (const id of list) {
     crashed: !!document.querySelector('.scene-msg:not([hidden]) .big')?.textContent.includes('💥'),
     handles: window.__scene?.stage?.handles?.length ?? 0,
   }));
+  if (!state.missing && ATLAS.has(id)) {
+    const want = ATLAS.get(id).beats.length, got = await page.$$eval('.story .ui-beat', (b) => b.length);
+    if (got !== want) errors.push(`atlas card has ${want} beats but the scene shows ${got}`);
+  }
   if (!state.missing) {
     // Drag every handle a bit, click every beat and scene button, then let it run.
     const hs = await page.evaluate(() => (window.__scene?.stage?.handles ?? []).filter((h) => h.visible()).map((h) => {
