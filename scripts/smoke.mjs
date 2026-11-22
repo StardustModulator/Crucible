@@ -47,10 +47,13 @@ for (const id of list) {
       await page.mouse.move(x + 40, y - 30, { steps: 5 }); await page.mouse.up();
     }
     const beats = await page.$$('.ui-beat');
-    for (const b of beats) { await b.click(); await page.waitForTimeout(250); }
+    for (const b of beats) { await b.click({ timeout: 2000 }).catch(() => {}); await page.waitForTimeout(250); }
     const btns = await page.$$('.scene-ctl .ui-btn');
-    for (const b of btns.slice(0, 8)) { await b.click().catch(() => {}); await page.waitForTimeout(120); }
-    if (beats.length) { await beats[0].click(); }
+    for (const b of btns.slice(0, 8)) {
+      if (!(await b.isVisible().catch(() => false))) continue;
+      await b.click({ timeout: 1000 }).catch(() => {}); await page.waitForTimeout(120);
+    }
+    if (beats.length) { await beats[0].click({ timeout: 2000 }).catch(() => {}); }
     await page.waitForTimeout(1200);
     await page.evaluate(() => window.__scene?.stage?.advance(4));
     if (shots) await page.screenshot({ path: `${shots}/${id}.png` });
