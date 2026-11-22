@@ -1,0 +1,4807 @@
+{
+ "id": "ch07",
+ "title": "Nonholonomic Behavior in Robotic Systems",
+ "pdfPages": [
+  335,
+  372
+ ],
+ "sections": [
+  {
+   "id": "7.1",
+   "title": "Introduction",
+   "book": 317
+  },
+  {
+   "id": "7.2",
+   "title": "Controllability and Frobenius’ Theorem",
+   "book": 321
+  },
+  {
+   "id": "7.2.1",
+   "title": "Vector fields and flows",
+   "book": 322
+  },
+  {
+   "id": "7.2.2",
+   "title": "Lie brackets and Frobenius’ theorem",
+   "book": 323
+  },
+  {
+   "id": "7.2.3",
+   "title": "Nonlinear controllability",
+   "book": 328
+  },
+  {
+   "id": "7.3",
+   "title": "Examples of Nonholonomic Systems",
+   "book": 332
+  },
+  {
+   "id": "7.4",
+   "title": "Structure of Nonholonomic Systems",
+   "book": 339
+  },
+  {
+   "id": "7.4.1",
+   "title": "Classification of nonholonomic distributions",
+   "book": 340
+  },
+  {
+   "id": "7.4.2",
+   "title": "Examples of nonholonomic systems, continued",
+   "book": 341
+  },
+  {
+   "id": "7.4.3",
+   "title": "Philip Hall basis",
+   "book": 344
+  },
+  {
+   "id": "7.5",
+   "title": "Summary",
+   "book": 346
+  },
+  {
+   "id": "7.6",
+   "title": "Bibliography",
+   "book": 347
+  },
+  {
+   "id": "7.7",
+   "title": "Exercises",
+   "book": 349
+  }
+ ],
+ "scenes": [
+  {
+   "id": "mls-ch7-roadmap",
+   "title": "Chapter Map",
+   "icon": "🗺️",
+   "section": "7",
+   "pages": [
+    317,
+    354
+   ],
+   "uses": [
+    "cspace",
+    "ode",
+    "vectors"
+   ],
+   "beats": [
+    "🗺️ the route through the chapter",
+    "🦓 two sources: rolling & spinning",
+    "🧾 recap ladder",
+    "📜 who found what"
+   ],
+   "brief": "A winding road of five stepping stones (constraints → brackets → Chow → robot zoo → growth vector) on a slate ground; a tiny car hops stone to stone and each stone, when tapped, opens a thumbnail of its scene. A second panel splits the robot zoo into two fenced pens: a wheel pen (coin, car, ball under a fingertip) with lime no-slip contact dots, and a spin pen (hopper, floating arms, cat) with a blue conserved-momentum gauge that stays pinned at 0. The recap beat is a ladder whose rungs light up one idea each; the history beat is a horizontal timeline of dots."
+  },
+  {
+   "id": "mls-ch7-holonomic-test",
+   "title": "Stuck or Free",
+   "icon": "🧵",
+   "section": "7.1",
+   "pages": [
+    317,
+    321
+   ],
+   "uses": [
+    "cspace",
+    "derivative",
+    "vectors",
+    "chain-rule"
+   ],
+   "beats": [
+    "🚗 no sideways, yet parks anywhere",
+    "🧵 holonomic = trapped on a level set",
+    "🧪 one constraint: the integrating-factor test",
+    "🔀 flip walls into free arrows",
+    "🌍 reachable set: everything or a slice"
+   ],
+   "brief": "Top-down slate parking lot. A blue car whose wheels show lime \"allowed\" arrows (forward/back) and coral \"forbidden\" arrows (sideways). Beside it, a contour map of a function h with gold level curves: a bead on a wire that can only slide along one curve (holonomic) versus a car that, by wiggling, leaves its curve and visits every curve (nonholonomic). A reach meter fills a purple shaded region as the learner drives: for holonomic constraints it fills a thin sheet only; for the car it floods the whole lot. In the \"flip\" beat, each coral wall at a point is replaced by the lime arrows perpendicular to it (the null space), and two orange sliders u1,u2 mix those arrows to drive."
+  },
+  {
+   "id": "mls-ch7-fields-flows",
+   "title": "Fields & Flows",
+   "icon": "🌊",
+   "section": "7.2.1",
+   "pages": [
+    322,
+    323
+   ],
+   "uses": [
+    "ode",
+    "vectors",
+    "derivative"
+   ],
+   "exists": "ode",
+   "beats": [
+    "➡️ an arrow at every point",
+    "📈 Lie derivative: how a hill height changes as you drift",
+    "🌊 the flow map φ_t",
+    "➕ flows chain: t then s = t+s"
+   ],
+   "brief": "A grid of small blue arrows f(q) over the plane (computed by control.vectorField). Drop a teal leaf anywhere: it drifts along the arrows, leaving a trail (rk4). A gold hill V is drawn as contour rings underneath; a thermometer shows dV/dt = ∇V·f as the leaf drifts — positive when it climbs, negative when it descends. An orange time slider t moves the whole sheet of leaves at once (the flow map φ_t as a warped grid). Chaining: run t=1 then s=0.5 and compare with a single run of t=1.5 — two ghost leaves land on the same spot (lime check)."
+  },
+  {
+   "id": "mls-ch7-bracket-square",
+   "title": "Bracket Square",
+   "icon": "🔲",
+   "section": "7.2.2",
+   "pages": [
+    323,
+    325
+   ],
+   "uses": [
+    "ode",
+    "derivative",
+    "matrix",
+    "linearize"
+   ],
+   "exists": "linearize",
+   "beats": [
+    "🔁 go A, go B, undo A, undo B",
+    "📏 the gap shrinks like ε²",
+    "🧮 [f,g] = (∂g)f − (∂f)g",
+    "🔲 linear fields: commutator BA − AB",
+    "⚖️ skew, Jacobi, chain rule"
+   ],
+   "brief": "Two orange vector fields g1 and g2 drawn as faint arrow grids. A teal dot runs a four-leg loop: ε along g1, ε along g2, ε along −g1, ε along −g2, each leg a coloured trail. It does not come home: a coral gap arrow joins the end to the start. An orange ε slider shrinks the loop; a log-log readout plots gap size against ε and the points line up on a slope-2 line. A gold arrow [g1,g2](q0) computed from numJacobian is overlaid on the gap divided by ε² — they match. Linear mode: pick two 2×2 matrices A, B; the gap direction equals (BA−AB)q. Properties mode: swap f,g (gap flips), add the three cyclic Jacobi loops (they cancel to a lime zero)."
+  },
+  {
+   "id": "mls-ch7-frobenius-leaves",
+   "title": "Frobenius Leaves",
+   "icon": "📚",
+   "section": "7.2.2",
+   "pages": [
+    325,
+    328
+   ],
+   "uses": [
+    "vectors",
+    "matrix",
+    "ode",
+    "derivative"
+   ],
+   "beats": [
+    "🧱 a plane of allowed arrows at each point",
+    "🔒 involutive: brackets stay inside",
+    "📚 integrable: a stack of leaves",
+    "🏁 Frobenius: closed ⇔ stacked",
+    "✋ one-forms: walls and their free arrows"
+   ],
+   "brief": "3D: at every grid point a small translucent blue tile (the distribution Δ_q spanned by two orange arrows g1,g2). The learner runs bracket loops inside the tiles; if the coral gap arrow always lies inside the tile (involutive) the tiles snap together into a stack of gold sheets (leaves, level sets of h) like pages of a book, and every path stays on its page. If the gap pokes out of the tile, the tiles twist like a screw staircase and no sheets can form — a dot wanders off its page. A one-form is drawn as a coral \"wall normal\" arrow; the null-space arrows are lime and lie flat in the tile."
+  },
+  {
+   "id": "mls-ch7-chow-reach",
+   "title": "Chow Reach",
+   "icon": "🌐",
+   "section": "7.2.3",
+   "pages": [
+    328,
+    332
+   ],
+   "uses": [
+    "ode",
+    "vectors",
+    "cspace"
+   ],
+   "beats": [
+    "🎯 controllable vs small-time local",
+    "🔁 wiggles reach bracket directions",
+    "🧅 grow a curve → sheet → blob",
+    "↩️ drift-free: run the tape backwards",
+    "🔗 chain reach-bubbles to the goal"
+   ],
+   "brief": "3D configuration space with a teal start dot q0 inside a slate \"leash\" ball V. Two orange joystick sliders u1,u2 apply g1,g2. The reachable set in time ≤T is drawn as a purple cloud built from random piecewise-constant inputs. Rank meter: number of independent arrows among g1,g2 and their brackets at q0 (lime when it hits n). Staircase beat: one flow sweeps a curve N1, adding a second flow sweeps a sheet N2, adding a third sweeps a solid blob N3. Reverse beat: a path to qf is replayed with reversed, negated inputs and the bubble around qf maps back to a bubble around q0. Chain beat: overlapping purple bubbles along a straight gold segment from q0 to qf."
+  },
+  {
+   "id": "mls-ch7-hopper-flight",
+   "title": "Hopper Flight",
+   "icon": "🦘",
+   "section": "7.3",
+   "pages": [
+    333,
+    342
+   ],
+   "uses": [
+    "energy",
+    "ode",
+    "vectors"
+   ],
+   "beats": [
+    "🦘 swing the leg, the body counter-turns",
+    "🧮 zero spin as one constraint",
+    "🔁 swing–stretch loop tilts the body",
+    "📈 growth (2,3)"
+   ],
+   "brief": "Side view of a blue box body with an orange leg in mid-air above slate ground. Two orange sliders: leg angle ψ and leg extension l. As ψ moves the blue body rotates the other way so the blue angular-momentum gauge stays at 0. Loop beat: drag the leg around a closed loop in the (ψ,l) pad (stretch, swing, shrink, swing back); the body ends tilted — the coral angle readout shows the net body turn equals the loop area weighted by the bracket g3. Growth beat: three arrows g1,g2,[g1,g2] in a 3D (ψ,l,θ) inset with a rank meter reading 3."
+  },
+  {
+   "id": "mls-ch7-space-arms",
+   "title": "Floating Arms",
+   "icon": "🛰️",
+   "section": "7.3",
+   "pages": [
+    334,
+    342
+   ],
+   "uses": [
+    "lagrange-dynamics",
+    "energy",
+    "ode"
+   ],
+   "beats": [
+    "🛰️ wave arms, body spins",
+    "⚖️ the inertia matrix",
+    "🧮 zero momentum → two free arrows",
+    "🔁 arm loops reorient the body",
+    "⚠️ the bracket dies when arms match"
+   ],
+   "brief": "A blue rectangular body floating among stars with two orange arms ending in pink weights. Sliders ψ1, ψ2 move the arms; the body angle θ updates so the blue momentum gauge (a13ψ̇1+a23ψ̇2+a33θ̇) stays at 0. A 3×3 inertia heat-map shows the a_ij entries changing with ψ1,ψ2. Loop beat: drive the arms around a closed loop in the (ψ1,ψ2) pad; the body comes back with a net coral turn. Singular beat: a strip ψ1=ψ2 on the pad turns coral; the bracket arrow g3 shrinks to zero on it, yet higher brackets (shown as faint gold arrows) still fill the third direction."
+  },
+  {
+   "id": "mls-ch7-rolling-coin",
+   "title": "Rolling Coin",
+   "icon": "🪙",
+   "section": "7.3",
+   "pages": [
+    336,
+    343
+   ],
+   "uses": [
+    "rotation",
+    "ode",
+    "vectors"
+   ],
+   "beats": [
+    "🪙 roll and turn",
+    "🚫 no skidding",
+    "🔁 roll–turn–unroll–unturn = sideways",
+    "📈 growth (2,3,4)"
+   ],
+   "brief": "3D: an upright blue coin on a slate table with a pink contact dot leaving a teal trail and a red mark on its rim showing the roll angle. Orange slider/joystick for roll rate and heading rate. No-skid: the contact velocity arrow is always lime and along the heading; a coral sideways arrow is permanently crossed out. Loop beat: roll, turn, unroll, unturn — the coin ends shifted sideways (coral gap) and with its rim mark changed. Growth beat: the 4D state (x,y,heading,roll) shown as four bars; the count of independent arrows climbs 2→3→4 as brackets are added."
+  },
+  {
+   "id": "mls-ch7-car-parking",
+   "title": "Parallel Park",
+   "icon": "🚗",
+   "section": "7.3",
+   "pages": [
+    336,
+    343
+   ],
+   "uses": [
+    "cspace",
+    "ode",
+    "rotation"
+   ],
+   "beats": [
+    "🚗 drive and steer",
+    "🚫 wheels never slide",
+    "🔁 drive–steer wiggle = turn in place",
+    "🔁🔁 turn–drive wiggle = slide sideways",
+    "📈 growth (2,3,4)"
+   ],
+   "brief": "Top-down slate street with a blue car (rear axle dot at (x,y), front wheels at steering angle φ). Orange pedal slider u1 and steering slider u2. Lime arrows show each wheel’s rolling direction, coral crossed-out arrows show the forbidden sideways slip. Bracket beats: run the four-leg loop (drive, steer, reverse, unsteer) and watch the car end rotated; nest it with driving to get a pure sideways shift — the classic parallel-park wiggle into a gold parking box. Growth beat: 4 bars (x,y,θ,φ) and a rank meter climbing 2→3→4 as [g1,g2] and [g1,[g1,g2]] are added; a coral band at φ=±π/2 where the model breaks."
+  },
+  {
+   "id": "mls-ch7-ball-rolling",
+   "title": "Ball on Table",
+   "icon": "🎱",
+   "section": "7.3",
+   "pages": [
+    337,
+    344
+   ],
+   "uses": [
+    "rotation",
+    "ode",
+    "jacobian"
+   ],
+   "beats": [
+    "🎱 roll a ball under your palm",
+    "🧮 contact coordinates",
+    "🚫 no sliding, no spinning in place",
+    "🔁 small loops twist the ball",
+    "📈 growth (2,3,5)"
+   ],
+   "brief": "A blue unit sphere (with a painted red/green/blue frame) on a slate plane; a pink fingertip dot at the contact. Two orange sliders: roll about the x and y tangent axes. Teal trails on both the ball (contact path on the sphere) and the table. The contact constraint is shown as a lime \"rolls\" arrow and coral crossed-out arrows for slide and spin about the normal. Loop beat: roll a small square on the table; the ball returns to the same spot but turned about the vertical (coral twist angle readout). Growth beat: five state bars and a rank meter 2→3→5."
+  },
+  {
+   "id": "mls-ch7-growth-vector",
+   "title": "Growth Vector",
+   "icon": "📈",
+   "section": "7.4.1",
+   "pages": [
+    339,
+    341
+   ],
+   "uses": [
+    "vectors",
+    "matrix",
+    "ode"
+   ],
+   "beats": [
+    "🧱 Δ1: the free arrows",
+    "➕ Δ2: add first brackets",
+    "🪜 keep bracketing until rank stalls",
+    "🔢 degree κ and growth vector",
+    "🧭 stalls short → leaves; reaches n → Chow"
+   ],
+   "brief": "A tower of floors: floor i holds the arrows of Δ_i as orange (generators), then gold (new brackets). A rank bar beside each floor shows dim Δ_i; the bars form a staircase (the growth vector r) and the step heights form σ. The staircase stops climbing at floor κ. If the final bar reaches the ceiling n it glows lime (Chow: reach everywhere); if it stalls below, purple leaves appear (Frobenius: trapped on level sets of p hidden functions). Pick a robot from a shelf (hopper, coin, car, ball) to load its staircase."
+  },
+  {
+   "id": "mls-ch7-hall-basis",
+   "title": "Hall Basis",
+   "icon": "🌳",
+   "section": "7.4.3",
+   "pages": [
+    344,
+    345
+   ],
+   "uses": [
+    "vectors",
+    "matrix"
+   ],
+   "beats": [
+    "📏 length = how many letters",
+    "♻️ skew & Jacobi make copies",
+    "🌳 Hall rules pick one of each",
+    "✂️ nilpotent: long words vanish"
+   ],
+   "brief": "Brackets are drawn as little binary trees with orange leaves g1, g2, g3. Trees are sorted on shelves by length (number of leaves). A \"copy detector\" flashes coral on [g2,g1] (just −[g1,g2]) and on the third Jacobi term; the Hall rules act as a sieve that keeps one gold tree per independent direction. A nilpotency slider k greys out every shelf longer than k. Counter shows how many trees survive per shelf (e.g. 3, 3, 8 for three generators)."
+  }
+ ],
+ "pages": [
+  {
+   "pdf": 335,
+   "book": 317,
+   "lines": 27,
+   "section": "7.1",
+   "summary": "Chapter opener: velocity constraints from rolling and from conserved spin, and the question of when they secretly confine the robot; the constraints are written as rows ωᵢ(q)q̇ = 0.",
+   "atoms": [
+    {
+     "id": "7-317-a",
+     "lines": [
+      1,
+      3
+     ],
+     "kind": "heading",
+     "idea": "Chapter 7 title: nonholonomic behavior in robotic systems."
+    },
+    {
+     "id": "7-317-b",
+     "lines": [
+      4,
+      14
+     ],
+     "kind": "prose",
+     "idea": "Preview: rolling contact (hands, wheels) and conserved angular momentum put limits on velocities, not positions. The chapter asks when such velocity limits are really position limits in disguise, using tools from differential geometry and nonlinear control.",
+     "feynman": "A shopping cart cannot slide sideways, yet you can still push it into any spot in the store. A limit on how you move is not always a limit on where you can end up.",
+     "visual": "Opening tableau: a shopping-cart emoji on a slate floor with lime forward/back arrows and coral crossed-out sideways arrows; it wiggles and reaches a gold spot directly beside it. Next to it a cat 🐈 flips in mid-air with a blue momentum gauge frozen at 0.",
+     "scene": "mls-ch7-roadmap",
+     "beat": "🗺️ the route through the chapter",
+     "math": [
+      "cspace",
+      "vectors"
+     ],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "7-317-c",
+     "lines": [
+      15,
+      15
+     ],
+     "kind": "heading",
+     "idea": "Section 7.1 Introduction."
+    },
+    {
+     "id": "7-317-d",
+     "lines": [
+      16,
+      23
+     ],
+     "kind": "prose",
+     "idea": "Recall from Chapter 6: Pfaffian constraints J(θ,x)θ̇ = Gᵀ(θ,x)ẋ (Eq 7.1) are linear in velocity, with q = (θ,x). They model hands, robots touching the world and redundant arms.",
+     "feynman": "A train on rails: the rails do not say where the train is, they say which way it is allowed to move right now.",
+     "visual": "A blue body at q with a fan of all possible velocity arrows; the constraint rows paint some directions coral (forbidden) and the remaining ones lime. Drag q: the lime fan re-orients with position.",
+     "scene": "mls-ch7-holonomic-test",
+     "beat": "🚗 no sideways, yet parks anywhere",
+     "math": [
+      "vectors",
+      "matrix"
+     ],
+     "engine": [
+      "linalg.mvec"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "7-317-e",
+     "lines": [
+      24,
+      26
+     ],
+     "kind": "equation",
+     "label": "Eq (7.2)",
+     "idea": "Rewrite all constraints as k row vectors: ωᵢ(q)·q̇ = 0 for i = 1…k. Each row is a wall that the velocity must be parallel to.",
+     "feynman": "Each rule is like a sign saying \"no moving this way\" — a velocity is legal if it is perpendicular to every sign’s arrow.",
+     "visual": "k coral normal arrows ωᵢ planted at q; the learner drags a velocity arrow q̇ — it turns lime only when its dot product with every coral arrow reads 0 on a row of meters.",
+     "scene": "mls-ch7-holonomic-test",
+     "beat": "🚗 no sideways, yet parks anywhere",
+     "math": [
+      "vectors"
+     ],
+     "engine": [
+      "linalg.vdot"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "7-317-f",
+     "lines": [
+      27,
+      27
+     ],
+     "kind": "page-number",
+     "idea": "Page 317."
+    }
+   ]
+  },
+  {
+   "pdf": 336,
+   "book": 318,
+   "lines": 43,
+   "section": "7.1",
+   "summary": "Holonomic means the velocity rules are really position rules hᵢ(q)=0; nonholonomic means they are not. The real question is which configurations are reachable.",
+   "atoms": [
+    {
+     "id": "7-318-a",
+     "lines": [
+      1,
+      4
+     ],
+     "kind": "prose",
+     "idea": "Assume the k rows ωᵢ(q) are linearly independent at every q (redundant rows can be dropped); each one removes one direction of allowed velocity.",
+     "feynman": "Three \"no entry\" signs pointing the same way are really one sign — only different directions count.",
+     "visual": "Add coral wall arrows one by one; a counter of allowed directions n−k drops by one per independent wall, and stays put when a new wall is a combination of old ones (it flashes purple).",
+     "scene": "mls-ch7-holonomic-test",
+     "beat": "🚗 no sideways, yet parks anywhere",
+     "math": [
+      "vectors",
+      "matrix"
+     ],
+     "engine": [
+      "NEW: rank"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "7-318-b",
+     "lines": [
+      5,
+      13
+     ],
+     "kind": "definition",
+     "label": "Eq (7.3)",
+     "idea": "A holonomic constraint confines motion to a smooth surface (a manifold) given locally by k equations hᵢ(q) = 0; the leftover surface has dimension n − k.",
+     "feynman": "A bead threaded on a curved wire: wherever you push it, it stays on the wire — the wire is the equation h(q) = 0.",
+     "visual": "A gold wire curve in the plane (or a gold sheet in 3D) and a teal bead; drag the bead anywhere — it snaps back onto the wire. A dimension readout shows n − k.",
+     "scene": "mls-ch7-holonomic-test",
+     "beat": "🧵 holonomic = trapped on a level set",
+     "math": [
+      "cspace"
+     ],
+     "engine": [],
+     "difficulty": 2
+    },
+    {
+     "id": "7-318-c",
+     "lines": [
+      14,
+      22
+     ],
+     "kind": "definition",
+     "idea": "A set of Pfaffian constraints is integrable when there are functions hᵢ with hᵢ(q(t)) = 0 exactly when ωᵢ(q)q̇ = 0; integrable constraints are called holonomic, and constraints with no such equivalent are nonholonomic.",
+     "feynman": "Following \"always walk along the hillside, never up or down\" is the same as \"stay at this height\" — the walking rule integrates to a height rule. A car’s \"never slide sideways\" has no such height.",
+     "visual": "Split screen: left, a hillside with gold contour lines and a walker obeying \"move along the contour\" — her trail never leaves one contour (lime). Right, a car obeying \"no sideways\" whose trail crosses many contours (coral flash): no hidden h exists.",
+     "scene": "mls-ch7-holonomic-test",
+     "beat": "🧵 holonomic = trapped on a level set",
+     "math": [
+      "cspace",
+      "derivative"
+     ],
+     "engine": [],
+     "difficulty": 3
+    },
+    {
+     "id": "7-318-d",
+     "lines": [
+      23,
+      39
+     ],
+     "kind": "prose",
+     "idea": "Rather than worrying about the equations of motion, the chapter asks: given start q0 and goal qf, is there a path obeying the constraints? The reachable set of q0 is everything such a path can reach. Holonomic constraints confine it to the level set hᵢ(q) = hᵢ(q0).",
+     "feynman": "A tram can only ever be somewhere on its track network; a bicycle can get anywhere in town even though it, too, cannot slide sideways.",
+     "visual": "Reach meter: from a teal start dot, random legal paths paint a purple cloud. Toggle constraint type: holonomic paints only a thin gold sheet (the level set through q0); nonholonomic floods the whole box.",
+     "scene": "mls-ch7-holonomic-test",
+     "beat": "🌍 reachable set: everything or a slice",
+     "math": [
+      "cspace"
+     ],
+     "engine": [
+      "dynamics.rk4"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "7-318-e",
+     "lines": [
+      40,
+      42
+     ],
+     "kind": "prose",
+     "idea": "The car is the model example: wheels may roll and pivot but not skid sideways (continued next page).",
+     "feynman": "Push a toy car sideways across a table: it resists and drags its tires. Push it forward and it glides.",
+     "visual": "Top-down blue car; the learner drags it sideways and the wheels show coral skid marks with a \"🚫\" flash; dragging forward leaves clean lime rolling tracks.",
+     "scene": "mls-ch7-holonomic-test",
+     "beat": "🚗 no sideways, yet parks anywhere",
+     "math": [
+      "cspace"
+     ],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "7-318-f",
+     "lines": [
+      43,
+      43
+     ],
+     "kind": "page-number",
+     "idea": "Page 318."
+    }
+   ]
+  },
+  {
+   "pdf": 337,
+   "book": 319,
+   "lines": 47,
+   "section": "7.1",
+   "summary": "The car shows nonholonomy: no sideways motion, yet every parking pose is reachable. For one constraint, integrability means finding an integrating factor α with αω a gradient, checked by symmetric mixed partials.",
+   "atoms": [
+    {
+     "id": "7-319-a",
+     "lines": [
+      1,
+      7
+     ],
+     "kind": "prose",
+     "idea": "So the car can neither slide sideways nor spin in place, yet experience says it can be parked at any position and heading: its constraints cannot be holonomic. Finding the actual path is nonholonomic motion planning (Chapter 8).",
+     "feynman": "Parallel parking: you only drive forward/back and steer, but a few wiggles slide the car sideways into the gap.",
+     "visual": "A gold parking box beside a blue car. Two orange sliders (drive, steer). A ghost shows the wiggle forward-steer-back-unsteer; after a few rounds the car sits in the box with a lime check. A sideways-shift counter grows each round.",
+     "scene": "mls-ch7-holonomic-test",
+     "beat": "🚗 no sideways, yet parks anywhere",
+     "math": [
+      "cspace"
+     ],
+     "engine": [
+      "NEW: kinematicCar"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "7-319-b",
+     "lines": [
+      8,
+      16
+     ],
+     "kind": "prose",
+     "idea": "Testing holonomy is not easy. Start with a single constraint ω(q)q̇ = Σⱼ ωⱼ(q)q̇ⱼ = 0: it is integrable if some function h has ω(q)q̇ = 0 ⇔ h(q) = 0.",
+     "feynman": "One rule like \"keep the same distance from the lamp post\" is secretly a position rule (stay on a circle). The test asks whether a given velocity rule hides such a circle.",
+     "visual": "One coral constraint arrow field ω over the plane; lime arrows perpendicular to it everywhere. A \"search\" button tries to draw a gold curve family whose tangents match the lime arrows; it succeeds (curves appear) or reports failure.",
+     "scene": "mls-ch7-holonomic-test",
+     "beat": "🧪 one constraint: the integrating-factor test",
+     "math": [
+      "derivative",
+      "vectors"
+     ],
+     "engine": [],
+     "difficulty": 2
+    },
+    {
+     "id": "7-319-c",
+     "lines": [
+      17,
+      32
+     ],
+     "kind": "equation",
+     "label": "Eq (7.4)",
+     "idea": "Differentiating h(q)=0 in time gives Σ (∂h/∂qⱼ) q̇ⱼ = 0, so the gradient of h must be parallel to ω: there is an integrating factor α(q) with α ωⱼ = ∂h/∂qⱼ. One constraint is holonomic exactly when some rescaling of ω is a gradient.",
+     "feynman": "Contour lines on a map: the uphill direction is always perpendicular to them. If your rule’s arrows can be stretched (longer here, shorter there) to become exactly the uphill arrows of some hill, then the rule is \"stay at one height\".",
+     "visual": "Coral ω arrows on a grid with an orange \"stretch\" brush α that lengthens or shortens arrows pointwise. When the stretched field becomes curl-free, a gold hill h appears underneath whose gradient matches every arrow (lime check).",
+     "scene": "mls-ch7-holonomic-test",
+     "beat": "🧪 one constraint: the integrating-factor test",
+     "math": [
+      "derivative",
+      "chain-rule"
+     ],
+     "engine": [
+      "dynamics.numJacobian"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "7-319-d",
+     "lines": [
+      33,
+      42
+     ],
+     "kind": "equation",
+     "label": "Eq (7.5)",
+     "idea": "To avoid the unknown h, use symmetry of second derivatives: integrability needs ∂(αωⱼ)/∂qᵢ = ∂(αωᵢ)/∂qⱼ for all i,j — the rescaled one-form must be curl-free.",
+     "feynman": "Walk a tiny square on a real hill and add up the climbs: you always come back to zero. If the square adds up to a net climb, there is no hill — it is an Escher staircase.",
+     "visual": "Draw a small square loop on the field; a gauge sums αω·dq around it. Zero (lime) for every square ⇒ a hill exists; a nonzero (coral) total proves no α works at that α. Slider for α shows the total going to zero for the right α.",
+     "scene": "mls-ch7-holonomic-test",
+     "beat": "🧪 one constraint: the integrating-factor test",
+     "math": [
+      "derivative"
+     ],
+     "engine": [
+      "NEW: loopIntegral"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "7-319-e",
+     "lines": [
+      43,
+      46
+     ],
+     "kind": "prose",
+     "idea": "This is natural: multiplying a constraint by any nonzero smooth α(q) does not change which velocities are allowed.",
+     "feynman": "\"Don’t walk north\" and \"really, really don’t walk north\" forbid exactly the same steps.",
+     "visual": "Scale the coral wall arrow by a slider α; its length changes but the lime allowed fan stays identical (overlay ghost matches exactly).",
+     "scene": "mls-ch7-holonomic-test",
+     "beat": "🧪 one constraint: the integrating-factor test",
+     "math": [
+      "vectors"
+     ],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "7-319-f",
+     "lines": [
+      47,
+      47
+     ],
+     "kind": "page-number",
+     "idea": "Page 319."
+    }
+   ]
+  },
+  {
+   "pdf": 338,
+   "book": 320,
+   "lines": 42,
+   "section": "7.1",
+   "summary": "With several constraints, some combinations may integrate (partially holonomic) even if none does alone; flipping to the free directions turns constraints into a driftless control system q̇ = Σ gⱼuⱼ.",
+   "atoms": [
+    {
+     "id": "7-320-a",
+     "lines": [
+      1,
+      2
+     ],
+     "kind": "prose",
+     "idea": "The catch is that one still has to find a suitable α.",
+     "feynman": "Knowing a key exists is not the same as having it in your hand.",
+     "visual": "The α brush from the previous beat keeps searching (orange shimmer) until the loop gauge hits zero or a timeout shows coral.",
+     "scene": "mls-ch7-holonomic-test",
+     "beat": "🧪 one constraint: the integrating-factor test",
+     "math": [],
+     "engine": [],
+     "difficulty": 2
+    },
+    {
+     "id": "7-320-b",
+     "lines": [
+      3,
+      19
+     ],
+     "kind": "prose",
+     "idea": "With k constraints, one must also test every combination Σαᵢωᵢ: there may be p ≤ k functions hᵢ whose gradients lie in the span of the ωᵢ, and then the motion stays on the level sets {h₁=c₁,…,h_p=c_p}.",
+     "feynman": "Two rules, \"no sliding\" and \"no spinning\", might each be harmless alone but together force \"you stay at this height\" — like two locks that only together keep a door shut.",
+     "visual": "Two coral walls ω₁, ω₂; an orange mixing dial (α₁,α₂) sweeps their combinations. For some mixtures a gold contour sheet appears (an integrable combination); the reach cloud is then squashed onto that sheet.",
+     "scene": "mls-ch7-holonomic-test",
+     "beat": "🌍 reachable set: everything or a slice",
+     "math": [
+      "vectors",
+      "cspace"
+     ],
+     "engine": [],
+     "difficulty": 3
+    },
+    {
+     "id": "7-320-c",
+     "lines": [
+      20,
+      26
+     ],
+     "kind": "definition",
+     "idea": "If p = k the constraints are holonomic; if 0 < p < k they are partially holonomic (reach is still limited); if no such function exists the constraints are completely nonholonomic — the case of interest.",
+     "feynman": "A tram (fully stuck to rails), a boat on a canal network (stuck to water, free within it), and a skater on open ice who can get anywhere.",
+     "visual": "Three pens side by side, each with a purple reach cloud: a gold line (p=k), a gold sheet (0<p<k), and a full box (p=0, lime). A counter shows p.",
+     "scene": "mls-ch7-holonomic-test",
+     "beat": "🌍 reachable set: everything or a slice",
+     "math": [
+      "cspace"
+     ],
+     "engine": [],
+     "difficulty": 2
+    },
+    {
+     "id": "7-320-d",
+     "lines": [
+      27,
+      36
+     ],
+     "kind": "prose",
+     "idea": "Change viewpoint from forbidden directions to free ones: pick a basis gⱼ(q), j = 1…n−k = m, of the right null space of the constraints, so ωᵢ(q)gⱼ(q) = 0 for all i,j.",
+     "feynman": "Instead of listing every road that is closed, hand the driver the two pedals that actually work.",
+     "visual": "At a point q: coral wall arrows ωᵢ fade out and lime arrows gⱼ grow in exactly perpendicular to all of them (dot-product meters read 0).",
+     "scene": "mls-ch7-holonomic-test",
+     "beat": "🔀 flip walls into free arrows",
+     "math": [
+      "vectors",
+      "matrix"
+     ],
+     "engine": [
+      "NEW: nullspace"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "7-320-e",
+     "lines": [
+      37,
+      41
+     ],
+     "kind": "equation",
+     "label": "Eq (7.6)",
+     "idea": "Allowed trajectories are exactly the solutions of the driftless control system q̇ = g₁(q)u₁ + … + g_m(q)u_m for some inputs u(t) ∈ ℝᵐ.",
+     "feynman": "A car has two knobs — gas and steering wheel. Every legal motion is just some way of turning those two knobs over time.",
+     "visual": "Two orange sliders u₁,u₂ scale two lime arrows g₁,g₂ at the body; their sum is the velocity and the body moves along it (rk4). Releasing the sliders stops the body dead (no drift).",
+     "scene": "mls-ch7-holonomic-test",
+     "beat": "🔀 flip walls into free arrows",
+     "math": [
+      "ode",
+      "vectors"
+     ],
+     "engine": [
+      "dynamics.rk4"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "7-320-f",
+     "lines": [
+      42,
+      42
+     ],
+     "kind": "page-number",
+     "idea": "Page 320."
+    }
+   ]
+  },
+  {
+   "pdf": 339,
+   "book": 321,
+   "lines": 43,
+   "section": "7.1",
+   "summary": "Completely nonholonomic = the control system can be steered anywhere; rolling and momentum conservation are the sources. Outline of the chapter, then §7.2 opens: tools for deciding holonomy, for driftless systems in ℝⁿ.",
+   "atoms": [
+    {
+     "id": "7-321-a",
+     "lines": [
+      1,
+      8
+     ],
+     "kind": "prose",
+     "idea": "In control language: constraints are completely nonholonomic iff the system (7.6) can be steered between any two points; holonomic ones keep it on a constraint surface. So integrability is studied through controllability.",
+     "feynman": "Can a toy with only two buttons get to every spot on the play mat? If yes, its rules are fully nonholonomic; if it is stuck on one stripe, they are holonomic.",
+     "visual": "Teal start, gold goal anywhere in the box; press \"steer\". Holonomic mode: the planner fails unless the goal lies on the start’s gold level sheet. Nonholonomic mode: every goal gets reached (lime).",
+     "scene": "mls-ch7-holonomic-test",
+     "beat": "🌍 reachable set: everything or a slice",
+     "math": [
+      "cspace"
+     ],
+     "engine": [],
+     "difficulty": 2
+    },
+    {
+     "id": "7-321-b",
+     "lines": [
+      9,
+      15
+     ],
+     "kind": "prose",
+     "idea": "Applications: rolling fingers on objects, wheeled mobile robots, and free-floating space robots where conserved angular momentum acts as the constraint. The key questions: is a path possible, and how to compute it.",
+     "feynman": "A gymnast in the air cannot push on anything, yet twists by moving arms and legs; a robot wheel cannot skid, yet the robot goes everywhere.",
+     "visual": "Two pens: wheel pen (finger on ball, car, coin) with lime contact dots; spin pen (satellite arms, hopper) with a blue momentum gauge stuck at 0. A question mark hovers over a gold goal in each.",
+     "scene": "mls-ch7-roadmap",
+     "beat": "🦓 two sources: rolling & spinning",
+     "math": [
+      "cspace"
+     ],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "7-321-c",
+     "lines": [
+      16,
+      21
+     ],
+     "kind": "prose",
+     "idea": "Roadmap: §2 builds geometric and control tools, §3 gives examples, §4 analyses their structure; Chapter 8 plans the actual paths.",
+     "feynman": "Like a cookbook: first the kitchen tools, then the ingredients, then how they combine — the recipes come next chapter.",
+     "visual": "Stepping-stone road: 🧰 tools → 🦓 examples → 🧬 structure → (next chapter) 🧭 planning. A car hops along the stones as the learner taps each.",
+     "scene": "mls-ch7-roadmap",
+     "beat": "🗺️ the route through the chapter",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "7-321-d",
+     "lines": [
+      22,
+      29
+     ],
+     "kind": "remark",
+     "idea": "This chapter and the next are more advanced and closer to research; nonholonomy also links to geometric mechanics, where it shows up as the geometric phase of a symmetric mechanical system (see Marsden’s notes [67]).",
+     "feynman": "A falling cat lands on its feet with zero spin by changing shape in a loop; the net turn depends only on the loop’s shape — that \"free turn\" is the geometric phase.",
+     "visual": "A cat silhouette cycles through a closed loop of shapes (shape pad on the right traces a loop); its body angle advances by a fixed coral amount per loop, proportional to the loop’s enclosed area.",
+     "scene": "mls-ch7-roadmap",
+     "beat": "📜 who found what",
+     "math": [
+      "energy"
+     ],
+     "engine": [],
+     "difficulty": 3
+    },
+    {
+     "id": "7-321-e",
+     "lines": [
+      30,
+      30
+     ],
+     "kind": "heading",
+     "idea": "Section 7.2 Controllability and Frobenius’ theorem."
+    },
+    {
+     "id": "7-321-f",
+     "lines": [
+      31,
+      36
+     ],
+     "kind": "prose",
+     "idea": "Deciding whether constraints are holonomic, and if not whether they are completely nonholonomic, is hard by hand; this section builds the machinery to answer it.",
+     "feynman": "Rather than guessing whether a maze has a hidden wall, build a gadget that tests every corridor automatically.",
+     "visual": "A sorting machine: drop in a set of constraint arrows; it outputs one of three bins — holonomic (gold sheet), partial, complete (full lime box).",
+     "scene": "mls-ch7-frobenius-leaves",
+     "beat": "🏁 Frobenius: closed ⇔ stacked",
+     "math": [],
+     "engine": [],
+     "difficulty": 2
+    },
+    {
+     "id": "7-321-g",
+     "lines": [
+      37,
+      42
+     ],
+     "kind": "prose",
+     "idea": "The tools are Frobenius’ theorem and nonlinear controllability, kept in ℝⁿ and limited to drift-free systems — those that stay put when the inputs are zero.",
+     "feynman": "A rowboat in still water: stop rowing and it stops. A boat in a river (drift) keeps moving; this chapter only handles still water.",
+     "visual": "Toggle drift on/off: with drift off the teal dot freezes when the orange sliders are released; with drift on a faint blue current keeps carrying it.",
+     "scene": "mls-ch7-chow-reach",
+     "beat": "🎯 controllable vs small-time local",
+     "math": [
+      "ode"
+     ],
+     "engine": [],
+     "difficulty": 2
+    },
+    {
+     "id": "7-321-h",
+     "lines": [
+      43,
+      43
+     ],
+     "kind": "page-number",
+     "idea": "Page 321."
+    }
+   ]
+  },
+  {
+   "pdf": 340,
+   "book": 322,
+   "lines": 45,
+   "section": "7.2.1",
+   "summary": "Vector fields are arrow-at-each-point maps that act as right-hand sides of ODEs; the Lie derivative measures how a function changes along them; the flow map carries points forward in time.",
+   "atoms": [
+    {
+     "id": "7-322-a",
+     "lines": [
+      1,
+      5
+     ],
+     "kind": "remark",
+     "idea": "Several proofs use manifold facts not developed here and may be skipped; Isidori [43] and Nijmeijer–van der Schaft [83] are recommended background.",
+     "feynman": "You can drive a car well without knowing how the engine is built.",
+     "visual": "A collapsible \"proof drawer\" icon on each theorem stone of the roadmap; closed by default, opening shows the staircase visuals.",
+     "scene": "mls-ch7-chow-reach",
+     "beat": "🎯 controllable vs small-time local",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "7-322-b",
+     "lines": [
+      6,
+      6
+     ],
+     "kind": "heading",
+     "idea": "Subsection 7.2.1 Vector fields and flows."
+    },
+    {
+     "id": "7-322-c",
+     "lines": [
+      7,
+      20
+     ],
+     "kind": "definition",
+     "idea": "Points of ℝⁿ and tangent vectors at a point are kept distinct (as points vs vectors were in Chapter 2). A vector field assigns to each q a tangent vector f(q) ∈ T_qℝⁿ, written as a column of smooth functions fᵢ(q).",
+     "feynman": "A weather map of wind: at every town there is an arrow saying which way and how hard the wind blows there.",
+     "visual": "A grid of blue arrows f(q) over the plane; hovering a point shows its own little tangent plane (a translucent tile) with the arrow sitting in it, distinct from the point itself.",
+     "scene": "mls-ch7-fields-flows",
+     "beat": "➡️ an arrow at every point",
+     "math": [
+      "vectors",
+      "ode"
+     ],
+     "engine": [
+      "control.vectorField"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "7-322-d",
+     "lines": [
+      21,
+      23
+     ],
+     "kind": "equation",
+     "label": "Eq (7.7)",
+     "idea": "A vector field is the right-hand side of an ODE q̇ = f(q).",
+     "feynman": "Drop a leaf in a stream: at every moment it moves the way the water at its spot is flowing.",
+     "visual": "Click to drop teal leaves; each follows the blue arrows, leaving a trail (rk4). Arrows recolor as speed.",
+     "scene": "mls-ch7-fields-flows",
+     "beat": "➡️ an arrow at every point",
+     "math": [
+      "ode"
+     ],
+     "engine": [
+      "dynamics.rk4",
+      "control.vectorField"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "7-322-e",
+     "lines": [
+      24,
+      35
+     ],
+     "kind": "definition",
+     "idea": "The rate of change of a function V along the flow is V̇ = (∂V/∂q) f = Σ (∂V/∂qᵢ) fᵢ, called the Lie derivative L_f V.",
+     "feynman": "Hiking with a compass: how fast your altitude changes depends on how steep the hill is and which way you are walking — slope dotted with walking direction.",
+     "visual": "Gold contour rings of a hill V under the blue arrow field; a teal leaf drifts and a vertical thermometer shows L_fV = ∇V·f live: red-up when climbing, blue-down when descending, zero when crossing contours tangentially.",
+     "scene": "mls-ch7-fields-flows",
+     "beat": "📈 Lie derivative: how a hill height changes as you drift",
+     "math": [
+      "derivative",
+      "chain-rule"
+     ],
+     "engine": [
+      "linalg.vdot"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "7-322-f",
+     "lines": [
+      36,
+      42
+     ],
+     "kind": "definition",
+     "idea": "The flow φ_t^f(q) is where the ODE solution starting at q sits after time t; it satisfies d/dt φ_t(q) = f(φ_t(q)).",
+     "feynman": "A conveyor belt system in a factory: the flow is the rule \"where will the box placed here be after t seconds\".",
+     "visual": "A square of teal dots (a sheet of leaves) is carried by the field; an orange t slider scrubs time and the whole sheet bends and moves together (φ_t as a warped grid).",
+     "scene": "mls-ch7-fields-flows",
+     "beat": "🌊 the flow map φ_t",
+     "math": [
+      "ode"
+     ],
+     "engine": [
+      "dynamics.rk4"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "7-322-g",
+     "lines": [
+      43,
+      44
+     ],
+     "kind": "prose",
+     "idea": "A field is complete if its flow exists for all time; by ODE existence and uniqueness, for each fixed t the flow is a local diffeomorphism of ℝⁿ (continued next page).",
+     "feynman": "A river that never sends a leaf off to infinity in finite time, so you can always ask \"where is it later?\" — and two leaves never merge.",
+     "visual": "Push the t slider far: for a complete field all leaves remain on screen; a contrasting field (q̇ = q²) shows a leaf racing off with a coral 🚫 at finite time.",
+     "scene": "mls-ch7-fields-flows",
+     "beat": "🌊 the flow map φ_t",
+     "math": [
+      "ode"
+     ],
+     "engine": [
+      "dynamics.rk4"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "7-322-h",
+     "lines": [
+      45,
+      45
+     ],
+     "kind": "page-number",
+     "idea": "Page 322."
+    }
+   ]
+  },
+  {
+   "pdf": 341,
+   "book": 323,
+   "lines": 30,
+   "section": "7.2.2",
+   "summary": "Flows compose additively in time. Two different flows do not commute: going around an ε-square along g1, g2, −g1, −g2 fails to close, and the Taylor expansion of the first leg begins the computation.",
+   "atoms": [
+    {
+     "id": "7-323-a",
+     "lines": [
+      1,
+      6
+     ],
+     "kind": "figure",
+     "label": "Fig 7.1",
+     "idea": "A Lie-bracket loop: flow ε along g1, then g2, then −g1, then −g2; the end point misses the start by a nonzero net motion.",
+     "feynman": "Parallel parking in four moves — forward with wheel left, back with wheel right, … — you end up beside where you started, not on top of it.",
+     "visual": "Teal dot runs four coloured legs (orange g1, orange-dashed g2, then the reverses); a coral arrow joins end to start, labelled only by its length readout.",
+     "scene": "mls-ch7-bracket-square",
+     "beat": "🔁 go A, go B, undo A, undo B",
+     "math": [
+      "vectors",
+      "ode"
+     ],
+     "engine": [
+      "dynamics.rk4"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "7-323-b",
+     "lines": [
+      7,
+      11
+     ],
+     "kind": "prose",
+     "idea": "For each t, φ_t is a local diffeomorphism, and flows of one field compose additively: φ_t ∘ φ_s = φ_{t+s}.",
+     "feynman": "Riding the escalator 10 seconds and then 5 more lands you where 15 seconds would.",
+     "visual": "Two ghost leaves: one runs t then s, the other runs t+s in one go; they land on the same pixel (lime ring).",
+     "scene": "mls-ch7-fields-flows",
+     "beat": "➕ flows chain: t then s = t+s",
+     "math": [
+      "ode"
+     ],
+     "engine": [
+      "dynamics.rk4"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "7-323-c",
+     "lines": [
+      12,
+      12
+     ],
+     "kind": "heading",
+     "idea": "Subsection 7.2.2 Lie brackets and Frobenius’ theorem."
+    },
+    {
+     "id": "7-323-d",
+     "lines": [
+      13,
+      18
+     ],
+     "kind": "prose",
+     "idea": "Composing flows of two different fields depends on order: φ^{g1}_t ∘ φ^{g2}_s ≠ φ^{g2}_s ∘ φ^{g1}_t in general. Fig 7.1’s four-leg loop exposes the difference.",
+     "feynman": "Put on socks then shoes vs shoes then socks — order matters. Turning a car’s wheel then driving is not the same as driving then turning.",
+     "visual": "Two teal dots from the same start: one does g1 then g2, the other g2 then g1; their endpoints differ (coral gap). Swap button replays both.",
+     "scene": "mls-ch7-bracket-square",
+     "beat": "🔁 go A, go B, undo A, undo B",
+     "math": [
+      "ode"
+     ],
+     "engine": [
+      "dynamics.rk4"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "7-323-e",
+     "lines": [
+      19,
+      29
+     ],
+     "kind": "equation",
+     "idea": "First leg by Taylor series: q(ε) = q0 + ε g1(q0) + ½ ε² (∂g1/∂q) g1(q0) + O(ε³).",
+     "feynman": "Walking along a curving path for a short while: mostly you go straight, plus a small ε²-sized bend because the path turns under your feet.",
+     "visual": "Staircase step 1: zoom on the first leg; a straight orange ε·g1 arrow and a tiny purple ε² curvature correction that bends the tip onto the true teal path.",
+     "scene": "mls-ch7-bracket-square",
+     "beat": "📏 the gap shrinks like ε²",
+     "math": [
+      "derivative",
+      "linearize"
+     ],
+     "engine": [
+      "dynamics.numJacobian"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "7-323-f",
+     "lines": [
+      30,
+      30
+     ],
+     "kind": "page-number",
+     "idea": "Page 323."
+    }
+   ]
+  },
+  {
+   "pdf": 342,
+   "book": 324,
+   "lines": 57,
+   "section": "7.2.2",
+   "summary": "Carrying the Taylor expansion through the four legs leaves a net ε²[g1,g2] displacement (Eq 7.8), which defines the Lie bracket; vanishing bracket means commuting fields. For linear fields the bracket is the matrix commutator.",
+   "atoms": [
+    {
+     "id": "7-324-a",
+     "lines": [
+      1,
+      20
+     ],
+     "kind": "equation",
+     "idea": "Second leg: flow g2 from the shifted point, expanding g2(q0+εg1) ≈ g2(q0) + ε(∂g2/∂q)g1; the ε² term collects ½(∂g1 g1 + ∂g2 g2) + ∂g2 g1.",
+     "feynman": "On the second side of the square, the wind (g2) is measured at a slightly moved spot, so it is a little different from the wind at the start — that difference is the seed of the gap.",
+     "visual": "Staircase step 2: the g2 arrow drawn at q0 (faint) and at the shifted point (solid); a tiny purple difference arrow ε(∂g2/∂q)g1 between them is highlighted.",
+     "scene": "mls-ch7-bracket-square",
+     "beat": "📏 the gap shrinks like ε²",
+     "math": [
+      "derivative",
+      "chain-rule"
+     ],
+     "engine": [
+      "dynamics.numJacobian"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "7-324-b",
+     "lines": [
+      21,
+      28
+     ],
+     "kind": "equation",
+     "idea": "Third leg (−g1): the first-order g1 terms cancel, leaving q0 + εg2 plus ε² terms with a −2(∂g1/∂q)g2 piece (reader to verify).",
+     "feynman": "Walking back along the first direction undoes the big move, but not the small mismatch picked up on the way.",
+     "visual": "Staircase step 3: the third leg overlays the first in reverse; the big orange arrows cancel (fade to grey), the purple ε² remainders stay and stack.",
+     "scene": "mls-ch7-bracket-square",
+     "beat": "📏 the gap shrinks like ε²",
+     "math": [
+      "derivative"
+     ],
+     "engine": [],
+     "difficulty": 4
+    },
+    {
+     "id": "7-324-c",
+     "lines": [
+      29,
+      39
+     ],
+     "kind": "equation",
+     "label": "Eq (7.8)",
+     "idea": "After the fourth leg everything of first order cancels: q(4ε) = q0 + ε²((∂g2/∂q)g1 − (∂g1/∂q)g2) + O(ε³).",
+     "feynman": "After a full parallel-parking wiggle the big motions all undo each other; what is left is a small, steady sideways shift.",
+     "visual": "Staircase step 4: only the coral gap remains; a log-log plot of gap vs ε lands on a slope-2 line, and gap/ε² converges to a gold arrow.",
+     "scene": "mls-ch7-bracket-square",
+     "beat": "📏 the gap shrinks like ε²",
+     "math": [
+      "derivative"
+     ],
+     "engine": [
+      "dynamics.rk4",
+      "dynamics.numJacobian"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "7-324-d",
+     "lines": [
+      40,
+      44
+     ],
+     "kind": "definition",
+     "idea": "Lie bracket of vector fields: [f,g](q) = (∂g/∂q) f(q) − (∂f/∂q) g(q).",
+     "feynman": "Go A, go B, undo A, undo B: you do not come home. The bracket is the arrow from home to where you ended up, per ε².",
+     "visual": "Gold arrow [g1,g2] computed from numerical Jacobians drawn at q0; overlay the scaled loop gap — they coincide. Drag q0: both arrows move together across the plane.",
+     "scene": "mls-ch7-bracket-square",
+     "beat": "🧮 [f,g] = (∂g)f − (∂f)g",
+     "math": [
+      "derivative",
+      "jacobian"
+     ],
+     "engine": [
+      "dynamics.numJacobian",
+      "NEW: lieBracket"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "7-324-e",
+     "lines": [
+      45,
+      48
+     ],
+     "kind": "prose",
+     "idea": "The bracket is the ε²-order motion produced by flowing around an f–g square. If [f,g] = 0 the loop closes exactly and f, g commute.",
+     "feynman": "Moving a chess rook two right then three up lands where three up then two right does: those moves commute, so the square closes.",
+     "visual": "Pick two constant fields: the loop closes (lime ring, gap 0). Switch to the car’s fields: the gap opens (coral).",
+     "scene": "mls-ch7-bracket-square",
+     "beat": "🧮 [f,g] = (∂g)f − (∂f)g",
+     "math": [
+      "vectors"
+     ],
+     "engine": [
+      "NEW: lieBracket"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "7-324-f",
+     "lines": [
+      49,
+      50
+     ],
+     "kind": "definition",
+     "idea": "A Lie product is any nested bracket, such as [[f,g],[f,[f,g]]].",
+     "feynman": "Wiggles of wiggles: once you can make a sideways shift, wiggling that shift with another move makes yet another new move.",
+     "visual": "Bracket trees: orange leaves f,g joined by gold nodes; tapping a tree runs the corresponding nested loop and shows its tiny gap arrow.",
+     "scene": "mls-ch7-hall-basis",
+     "beat": "📏 length = how many letters",
+     "math": [],
+     "engine": [
+      "NEW: lieBracket"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "7-324-g",
+     "lines": [
+      51,
+      56
+     ],
+     "kind": "example",
+     "label": "Ex 7.1",
+     "idea": "For linear fields f = Aq and g = Bq, the bracket is linear too: [f,g](q) = (BA − AB)q, the matrix commutator.",
+     "feynman": "Squash-then-rotate a photo vs rotate-then-squash: the two results differ by a specific distortion — that difference is BA − AB.",
+     "visual": "Two 2×2 matrix editors A,B (î ĵ columns as arrows); the phase-plane shows both linear fields; the loop gap at several points lines up with the arrow field (BA−AB)q drawn in gold.",
+     "scene": "mls-ch7-bracket-square",
+     "beat": "🔲 linear fields: commutator BA − AB",
+     "math": [
+      "matrix",
+      "linearize"
+     ],
+     "engine": [
+      "linalg.mmul",
+      "linalg.msub"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "7-324-h",
+     "lines": [
+      57,
+      57
+     ],
+     "kind": "page-number",
+     "idea": "Page 324."
+    }
+   ]
+  },
+  {
+   "pdf": 343,
+   "book": 325,
+   "lines": 37,
+   "section": "7.2.2",
+   "summary": "Lie bracket properties (skew-symmetry, Jacobi, product rule) and an equivalent definition via Lie derivatives; distributions are smooth families of subspaces, regular if constant rank, involutive if bracket-closed.",
+   "atoms": [
+    {
+     "id": "7-325-a",
+     "lines": [
+      1,
+      2
+     ],
+     "kind": "prose",
+     "idea": "The bracket’s algebraic properties follow directly from its definition (proof left as an exercise).",
+     "feynman": "Once you know the rule for the wiggle, its habits follow — like knowing how a seesaw balances tells you what happens if you swap the kids.",
+     "visual": "Lead-in card: three property tiles (⇄, 🔺, ⛓️) light up one by one.",
+     "scene": "mls-ch7-bracket-square",
+     "beat": "⚖️ skew, Jacobi, chain rule",
+     "math": [],
+     "engine": [],
+     "difficulty": 2
+    },
+    {
+     "id": "7-325-b",
+     "lines": [
+      3,
+      13
+     ],
+     "kind": "proposition",
+     "label": "Prop 7.1",
+     "idea": "For fields f,g,h and functions α,β: [f,g] = −[g,f]; Jacobi [f,[g,h]] + [h,[f,g]] + [g,[h,f]] = 0; and [αf,βg] = αβ[f,g] + α(L_fβ)g − β(L_gα)f.",
+     "feynman": "Running the parking wiggle in the opposite order shifts you the opposite way. Three-way wiggles balance out like three people tugging a ring in a triangle.",
+     "visual": "Skew: swap g1/g2 order and the coral gap arrow flips. Jacobi: three cyclic nested loops drawn in three shades; their gap arrows add tip-to-tail to a lime closed triangle. Product rule: scale fields by orange heat-maps α,β and see the extra L_fβ·g and L_gα·f pieces appear as purple arrows.",
+     "scene": "mls-ch7-bracket-square",
+     "beat": "⚖️ skew, Jacobi, chain rule",
+     "math": [
+      "derivative",
+      "chain-rule"
+     ],
+     "engine": [
+      "NEW: lieBracket"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "7-325-c",
+     "lines": [
+      14,
+      18
+     ],
+     "kind": "remark",
+     "idea": "Equivalently, [f,g] is the field whose Lie derivative on any function is L_f(L_gα) − L_g(L_fα).",
+     "feynman": "Measure how fast the temperature changes \"walking east then north\" vs \"north then east\"; the mismatch in your thermometer readings is the bracket acting on temperature.",
+     "visual": "Pick a gold hill α; two thermometers read L_f L_g α and L_g L_f α at q; their difference meter equals ∇α·[f,g] (lime match).",
+     "scene": "mls-ch7-bracket-square",
+     "beat": "⚖️ skew, Jacobi, chain rule",
+     "math": [
+      "derivative"
+     ],
+     "engine": [
+      "dynamics.numJacobian"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "7-325-d",
+     "lines": [
+      19,
+      27
+     ],
+     "kind": "definition",
+     "idea": "A distribution assigns a subspace of the tangent space to each point smoothly; e.g. Δ = span{g1,…,gm} over smooth functions, giving Δ_q = span{gᵢ(q)} ⊂ T_qℝⁿ.",
+     "feynman": "At every spot on an ice rink, the set of directions a skate blade can glide is a line; together those lines are a distribution.",
+     "visual": "At each grid point, a small translucent blue tile spanned by two orange arrows g1(q), g2(q); move the mouse to see tiles tilt as q changes.",
+     "scene": "mls-ch7-frobenius-leaves",
+     "beat": "🧱 a plane of allowed arrows at each point",
+     "math": [
+      "vectors",
+      "matrix"
+     ],
+     "engine": [],
+     "difficulty": 2
+    },
+    {
+     "id": "7-325-e",
+     "lines": [
+      28,
+      31
+     ],
+     "kind": "definition",
+     "idea": "Δ is regular if dim Δ_q is constant, and involutive if the bracket of any two of its fields stays in Δ.",
+     "feynman": "A club is closed if every combination of members’ moves is still a club move; an involutive distribution never \"teaches\" you a new direction.",
+     "visual": "Run the bracket loop for g1,g2 inside the tiles: the coral gap arrow is tested against the tile — lies inside (lime, involutive) or pokes out (coral, not involutive).",
+     "scene": "mls-ch7-frobenius-leaves",
+     "beat": "🔒 involutive: brackets stay inside",
+     "math": [
+      "vectors"
+     ],
+     "engine": [
+      "NEW: lieBracket",
+      "NEW: rank"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "7-325-f",
+     "lines": [
+      32,
+      36
+     ],
+     "kind": "prose",
+     "idea": "It suffices to bracket basis fields. The involutive closure Δ̄ is the smallest involutive distribution containing Δ.",
+     "feynman": "To learn every move you could ever make, keep adding new wiggles until wiggling gives nothing new.",
+     "visual": "Keep adding gold bracket arrows to the tile; it grows from a plane into the full space or stops when new arrows fall inside (counter of dimension).",
+     "scene": "mls-ch7-frobenius-leaves",
+     "beat": "🔒 involutive: brackets stay inside",
+     "math": [
+      "vectors"
+     ],
+     "engine": [
+      "NEW: lieBracket",
+      "NEW: rank"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "7-325-g",
+     "lines": [
+      37,
+      37
+     ],
+     "kind": "page-number",
+     "idea": "Page 325."
+    }
+   ]
+  },
+  {
+   "pdf": 344,
+   "book": 326,
+   "lines": 44,
+   "section": "7.2.2",
+   "summary": "Lie algebras; the Lie algebra generated by the input fields and its rank; integrable distributions and integral manifolds; Frobenius’ theorem (regular: integrable ⇔ involutive); one-forms as row vectors.",
+   "atoms": [
+    {
+     "id": "7-326-a",
+     "lines": [
+      1,
+      4
+     ],
+     "kind": "definition",
+     "label": "Def 7.1",
+     "idea": "A Lie algebra is a real vector space with a bilinear bracket that is skew-symmetric and satisfies the Jacobi identity.",
+     "feynman": "Any set of \"moves\" where you can combine moves and take the wiggle of two moves, with the wiggle obeying the swap-sign and three-way-balance rules.",
+     "visual": "A small toolbox: vector arrows you can add (blue) and a bracket button (gold) that turns two arrows into a third; the skew and Jacobi badges from the previous beat stamp it \"Lie algebra\".",
+     "scene": "mls-ch7-bracket-square",
+     "beat": "⚖️ skew, Jacobi, chain rule",
+     "math": [
+      "vectors"
+     ],
+     "engine": [],
+     "difficulty": 3
+    },
+    {
+     "id": "7-326-b",
+     "lines": [
+      5,
+      14
+     ],
+     "kind": "prose",
+     "idea": "Smooth vector fields with the bracket form a Lie algebra. The involutive closure of span{g1..gm} is the Lie algebra L(g1,…,gm) they generate: combine, bracket, combine again, and so on. Its rank at q is the dimension of the resulting subspace there.",
+     "feynman": "Start with two dance steps; mixing them and inventing wiggle-steps from them, again and again, gives the full repertoire. The rank is how many truly different directions the repertoire covers at this spot.",
+     "visual": "Generation tree: orange g1,g2 at the root; each tap of \"bracket\" adds a gold child arrow at q. A rank meter counts independent arrows at q (stops at n). Moving q updates the count.",
+     "scene": "mls-ch7-frobenius-leaves",
+     "beat": "🔒 involutive: brackets stay inside",
+     "math": [
+      "vectors",
+      "matrix"
+     ],
+     "engine": [
+      "NEW: lieBracket",
+      "NEW: rank"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "7-326-c",
+     "lines": [
+      15,
+      28
+     ],
+     "kind": "definition",
+     "label": "Eq (7.9)",
+     "idea": "A constant-rank-k distribution is integrable if near each point there are n−k functions hᵢ with independent gradients and L_f hᵢ = 0 for every f in Δ. Their joint level sets are integral manifolds, and Δ_q is exactly their tangent space.",
+     "feynman": "Pages of a closed book: at every point the allowed directions lie flat in the page, and the page number is the function h that never changes as you move.",
+     "visual": "Blue tiles at each grid point; for an integrable Δ, gold sheets (level sets of h) appear and every tile lies flat on its sheet. A teal dot driven by any inputs keeps a constant h readout.",
+     "scene": "mls-ch7-frobenius-leaves",
+     "beat": "📚 integrable: a stack of leaves",
+     "math": [
+      "derivative",
+      "cspace"
+     ],
+     "engine": [],
+     "difficulty": 3
+    },
+    {
+     "id": "7-326-d",
+     "lines": [
+      29,
+      32
+     ],
+     "kind": "theorem",
+     "label": "Thm 7.2",
+     "idea": "Frobenius: a regular distribution is integrable if and only if it is involutive.",
+     "feynman": "If wiggling never produces a new direction, you are trapped on a page of a book; if some wiggle pops you off the page (like a car shuffling sideways), there are no pages at all.",
+     "visual": "Toggle between two pairs of fields. Involutive pair: every loop gap lies in the tile and gold sheets assemble (lime \"📚\"). Non-involutive pair (e.g. car-like): the gap pokes out of the tile, tiles twist like a spiral staircase, sheets fail to form (coral).",
+     "scene": "mls-ch7-frobenius-leaves",
+     "beat": "🏁 Frobenius: closed ⇔ stacked",
+     "math": [
+      "vectors",
+      "derivative"
+     ],
+     "engine": [
+      "NEW: lieBracket"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "7-326-e",
+     "lines": [
+      33,
+      37
+     ],
+     "kind": "prose",
+     "idea": "So a k-dimensional involutive distribution is locally the family of level sets of n−k functions; these level sets form a foliation and each one is a leaf.",
+     "feynman": "An onion: every layer is a leaf; an ant walking only along its layer never reaches another layer.",
+     "visual": "Onion view in 3D: nested gold shells (leaves) with an ant dot; any orange input wiggle keeps it on its shell (shell index readout fixed).",
+     "scene": "mls-ch7-frobenius-leaves",
+     "beat": "📚 integrable: a stack of leaves",
+     "math": [
+      "cspace"
+     ],
+     "engine": [],
+     "difficulty": 2
+    },
+    {
+     "id": "7-326-f",
+     "lines": [
+      38,
+      43
+     ],
+     "kind": "definition",
+     "idea": "The dual space T*_qℝⁿ holds linear functions on tangent vectors. A one-form assigns to each q a covector ω(q), written as a row vector (ω₁(q),…,ωₙ(q)).",
+     "feynman": "A ticket inspector at each point who, for any arrow you show, reports one number: how much it goes the forbidden way.",
+     "visual": "At q a coral row-arrow (drawn as a stack of parallel planes, like contour slices); any blue velocity arrow piercing the stack reads out how many planes it crosses — that number is ω·v.",
+     "scene": "mls-ch7-frobenius-leaves",
+     "beat": "✋ one-forms: walls and their free arrows",
+     "math": [
+      "vectors"
+     ],
+     "engine": [
+      "linalg.vdot"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "7-326-g",
+     "lines": [
+      44,
+      44
+     ],
+     "kind": "page-number",
+     "idea": "Page 326."
+    }
+   ]
+  },
+  {
+   "pdf": 345,
+   "book": 327,
+   "lines": 40,
+   "section": "7.2.2",
+   "summary": "Differentials are one-forms (exact ones); one-forms pair with vector fields; codistributions; Prop 7.3 says constraint one-forms always have an annihilating set of n−k vector fields, proved by choosing coordinates.",
+   "atoms": [
+    {
+     "id": "7-327-a",
+     "lines": [
+      1,
+      8
+     ],
+     "kind": "definition",
+     "idea": "The differential dβ = (∂β/∂q₁,…,∂β/∂qₙ) of a function is a one-form; one-forms that are differentials are called exact, but not every one-form is.",
+     "feynman": "A contour map always comes from a real hill. But you can draw \"uphill\" arrows that loop around forever (like an Escher staircase) — no real hill matches them.",
+     "visual": "Two coral row-arrow fields side by side: one is the gradient of a gold hill (loop gauge always 0, labelled d); the other circulates (loop gauge nonzero, coral), so no hill exists.",
+     "scene": "mls-ch7-frobenius-leaves",
+     "beat": "✋ one-forms: walls and their free arrows",
+     "math": [
+      "derivative"
+     ],
+     "engine": [
+      "NEW: loopIntegral"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "7-327-b",
+     "lines": [
+      9,
+      14
+     ],
+     "kind": "equation",
+     "idea": "A one-form and a vector field pair to a function: ω·f = Σ ωᵢ fᵢ.",
+     "feynman": "Count how many stripes of a zebra crossing you step over when you take a step — that count is the pairing.",
+     "visual": "Stack-of-planes ω and a blue arrow f at each grid point; a heat-map underneath shows the number ω·f, white where they are orthogonal.",
+     "scene": "mls-ch7-frobenius-leaves",
+     "beat": "✋ one-forms: walls and their free arrows",
+     "math": [
+      "vectors"
+     ],
+     "engine": [
+      "linalg.vdot"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "7-327-c",
+     "lines": [
+      15,
+      20
+     ],
+     "kind": "definition",
+     "idea": "A codistribution smoothly assigns a subspace of covectors to each point, e.g. Ω = span{ω₁,…,ω_m}; its rank is dim Ω_q, regular if constant.",
+     "feynman": "All the \"no entry\" signs posted at each corner of town, as a set; how many independent signs there are is the rank.",
+     "visual": "At each grid point a bundle of coral normals; a rank badge per point; colour the grid by rank to spot irregular points (purple).",
+     "scene": "mls-ch7-frobenius-leaves",
+     "beat": "✋ one-forms: walls and their free arrows",
+     "math": [
+      "vectors",
+      "matrix"
+     ],
+     "engine": [
+      "NEW: rank"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "7-327-d",
+     "lines": [
+      21,
+      30
+     ],
+     "kind": "prose",
+     "idea": "To plan motion, first turn the constraint one-forms ωᵢ (smooth, independent) into an equivalent control system; the next proposition makes the introduction’s idea precise.",
+     "feynman": "Translate the list of forbidden moves into a list of buttons that only ever make allowed moves.",
+     "visual": "Machine animation: coral walls go in one side, lime arrows g come out the other, each tested to have zero dot product with every wall.",
+     "scene": "mls-ch7-frobenius-leaves",
+     "beat": "✋ one-forms: walls and their free arrows",
+     "math": [],
+     "engine": [
+      "NEW: nullspace"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "7-327-e",
+     "lines": [
+      31,
+      34
+     ],
+     "kind": "proposition",
+     "label": "Prop 7.3",
+     "idea": "Given k independent one-forms ωᵢ, there are n−k smooth independent vector fields gⱼ with ωᵢ·gⱼ = 0 for all i,j.",
+     "feynman": "If 2 directions out of 4 are forbidden, there are always 2 independent directions left that are fully allowed.",
+     "visual": "In 3D, one coral wall normal at each point; two lime arrows lying in the wall’s plane appear and follow smoothly as the point is dragged; dot-product meters stay at 0.",
+     "scene": "mls-ch7-frobenius-leaves",
+     "beat": "✋ one-forms: walls and their free arrows",
+     "math": [
+      "vectors",
+      "matrix"
+     ],
+     "engine": [
+      "NEW: nullspace"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "7-327-f",
+     "lines": [
+      35,
+      39
+     ],
+     "kind": "proof",
+     "idea": "Proof step 1: choose local coordinates where the i-th one-form reads (0,…,1 in slot i,…,0, α_{i,k+1},…,α_{in}) — the constraints are solved for the first k velocities.",
+     "feynman": "Rewrite every rule as \"the speed of dial i must equal some mix of the free dials’ speeds\".",
+     "visual": "Matrix view: the k×n constraint matrix row-reduces to [I | α]; the identity block glows orange, the α block teal.",
+     "scene": "mls-ch7-frobenius-leaves",
+     "beat": "✋ one-forms: walls and their free arrows",
+     "math": [
+      "matrix"
+     ],
+     "engine": [
+      "linalg.solve"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "7-327-g",
+     "lines": [
+      40,
+      40
+     ],
+     "kind": "page-number",
+     "idea": "Page 327."
+    }
+   ]
+  },
+  {
+   "pdf": 346,
+   "book": 328,
+   "lines": 42,
+   "section": "7.2.2",
+   "summary": "Proof of Prop 7.3 completes by an explicit null-space basis; the distribution Δ is the annihilator Ω⊥; Prop 7.4: Pfaffian constraints are integrable iff the annihilating distribution is involutive. §7.2.3 opens.",
+   "atoms": [
+    {
+     "id": "7-328-a",
+     "lines": [
+      1,
+      22
+     ],
+     "kind": "proof",
+     "idea": "Proof step 2: set gⱼ = (−α_{1,j+k},…,−α_{k,j+k}, 0,…,1 at slot j+k,…,0). These are independent (they carry an identity block) and ω̃ᵢ·gⱼ = α_{i,j+k} − α_{i,j+k} = 0.",
+     "feynman": "Turn one free dial by one notch, and set each constrained dial to exactly cancel what the rule demands — the rule balances to zero.",
+     "visual": "Matrix [I | α] times the stacked block [−α ; I] lights up as a zero matrix (lime), cell by cell, as the learner hovers each product.",
+     "scene": "mls-ch7-frobenius-leaves",
+     "beat": "✋ one-forms: walls and their free arrows",
+     "math": [
+      "matrix"
+     ],
+     "engine": [
+      "linalg.mmul",
+      "NEW: nullspace"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "7-328-b",
+     "lines": [
+      23,
+      33
+     ],
+     "kind": "prose",
+     "idea": "In this language Δ = span{gⱼ} is the annihilator of Ω = span{ωᵢ}, written Δ = Ω⊥, and the associated control system q̇ = Σ gⱼuⱼ has freely chosen inputs.",
+     "feynman": "The allowed directions and the forbidden ones are like a door and its frame: together they fill the doorway and are perfectly perpendicular.",
+     "visual": "At q: coral normals span Ω, lime tile spans Δ; a dimension bar shows k + (n−k) = n filling exactly. Two orange sliders drive along the lime tile.",
+     "scene": "mls-ch7-frobenius-leaves",
+     "beat": "✋ one-forms: walls and their free arrows",
+     "math": [
+      "vectors",
+      "matrix"
+     ],
+     "engine": [
+      "NEW: nullspace"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "7-328-c",
+     "lines": [
+      34,
+      38
+     ],
+     "kind": "proposition",
+     "label": "Prop 7.4",
+     "idea": "Pfaffian constraints are integrable exactly when the distribution annihilating them is involutive.",
+     "feynman": "Velocity rules secretly fence you in if and only if no wiggle of the allowed moves escapes the allowed directions.",
+     "visual": "Feed constraints into the sorter: it computes Δ = Ω⊥, runs bracket loops, and stamps \"holonomic 📚\" (gap inside tile) or \"nonholonomic 🔓\" (gap outside).",
+     "scene": "mls-ch7-frobenius-leaves",
+     "beat": "🏁 Frobenius: closed ⇔ stacked",
+     "math": [
+      "vectors"
+     ],
+     "engine": [
+      "NEW: lieBracket",
+      "NEW: nullspace"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "7-328-d",
+     "lines": [
+      39,
+      39
+     ],
+     "kind": "heading",
+     "idea": "Subsection 7.2.3 Nonlinear controllability."
+    },
+    {
+     "id": "7-328-e",
+     "lines": [
+      40,
+      41
+     ],
+     "kind": "prose",
+     "idea": "Given Prop 7.3, motion planning under constraints is the same as steering a control system (continued next page).",
+     "feynman": "Planning a legal route is the same as figuring out how to work the two pedals.",
+     "visual": "The lime arrows from the frob scene morph into the two orange joystick sliders of the chow scene.",
+     "scene": "mls-ch7-chow-reach",
+     "beat": "🎯 controllable vs small-time local",
+     "math": [],
+     "engine": [],
+     "difficulty": 2
+    },
+    {
+     "id": "7-328-f",
+     "lines": [
+      42,
+      42
+     ],
+     "kind": "page-number",
+     "idea": "Page 328."
+    }
+   ]
+  },
+  {
+   "pdf": 347,
+   "book": 329,
+   "lines": 42,
+   "section": "7.2.3",
+   "summary": "Drift-free control systems; controllability and small-time local controllability defined via reachable sets inside a neighbourhood; switching inputs produces bracket motion; Chow’s theorem: full-rank Lie algebra ⇒ locally controllable.",
+   "atoms": [
+    {
+     "id": "7-329-a",
+     "lines": [
+      1,
+      11
+     ],
+     "kind": "equation",
+     "label": "Eq (7.10)",
+     "idea": "Study Σ: q̇ = g₁(q)u₁ + … + g_m(q)u_m with q ∈ ℝⁿ, u ∈ U ⊂ ℝᵐ — drift-free (stays still at u = 0), with smooth, independent, complete gⱼ. Goal: steer any q0 to any qf.",
+     "feynman": "A remote-control toy with m buttons: nothing moves unless you press, and each button pushes in its own state-dependent direction.",
+     "visual": "Teal dot at q0, gold dot at qf in a 3D box; m orange buttons light the corresponding lime arrows at the dot; with all buttons released the dot is frozen.",
+     "scene": "mls-ch7-chow-reach",
+     "beat": "🎯 controllable vs small-time local",
+     "math": [
+      "ode"
+     ],
+     "engine": [
+      "dynamics.rk4"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "7-329-b",
+     "lines": [
+      12,
+      24
+     ],
+     "kind": "definition",
+     "idea": "Controllable: every q0 can be steered to every qf in some time. Small-time locally controllable: for any neighbourhood V and time T, the set R^V(q0,≤T) of states reached by time T without leaving V contains a neighbourhood of q0.",
+     "feynman": "Controllable means \"can get anywhere eventually\". Locally controllable means \"on a short leash and in a hurry, you can still nudge in every direction\" — like shuffling a car a centimetre in any direction inside a tight garage.",
+     "visual": "A slate leash ball V around q0 and a time slider T; the purple reach cloud for time ≤T inside V. As both shrink, the cloud shrinks but still wraps all around q0 (lime ring) for a locally controllable system; for a stuck one it is a flat sliver (coral).",
+     "scene": "mls-ch7-chow-reach",
+     "beat": "🎯 controllable vs small-time local",
+     "math": [
+      "cspace"
+     ],
+     "engine": [
+      "dynamics.rk4",
+      "random.rng"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "7-329-c",
+     "lines": [
+      25,
+      37
+     ],
+     "kind": "prose",
+     "idea": "The Lie algebra generated by the gⱼ is the controllability Lie algebra. Switching inputs (u₁=+1, u₂=+1, u₁=−1, u₂=−1, each for ε) moves along [g1,g2]; repeating with longer patterns reaches every Lie product direction.",
+     "feynman": "A parking wiggle reaches \"sideways\"; wiggling that wiggle with steering reaches yet another direction. Patterns of patterns open every door.",
+     "visual": "Input tape: four coloured blocks (+u1, +u2, −u1, −u2) scroll past; the dot moves along the gold bracket arrow. Nest the tape inside itself to unlock a second-level gold arrow; a rank meter climbs with each new direction.",
+     "scene": "mls-ch7-chow-reach",
+     "beat": "🔁 wiggles reach bracket directions",
+     "math": [
+      "ode"
+     ],
+     "engine": [
+      "dynamics.rk4",
+      "NEW: lieBracket"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "7-329-d",
+     "lines": [
+      38,
+      41
+     ],
+     "kind": "theorem",
+     "label": "Thm 7.5",
+     "idea": "Chow: Σ is locally controllable at q if the controllability Lie algebra spans the whole tangent space there.",
+     "feynman": "If the plain moves plus all their wiggles point in every direction, you can get anywhere nearby — the parking theorem.",
+     "visual": "Rank meter at q0 reaches n (lime); the purple reach cloud is immediately a full ball around q0. Drop rank (choose commuting fields) and the cloud collapses to a sheet.",
+     "scene": "mls-ch7-chow-reach",
+     "beat": "🔁 wiggles reach bracket directions",
+     "math": [
+      "vectors",
+      "cspace"
+     ],
+     "engine": [
+      "NEW: rank",
+      "NEW: lieBracket"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "7-329-e",
+     "lines": [
+      42,
+      42
+     ],
+     "kind": "page-number",
+     "idea": "Page 329."
+    }
+   ]
+  },
+  {
+   "pdf": 348,
+   "book": 330,
+   "lines": 38,
+   "section": "7.2.3",
+   "summary": "The controllability rank condition; proof of Chow begins: full rank ⇒ reachable set has interior (Prop 7.6), built by sweeping flows to make manifolds of growing dimension (Fig 7.2).",
+   "atoms": [
+    {
+     "id": "7-330-a",
+     "lines": [
+      1,
+      10
+     ],
+     "kind": "figure",
+     "label": "Fig 7.2",
+     "idea": "Proof picture: a curve N1 traced by one flow from q0, then a sheet N2 swept by a second field not tangent to N1, and so on; at each stage some field sticks out of the current Nk.",
+     "feynman": "Draw a line with a pencil, then drag the pencil sideways to paint a sheet, then lift the sheet to fill a box.",
+     "visual": "Staircase: N1 as a teal curve; an orange arrow f2 sticking out of it; sweeping makes a translucent teal sheet N2; an arrow f3 out of the sheet sweeps a solid blob.",
+     "scene": "mls-ch7-chow-reach",
+     "beat": "🧅 grow a curve → sheet → blob",
+     "math": [
+      "cspace"
+     ],
+     "engine": [
+      "dynamics.rk4"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "7-330-b",
+     "lines": [
+      11,
+      14
+     ],
+     "kind": "prose",
+     "idea": "So a drift-free system is controllable when its controllability Lie algebra has rank n; checking this rank is the controllability rank condition.",
+     "feynman": "Count independent directions you can make (plain or wiggled); if the count equals the number of dials, you are free.",
+     "visual": "Rank meter with n slots; each independent arrow (plain orange or gold bracket) fills a slot; all slots full → lime.",
+     "scene": "mls-ch7-chow-reach",
+     "beat": "🔁 wiggles reach bracket directions",
+     "math": [
+      "matrix"
+     ],
+     "engine": [
+      "NEW: rank"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "7-330-c",
+     "lines": [
+      15,
+      18
+     ],
+     "kind": "prose",
+     "idea": "Proof plan: full rank ⇒ the reachable set R^V(q,≤T) has nonempty interior ⇔ locally controllable.",
+     "feynman": "First show you can reach a little blob somewhere; then show you can make that blob surround your start.",
+     "visual": "Two-step staircase banner: 🧅 \"grow a blob\" → ↩️ \"move it home\"; the current step glows.",
+     "scene": "mls-ch7-chow-reach",
+     "beat": "🧅 grow a curve → sheet → blob",
+     "math": [],
+     "engine": [],
+     "difficulty": 3
+    },
+    {
+     "id": "7-330-d",
+     "lines": [
+      19,
+      21
+     ],
+     "kind": "proposition",
+     "label": "Prop 7.6",
+     "idea": "If the Lie algebra has full rank near q0, then for every T > 0 and neighbourhood V, R^V(q0,≤T) has nonempty interior.",
+     "feynman": "With full freedom of directions, even in a hurry on a short leash you can fill a little solid region.",
+     "visual": "Leash ball V and time slider T both shrink; a small solid purple blob is still produced somewhere inside V.",
+     "scene": "mls-ch7-chow-reach",
+     "beat": "🧅 grow a curve → sheet → blob",
+     "math": [
+      "cspace"
+     ],
+     "engine": [],
+     "difficulty": 4
+    },
+    {
+     "id": "7-330-e",
+     "lines": [
+      22,
+      26
+     ],
+     "kind": "proof",
+     "idea": "Proof step 1: flow from q0 along some f1 in Δ for times in (0,ε1): a 1-dimensional curve N1 with points arbitrarily close to q0, inside V.",
+     "feynman": "Press one button briefly: you trace a short line.",
+     "visual": "Teal curve N1 drawn by sweeping t1 ∈ (0,ε1) with an orange slider for ε1.",
+     "scene": "mls-ch7-chow-reach",
+     "beat": "🧅 grow a curve → sheet → blob",
+     "math": [
+      "ode"
+     ],
+     "engine": [
+      "dynamics.rk4"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "7-330-f",
+     "lines": [
+      27,
+      30
+     ],
+     "kind": "proof",
+     "idea": "Proof step 2: if Nk has dimension k < n, some field of the Lie algebra is not tangent to Nk somewhere — otherwise the whole algebra would lie in the k-dimensional tangent spaces, contradicting rank n.",
+     "feynman": "A flat sheet cannot contain every direction of 3D space; if you have arrows pointing every way, one must poke out of the sheet.",
+     "visual": "On sheet N2, test arrows g1,g2,[g1,g2] at many points; tangent ones grey out, a poking-out one glows orange (f_{k+1}).",
+     "scene": "mls-ch7-chow-reach",
+     "beat": "🧅 grow a curve → sheet → blob",
+     "math": [
+      "vectors"
+     ],
+     "engine": [
+      "NEW: rank"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "7-330-g",
+     "lines": [
+      31,
+      35
+     ],
+     "kind": "proof",
+     "idea": "Proof step 3: compose the new flow after the old ones with small times: N_{k+1} is (k+1)-dimensional and, for small εᵢ, still in V.",
+     "feynman": "Slide the line sideways along the poking arrow and it paints a sheet; slide the sheet and it fills a slab.",
+     "visual": "Animate sweep: N2 swept along f3 grows into a translucent solid; a dimension counter ticks k→k+1.",
+     "scene": "mls-ch7-chow-reach",
+     "beat": "🧅 grow a curve → sheet → blob",
+     "math": [
+      "ode"
+     ],
+     "engine": [
+      "dynamics.rk4"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "7-330-h",
+     "lines": [
+      36,
+      37
+     ],
+     "kind": "proof",
+     "idea": "Proof step 4: at k = n the swept set N_n is n-dimensional and lies in the reachable set up to time ε1+…+εn, so that set contains an open set (continued).",
+     "feynman": "When the painted region is as fat as the room itself, it contains a real chunk of space.",
+     "visual": "Final step: solid blob highlighted lime inside the leash ball; total time readout Σεᵢ.",
+     "scene": "mls-ch7-chow-reach",
+     "beat": "🧅 grow a curve → sheet → blob",
+     "math": [
+      "cspace"
+     ],
+     "engine": [],
+     "difficulty": 4
+    },
+    {
+     "id": "7-330-i",
+     "lines": [
+      38,
+      38
+     ],
+     "kind": "page-number",
+     "idea": "Page 330."
+    }
+   ]
+  },
+  {
+   "pdf": 349,
+   "book": 331,
+   "lines": 37,
+   "section": "7.2.3",
+   "summary": "Prop 7.6 finishes (pick εᵢ ≤ T/n). Prop 7.7: interior nonempty ⇔ locally controllable, proved by running the same inputs backwards to bring a neighbourhood of qf home (Fig 7.3); planning by chaining reach-bubbles.",
+   "atoms": [
+    {
+     "id": "7-331-a",
+     "lines": [
+      1,
+      8
+     ],
+     "kind": "figure",
+     "label": "Fig 7.3",
+     "idea": "Proof picture: paths from q0 reach a ball around q1 = qf; reversing the inputs maps that ball back onto a neighbourhood of q0.",
+     "feynman": "Unroll a ribbon to a spot, mark a coin-sized region there, then rewind the ribbon: the region comes back around your start.",
+     "visual": "Bundle of teal paths from q0 into a purple bubble W at qf; replay in reverse (orange tape rewinding) and the bubble rides back to a purple bubble surrounding q0.",
+     "scene": "mls-ch7-chow-reach",
+     "beat": "↩️ drift-free: run the tape backwards",
+     "math": [
+      "ode"
+     ],
+     "engine": [
+      "dynamics.rk4"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "7-331-b",
+     "lines": [
+      9,
+      10
+     ],
+     "kind": "proof",
+     "idea": "Proof end: choosing each εᵢ ≤ T/n gives such an open set within any time T.",
+     "feynman": "If you have a total time budget, just split it evenly between the presses.",
+     "visual": "T slider divides into n equal orange segments; the blob still forms.",
+     "scene": "mls-ch7-chow-reach",
+     "beat": "🧅 grow a curve → sheet → blob",
+     "math": [],
+     "engine": [],
+     "difficulty": 3
+    },
+    {
+     "id": "7-331-c",
+     "lines": [
+      11,
+      13
+     ],
+     "kind": "prose",
+     "idea": "Next question: can the open reachable set be made to contain q0 itself?",
+     "feynman": "Being able to reach a blob over there is good; being able to wobble in every direction from right here is better.",
+     "visual": "Purple blob sits off to one side of q0; a \"?\" arrow asks to move it so q0 is inside.",
+     "scene": "mls-ch7-chow-reach",
+     "beat": "↩️ drift-free: run the tape backwards",
+     "math": [],
+     "engine": [],
+     "difficulty": 3
+    },
+    {
+     "id": "7-331-d",
+     "lines": [
+      14,
+      16
+     ],
+     "kind": "proposition",
+     "label": "Prop 7.7",
+     "idea": "R^V(q0,≤T) has nonempty interior for every V and T > 0 iff Σ is locally controllable at q0.",
+     "feynman": "If you can always fill some blob quickly, then you can fill a blob around your own feet.",
+     "visual": "Lime equivalence badge linking the blob-somewhere picture and the blob-around-q0 picture.",
+     "scene": "mls-ch7-chow-reach",
+     "beat": "↩️ drift-free: run the tape backwards",
+     "math": [
+      "cspace"
+     ],
+     "engine": [],
+     "difficulty": 4
+    },
+    {
+     "id": "7-331-e",
+     "lines": [
+      17,
+      28
+     ],
+     "kind": "proof",
+     "idea": "Proof: one direction is the definition. For the other, steer q0 to some qf in time T/2; since there is no drift, the reversed input u′(t) = −u(T/2−t) runs the path backwards. A neighbourhood W of qf maps back to a neighbourhood of q0, so concatenating gives an open reachable set around q0.",
+     "feynman": "Walk a path, then walk it backwards step by step with every move reversed — a still-water rowboat retraces its route exactly. A boat in a river could not.",
+     "visual": "Input tape plays forward to qf (teal path), then mirror-reversed and negated (coral blocks) back to q0. The purple bubble W around qf is carried home and wraps q0 (lime). Toggle drift on: the reversed path misses (coral).",
+     "scene": "mls-ch7-chow-reach",
+     "beat": "↩️ drift-free: run the tape backwards",
+     "math": [
+      "ode"
+     ],
+     "engine": [
+      "dynamics.rk4"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "7-331-f",
+     "lines": [
+      29,
+      36
+     ],
+     "kind": "prose",
+     "idea": "Recipe in principle: pick via points q1…qp and neighbourhoods Vᵢ so that the union of local reachable sets covers the straight segment from q0 to qf (continued).",
+     "feynman": "Cross a river on stepping stones: from each stone you can reach a small circle, and the circles overlap all the way across.",
+     "visual": "A gold straight segment q0→qf with a chain of overlapping purple bubbles centred on via points; the teal dot hops bubble to bubble.",
+     "scene": "mls-ch7-chow-reach",
+     "beat": "🔗 chain reach-bubbles to the goal",
+     "math": [
+      "cspace"
+     ],
+     "engine": [],
+     "difficulty": 3
+    },
+    {
+     "id": "7-331-g",
+     "lines": [
+      37,
+      37
+     ],
+     "kind": "page-number",
+     "idea": "Page 331."
+    }
+   ]
+  },
+  {
+   "pdf": 350,
+   "book": 332,
+   "lines": 37,
+   "section": "7.2.3",
+   "summary": "Chaining local reach-bubbles steers q0 to qf (Fig 7.4), but these results are non-constructive; actual path construction is Chapter 8. §7.3 opens: nonholonomy comes from rolling without slipping or from conserved angular momentum.",
+   "atoms": [
+    {
+     "id": "7-332-a",
+     "lines": [
+      1,
+      10
+     ],
+     "kind": "figure",
+     "label": "Fig 7.4",
+     "idea": "Overlapping local reachable sets around via points q0, q1, …, qp cover the segment from q0 to qf.",
+     "feynman": "A string of soap bubbles stuck to each other from your hand to the target.",
+     "visual": "Ellipse-shaped purple bubbles chained along a gold line; tapping a bubble shows the short wiggle that crosses it.",
+     "scene": "mls-ch7-chow-reach",
+     "beat": "🔗 chain reach-bubbles to the goal",
+     "math": [
+      "cspace"
+     ],
+     "engine": [],
+     "difficulty": 3
+    },
+    {
+     "id": "7-332-b",
+     "lines": [
+      11,
+      23
+     ],
+     "kind": "prose",
+     "idea": "Then p segments of control steer from q0 to qf. But the argument only proves existence: full rank guarantees a path exists for the constraint system, without telling how to build it — constructive controllability is Chapter 8’s job.",
+     "feynman": "Knowing every room in a house is connected does not hand you the route — you still need a map.",
+     "visual": "The bubble chain is drawn, but the actual input tape for each bubble is shown as a grey \"?\" block, with a pointer to the next chapter’s planner.",
+     "scene": "mls-ch7-chow-reach",
+     "beat": "🔗 chain reach-bubbles to the goal",
+     "math": [],
+     "engine": [],
+     "difficulty": 2
+    },
+    {
+     "id": "7-332-c",
+     "lines": [
+      24,
+      24
+     ],
+     "kind": "heading",
+     "idea": "Section 7.3 Examples of nonholonomic systems."
+    },
+    {
+     "id": "7-332-d",
+     "lines": [
+      25,
+      30
+     ],
+     "kind": "prose",
+     "idea": "Examples used throughout: nonholonomic constraints come from (1) bodies rolling on each other without slipping and (2) conservation of angular momentum in multibody systems.",
+     "feynman": "A rolling coin can’t skid; a spinning ice skater can’t change her total spin — two different reasons a motion gets forbidden.",
+     "visual": "Two pens: 🛞 rolling pen with lime no-slip contact dots, 🌀 spin pen with a blue momentum gauge locked at 0.",
+     "scene": "mls-ch7-roadmap",
+     "beat": "🦓 two sources: rolling & spinning",
+     "math": [
+      "cspace"
+     ],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "7-332-e",
+     "lines": [
+      31,
+      36
+     ],
+     "kind": "prose",
+     "idea": "Rolling examples: fingertips rolling on a grasped object, mobile robots and cars. Momentum examples: satellites with moving robot arms (continued).",
+     "feynman": "A fingertip rolling a marble, a robot vacuum’s wheels, a toy car — all roll; an astronaut waving arms to turn — momentum.",
+     "visual": "Icons enter their pens: 🎱 finger-on-ball, 🤖 mobile robot, 🚗 car into the rolling pen; 🛰️ satellite arms into the spin pen.",
+     "scene": "mls-ch7-roadmap",
+     "beat": "🦓 two sources: rolling & spinning",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "7-332-f",
+     "lines": [
+      37,
+      37
+     ],
+     "kind": "page-number",
+     "idea": "Page 332."
+    }
+   ]
+  },
+  {
+   "pdf": 351,
+   "book": 333,
+   "lines": 30,
+   "section": "7.3",
+   "summary": "Momentum examples include space robots and mid-air divers; proofs of nonholonomy are deferred to §7.4. Ex 7.2: a hopping robot in flight whose zero angular momentum is one Pfaffian constraint on (ψ, l, θ).",
+   "atoms": [
+    {
+     "id": "7-333-a",
+     "lines": [
+      1,
+      5
+     ],
+     "kind": "figure",
+     "label": "Fig 7.5",
+     "idea": "A hopping robot: body angle θ, a leg at angle ψ relative to the body, upper leg length d plus extension l, foot mass at the end.",
+     "feynman": "A pogo-stick rider in mid-air swinging the stick: the rider’s body turns the opposite way.",
+     "visual": "Side view: blue box body, orange leg with a pink foot; arcs mark θ (body) and ψ (leg); a teal ruler marks d and the extending l.",
+     "scene": "mls-ch7-hopper-flight",
+     "beat": "🦘 swing the leg, the body counter-turns",
+     "math": [
+      "rotation"
+     ],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "7-333-b",
+     "lines": [
+      6,
+      7
+     ],
+     "kind": "prose",
+     "idea": "Momentum examples: satellites with moving appendages, and divers or gymnasts in mid-air.",
+     "feynman": "A diver tucks and twists in the air without touching anything.",
+     "visual": "Spin pen gains a diver 🤸 and satellite 🛰️ icon; their blue momentum gauges stay at 0 while their limbs move.",
+     "scene": "mls-ch7-roadmap",
+     "beat": "🦓 two sources: rolling & spinning",
+     "math": [
+      "energy"
+     ],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "7-333-c",
+     "lines": [
+      8,
+      11
+     ],
+     "kind": "prose",
+     "idea": "The systems are introduced now; proving they are nonholonomic (no function of configuration integrates the constraints) waits for §7.4.",
+     "feynman": "First meet the animals in the zoo; later measure how wild each one is.",
+     "visual": "Each zoo icon gets a grey \"?\" badge that will later turn into its growth-vector staircase.",
+     "scene": "mls-ch7-roadmap",
+     "beat": "🦓 two sources: rolling & spinning",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "7-333-d",
+     "lines": [
+      12,
+      16
+     ],
+     "kind": "example",
+     "label": "Ex 7.2",
+     "idea": "Hopping robot in flight: a body with a leg that can swing and extend; the only \"constraint\" is conservation of angular momentum.",
+     "feynman": "Lying on a spinning office chair with your feet off the floor: swing your legs one way and the chair turns the other.",
+     "visual": "In mid-air, drag the orange leg slider ψ: the blue body counter-rotates so the momentum gauge stays at 0.",
+     "scene": "mls-ch7-hopper-flight",
+     "beat": "🦘 swing the leg, the body counter-turns",
+     "math": [
+      "energy"
+     ],
+     "engine": [
+      "dynamics.rk4"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "7-333-e",
+     "lines": [
+      17,
+      23
+     ],
+     "kind": "equation",
+     "label": "Eq (7.11)",
+     "idea": "With q = (ψ, l, θ), body inertia I and leg mass m at the foot, the total angular momentum is I θ̇ + m(l+d)²(θ̇ + ψ̇).",
+     "feynman": "Spin of the body plus spin of the foot, where the foot counts more the farther out it is — like a figure skater’s arms.",
+     "visual": "Blue momentum gauge split into two bars: body bar Iθ̇ and foot bar m(l+d)²(θ̇+ψ̇); they always sum to 0. Extending l makes the foot bar react more strongly.",
+     "scene": "mls-ch7-hopper-flight",
+     "beat": "🧮 zero spin as one constraint",
+     "math": [
+      "energy",
+      "vectors"
+     ],
+     "engine": [],
+     "difficulty": 2
+    },
+    {
+     "id": "7-333-f",
+     "lines": [
+      24,
+      29
+     ],
+     "kind": "prose",
+     "idea": "Starting from zero momentum, Eq (7.11) = 0 is one Pfaffian constraint on three velocities, leaving two inputs: control the leg angle and the leg extension (continued).",
+     "feynman": "Three dials, one rule linking them: you get to turn two dials freely and the third follows.",
+     "visual": "Three dial icons ψ, l, θ; ψ and l glow orange (inputs), θ turns blue and is driven automatically.",
+     "scene": "mls-ch7-hopper-flight",
+     "beat": "🧮 zero spin as one constraint",
+     "math": [
+      "vectors"
+     ],
+     "engine": [
+      "NEW: nullspace"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "7-333-g",
+     "lines": [
+      30,
+      30
+     ],
+     "kind": "page-number",
+     "idea": "Page 333."
+    }
+   ]
+  },
+  {
+   "pdf": 352,
+   "book": 334,
+   "lines": 32,
+   "section": "7.3",
+   "summary": "Hopper input fields: swinging the leg also turns the body; extending the leg does not. Ex 7.3: a planar free-floating robot with two arms rotates its body by moving its arms under zero momentum.",
+   "atoms": [
+    {
+     "id": "7-334-a",
+     "lines": [
+      1,
+      7
+     ],
+     "kind": "figure",
+     "label": "Fig 7.6",
+     "idea": "Planar space robot: a central body at angle θ with two arms on joints offset r from the centre, each of length l with a tip mass m, joint angles ψ1, ψ2.",
+     "feynman": "An astronaut floating with arms out, holding a weight in each hand.",
+     "visual": "Top view among stars: blue rectangle body, two orange arm links ending in pink weights; arcs for θ, ψ1, ψ2.",
+     "scene": "mls-ch7-space-arms",
+     "beat": "🛰️ wave arms, body spins",
+     "math": [
+      "rotation"
+     ],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "7-334-b",
+     "lines": [
+      8,
+      16
+     ],
+     "kind": "equation",
+     "idea": "Hopper control fields: g1 = (1, 0, −m(l+d)²/(I+m(l+d)²)) for swinging the leg, g2 = (0, 1, 0) for extending it; q̇ = g1u1 + g2u2.",
+     "feynman": "Swinging your leg turns your body back a bit; just stretching your leg does not turn anything by itself.",
+     "visual": "Two lime arrows in the 3D (ψ,l,θ) inset: g1 tilts down in θ (its tilt shrinks as l grows), g2 points straight along l. Orange sliders u1,u2 drive the hopper.",
+     "scene": "mls-ch7-hopper-flight",
+     "beat": "🧮 zero spin as one constraint",
+     "math": [
+      "vectors",
+      "ode"
+     ],
+     "engine": [
+      "dynamics.rk4"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "7-334-c",
+     "lines": [
+      17,
+      23
+     ],
+     "kind": "example",
+     "label": "Ex 7.3",
+     "idea": "Planar space robot: with no external torque, moving the arms makes the central body turn; with zero momentum this is a Pfaffian constraint.",
+     "feynman": "Floating in a pool without touching the walls, sweeping your arms around makes your torso rotate.",
+     "visual": "Drag the arm sliders ψ1, ψ2: the blue body rotates in response; the blue momentum gauge stays pinned at 0.",
+     "scene": "mls-ch7-space-arms",
+     "beat": "🛰️ wave arms, body spins",
+     "math": [
+      "energy"
+     ],
+     "engine": [
+      "dynamics.rk4"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "7-334-d",
+     "lines": [
+      24,
+      31
+     ],
+     "kind": "prose",
+     "idea": "Model: body mass M and inertia I, arm masses m at the tips, joints at distance r from the body centre, links of length l; express tip positions via θ, ψ1, ψ2 and use momentum conservation with no friction.",
+     "feynman": "Like a baton twirler: the heavy ends of the arms dominate how the body reacts.",
+     "visual": "Parameter drawer: sliders for M, I, m, r, l reshape the drawing; tips’ trails in teal.",
+     "scene": "mls-ch7-space-arms",
+     "beat": "⚖️ the inertia matrix",
+     "math": [
+      "lagrange-dynamics"
+     ],
+     "engine": [],
+     "difficulty": 2
+    },
+    {
+     "id": "7-334-e",
+     "lines": [
+      32,
+      32
+     ],
+     "kind": "page-number",
+     "idea": "Page 334."
+    }
+   ]
+  },
+  {
+   "pdf": 353,
+   "book": 335,
+   "lines": 46,
+   "section": "7.3",
+   "summary": "For the space robot the kinetic energy is a quadratic form in (ψ̇1, ψ̇2, θ̇) that does not depend on θ, so the momentum ∂L/∂θ̇ is conserved; zero momentum gives Eq (7.12) and two input fields with the body rotation slaved to the arms.",
+   "atoms": [
+    {
+     "id": "7-335-a",
+     "lines": [
+      1,
+      4
+     ],
+     "kind": "prose",
+     "idea": "Coordinates: body angle θ, arm angles ψ1, ψ2 relative to the body, and a body point p (e.g. the centre of mass); then write the kinetic energy.",
+     "feynman": "Track how fast each part spins and slides, then add up the motion energy.",
+     "visual": "Coordinate overlay: θ arc on the body, ψ1, ψ2 arcs at the joints, teal dot at p.",
+     "scene": "mls-ch7-space-arms",
+     "beat": "⚖️ the inertia matrix",
+     "math": [
+      "rotation"
+     ],
+     "engine": [],
+     "difficulty": 2
+    },
+    {
+     "id": "7-335-b",
+     "lines": [
+      5,
+      19
+     ],
+     "kind": "equation",
+     "idea": "K = ½(M+2m)|ṗ|² + ½ [ψ̇1 ψ̇2 θ̇] A [ψ̇1 ψ̇2 θ̇]ᵀ with a11 = a22 = ml², a12 = 0, a13 = ml² + mr cos ψ1, a23 = ml² + mr cos ψ2, a33 = I + 2ml² + 2mr² + 2mrl(cos ψ1 + cos ψ2).",
+     "feynman": "How hard it is to spin the whole thing depends on where the arms are: arms stretched out make it sluggish, folded in makes it nimble.",
+     "visual": "A 3×3 heat-map of A next to the robot; dragging ψ1, ψ2 recolours a13, a23, a33 live; a33 bar grows when the arms point outward.",
+     "scene": "mls-ch7-space-arms",
+     "beat": "⚖️ the inertia matrix",
+     "math": [
+      "lagrange-dynamics",
+      "energy",
+      "matrix"
+     ],
+     "engine": [
+      "NEW: spaceRobotInertia"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "7-335-c",
+     "lines": [
+      20,
+      32
+     ],
+     "kind": "equation",
+     "idea": "K has no θ in it, so Lagrange’s equation gives d/dt(∂L/∂θ̇) = 0: the angular momentum µ = a13ψ̇1 + a23ψ̇2 + a33θ̇ is constant.",
+     "feynman": "Turning the whole floating robot to face a different star changes nothing about its energy — so its total spin can’t change.",
+     "visual": "Rotate the whole robot rigidly (grab and twist): the energy bar does not change; then animate free motion and the blue µ gauge stays flat.",
+     "scene": "mls-ch7-space-arms",
+     "beat": "⚖️ the inertia matrix",
+     "math": [
+      "lagrange-dynamics",
+      "energy"
+     ],
+     "engine": [
+      "dynamics.rk4"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "7-335-d",
+     "lines": [
+      33,
+      36
+     ],
+     "kind": "equation",
+     "label": "Eq (7.12)",
+     "idea": "Starting at zero momentum keeps it zero: a13(ψ)ψ̇1 + a23(ψ)ψ̇2 + a33(ψ)θ̇ = 0.",
+     "feynman": "A spin bank account that started at zero and accepts no deposits: every arm spin must be paid back by the body spinning the other way.",
+     "visual": "Three coloured bars (arm1 share, arm2 share, body share) always sum to the zero line as the learner moves the arms.",
+     "scene": "mls-ch7-space-arms",
+     "beat": "🧮 zero momentum → two free arrows",
+     "math": [
+      "energy"
+     ],
+     "engine": [],
+     "difficulty": 2
+    },
+    {
+     "id": "7-335-e",
+     "lines": [
+      37,
+      45
+     ],
+     "kind": "equation",
+     "idea": "Inputs u1 = ψ̇1, u2 = ψ̇2 with q = (ψ1, ψ2, θ) give q̇ = g1u1 + g2u2, g1 = (1, 0, −a13/a33), g2 = (0, 1, −a23/a33).",
+     "feynman": "Each arm is a crank; turning a crank also turns the body by a fixed fraction that depends on the arm positions.",
+     "visual": "Two lime arrows in the 3D (ψ1,ψ2,θ) inset, each tilted in θ by −a_i3/a33; sliders drive the robot and a teal trail traces the state.",
+     "scene": "mls-ch7-space-arms",
+     "beat": "🧮 zero momentum → two free arrows",
+     "math": [
+      "vectors",
+      "ode"
+     ],
+     "engine": [
+      "dynamics.rk4"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "7-335-f",
+     "lines": [
+      46,
+      46
+     ],
+     "kind": "page-number",
+     "idea": "Page 335."
+    }
+   ]
+  },
+  {
+   "pdf": 354,
+   "book": 336,
+   "lines": 37,
+   "section": "7.3",
+   "summary": "Ex 7.4: a disk rolling upright on a plane without slipping gives two constraints and a two-input system (roll, turn) in Eq (7.13). Ex 7.5 sets up the kinematic car.",
+   "atoms": [
+    {
+     "id": "7-336-a",
+     "lines": [
+      1,
+      4
+     ],
+     "kind": "figure",
+     "label": "Fig 7.7",
+     "idea": "A thin disk standing on a plane: contact point (x,y), heading angle θ, and roll angle φ of a mark on the rim.",
+     "feynman": "A coin rolling on its edge across a table.",
+     "visual": "3D: upright blue coin, pink contact dot at (x,y), a red rim mark showing the roll angle, a heading arc on the table.",
+     "scene": "mls-ch7-rolling-coin",
+     "beat": "🪙 roll and turn",
+     "math": [
+      "rotation"
+     ],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "7-336-b",
+     "lines": [
+      5,
+      13
+     ],
+     "kind": "example",
+     "label": "Ex 7.4",
+     "idea": "Rolling disk: configuration (x, y, θ, φ). Rolling without slipping means the contact point moves along the heading at speed ρ·(roll rate): ẋ = ρ cos θ φ̇, ẏ = ρ sin θ φ̇.",
+     "feynman": "A wheel of a unicycle: one full turn of the wheel carries you exactly one circumference forward, in whatever direction it faces.",
+     "visual": "Roll the coin: the teal contact trail’s length always equals ρ times the rim mark’s accumulated angle (lime readout match); a coral sideways arrow is crossed out.",
+     "scene": "mls-ch7-rolling-coin",
+     "beat": "🚫 no skidding",
+     "math": [
+      "rotation",
+      "vectors"
+     ],
+     "engine": [
+      "NEW: rollingDisk"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "7-336-c",
+     "lines": [
+      14,
+      19
+     ],
+     "kind": "equation",
+     "idea": "As Pfaffian rows on q = (x,y,θ,φ): [1, 0, 0, −ρ cos θ] q̇ = 0 and [0, 1, 0, −ρ sin θ] q̇ = 0.",
+     "feynman": "Two rules: \"east-speed must match the roll\", \"north-speed must match the roll\".",
+     "visual": "Two coral row-arrows drawn in a 4-bar state panel; velocity bars that violate a row flash coral.",
+     "scene": "mls-ch7-rolling-coin",
+     "beat": "🚫 no skidding",
+     "math": [
+      "matrix"
+     ],
+     "engine": [],
+     "difficulty": 2
+    },
+    {
+     "id": "7-336-d",
+     "lines": [
+      20,
+      27
+     ],
+     "kind": "equation",
+     "label": "Eq (7.13)",
+     "idea": "Free directions: rolling g1 = (ρ cos θ, ρ sin θ, 0, 1) and turning g2 = (0, 0, 1, 0); q̇ = g1u1 + g2u2.",
+     "feynman": "A coin has exactly two moves: roll forward, or pivot on its contact point.",
+     "visual": "Two orange sliders: roll and turn; the coin moves accordingly; state bars x, y, θ, φ update.",
+     "scene": "mls-ch7-rolling-coin",
+     "beat": "🪙 roll and turn",
+     "math": [
+      "ode",
+      "vectors"
+     ],
+     "engine": [
+      "dynamics.rk4"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "7-336-e",
+     "lines": [
+      28,
+      34
+     ],
+     "kind": "example",
+     "label": "Ex 7.5",
+     "idea": "Kinematic car: rear wheels fixed to the body, front wheels steer; each axle is modelled as one wheel at its midpoint; wheels roll and pivot but do not slip.",
+     "feynman": "A tricycle or a bicycle seen from above: back wheel follows the frame, front wheel turns with the handlebar.",
+     "visual": "Top-down: blue car body with one rear wheel and one front wheel at the axle midpoints; front wheel rotates with the orange steering slider.",
+     "scene": "mls-ch7-car-parking",
+     "beat": "🚗 drive and steer",
+     "math": [
+      "cspace"
+     ],
+     "engine": [
+      "NEW: kinematicCar"
+     ],
+     "difficulty": 1
+    },
+    {
+     "id": "7-336-f",
+     "lines": [
+      35,
+      36
+     ],
+     "kind": "prose",
+     "idea": "Configuration (x, y, θ, φ): rear-axle position, body angle, and (continued) steering angle.",
+     "feynman": "Four numbers describe a parked car: where it is, which way it points, and how the wheel is turned.",
+     "visual": "Four state bars x, y, θ, φ beside the car, updating as it moves.",
+     "scene": "mls-ch7-car-parking",
+     "beat": "🚗 drive and steer",
+     "math": [
+      "cspace"
+     ],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "7-336-g",
+     "lines": [
+      37,
+      37
+     ],
+     "kind": "page-number",
+     "idea": "Page 336."
+    }
+   ]
+  },
+  {
+   "pdf": 355,
+   "book": 337,
+   "lines": 33,
+   "section": "7.3",
+   "summary": "Car constraints: zero sideways speed at the rear and the front wheel; the resulting two-input system (drive, steer) is Eq (7.14). Ex 7.6 starts the rolling fingertip on an object.",
+   "atoms": [
+    {
+     "id": "7-337-a",
+     "lines": [
+      1,
+      6
+     ],
+     "kind": "figure",
+     "label": "Fig 7.8",
+     "idea": "Car model: rear axle point (x,y), body angle θ, steering angle φ, wheelbase l.",
+     "feynman": "A toy car viewed from above with its front wheels turned.",
+     "visual": "Top-down car with arcs θ and φ, a teal ruler for l between axles.",
+     "scene": "mls-ch7-car-parking",
+     "beat": "🚗 drive and steer",
+     "math": [
+      "rotation"
+     ],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "7-337-b",
+     "lines": [
+      7,
+      15
+     ],
+     "kind": "equation",
+     "idea": "No sideways slip: rear wheels need sin θ ẋ − cos θ ẏ = 0; front wheels need sin(θ+φ)ẋ − cos(θ+φ)ẏ − l cos φ θ̇ = 0.",
+     "feynman": "Ice-skate blades: each blade glides along itself but never sideways — a car has two such blades, front and back.",
+     "visual": "At each wheel a lime rolling arrow and a coral crossed-out sideways arrow; the learner drags the car and any sideways component flashes coral at that wheel.",
+     "scene": "mls-ch7-car-parking",
+     "beat": "🚫 wheels never slide",
+     "math": [
+      "vectors"
+     ],
+     "engine": [],
+     "difficulty": 2
+    },
+    {
+     "id": "7-337-c",
+     "lines": [
+      16,
+      27
+     ],
+     "kind": "equation",
+     "label": "Eq (7.14)",
+     "idea": "With drive speed u1 and steering rate u2: ẋ = cos θ u1, ẏ = sin θ u1, θ̇ = (tan φ / l) u1, φ̇ = u2.",
+     "feynman": "Gas pedal moves the car forward and turns it more the more the wheel is turned; the steering wheel just turns the front wheels.",
+     "visual": "Orange pedal and steering sliders; the car follows rk4 of Eq (7.14); a teal rear-axle trail draws arcs whose curvature equals tan φ / l.",
+     "scene": "mls-ch7-car-parking",
+     "beat": "🚗 drive and steer",
+     "math": [
+      "ode"
+     ],
+     "engine": [
+      "dynamics.rk4",
+      "NEW: kinematicCar"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "7-337-d",
+     "lines": [
+      28,
+      32
+     ],
+     "kind": "example",
+     "label": "Ex 7.6",
+     "idea": "Fingertip rolling on an object: object surface coordinates αo ∈ ℝ², finger surface coordinates αf ∈ ℝ², contact angle ψ — a 5-dimensional configuration (contact kinematics from Chapter 5).",
+     "feynman": "Rolling a marble under your fingertip on a table: where the marble touches the table, where it touches your finger, and how it is twisted.",
+     "visual": "Two surfaces (blue fingertip sphere, slate object) with teal contact dots on each and a small orange angle arc ψ between their frames; five state bars.",
+     "scene": "mls-ch7-ball-rolling",
+     "beat": "🧮 contact coordinates",
+     "math": [
+      "rotation"
+     ],
+     "engine": [],
+     "difficulty": 3
+    },
+    {
+     "id": "7-337-e",
+     "lines": [
+      33,
+      33
+     ],
+     "kind": "page-number",
+     "idea": "Page 337."
+    }
+   ]
+  },
+  {
+   "pdf": 356,
+   "book": 338,
+   "lines": 54,
+   "section": "7.3",
+   "summary": "Contact kinematics (Eq 7.15) with no slide and no spin (Eq 7.16) give three constraints (Eq 7.17) and a two-input rolling system (Eq 7.18); specialized to a unit sphere on a plane.",
+   "atoms": [
+    {
+     "id": "7-338-a",
+     "lines": [
+      1,
+      12
+     ],
+     "kind": "equation",
+     "label": "Eq (7.15)",
+     "idea": "Chapter 5’s contact equations give α̇f, α̇o, ψ̇ in terms of the relative rotation (ωx, ωy, ωz) and sliding velocity (vx, vy) through metrics M, curvatures K and torsions T.",
+     "feynman": "How the contact spots slide across both surfaces depends on how fast the ball turns and how curved both surfaces are.",
+     "visual": "Live readouts: the contact dot speeds on finger and object, with sliders for the five relative velocities; curvature heat-maps on each surface.",
+     "scene": "mls-ch7-ball-rolling",
+     "beat": "🧮 contact coordinates",
+     "math": [
+      "rotation",
+      "jacobian"
+     ],
+     "engine": [],
+     "difficulty": 4
+    },
+    {
+     "id": "7-338-b",
+     "lines": [
+      13,
+      18
+     ],
+     "kind": "equation",
+     "label": "Eq (7.16)",
+     "idea": "Pure rolling: no sliding (vx = vy = 0) and no spinning about the contact normal (ωz = 0).",
+     "feynman": "A ball rolled under your palm neither skids nor twists in place like a spinning top.",
+     "visual": "Three velocity sliders (vx, vy, ωz) locked at 0 with coral padlocks; only the two rolling sliders ωx, ωy stay orange and movable.",
+     "scene": "mls-ch7-ball-rolling",
+     "beat": "🚫 no sliding, no spinning in place",
+     "math": [
+      "vectors"
+     ],
+     "engine": [],
+     "difficulty": 2
+    },
+    {
+     "id": "7-338-c",
+     "lines": [
+      19,
+      25
+     ],
+     "kind": "equation",
+     "label": "Eq (7.17)",
+     "idea": "Substituting gives three Pfaffian constraints on q = (αf, αo, ψ) ∈ ℝ⁵: Mf α̇f − Rψ Mo α̇o = 0 and Tf Mf α̇f + To Mo α̇o − ψ̇ = 0.",
+     "feynman": "The finger’s contact spot and the table’s contact spot must move by matching distances (rotated into each other’s frame), and the twist angle is dictated by both.",
+     "visual": "Two teal trails (on sphere and on table) drawn with equal arc length (lime readout), and the ψ arc driven automatically.",
+     "scene": "mls-ch7-ball-rolling",
+     "beat": "🚫 no sliding, no spinning in place",
+     "math": [
+      "matrix",
+      "rotation"
+     ],
+     "engine": [],
+     "difficulty": 4
+    },
+    {
+     "id": "7-338-d",
+     "lines": [
+      26,
+      34
+     ],
+     "kind": "equation",
+     "label": "Eq (7.18)",
+     "idea": "Choosing u1 = ωx, u2 = ωy yields q̇ = G(q)u with columns built from Mf⁻¹, Mo⁻¹Rψ, the curvature sum (Kf + K̃o)⁻¹ and the torsion terms.",
+     "feynman": "Two knobs: roll the ball forward-back and roll it left-right; everything else follows.",
+     "visual": "Two orange sliders ωx, ωy; five state bars update; contact trails grow on both surfaces.",
+     "scene": "mls-ch7-ball-rolling",
+     "beat": "🧮 contact coordinates",
+     "math": [
+      "ode",
+      "jacobian"
+     ],
+     "engine": [
+      "dynamics.rk4"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "7-338-e",
+     "lines": [
+      35,
+      48
+     ],
+     "kind": "example",
+     "idea": "Special case: flat object, unit-sphere fingertip. From Ex 5.7: Ko = 0, Kf = I, Mo = I, Mf = diag(1, cos q1), To = 0, Tf = (0, −tan q1).",
+     "feynman": "A ball on a table: the table is perfectly flat, the ball is equally curved everywhere, and latitude/longitude lines on the ball get squeezed near the poles.",
+     "visual": "Blue sphere with latitude/longitude grid (lines crowd near the poles, showing cos q1 shrinking); flat slate table with a square grid.",
+     "scene": "mls-ch7-ball-rolling",
+     "beat": "🧮 contact coordinates",
+     "math": [
+      "rotation"
+     ],
+     "engine": [],
+     "difficulty": 3
+    },
+    {
+     "id": "7-338-f",
+     "lines": [
+      49,
+      53
+     ],
+     "kind": "equation",
+     "idea": "The three constraint rows for the sphere-on-plane case in q = (q1,…,q5), with entries in cos q1, sin q1, cos q5, sin q5.",
+     "feynman": "Three rules: the ball’s contact point moves as far as the table’s does, in matching directions, and the twist follows latitude.",
+     "visual": "Three coral row-arrows in a 5-bar state panel; legal velocity bars light lime when all three dot products read 0.",
+     "scene": "mls-ch7-ball-rolling",
+     "beat": "🚫 no sliding, no spinning in place",
+     "math": [
+      "matrix"
+     ],
+     "engine": [],
+     "difficulty": 3
+    },
+    {
+     "id": "7-338-g",
+     "lines": [
+      54,
+      54
+     ],
+     "kind": "page-number",
+     "idea": "Page 338."
+    }
+   ]
+  },
+  {
+   "pdf": 357,
+   "book": 339,
+   "lines": 41,
+   "section": "7.3",
+   "summary": "The sphere-on-plane rolling system (Eq 7.19). §7.4 opens: Frobenius splits the closure rank question into p hidden integrals; p ≤ k; full rank means completely nonholonomic.",
+   "atoms": [
+    {
+     "id": "7-339-a",
+     "lines": [
+      1,
+      10
+     ],
+     "kind": "equation",
+     "label": "Eq (7.19)",
+     "idea": "Rolling a unit sphere on a plane with rolling rates as inputs: g1 = (0, sec q1, −sin q5, −cos q5, −tan q1), g2 = (−1, 0, −cos q5, sin q5, 0).",
+     "feynman": "Roll the ball one way and its contact spot travels along the table, moves on the ball, and the ball twists a little depending on latitude.",
+     "visual": "Two orange sliders; ball rolls on table; teal trails on sphere and plane; the ψ twist arc visibly grows when rolling near high latitude.",
+     "scene": "mls-ch7-ball-rolling",
+     "beat": "🎱 roll a ball under your palm",
+     "math": [
+      "ode",
+      "rotation"
+     ],
+     "engine": [
+      "dynamics.rk4",
+      "NEW: sphereOnPlane"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "7-339-b",
+     "lines": [
+      11,
+      11
+     ],
+     "kind": "heading",
+     "idea": "Section 7.4 Structure of nonholonomic systems."
+    },
+    {
+     "id": "7-339-c",
+     "lines": [
+      12,
+      25
+     ],
+     "kind": "prose",
+     "idea": "Back to the general picture: constraints ⇔ q̇ = Σ gⱼuⱼ (Eq 7.20), m = n−k. If the Lie algebra has rank n, any two points can be joined; if instead its closure has constant rank n−p < n, Frobenius gives p functions with hⱼ(q) = cⱼ along every legal motion.",
+     "feynman": "Either the wiggles take you everywhere, or there is a hidden \"altitude\" (or p of them) that no wiggle can change.",
+     "visual": "Rank staircase on the left; if it reaches n the reach cloud fills the box (lime); if it stops at n−p, p gold altitude sheets appear and the cloud is trapped on one.",
+     "scene": "mls-ch7-growth-vector",
+     "beat": "🧭 stalls short → leaves; reaches n → Chow",
+     "math": [
+      "cspace"
+     ],
+     "engine": [
+      "NEW: rank"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "7-339-d",
+     "lines": [
+      26,
+      38
+     ],
+     "kind": "prose",
+     "idea": "Since the closure is at least as big as Δ, p ≤ k: fewer hidden integrals than constraints. One could find the integrable part directly with exterior differential systems, but that is out of scope. If the closure fills the tangent space everywhere, p = 0: completely nonholonomic.",
+     "feynman": "A car has two no-slip rules but zero hidden altitudes — none of its rules secretly fence it in.",
+     "visual": "Counter pair: k (coral walls) above, p (gold sheets) below with p never exceeding k; for the car, k = 2 and p = 0 (lime).",
+     "scene": "mls-ch7-growth-vector",
+     "beat": "🧭 stalls short → leaves; reaches n → Chow",
+     "math": [
+      "cspace"
+     ],
+     "engine": [],
+     "difficulty": 3
+    },
+    {
+     "id": "7-339-e",
+     "lines": [
+      39,
+      40
+     ],
+     "kind": "prose",
+     "idea": "This section fixes notation and applies it to the §7.3 examples (continued).",
+     "feynman": "Now we measure each zoo animal with the same ruler.",
+     "visual": "The zoo icons line up in front of the growth-vector tower, ready to be measured.",
+     "scene": "mls-ch7-growth-vector",
+     "beat": "🧱 Δ1: the free arrows",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "7-339-f",
+     "lines": [
+      41,
+      41
+     ],
+     "kind": "page-number",
+     "idea": "Page 339."
+    }
+   ]
+  },
+  {
+   "pdf": 358,
+   "book": 340,
+   "lines": 42,
+   "section": "7.4.1",
+   "summary": "The filtration Δ1 ⊂ Δ2 ⊂ … adds one more level of brackets at each step; for a regular filtration the ranks climb until they stall at step κ, the degree of nonholonomy; a stall below n means p hidden integrals.",
+   "atoms": [
+    {
+     "id": "7-340-a",
+     "lines": [
+      1,
+      3
+     ],
+     "kind": "prose",
+     "idea": "More tools for measuring how the controllability Lie algebra grows come at the end of the section.",
+     "feynman": "Before comparing animals, build the measuring tape.",
+     "visual": "An empty growth-vector tower assembles floor by floor as a lead-in.",
+     "scene": "mls-ch7-growth-vector",
+     "beat": "🧱 Δ1: the free arrows",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "7-340-b",
+     "lines": [
+      4,
+      4
+     ],
+     "kind": "heading",
+     "idea": "Subsection 7.4.1 Classification of nonholonomic distributions."
+    },
+    {
+     "id": "7-340-c",
+     "lines": [
+      5,
+      12
+     ],
+     "kind": "definition",
+     "idea": "How hard planning is depends on how deep the needed brackets are. Define the filtration Δ1 = Δ = span{gⱼ} and Δi = Δ_{i−1} + [Δ1, Δ_{i−1}], where [Δ1, Δ_{i−1}] spans all brackets of one field from each.",
+     "feynman": "Floor 1: the moves you have. Floor 2: add every wiggle of two moves. Floor 3: add wiggles of a move with a floor-2 wiggle. Each floor is a harder, finer manoeuvre.",
+     "visual": "Tower view: floor 1 holds orange g1,g2; pressing \"next floor\" brackets every floor-1 arrow with every arrow on the floor below and adds the new gold arrows; a rank bar beside each floor.",
+     "scene": "mls-ch7-growth-vector",
+     "beat": "➕ Δ2: add first brackets",
+     "math": [
+      "vectors"
+     ],
+     "engine": [
+      "NEW: lieBracket",
+      "NEW: rank"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "7-340-d",
+     "lines": [
+      13,
+      19
+     ],
+     "kind": "prose",
+     "idea": "The floors are nested, Δi ⊂ Δ_{i+1}; Δi contains the inputs plus brackets up to depth i−1. By the Jacobi identity, [Δi, Δj] ⊂ [Δ1, Δ_{i+j−1}] ⊂ Δ_{i+j} (exercise).",
+     "feynman": "A wiggle built from a level-2 and a level-3 manoeuvre is never fancier than a level-5 one — the levels add like the number of letters in a word.",
+     "visual": "Nested translucent tiles growing in size; picking a floor-i arrow and a floor-j arrow and bracketing them lands the result on floor i+j (gold highlight).",
+     "scene": "mls-ch7-growth-vector",
+     "beat": "🪜 keep bracketing until rank stalls",
+     "math": [
+      "vectors"
+     ],
+     "engine": [
+      "NEW: lieBracket"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "7-340-e",
+     "lines": [
+      20,
+      27
+     ],
+     "kind": "definition",
+     "idea": "The filtration is regular near q0 if every rank Δi(q) is constant there. Then each step either gains dimension or stops for good: once rank Δ_{i+1} = rank Δi, Δi is involutive and all later floors equal it. Since ranks are at most n, the climb ends at some κ < n.",
+     "feynman": "Climbing stairs in a building: each flight takes you up, and the moment a flight gains no height you are on the roof — no stairs continue above.",
+     "visual": "Rank staircase per floor; when a step is flat the remaining floors collapse into it (lime \"involutive\" stamp). Moving q around the region keeps the staircase identical (regular); a purple flicker marks irregular points.",
+     "scene": "mls-ch7-growth-vector",
+     "beat": "🪜 keep bracketing until rank stalls",
+     "math": [
+      "matrix"
+     ],
+     "engine": [
+      "NEW: rank"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "7-340-f",
+     "lines": [
+      28,
+      31
+     ],
+     "kind": "definition",
+     "label": "Def 7.2",
+     "idea": "Degree of nonholonomy: for a regular filtration, the smallest κ with rank Δκ = rank Δ_{κ+1}.",
+     "feynman": "How many levels of wiggle-within-wiggle you need before you have every move you will ever get — like how deep a nesting of parallel-parking manoeuvres you must master.",
+     "visual": "A gold flag on the floor where the staircase stops; its number κ is shown on the flag.",
+     "scene": "mls-ch7-growth-vector",
+     "beat": "🔢 degree κ and growth vector",
+     "math": [
+      "matrix"
+     ],
+     "engine": [
+      "NEW: rank"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "7-340-g",
+     "lines": [
+      32,
+      41
+     ],
+     "kind": "prose",
+     "idea": "If rank Δκ = n − p, Frobenius gives p functions whose level sets are the integral manifolds of Δκ, and the state is trapped on one of them — the full answer to the opening question. These are the most functions whose gradients lie in span{ωᵢ} (continued).",
+     "feynman": "If the staircase stops below the roof, there are p hidden \"altitudes\" that no manoeuvre can change — like a lift that only serves some floors.",
+     "visual": "Staircase stops at n−p; p gold leaf sheets appear in a 3D inset; the reach cloud from q0 lies on one leaf.",
+     "scene": "mls-ch7-growth-vector",
+     "beat": "🧭 stalls short → leaves; reaches n → Chow",
+     "math": [
+      "cspace"
+     ],
+     "engine": [
+      "NEW: rank"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "7-340-h",
+     "lines": [
+      42,
+      42
+     ],
+     "kind": "page-number",
+     "idea": "Page 340."
+    }
+   ]
+  },
+  {
+   "pdf": 359,
+   "book": 341,
+   "lines": 43,
+   "section": "7.4.1",
+   "summary": "The hidden integrals have gradients spanning the annihilator of the closure; p = 0 recovers Chow (which holds even for irregular filtrations). Growth vector and relative growth vector defined. §7.4.2 measures the hopper: brackets of its two fields.",
+   "atoms": [
+    {
+     "id": "7-341-a",
+     "lines": [
+      1,
+      10
+     ],
+     "kind": "prose",
+     "idea": "Those functions are exactly the ones whose gradients span the annihilator of the closure Δ̄. If p = 0 (rank Δκ = n) there are none and any two points can be joined — Chow’s theorem, which in fact needs only Δ smooth and of constant rank, not a regular filtration.",
+     "feynman": "No hidden altitude means no secret fence: every spot is reachable.",
+     "visual": "Staircase hits the ceiling n: gold leaves dissolve, reach cloud fills the box, lime \"Chow ✓\" badge.",
+     "scene": "mls-ch7-growth-vector",
+     "beat": "🧭 stalls short → leaves; reaches n → Chow",
+     "math": [
+      "cspace"
+     ],
+     "engine": [
+      "NEW: rank"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "7-341-b",
+     "lines": [
+      11,
+      18
+     ],
+     "kind": "definition",
+     "label": "Def 7.3",
+     "idea": "For a regular filtration with degree κ: growth vector rᵢ = rank Δi; relative growth vector σᵢ = rᵢ − r_{i−1} (r0 = 0).",
+     "feynman": "Track how many moves you have after each level of training (r) and how many new ones each level taught you (σ).",
+     "visual": "Staircase bars are r; the coloured step heights are σ, shown as a row of numbers under the tower.",
+     "scene": "mls-ch7-growth-vector",
+     "beat": "🔢 degree κ and growth vector",
+     "math": [
+      "vectors"
+     ],
+     "engine": [
+      "NEW: rank"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "7-341-c",
+     "lines": [
+      19,
+      21
+     ],
+     "kind": "prose",
+     "idea": "The growth vector is a compact fingerprint of how complex the controllability Lie algebra is.",
+     "feynman": "Like a recipe’s difficulty rating, it tells you at a glance how many layers of finesse a system needs.",
+     "visual": "Shelf of robot cards, each showing its staircase silhouette; harder systems have taller, longer staircases.",
+     "scene": "mls-ch7-growth-vector",
+     "beat": "🔢 degree κ and growth vector",
+     "math": [],
+     "engine": [],
+     "difficulty": 2
+    },
+    {
+     "id": "7-341-d",
+     "lines": [
+      22,
+      22
+     ],
+     "kind": "heading",
+     "idea": "Subsection 7.4.2 Examples of nonholonomic systems, continued."
+    },
+    {
+     "id": "7-341-e",
+     "lines": [
+      23,
+      24
+     ],
+     "kind": "prose",
+     "idea": "Apply the classification to each §7.3 example.",
+     "feynman": "Measure each zoo animal with the same staircase ruler.",
+     "visual": "Robot shelf: tapping a card loads its fields into the tower.",
+     "scene": "mls-ch7-growth-vector",
+     "beat": "🧱 Δ1: the free arrows",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "7-341-f",
+     "lines": [
+      25,
+      35
+     ],
+     "kind": "example",
+     "label": "Ex 7.7",
+     "idea": "Hopper again: q = (ψ, l, θ), inputs ψ̇ = u1, l̇ = u2, and θ̇ = −m(l+d)²/(I + m(l+d)²)·u1.",
+     "feynman": "Swinging the leg turns the body back; stretching the leg does nothing on its own.",
+     "visual": "Hopper card loaded: the two lime fields in the 3D inset, with sliders.",
+     "scene": "mls-ch7-hopper-flight",
+     "beat": "🧮 zero spin as one constraint",
+     "math": [
+      "ode"
+     ],
+     "engine": [
+      "dynamics.rk4"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "7-341-g",
+     "lines": [
+      36,
+      42
+     ],
+     "kind": "equation",
+     "idea": "Bracketing gives g3 = [g1, g2] = (0, 0, 2Im(l+d)/(I + m(l+d)²)²): a pure body rotation.",
+     "feynman": "Swing, stretch, swing back, shrink back: the leg is where it began but the body has turned — that net turn is g3.",
+     "visual": "Loop the leg in the (ψ, l) pad; the body ends tilted; the measured tilt/ε² matches the gold g3 arrow’s θ-component.",
+     "scene": "mls-ch7-hopper-flight",
+     "beat": "🔁 swing–stretch loop tilts the body",
+     "math": [
+      "derivative"
+     ],
+     "engine": [
+      "NEW: lieBracket",
+      "dynamics.rk4"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "7-341-h",
+     "lines": [
+      43,
+      43
+     ],
+     "kind": "page-number",
+     "idea": "Page 341."
+    }
+   ]
+  },
+  {
+   "pdf": 360,
+   "book": 342,
+   "lines": 53,
+   "section": "7.4.2",
+   "summary": "Hopper: growth (2,3), degree 2. Space robot: first bracket vanishes when ψ1 = ψ2 (irregular), yet higher brackets give full rank near 0. Rolling disk: two brackets give sideways and forward motions.",
+   "atoms": [
+    {
+     "id": "7-342-a",
+     "lines": [
+      1,
+      3
+     ],
+     "kind": "prose",
+     "idea": "Near l = 0 the fields g1, g2, g3 span ℝ³: degree of nonholonomy 2, growth vector (2,3), relative growth (2,1).",
+     "feynman": "One level of wiggle is enough for the hopper to point its body anywhere.",
+     "visual": "Tower for the hopper: floor 1 rank 2, floor 2 rank 3 = n (lime ceiling); r = (2,3), σ = (2,1).",
+     "scene": "mls-ch7-hopper-flight",
+     "beat": "📈 growth (2,3)",
+     "math": [
+      "matrix"
+     ],
+     "engine": [
+      "NEW: rank"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "7-342-b",
+     "lines": [
+      4,
+      19
+     ],
+     "kind": "example",
+     "label": "Ex 7.8",
+     "idea": "Space robot: zero momentum gives the constraint a13θ̇1 + a23θ̇2 + a33θ̇ = 0 with q = (ψ1, ψ2, θ); the fields are g1 = (1, 0, −a13/a33), g2 = (0, 1, −a23/a33) written out in the parameters.",
+     "feynman": "Each arm crank turns the body by a share that depends on both arm angles.",
+     "visual": "Space-robot card loaded into the tower; the two lime fields shown in (ψ1, ψ2, θ) space.",
+     "scene": "mls-ch7-space-arms",
+     "beat": "🧮 zero momentum → two free arrows",
+     "math": [
+      "vectors"
+     ],
+     "engine": [],
+     "difficulty": 3
+    },
+    {
+     "id": "7-342-c",
+     "lines": [
+      20,
+      26
+     ],
+     "kind": "equation",
+     "idea": "g3 = [g1, g2] has only a θ-component, proportional to 2m²l²r(−l sin ψ1 − r sin(ψ1 − ψ2) + l sin ψ2) divided by a33².",
+     "feynman": "Looping the two arms around reorients the body by an amount set by this bracket — bigger loops, bigger turn.",
+     "visual": "Run a small square loop in the (ψ1, ψ2) pad; coral body-turn readout vs the gold g3 arrow; a heat-map of |g3| over the pad.",
+     "scene": "mls-ch7-space-arms",
+     "beat": "🔁 arm loops reorient the body",
+     "math": [
+      "derivative"
+     ],
+     "engine": [
+      "NEW: lieBracket",
+      "dynamics.rk4"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "7-342-d",
+     "lines": [
+      27,
+      30
+     ],
+     "kind": "prose",
+     "idea": "g3 vanishes on ψ1 = ψ2, so the filtration is not regular; still, higher brackets fill ℝ³ near q = 0, so the system is controllable.",
+     "feynman": "When both arms are mirrored, the simplest wiggle stops turning the body — but a fancier wiggle still works, like a stuck jar lid that needs a twist-and-tap.",
+     "visual": "The diagonal ψ1 = ψ2 on the heat-map glows coral (|g3| = 0); a deeper bracket arrow (gold, faint) remains nonzero there and the rank meter still reads 3.",
+     "scene": "mls-ch7-space-arms",
+     "beat": "⚠️ the bracket dies when arms match",
+     "math": [
+      "matrix"
+     ],
+     "engine": [
+      "NEW: lieBracket",
+      "NEW: rank"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "7-342-e",
+     "lines": [
+      31,
+      41
+     ],
+     "kind": "example",
+     "label": "Ex 7.9",
+     "idea": "Rolling disk again: Δ = span{g1 = (ρ cos θ, ρ sin θ, 0, 1), g2 = (0, 0, 1, 0)}.",
+     "feynman": "The coin’s two moves: roll along its heading, or pivot.",
+     "visual": "Coin card loaded into the tower: two orange arrows in the state panel.",
+     "scene": "mls-ch7-rolling-coin",
+     "beat": "🪙 roll and turn",
+     "math": [
+      "vectors"
+     ],
+     "engine": [],
+     "difficulty": 2
+    },
+    {
+     "id": "7-342-f",
+     "lines": [
+      42,
+      52
+     ],
+     "kind": "equation",
+     "idea": "g3 = [g1, g2] = (ρ sin θ, −ρ cos θ, 0, 0) moves the contact point sideways; g4 = [g2, g3] = (ρ cos θ, ρ sin θ, 0, 0) moves it straight ahead without changing the roll angle.",
+     "feynman": "Roll, pivot, unroll, unpivot: the coin slides sideways. Wiggle that again with a pivot: it moves forward but its painted mark ends up where it started.",
+     "visual": "Loop the coin roll–turn–unroll–unturn: coral sideways gap matches gold g3. Nest it with turning: the coin advances while the rim mark readout returns to its start value (gold g4).",
+     "scene": "mls-ch7-rolling-coin",
+     "beat": "🔁 roll–turn–unroll–unturn = sideways",
+     "math": [
+      "derivative"
+     ],
+     "engine": [
+      "NEW: lieBracket",
+      "dynamics.rk4"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "7-342-g",
+     "lines": [
+      53,
+      53
+     ],
+     "kind": "page-number",
+     "idea": "Page 342."
+    }
+   ]
+  },
+  {
+   "pdf": 361,
+   "book": 343,
+   "lines": 50,
+   "section": "7.4.2",
+   "summary": "Disk: growth (2,3,4), degree 3. Car: brackets [g1,g2] (turn) and [g1,[g1,g2]] (sideways) complete the span away from φ = ±π/2; growth (2,3,4). Ex 7.11 recalls the rolling sphere’s fields.",
+   "atoms": [
+    {
+     "id": "7-343-a",
+     "lines": [
+      1,
+      3
+     ],
+     "kind": "prose",
+     "idea": "g1…g4 span ℝ⁴ everywhere: degree 3, growth (2,3,4), relative growth (2,1,1).",
+     "feynman": "Two levels of wiggle unlock every coin pose.",
+     "visual": "Coin tower: ranks 2, 3, 4 = n (lime ceiling); σ = (2,1,1).",
+     "scene": "mls-ch7-rolling-coin",
+     "beat": "📈 growth (2,3,4)",
+     "math": [
+      "matrix"
+     ],
+     "engine": [
+      "NEW: rank"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "7-343-b",
+     "lines": [
+      4,
+      13
+     ],
+     "kind": "example",
+     "label": "Ex 7.10",
+     "idea": "Car again: configuration (x, y, θ, φ); the two no-slip constraints on rear and front wheels convert to the drive/steer system of Eq (7.14).",
+     "feynman": "Recall the two ice-skate blades of the car.",
+     "visual": "Car card loaded; lime/coral wheel arrows reappear.",
+     "scene": "mls-ch7-car-parking",
+     "beat": "🚫 wheels never slide",
+     "math": [
+      "vectors"
+     ],
+     "engine": [
+      "NEW: kinematicCar"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "7-343-c",
+     "lines": [
+      14,
+      31
+     ],
+     "kind": "equation",
+     "idea": "Filtration: g1 = (cos θ, sin θ, tan φ / l, 0), g2 = (0, 0, 0, 1); g3 = [g1, g2] = (0, 0, −1/(l cos²φ), 0) rotates the car; g4 = [g1, g3] = (−sin θ, cos θ, 0, 0)/(l cos²φ) slides it sideways.",
+     "feynman": "Drive–steer–reverse–unsteer turns the car on the spot; wiggling that with driving slides it sideways — exactly how you parallel park.",
+     "visual": "Run the drive/steer loop: car ends rotated, gap matches gold g3 (θ only). Run the nested turn/drive loop: car ends shifted sideways into the gold parking box, matching g4.",
+     "scene": "mls-ch7-car-parking",
+     "beat": "🔁 drive–steer wiggle = turn in place",
+     "math": [
+      "derivative"
+     ],
+     "engine": [
+      "NEW: lieBracket",
+      "dynamics.rk4"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "7-343-d",
+     "lines": [
+      32,
+      35
+     ],
+     "kind": "prose",
+     "idea": "g1…g4 are independent wherever the model is defined: degree 3, growth (2,3,4), relative growth (2,1,1); regular away from φ = ±π/2 where g1 blows up.",
+     "feynman": "Any parking spot is reachable with two levels of wiggle — unless the front wheels are turned a full right angle, where the toy model breaks.",
+     "visual": "Car tower: ranks 2, 3, 4 (lime ceiling). Steering slider near ±90° lights a coral band and the g1 arrow shoots off-screen.",
+     "scene": "mls-ch7-car-parking",
+     "beat": "📈 growth (2,3,4)",
+     "math": [
+      "matrix"
+     ],
+     "engine": [
+      "NEW: rank"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "7-343-e",
+     "lines": [
+      36,
+      49
+     ],
+     "kind": "example",
+     "label": "Ex 7.11",
+     "idea": "Sphere rolling on a plane with u1 = ωx, u2 = ωy: g1 = (0, sec q1, −sin q5, −cos q5, −tan q1), g2 = (−1, 0, −cos q5, sin q5, 0) from Eq (7.19).",
+     "feynman": "The ball’s two rolling directions.",
+     "visual": "Ball card loaded into the tower: two orange arrows in the five-bar state panel.",
+     "scene": "mls-ch7-ball-rolling",
+     "beat": "📈 growth (2,3,5)",
+     "math": [
+      "vectors"
+     ],
+     "engine": [],
+     "difficulty": 3
+    },
+    {
+     "id": "7-343-f",
+     "lines": [
+      50,
+      50
+     ],
+     "kind": "page-number",
+     "idea": "Page 343."
+    }
+   ]
+  },
+  {
+   "pdf": 362,
+   "book": 344,
+   "lines": 46,
+   "section": "7.4.2",
+   "summary": "Sphere-on-plane: g3, g4, g5 complete the span near q = 0; growth (2,3,5), degree 3. §7.4.3: the Philip Hall basis — lengths of Lie products, nilpotency, and the ordering rules.",
+   "atoms": [
+    {
+     "id": "7-344-a",
+     "lines": [
+      1,
+      20
+     ],
+     "kind": "equation",
+     "idea": "Brackets: g3 = [g1, g2], g4 = [g1, g3], g5 = [g2, g3], each an explicit field in sec q1, tan q1, sin q5, cos q5.",
+     "feynman": "Rolling a ball around a small square under your palm brings it back to the same spot but twisted; doing that loop with another roll twists and shifts it differently.",
+     "visual": "Roll a small square on the table: the ball returns but turned about the vertical (coral twist readout vs gold g3). Second-level loops light g4 and g5.",
+     "scene": "mls-ch7-ball-rolling",
+     "beat": "🔁 small loops twist the ball",
+     "math": [
+      "derivative",
+      "rotation"
+     ],
+     "engine": [
+      "NEW: lieBracket",
+      "dynamics.rk4"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "7-344-b",
+     "lines": [
+      21,
+      24
+     ],
+     "kind": "prose",
+     "idea": "Near q = 0 (away from q1 = π/2), g1…g5 are independent: degree 3, growth (2,3,5), relative growth (2,1,2).",
+     "feynman": "Two rolling directions, one twist from the first wiggle, and two more from the next level: five moves, all five dials covered.",
+     "visual": "Ball tower: ranks 2, 3, 5 = n (lime); σ = (2,1,2) — the last step is a double jump.",
+     "scene": "mls-ch7-ball-rolling",
+     "beat": "📈 growth (2,3,5)",
+     "math": [
+      "matrix"
+     ],
+     "engine": [
+      "NEW: rank"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "7-344-c",
+     "lines": [
+      25,
+      25
+     ],
+     "kind": "heading",
+     "idea": "Subsection 7.4.3 Philip Hall basis."
+    },
+    {
+     "id": "7-344-d",
+     "lines": [
+      26,
+      31
+     ],
+     "kind": "prose",
+     "idea": "Listing all generators and all their Lie products overcounts, because skew-symmetry and the Jacobi identity make many products dependent. The Philip Hall basis selects products so these relations are respected.",
+     "feynman": "Saying \"east then north\" and \"north then east\" as two different words wastes a word; a good dictionary lists each meaning once.",
+     "visual": "Wall of bracket trees; duplicates flash coral (e.g. [g2,g1] next to [g1,g2]); a sieve drops them leaving gold survivors.",
+     "scene": "mls-ch7-hall-basis",
+     "beat": "♻️ skew & Jacobi make copies",
+     "math": [],
+     "engine": [
+      "NEW: hallBasis"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "7-344-e",
+     "lines": [
+      32,
+      36
+     ],
+     "kind": "definition",
+     "idea": "Length of a Lie product: l(gᵢ) = 1 and l([A, B]) = l(A) + l(B) — the number of generators it contains.",
+     "feynman": "Count the letters in a word: g1 has one letter, [g1,[g1,g2]] has three.",
+     "visual": "Each bracket tree shows its leaf count as a badge; trees shelve themselves by that count.",
+     "scene": "mls-ch7-hall-basis",
+     "beat": "📏 length = how many letters",
+     "math": [],
+     "engine": [
+      "NEW: hallBasis"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "7-344-f",
+     "lines": [
+      37,
+      39
+     ],
+     "kind": "definition",
+     "idea": "A Lie algebra is nilpotent of order k if every Lie product longer than k vanishes.",
+     "feynman": "Wiggles of wiggles eventually stop doing anything — like whispers passed down a line that fade to silence after k people.",
+     "visual": "Nilpotency slider k: shelves beyond k turn grey and their arrows shrink to zero length.",
+     "scene": "mls-ch7-hall-basis",
+     "beat": "✂️ nilpotent: long words vanish",
+     "math": [],
+     "engine": [
+      "NEW: hallBasis"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "7-344-g",
+     "lines": [
+      40,
+      45
+     ],
+     "kind": "definition",
+     "idea": "A Philip Hall basis is an ordered set H of Lie products with: (1) every generator in H; (2) shorter products come first; (3) [Bᵢ, Bⱼ] ∈ H iff (a) both are in H with Bᵢ < Bⱼ and (b) (continued).",
+     "feynman": "A spelling rule for bracket-words, so that every meaning gets exactly one official spelling.",
+     "visual": "Rule panel: three rule chips; dragging a candidate tree over the sieve shows which chip accepts (lime) or rejects (coral) it.",
+     "scene": "mls-ch7-hall-basis",
+     "beat": "🌳 Hall rules pick one of each",
+     "math": [],
+     "engine": [
+      "NEW: hallBasis"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "7-344-h",
+     "lines": [
+      46,
+      46
+     ],
+     "kind": "page-number",
+     "idea": "Page 344."
+    }
+   ]
+  },
+  {
+   "pdf": 363,
+   "book": 345,
+   "lines": 21,
+   "section": "7.4.3",
+   "summary": "Rule 3(b) completes the Hall-basis definition; the basis is built by listing short products and sieving; Ex 7.12 lists the order-3 basis for three generators, where Jacobi removes [g1,[g2,g3]].",
+   "atoms": [
+    {
+     "id": "7-345-a",
+     "lines": [
+      1,
+      2
+     ],
+     "kind": "definition",
+     "idea": "Rule 3(b): Bⱼ is a generator, or Bⱼ = [B_l, B_r] with both in H and B_l ≤ Bᵢ.",
+     "feynman": "You may only attach a new letter on the left if it is not \"later\" than the word’s own first piece — this stops two spellings of the same thing.",
+     "visual": "Fourth rule chip; animation of a tree [g2,[g1,g2]] passing and [g1,[g2,g3]]-type trees failing.",
+     "scene": "mls-ch7-hall-basis",
+     "beat": "🌳 Hall rules pick one of each",
+     "math": [],
+     "engine": [
+      "NEW: hallBasis"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "7-345-b",
+     "lines": [
+      3,
+      10
+     ],
+     "kind": "prose",
+     "idea": "That this really is a basis is proved elsewhere ([38], [104]). To build one of order k, list all products up to length k and discard those violating the rules; built in order, only rule 3 needs checking.",
+     "feynman": "Make every possible word up to k letters, then cross out the ones the spelling rules forbid.",
+     "visual": "Generator machine: products of length 1, 2, 3 stream onto a conveyor; the sieve stamps them; survivor count per length shows on a scoreboard.",
+     "scene": "mls-ch7-hall-basis",
+     "beat": "🌳 Hall rules pick one of each",
+     "math": [],
+     "engine": [
+      "NEW: hallBasis"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "7-345-c",
+     "lines": [
+      11,
+      16
+     ],
+     "kind": "example",
+     "label": "Ex 7.12",
+     "idea": "Three generators, order 3: the basis has g1, g2, g3; three length-2 brackets [g1,g2], [g2,g3], [g3,g1]; and eight length-3 brackets.",
+     "feynman": "With three letters you get 3 one-letter words, 3 two-letter words and 8 three-letter words after removing duplicates.",
+     "visual": "Shelves with 3, 3 and 8 gold trees; a total counter reads 14.",
+     "scene": "mls-ch7-hall-basis",
+     "beat": "🌳 Hall rules pick one of each",
+     "math": [],
+     "engine": [
+      "NEW: hallBasis"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "7-345-d",
+     "lines": [
+      17,
+      20
+     ],
+     "kind": "prose",
+     "idea": "[g1,[g2,g3]] is missing because Jacobi expresses it as minus the sum of the two other cyclic brackets, already in the basis.",
+     "feynman": "If two friends’ tug-of-war results are known, the third one’s is forced by the balance.",
+     "visual": "The three cyclic trees on a triangle; two are gold, the third is greyed with a coral \"= −(…)\" arrow pointing at the other two.",
+     "scene": "mls-ch7-hall-basis",
+     "beat": "♻️ skew & Jacobi make copies",
+     "math": [],
+     "engine": [
+      "NEW: lieBracket"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "7-345-e",
+     "lines": [
+      21,
+      21
+     ],
+     "kind": "page-number",
+     "idea": "Page 345."
+    }
+   ]
+  },
+  {
+   "pdf": 364,
+   "book": 346,
+   "lines": 35,
+   "section": "7.5",
+   "summary": "Summary, part 1: nonholonomic constraints and their control system; the Lie bracket; distributions (regular, involutive); integrability and Frobenius; completely nonholonomic Pfaffian systems.",
+   "atoms": [
+    {
+     "id": "7-346-a",
+     "lines": [
+      1,
+      1
+     ],
+     "kind": "heading",
+     "idea": "Section 7.5 Summary."
+    },
+    {
+     "id": "7-346-b",
+     "lines": [
+      2,
+      11
+     ],
+     "kind": "summary",
+     "idea": "Recap 1: nonholonomic constraints are velocity rows ωᵢ(q)q̇ = 0 that cannot be integrated into position rules; a null-space basis gⱼ gives q̇ = Σ gⱼuⱼ, and planning means finding q(·) from q0 to qf.",
+     "feynman": "Rules about how a cart may roll, turned into the two knobs that roll it.",
+     "visual": "Ladder rung 1 lights: coral walls flip into lime arrows and two orange sliders; mini-thumbnail of the \"Stuck or Free\" scene.",
+     "scene": "mls-ch7-roadmap",
+     "beat": "🧾 recap ladder",
+     "math": [
+      "cspace"
+     ],
+     "engine": [],
+     "difficulty": 2
+    },
+    {
+     "id": "7-346-c",
+     "lines": [
+      12,
+      16
+     ],
+     "kind": "summary",
+     "idea": "Recap 2: the Lie bracket [f,g] = (∂g/∂q)f − (∂f/∂q)g.",
+     "feynman": "Go A, go B, undo A, undo B — the leftover is the bracket.",
+     "visual": "Rung 2: the four-leg loop with its coral gap, thumbnail of \"Bracket Square\".",
+     "scene": "mls-ch7-roadmap",
+     "beat": "🧾 recap ladder",
+     "math": [
+      "derivative"
+     ],
+     "engine": [
+      "NEW: lieBracket"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "7-346-d",
+     "lines": [
+      17,
+      24
+     ],
+     "kind": "summary",
+     "idea": "Recap 3: a distribution assigns a subspace to each point, often Δ = span{g1..gm}; regular means constant dimension, involutive means closed under brackets.",
+     "feynman": "A field of tiny allowed-direction tiles; closed means wiggling never escapes the tile.",
+     "visual": "Rung 3: blue tiles with a bracket gap staying inside (lime) or poking out (coral).",
+     "scene": "mls-ch7-roadmap",
+     "beat": "🧾 recap ladder",
+     "math": [
+      "vectors"
+     ],
+     "engine": [],
+     "difficulty": 2
+    },
+    {
+     "id": "7-346-e",
+     "lines": [
+      25,
+      32
+     ],
+     "kind": "summary",
+     "idea": "Recap 4: a k-dimensional distribution is integrable if n−k independent functions have differentials annihilating it; Frobenius: regular ⇒ (integrable ⇔ involutive). Ω is completely nonholonomic when the closure of Δ = Ω⊥ is everything.",
+     "feynman": "Pages of a book (integrable) versus a spiral staircase with no pages (completely nonholonomic).",
+     "visual": "Rung 4: stack of gold leaves vs twisting tiles; thumbnail of \"Frobenius Leaves\".",
+     "scene": "mls-ch7-roadmap",
+     "beat": "🧾 recap ladder",
+     "math": [
+      "cspace"
+     ],
+     "engine": [],
+     "difficulty": 3
+    },
+    {
+     "id": "7-346-f",
+     "lines": [
+      33,
+      34
+     ],
+     "kind": "summary",
+     "idea": "Recap 5 begins: the drift-free system q̇ = Σ gⱼuⱼ (continued).",
+     "feynman": "The two-knob toy again.",
+     "visual": "Rung 5 starts glowing: the orange sliders appear.",
+     "scene": "mls-ch7-roadmap",
+     "beat": "🧾 recap ladder",
+     "math": [
+      "ode"
+     ],
+     "engine": [],
+     "difficulty": 2
+    },
+    {
+     "id": "7-346-g",
+     "lines": [
+      35,
+      35
+     ],
+     "kind": "page-number",
+     "idea": "Page 346."
+    }
+   ]
+  },
+  {
+   "pdf": 365,
+   "book": 347,
+   "lines": 41,
+   "section": "7.5",
+   "summary": "Summary, part 2 (controllability Lie algebra and Chow; filtration, degree of nonholonomy, growth vectors; Lie products, nilpotency, Philip Hall basis) and the bibliographic notes on where the ideas and examples come from.",
+   "atoms": [
+    {
+     "id": "7-347-a",
+     "lines": [
+      1,
+      5
+     ],
+     "kind": "summary",
+     "idea": "Recap 5: the controllability Lie algebra is the smallest Lie algebra containing the gⱼ; Chow: full rank ⇒ steerable between any two points.",
+     "feynman": "If plain moves plus wiggles point every way, you can park anywhere.",
+     "visual": "Rung 5: rank meter fills to n; purple reach cloud fills the box; thumbnail of \"Chow Reach\".",
+     "scene": "mls-ch7-roadmap",
+     "beat": "🧾 recap ladder",
+     "math": [
+      "cspace"
+     ],
+     "engine": [
+      "NEW: rank"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "7-347-b",
+     "lines": [
+      6,
+      16
+     ],
+     "kind": "summary",
+     "idea": "Recap 6: filtration Δ1 = Δ, Δi = Δ_{i−1} + [Δ1, Δ_{i−1}]; regular if each is; degree κ where rank stops growing; growth vector rᵢ = rank Δi and relative growth σᵢ = rᵢ − r_{i−1}.",
+     "feynman": "Floors of wiggles, and a staircase counting how many moves each floor gives.",
+     "visual": "Rung 6: the growth-vector tower with the car’s (2,3,4) staircase; thumbnail of \"Growth Vector\".",
+     "scene": "mls-ch7-roadmap",
+     "beat": "🧾 recap ladder",
+     "math": [
+      "matrix"
+     ],
+     "engine": [
+      "NEW: rank"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "7-347-c",
+     "lines": [
+      17,
+      23
+     ],
+     "kind": "summary",
+     "idea": "Recap 7: Lie products are nested brackets; nilpotent of order k means products longer than k vanish; a Philip Hall basis is an ordered selection of products respecting skew-symmetry and Jacobi.",
+     "feynman": "A dictionary of wiggle-words with one spelling per meaning.",
+     "visual": "Rung 7: shelves of gold bracket trees; thumbnail of \"Hall Basis\".",
+     "scene": "mls-ch7-roadmap",
+     "beat": "🧾 recap ladder",
+     "math": [],
+     "engine": [
+      "NEW: hallBasis"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "7-347-d",
+     "lines": [
+      24,
+      24
+     ],
+     "kind": "heading",
+     "idea": "Section 7.6 Bibliography."
+    },
+    {
+     "id": "7-347-e",
+     "lines": [
+      25,
+      33
+     ],
+     "kind": "prose",
+     "idea": "Bibliographic notes: holonomy of constraints goes back to classical mechanics ([81]; Rosenberg [99] on constraint types). The chapter’s examples come from rolling fingers [60, 76], mobile robots and parking [78, 112], and space robots [119, 32]; [61] collects nonholonomic planning papers.",
+     "feynman": "A family tree: grandparents in classical mechanics, children in robot hands, cars and satellites.",
+     "visual": "Timeline beat: dots from classical mechanics to robotics, each branching to an icon (🎱, 🚗, 🛰️) with its reference number.",
+     "scene": "mls-ch7-roadmap",
+     "beat": "📜 who found what",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "7-347-f",
+     "lines": [
+      34,
+      40
+     ],
+     "kind": "prose",
+     "idea": "Nonlinear controllability and its tie to Chow’s theorem: Hermann and Krener [40]; textbook treatments [43], [83]. The nonholonomic-distribution theory and notation follow Vershik and Gershkovich [117], as presented in [78].",
+     "feynman": "Who first noticed that wiggles add up to new directions, and who wrote the instruction books.",
+     "visual": "Timeline continues: a Chow dot, a controllability dot, a growth-vector dot, each linked to the scene it inspired.",
+     "scene": "mls-ch7-roadmap",
+     "beat": "📜 who found what",
+     "math": [],
+     "engine": [],
+     "difficulty": 1
+    },
+    {
+     "id": "7-347-g",
+     "lines": [
+      41,
+      41
+     ],
+     "kind": "page-number",
+     "idea": "Page 347."
+    }
+   ]
+  },
+  {
+   "pdf": 366,
+   "book": 348,
+   "lines": 8,
+   "section": "7.6",
+   "summary": "Bibliographic note: the same integrability ideas analyse redundant-arm controllers that may fail to return joints to start after a closed hand path.",
+   "atoms": [
+    {
+     "id": "7-348-a",
+     "lines": [
+      1,
+      7
+     ],
+     "kind": "prose",
+     "idea": "Another use: for redundant manipulators one wants closed end-effector paths to give closed joint paths; whether that holds is an integrability question (Shamir–Yomdin [105], Baillieul–Martin [5], Chiacchio–Siciliano [17], De Luca–Oriolo [23]).",
+     "feynman": "Trace a circle on a table with your fingertip many times: if your elbow slowly creeps upward each lap, the arm’s controller is \"nonholonomic\" — a loop of the hand is not a loop of the joints.",
+     "visual": "A 3-link planar arm whose pink hand traces a gold circle repeatedly under a pseudo-inverse controller; the orange joint angles leave a drift trail (coral) that does not close; a lap counter shows the joint drift growing.",
+     "scene": "mls-ch7-roadmap",
+     "beat": "📜 who found what",
+     "math": [
+      "jacobian",
+      "ik"
+     ],
+     "engine": [
+      "kinematics.planarJacobian",
+      "kinematics.planarIKStep"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "7-348-b",
+     "lines": [
+      8,
+      8
+     ],
+     "kind": "page-number",
+     "idea": "Page 348."
+    }
+   ]
+  },
+  {
+   "pdf": 367,
+   "book": 349,
+   "lines": 32,
+   "section": "7.7",
+   "summary": "Exercises 1–6: necessity of the rank condition, a nonholonomy check in ℝ⁵, bracket properties, rescaling and reversing inputs, sphere-on-sphere controllability, and the car pulling N trailers.",
+   "atoms": [
+    {
+     "id": "7-349-a",
+     "lines": [
+      1,
+      1
+     ],
+     "kind": "heading",
+     "idea": "Section 7.7 Exercises."
+    },
+    {
+     "id": "7-349-b",
+     "lines": [
+      2,
+      4
+     ],
+     "kind": "exercise",
+     "label": "Exercise 1",
+     "idea": "Prove that, with smoothness and regularity, full rank of the controllability Lie algebra is also necessary for local controllability.",
+     "feynman": "If the wiggles miss a direction everywhere, Frobenius builds a fence in that direction — so you cannot be free.",
+     "visual": "Challenge mode of Chow Reach: given a pair of fields whose closure has rank n−1, try to steer the teal dot off its gold leaf to a gold goal above it; the leaf readout never changes. Learner must explain the fence by revealing the hidden h.",
+     "scene": "mls-ch7-chow-reach",
+     "beat": "🔁 wiggles reach bracket directions",
+     "math": [
+      "cspace"
+     ],
+     "engine": [
+      "NEW: rank"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "7-349-c",
+     "lines": [
+      5,
+      8
+     ],
+     "kind": "exercise",
+     "label": "Exercise 2",
+     "idea": "Show that a specific single Pfaffian constraint in ℝ⁵ (with ρ sin q5, ρ cos q3, cos q5 entries) is nonholonomic.",
+     "feynman": "Check whether the rule hides a fence by running wiggles and seeing if any escapes.",
+     "visual": "Challenge mode of Frobenius Leaves: load the constraint, compute its four lime null-space fields, then add brackets until one pokes out of the tile; success when the rank meter passes 4 (lime).",
+     "scene": "mls-ch7-frobenius-leaves",
+     "beat": "🏁 Frobenius: closed ⇔ stacked",
+     "math": [
+      "vectors"
+     ],
+     "engine": [
+      "NEW: nullspace",
+      "NEW: lieBracket",
+      "NEW: rank"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "7-349-d",
+     "lines": [
+      9,
+      10
+     ],
+     "kind": "exercise",
+     "label": "Exercise 3",
+     "idea": "Prove the three properties of Prop 7.1 from the bracket’s definition.",
+     "feynman": "Show the swap-sign, three-way balance and stretching rules hold for every pair of moves, not just the ones you tried.",
+     "visual": "Challenge mode of Bracket Square: random fields each round; the learner predicts the gap direction after swapping order, and assembles the three Jacobi gaps into a closed triangle by dragging.",
+     "scene": "mls-ch7-bracket-square",
+     "beat": "⚖️ skew, Jacobi, chain rule",
+     "math": [
+      "derivative"
+     ],
+     "engine": [
+      "NEW: lieBracket"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "7-349-e",
+     "lines": [
+      11,
+      20
+     ],
+     "kind": "exercise",
+     "label": "Exercise 4",
+     "idea": "For q̇ = Σ gⱼuⱼ, show that time-rescaling an input (ũ(t) = u(t/T)) reaches the same goal in unit time, and that ū(t) = −ũ(1−t) drives the goal back to the start.",
+     "feynman": "Play a dance tape faster: you end in the same place. Play it backwards with every step reversed: you come home — only because there is no current pushing you.",
+     "visual": "Challenge mode of Chow Reach: given an input tape that reaches qf, the learner must squeeze it to one second (time slider) and then build the reversed tape that brings the dot back to q0 (lime ring on success).",
+     "scene": "mls-ch7-chow-reach",
+     "beat": "↩️ drift-free: run the tape backwards",
+     "math": [
+      "ode"
+     ],
+     "engine": [
+      "dynamics.rk4"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "7-349-f",
+     "lines": [
+      21,
+      24
+     ],
+     "kind": "exercise",
+     "label": "Exercise 5",
+     "idea": "Derive the rolling equations for a unit sphere rolling on a sphere of radius ρ with the same inputs as Ex 7.6, and show it is controllable iff ρ ≠ 1.",
+     "feynman": "Roll one ball on another of the same size and the contact pattern is too symmetric to twist freely; any size difference restores full freedom.",
+     "visual": "Challenge mode of Ball on Table: replace the table with a slate sphere of radius slider ρ; learner tries to reach a gold target orientation; rank meter drops (coral) exactly at ρ = 1.",
+     "scene": "mls-ch7-ball-rolling",
+     "beat": "📈 growth (2,3,5)",
+     "math": [
+      "rotation"
+     ],
+     "engine": [
+      "NEW: lieBracket",
+      "NEW: rank"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "7-349-g",
+     "lines": [
+      25,
+      31
+     ],
+     "kind": "exercise",
+     "label": "Exercise 6",
+     "idea": "Car pulling N trailers, each hitched at the previous rear-axle centre, wheels rolling without slip: state dimension N + 4 with 2 inputs (continued).",
+     "feynman": "A toy train of carts pulled by a car: you still only have gas and steering, but now a whole chain must be parked.",
+     "visual": "Challenge mode of Parallel Park: add N blue trailers with a slider; each hitch shows lime rolling and coral no-slip arrows.",
+     "scene": "mls-ch7-car-parking",
+     "beat": "📈 growth (2,3,4)",
+     "math": [
+      "cspace"
+     ],
+     "engine": [
+      "NEW: kinematicCar"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "7-349-h",
+     "lines": [
+      32,
+      32
+     ],
+     "kind": "page-number",
+     "idea": "Page 349."
+    }
+   ]
+  },
+  {
+   "pdf": 368,
+   "book": 350,
+   "lines": 35,
+   "section": "7.7",
+   "summary": "Exercise 6 continued (trailer kinematics with the angle of each trailer) and Exercise 7: the firetruck with a steerable trailer.",
+   "atoms": [
+    {
+     "id": "7-350-a",
+     "lines": [
+      1,
+      5
+     ],
+     "kind": "figure",
+     "idea": "Drawing of a car with N trailers: car pose (x, y, θ0, φ) and trailer angles θ1…θN, hitch spacing.",
+     "feynman": "A luggage train at an airport, each cart trailing the one ahead.",
+     "visual": "Top-down chain: blue car with steering arc φ, trailers with angle arcs θi; teal hitch dots.",
+     "scene": "mls-ch7-car-parking",
+     "beat": "📈 growth (2,3,4)",
+     "math": [
+      "rotation"
+     ],
+     "engine": [],
+     "difficulty": 2
+    },
+    {
+     "id": "7-350-b",
+     "lines": [
+      6,
+      19
+     ],
+     "kind": "exercise",
+     "label": "Exercise 6",
+     "idea": "Using car states plus each trailer’s absolute angle, show the system takes the form ẋ = cos θ0 u1, ẏ = sin θ0 u1, φ̇ = u2, θ̇0 = (tan φ / l)u1, and θ̇ᵢ = (1/dᵢ)(Π_{j<i} cos(θ_{j−1} − θ_j)) sin(θ_{i−1} − θᵢ) u1.",
+     "feynman": "Each cart only swings when the one ahead pulls at an angle, and it is pulled more weakly the more the chain ahead is bent.",
+     "visual": "Challenge: learner drives the chain; per-trailer angle bars update with the product-of-cosines speed factor shown as a shrinking orange multiplier down the chain. Goal: back the whole chain into a gold bay.",
+     "scene": "mls-ch7-car-parking",
+     "beat": "📈 growth (2,3,4)",
+     "math": [
+      "ode"
+     ],
+     "engine": [
+      "dynamics.rk4",
+      "NEW: trailerChain"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "7-350-c",
+     "lines": [
+      20,
+      34
+     ],
+     "kind": "exercise",
+     "label": "Exercise 7",
+     "idea": "Firetruck: a car with one trailer whose rear wheels also steer (figure with φ0, θ0, φ1, θ1). Derive the control system with drive, cab steering and trailer steering inputs, and show controllability.",
+     "feynman": "A hook-and-ladder truck has a second driver at the back steering the trailer — three knobs for a long vehicle.",
+     "visual": "Challenge mode of Parallel Park: a firetruck with two orange steering sliders and one drive slider; learner must navigate a tight gold-marked corner; rank meter must reach full (lime) to unlock the goal.",
+     "scene": "mls-ch7-car-parking",
+     "beat": "🔁🔁 turn–drive wiggle = slide sideways",
+     "math": [
+      "ode",
+      "cspace"
+     ],
+     "engine": [
+      "dynamics.rk4",
+      "NEW: lieBracket",
+      "NEW: rank"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "7-350-d",
+     "lines": [
+      35,
+      35
+     ],
+     "kind": "page-number",
+     "idea": "Page 350."
+    }
+   ]
+  },
+  {
+   "pdf": 369,
+   "book": 351,
+   "lines": 36,
+   "section": "7.7",
+   "summary": "Exercises 8–12: one-dimensional distributions are involutive, the two bracket definitions agree, filtration bracket nesting, rank stall implies involutive, and a satellite steered by two rotors on SO(3).",
+   "atoms": [
+    {
+     "id": "7-351-a",
+     "lines": [
+      1,
+      4
+     ],
+     "kind": "exercise",
+     "label": "Exercise 8",
+     "idea": "Show span{f} is involutive: [αf, βf] stays a multiple of f for any functions α, β.",
+     "feynman": "With only one direction you can speed up or slow down but wiggling never invents a sideways step — a train on a single track.",
+     "visual": "Challenge mode of Frobenius Leaves: one orange field with two heat-map scalings α, β; the learner runs bracket loops anywhere and must confirm every gap arrow is parallel to f (lime).",
+     "scene": "mls-ch7-frobenius-leaves",
+     "beat": "🔒 involutive: brackets stay inside",
+     "math": [
+      "vectors"
+     ],
+     "engine": [
+      "NEW: lieBracket"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "7-351-b",
+     "lines": [
+      5,
+      12
+     ],
+     "kind": "exercise",
+     "label": "Exercise 9",
+     "idea": "Prove the Jacobian formula for [f,g] and the Lie-derivative definition L_{[f,g]}α = L_f L_g α − L_g L_f α agree.",
+     "feynman": "Measuring the wiggle by where you land, or by how a thermometer reading changes, gives the same answer.",
+     "visual": "Challenge mode of Bracket Square: pick any hill α; learner drags the gold bracket arrow until its dot with ∇α matches the two-thermometer difference at many points.",
+     "scene": "mls-ch7-bracket-square",
+     "beat": "⚖️ skew, Jacobi, chain rule",
+     "math": [
+      "derivative"
+     ],
+     "engine": [
+      "dynamics.numJacobian"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "7-351-c",
+     "lines": [
+      13,
+      16
+     ],
+     "kind": "exercise",
+     "label": "Exercise 10",
+     "idea": "By induction and Jacobi, show [Δi, Δj] ⊂ [Δ1, Δ_{i+j−1}] ⊂ Δ_{i+j}.",
+     "feynman": "Prove that mixing a level-i trick with a level-j trick never needs more than level i+j.",
+     "visual": "Challenge mode of Growth Vector: random trees from floors i and j are bracketed; learner must place the result on the right floor, using Jacobi rewrites shown as tree rotations.",
+     "scene": "mls-ch7-growth-vector",
+     "beat": "🪜 keep bracketing until rank stalls",
+     "math": [],
+     "engine": [
+      "NEW: lieBracket"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "7-351-d",
+     "lines": [
+      17,
+      19
+     ],
+     "kind": "exercise",
+     "label": "Exercise 11",
+     "idea": "For a regular filtration, if rank Δ_{i+1} = rank Δi then Δi is involutive (use Ex 7.10).",
+     "feynman": "If one more level of training teaches nothing new, no later level will either.",
+     "visual": "Challenge mode of Growth Vector: learner presses \"next floor\" on a stalled tower and must predict (correctly) that all further floors are flat.",
+     "scene": "mls-ch7-growth-vector",
+     "beat": "🪜 keep bracketing until rank stalls",
+     "math": [
+      "matrix"
+     ],
+     "engine": [
+      "NEW: rank"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "7-351-e",
+     "lines": [
+      20,
+      35
+     ],
+     "kind": "exercise",
+     "label": "Exercise 12",
+     "idea": "Satellite with two rotors whose axes meet at a point, zero momentum: show body angular velocity is ω = b1u1 + b2u2 for constant b1, b2 (Eq 7.21), giving Ṙ = R(b̂1u1 + b̂2u2) on SO(3) (Eq 7.22); in Euler-parameter coordinates, show controllability.",
+     "feynman": "Spin two flywheels inside a satellite and the satellite turns the other way; alternate the two wheels in a loop and it ends up turned about the third axis.",
+     "visual": "Challenge mode of Floating Arms: a blue cube satellite with two orange rotor sliders; target a gold orientation that needs a rotation about the axis neither rotor provides; success requires a rotor loop (bracket b̂1×b̂2).",
+     "scene": "mls-ch7-space-arms",
+     "beat": "🔁 arm loops reorient the body",
+     "math": [
+      "rotation",
+      "quaternion"
+     ],
+     "engine": [
+      "lie.expSO3",
+      "lie.qmul"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "7-351-f",
+     "lines": [
+      36,
+      36
+     ],
+     "kind": "page-number",
+     "idea": "Page 351."
+    }
+   ]
+  },
+  {
+   "pdf": 370,
+   "book": 352,
+   "lines": 24,
+   "section": "7.7",
+   "summary": "Fig 7.9 (satellite with two rotors), Exercise 13 (falling cat as two coupled pendulums on S² × S²) and Exercise 14 (program a Philip Hall basis).",
+   "atoms": [
+    {
+     "id": "7-352-a",
+     "lines": [
+      1,
+      8
+     ],
+     "kind": "figure",
+     "label": "Fig 7.9",
+     "idea": "Satellite body with two rotors mounted on it, body frame and inertial frame; rotor speeds reorient the body.",
+     "feynman": "A satellite turning itself with internal spinning wheels, like a cat twisting without touching anything.",
+     "visual": "Blue satellite with two orange rotor discs; red/green/blue body axes against fixed slate inertial axes; rotor spin arrows animate.",
+     "scene": "mls-ch7-space-arms",
+     "beat": "🔁 arm loops reorient the body",
+     "math": [
+      "rotation"
+     ],
+     "engine": [
+      "lie.expSO3"
+     ],
+     "difficulty": 2
+    },
+    {
+     "id": "7-352-b",
+     "lines": [
+      9,
+      20
+     ],
+     "kind": "exercise",
+     "label": "Exercise 13",
+     "idea": "Falling-cat model: two pendulums joined by a spherical joint, configuration S² × S². Derive the zero-momentum Pfaffian constraints, convert to a control system, and decide controllability.",
+     "feynman": "A cat dropped upside down twists its front and back halves to land on its feet with zero total spin.",
+     "visual": "Challenge mode of Floating Arms: two blue half-bodies joined at an orange ball joint; learner moves the halves (shape) to make the body flip to a gold \"feet down\" orientation, momentum gauge pinned at 0.",
+     "scene": "mls-ch7-space-arms",
+     "beat": "🔁 arm loops reorient the body",
+     "math": [
+      "rotation",
+      "energy"
+     ],
+     "engine": [
+      "dynamics.rk4"
+     ],
+     "difficulty": 5
+    },
+    {
+     "id": "7-352-c",
+     "lines": [
+      21,
+      23
+     ],
+     "kind": "exercise",
+     "label": "Exercise 14",
+     "idea": "Write a program that lists a Philip Hall basis of a given order for m generators, and produce order 5 for 2 generators.",
+     "feynman": "Build the dictionary-maker: it writes all wiggle-words up to 5 letters with two letters, one spelling per meaning.",
+     "visual": "Challenge mode of Hall Basis: learner sets m = 2, k = 5; the sieve runs and the shelf counts must match the learner’s prediction (2, 1, 2, 3, 6).",
+     "scene": "mls-ch7-hall-basis",
+     "beat": "🌳 Hall rules pick one of each",
+     "math": [],
+     "engine": [
+      "NEW: hallBasis"
+     ],
+     "difficulty": 3
+    },
+    {
+     "id": "7-352-d",
+     "lines": [
+      24,
+      24
+     ],
+     "kind": "page-number",
+     "idea": "Page 352."
+    }
+   ]
+  },
+  {
+   "pdf": 371,
+   "book": 353,
+   "lines": 29,
+   "section": "7.7",
+   "summary": "Exercises 15–17: filtration of the N-trailer car (degree N+2), constraints with nonzero right side give systems with drift, and an upper bound on growth.",
+   "atoms": [
+    {
+     "id": "7-353-a",
+     "lines": [
+      1,
+      5
+     ],
+     "kind": "exercise",
+     "label": "Exercise 15",
+     "idea": "Compute the filtration for the N-trailer car symbolically and show it is controllable with degree N + 2 and relative growth (2, 1, …, 1).",
+     "feynman": "Every extra trailer needs one more level of wiggle to park — longer trains need ever subtler moves.",
+     "visual": "Challenge mode of Growth Vector: load the N-trailer card, N slider; the staircase grows one step per trailer; learner predicts κ before pressing go.",
+     "scene": "mls-ch7-growth-vector",
+     "beat": "🔢 degree κ and growth vector",
+     "math": [
+      "matrix"
+     ],
+     "engine": [
+      "NEW: lieBracket",
+      "NEW: rank",
+      "NEW: trailerChain"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "7-353-b",
+     "lines": [
+      6,
+      19
+     ],
+     "kind": "exercise",
+     "label": "Exercise 16",
+     "idea": "With constraints ωᵢ(q)q̇ = cᵢ (nonzero constants), dualize to q̇ = f(q) + Σ gᵢuᵢ, find the drift f, apply to a space robot with nonzero momentum, and discuss planning difficulties.",
+     "feynman": "A satellite already spinning keeps turning even when the arms rest — now you can’t just run the tape backwards to come home.",
+     "visual": "Challenge mode of Chow Reach with drift on: a blue current field f; with the sliders released the dot keeps moving; learner tries the reversed-tape trick and sees it miss (coral).",
+     "scene": "mls-ch7-chow-reach",
+     "beat": "↩️ drift-free: run the tape backwards",
+     "math": [
+      "ode"
+     ],
+     "engine": [
+      "dynamics.rk4"
+     ],
+     "difficulty": 4
+    },
+    {
+     "id": "7-353-c",
+     "lines": [
+      20,
+      28
+     ],
+     "kind": "exercise",
+     "label": "Exercise 17",
+     "idea": "(Hard) For a regular system, bound the relative growth: σᵢ ≤ σ̄ᵢ = (1/i)((σ1)^i − Σ_{j|i, j<i} j σ̄ⱼ); equality throughout is maximum growth.",
+     "feynman": "Count the most new wiggle-words of each length you could possibly get — the dictionary limit sets a ceiling on how fast freedom can grow.",
+     "visual": "Challenge mode of Hall Basis: learner computes the predicted shelf counts for m generators via the divisor formula; the sieve’s counts appear next to them and must match for a free (maximum-growth) algebra.",
+     "scene": "mls-ch7-hall-basis",
+     "beat": "🌳 Hall rules pick one of each",
+     "math": [],
+     "engine": [
+      "NEW: hallBasis"
+     ],
+     "difficulty": 5
+    },
+    {
+     "id": "7-353-d",
+     "lines": [
+      29,
+      29
+     ],
+     "kind": "page-number",
+     "idea": "Page 353."
+    }
+   ]
+  },
+  {
+   "pdf": 372,
+   "book": 354,
+   "lines": 1,
+   "section": "7.7",
+   "summary": "Blank end page of the chapter carrying only its page number.",
+   "atoms": [
+    {
+     "id": "7-354-a",
+     "lines": [
+      1,
+      1
+     ],
+     "kind": "page-number",
+     "idea": "Page 354."
+    }
+   ]
+  }
+ ]
+}
