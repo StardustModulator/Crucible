@@ -75,7 +75,7 @@ a { color: inherit; text-decoration: none; }
 .formula { position: absolute; left: 12px; bottom: 12px; max-width: calc(100% - 24px); background: color-mix(in srgb, var(--panel) 92%, transparent); border: 1px solid var(--grid); border-radius: var(--radius);
   padding: 10px 14px; font-family: "STIX Two Math", "Cambria Math", "Latin Modern Math", Georgia, serif; font-size: 19px; line-height: 1.5; box-shadow: 0 8px 24px rgba(0,0,0,.25); pointer-events: none; }
 .formula .tok { color: var(--c); font-weight: 700; }
-.eq-line { white-space: nowrap; overflow-x: auto; }
+.eq-line { white-space: pre; overflow-x: auto; }
 .scene-msg { position: absolute; inset: 0; display: grid; place-items: center; pointer-events: none; }
 .scene-msg .big { font-size: 120px; font-family: var(--emoji); }
 .scene-msg[hidden] { display: none; }

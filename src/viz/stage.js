@@ -176,7 +176,7 @@ export class Stage {
   }
 
   _frame(now, drawOnly = false) {
-    let dt = Math.min(0.05, (now - (this.last ?? now)) / 1000);
+    let dt = Math.max(0, Math.min(0.05, (now - (this.last ?? now)) / 1000)); // rAF time can precede `last`
     this.last = now;
     if (!drawOnly && !this.paused && this.updateFn) {
       dt *= this.speed;
