@@ -52,13 +52,13 @@ Colors always mean the same thing (`src/viz/palette.js`):
 | `red` `green` `blue` | x / y / z axes and turning about them |
 | `orange` | joints, inputs, the knob you turn |
 | `pink`   | the hand / end-effector / output |
-| `gold`   | goals, targets, the "answer" highlight |
+| `gold`   | goals, targets, the "answer" highlight — rendered in **cardinal red** |
 | `teal`   | data, measurements, samples |
 | `blue`   | the model / estimate / belief |
 | `purple` | uncertainty, noise, probability |
 | `lime`   | truth / correct |
 | `coral`  | error, gradient, pushback, danger |
-| `slate`  | obstacles, walls |
+| `slate`  | obstacles, walls — **silver gray** |
 
 Kid-level metaphors are the point: gradients are **balls rolling downhill**, covariance
 is a **fuzzy blob**, a Kalman update is **two blobs merging into a sharper one**,
@@ -74,6 +74,19 @@ Every scene should have:
    The picture must be computed, not drawn by hand.
 4. An `eq` with color tokens matching the picture.
 5. Live feedback: readouts (`ui.readout`), meters, plots of error/energy/loss over time.
+
+### Typography & emoji
+
+The app uses one type system (`src/viz/type.js`):
+- **Inter:** labels and numbers.
+- **Inter Tight:** headlines.
+- **IBM Plex Mono:** metadata.
+- **"Crucible Emoji":** Noto Emoji pinned to its thin 300 weight, so every emoji renders as a slim **black-and-white line glyph** in the current fill colour.
+
+On canvas, any font string you set is rewritten to this system automatically, and the colour-emoji selector U+FE0F is stripped. So:
+- **Font strings:** just write `ctx.font = '16px sans-serif'` or use `pen.text`/`pen.emoji`.
+- **Colour:** an emoji takes its colour from `fillStyle`. Set it deliberately (usually `C.ink` or `C.muted`), or a glyph drawn right after a fill inherits that fill's colour.
+- **Avoid colour-emoji fonts:** never reference them, and never rely on an emoji's colour to carry meaning. Meaning lives in palette colours.
 
 ## 3. Drawing API
 

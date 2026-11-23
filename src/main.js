@@ -1,4 +1,7 @@
 // App shell: hash router, the concept map, and the scene runner.
+import { installCanvasType, installDomEmojiText, loadFonts } from './viz/type.js';
+installCanvasType(); // every canvas font → Inter + thin monochrome emoji
+installDomEmojiText(); // …and every DOM emoji too
 import { C, setTheme, themeName, col, alpha } from './viz/palette.js';
 import { Stage } from './viz/stage.js';
 import { UI } from './viz/ui.js';
@@ -40,14 +43,16 @@ function legendHTML() {
 }
 
 // ---------------------------------------------------------------- map page
-function topbar(extra = '') {
+const navLink = (href, label, on) => `<a class="nav-a ${on ? 'on' : ''}" href="${href}">${label}</a>`;
+function topbar(extra = '', active = '') {
   return `
     <header class="topbar">
-      <a class="brand" href="#/" aria-label="home"><span class="logo">⚗️</span><b>Crucible</b></a>
+      <a class="brand" href="#/" aria-label="home"><span class="logo"></span><b>Crucible</b><span class="sub">Visual Math Engine</span></a>
       <div class="spacer"></div>
+      <nav class="nav">${navLink('#/', 'Map', active === 'map')}${navLink('#/book', 'Book', active === 'book')}${navLink('#/web', 'Grid', active === 'web')}</nav>
       ${extra}
       <button class="ui-btn" id="legend-btn" title="color language" aria-label="color language">🎨</button>
-      <button class="ui-btn" id="theme-btn" title="light / dark" aria-label="light / dark">🌓</button>
+      <button class="ui-btn" id="theme-btn" title="light / dark" aria-label="light / dark"><svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true"><circle cx="8" cy="8" r="6.25" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 1.75a6.25 6.25 0 0 1 0 12.5z" fill="currentColor"/></svg></button>
     </header>
     <div class="legend-pop" hidden>${legendHTML()}</div>`;
 }
@@ -60,16 +65,18 @@ function renderMap(preset = null) {
   teardown();
   document.title = 'Crucible';
   app.innerHTML = `
-    ${topbar(`
-      <button class="ui-btn" id="bridge-btn" title="connect two ideas" aria-label="connect two ideas" style="--tint:${col('gold')}">🔗</button>
-      <a class="ui-btn" href="#/web" title="math × algorithm grid" aria-label="math × algorithm grid">▦</a>
-      <a class="ui-btn" href="#/book" title="the textbook" aria-label="the textbook">📕</a>`)}
+    ${topbar(``, 'map')}
     <section class="hero">
-      <div class="hud">${Object.entries(ISLANDS).map(([k, isl]) => `<span title="${isl.name}">${isl.icon} <b>${CONCEPTS.filter((c) => c.island === k).length}</b></span>`).join('')}
-        <span title="pages you can explain">💡 <b>${stampCount()}</b></span><span title="day streak">🔥 <b>${streak()}</b></span></div>
-      <div class="spacer"></div>
-      <a class="ui-btn cta" href="#/book" title="the textbook">📕 ▶</a>
+      <div>
+        <div class="eyebrow">Robotics · Control · Learning — ${CONCEPTS.length} concepts</div>
+        <h1>Every idea,<br>a picture you can <em>touch</em>.</h1>
+        <p>From rotation matrices to diffusion policies: each concept is a live, computed scene, wired to the mathematics underneath it.</p>
+        <div class="actions"><a class="ui-btn cta" href="#/book">Open the Book →</a><button class="ui-btn" id="bridge-btn" title="connect two ideas" aria-label="connect two ideas">🔗 Bridge two ideas</button><a class="ui-btn" href="#/web">▦ Math × Algorithm</a></div>
+      </div>
+      <div class="hud">${Object.entries(ISLANDS).map(([k, isl]) => `<span><b>${CONCEPTS.filter((c) => c.island === k).length}</b><span class="k"><span class="emoji">${isl.icon}</span>${isl.name}</span></span>`).join('')}
+        <span><b>${stampCount()}</b><span class="k"><span class="emoji">💡</span>Explained</span></span></div>
     </section>
+    <div class="section-head"><h2>Concept map</h2><span class="eyebrow">Hover to trace the math · click to open</span></div>
     <section class="map-wrap"><div class="map-stage"></div></section>
     <nav class="bridge-strip" hidden></nav>
     <section class="shelves">${Object.entries(ISLANDS).map(([k, isl]) => `
@@ -139,9 +146,9 @@ function renderWeb() {
   document.title = 'Grid · Crucible';
   const math = CONCEPTS.filter((c) => c.island === 'math');
   const algos = CONCEPTS.filter((c) => c.island !== 'math');
-  app.innerHTML = `${topbar('<a class="ui-btn" href="#/" title="map" aria-label="map">🌌</a>')}
+  app.innerHTML = `${topbar('', 'web')}
     <section class="web-wrap"><div class="web">
-      <div class="corner">🧮 × 🤖</div>
+      <div class="corner">Math × Algorithm</div>
       ${algos.map((a, j) => `<a class="colh" href="#/s/${a.id}" style="--tint:${col(ISLANDS[a.island].color)};grid-column:${j + 2}" title="${a.name}" data-c="${j}">${a.icon}</a>`).join('')}
       ${math.map((m, i) => {
         const anc = (a) => ancestry(a.id);
@@ -152,7 +159,7 @@ function renderWeb() {
           }).join('');
       }).join('')}
     </div></section>
-    <div class="web-key"><span><i class="cell d"></i>⬅ 1</span><span><i class="cell t"></i>⬅ ⋯</span></div>`;
+    <div class="web-key"><span><i class="cell d"></i>Used directly</span><span><i class="cell t"></i>Somewhere underneath</span></div>`;
   wireTopbar();
   const web = $('.web');
   web.style.gridTemplateColumns = `minmax(120px, auto) repeat(${algos.length}, 26px)`;
@@ -202,25 +209,26 @@ async function renderScene(id, beat = null) {
     uses = (meta.uses ?? []).map((u) => BY_ID[u]).filter(Boolean);
     if (meta.exists && BY_ID[meta.exists] && !uses.includes(BY_ID[meta.exists])) uses.unshift(BY_ID[meta.exists]);
     feeds = [];
-    pageRow = `<div class="link-row"><span class="arrow" title="book pages">📕</span>${meta.pageLinks.map((p) => `<a class="chip" href="#/book/p/${p.pdf}" style="--tint:${col('gold')}"><span>📄</span><em>${p.label}</em></a>`).join('')}</div>`;
+    pageRow = `<div class="link-row"><span class="arrow">Book pages</span>${meta.pageLinks.map((p) => `<a class="chip" href="#/book/p/${p.pdf}" style="--tint:${col('gold')}"><span>📄</span><em>${p.label}</em></a>`).join('')}</div>`;
   } else { location.hash = '#/'; return; }
   document.title = `${c.name} · Crucible`;
 
   app.innerHTML = `
     <header class="topbar scene-top" style="--tint:${col(isl.color)}">
-      <a class="ui-btn" href="#/" title="map" aria-label="map">🗺️</a>
-      <a class="ui-btn" href="#/s/${prev.id}" title="${prev.name}" aria-label="previous">◀</a>
+      <a class="brand" href="#/" aria-label="home"><span class="logo"></span></a>
+      <a class="ui-btn" href="#/s/${prev.id}" title="${prev.name}" aria-label="previous">←</a>
       <h1><span class="ic">${c.icon}</span><span class="nm">${c.name}</span></h1>
-      <a class="ui-btn" href="#/s/${next.id}" title="${next.name}" aria-label="next">▶</a>
+      <a class="ui-btn" href="#/s/${next.id}" title="${next.name}" aria-label="next">→</a>
       <div class="spacer"></div>
+      <nav class="nav">${navLink('#/', 'Map', false)}${navLink('#/book', 'Book', false)}</nav>
       <button class="ui-btn" id="eq-btn" title="grown-up math" aria-label="grown-up math">∑</button>
       <button class="ui-btn" id="legend-btn" title="color language" aria-label="color language">🎨</button>
-      <button class="ui-btn" id="theme-btn" title="light / dark" aria-label="light / dark">🌓</button>
+      <button class="ui-btn" id="theme-btn" title="light / dark" aria-label="light / dark"><svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true"><circle cx="8" cy="8" r="6.25" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 1.75a6.25 6.25 0 0 1 0 12.5z" fill="currentColor"/></svg></button>
     </header>
     <div class="legend-pop" hidden>${legendHTML()}</div>
     <nav class="links">
-      ${uses.length ? `<div class="link-row"><span class="arrow" title="made of">🧱⬅</span>${uses.map((u) => chip(u)).join('')}</div>` : ''}
-      ${feeds.length ? `<div class="link-row"><span class="arrow" title="builds into">➡🏗️</span>${feeds.map((u) => chip(u)).join('')}</div>` : ''}
+      ${uses.length ? `<div class="link-row"><span class="arrow">Made of</span>${uses.map((u) => chip(u)).join('')}</div>` : ''}
+      ${feeds.length ? `<div class="link-row"><span class="arrow">Builds into</span>${feeds.map((u) => chip(u)).join('')}</div>` : ''}
       ${pageRow}
     </nav>
     <main class="scene-main">
@@ -282,7 +290,7 @@ async function renderScene(id, beat = null) {
 async function renderBook(kind, n) {
   teardown();
   document.title = 'Book · Crucible';
-  app.innerHTML = `${topbar('<a class="ui-btn" href="#/" title="map" aria-label="map">🌌</a>')}<div class="book"></div>`;
+  app.innerHTML = `${topbar('', 'book')}<div class="book"></div>`;
   wireTopbar();
   const el = $('.book');
   current = { repaint: () => route() };
@@ -319,5 +327,6 @@ addEventListener('keydown', (e) => {
   if (e.key === 'ArrowRight') document.querySelector('.scene-top a[aria-label="next"]')?.click();
   if (e.key === 'ArrowLeft') document.querySelector('.scene-top a[aria-label="previous"]')?.click();
 });
-route();
+// Fonts first (incl. the emoji glyphs the map uses), so no canvas ever flashes colour emoji.
+loadFonts(CONCEPTS.map((c) => c.icon).join('') + Object.values(ISLANDS).map((i) => i.icon).join('') + '🔗▦💡🔥🧱🏗️📕🎨').finally(route);
 export { alpha };

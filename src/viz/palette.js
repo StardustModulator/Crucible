@@ -4,27 +4,28 @@
 //   red / green / blue   x / y / z axes (and rotation about them)
 //   orange               joints, inputs, "the thing you turn"
 //   pink                 the hand / end-effector / output
-//   gold                 goals & targets
+//   gold                 goals, targets, the answer (cardinal red)
 //   teal                 data, measurements, samples
 //   blue                 the model / estimate / belief
 //   purple               uncertainty, noise, probability mass
 //   lime                 the truth / correct answer
 //   coral                error, gradient, "push back" forces
-//   slate                obstacles, walls
+//   slate                obstacles, walls (silver gray)
 
+// Cardinal red + silver gray + black & white, with a quiet scientific palette for meanings.
 const dark = {
-  bg: '#0b0e1f', panel: '#151a33', panel2: '#1d2347', ink: '#f1f3ff', muted: '#9aa5cf',
-  faint: '#343c6b', grid: '#1f2650', shadow: 'rgba(0,0,0,0.35)',
-  red: '#ff5d6c', green: '#3ddc84', blue: '#4ea8ff', orange: '#ffa94d', pink: '#ff6ad5',
-  gold: '#ffd43b', teal: '#2ee6d6', purple: '#b18cff', lime: '#a3e635', coral: '#ff7b54',
-  slate: '#6b7896', white: '#ffffff', black: '#000000',
+  bg: '#0b0b0c', panel: '#141416', panel2: '#1c1c1f', ink: '#f4f4f2', muted: '#9b9b9e',
+  faint: '#3a3a3e', grid: '#1e1e21', shadow: 'rgba(0,0,0,0.45)',
+  red: '#ef5b6c', green: '#45c08a', blue: '#5b9cff', orange: '#f2994a', pink: '#e4669f',
+  gold: '#e8465c', teal: '#3cc6c0', purple: '#a58bf0', lime: '#8fcf5a', coral: '#ff8a5c',
+  slate: '#8a8b8c', white: '#ffffff', black: '#000000',
 };
 const light = {
-  bg: '#fbf6ea', panel: '#fffdf7', panel2: '#f4eddc', ink: '#1d2340', muted: '#5d6687',
-  faint: '#d6cfbd', grid: '#ece3cf', shadow: 'rgba(30,30,60,0.15)',
-  red: '#e03140', green: '#16a35a', blue: '#1f7ae0', orange: '#ec7a00', pink: '#d6339f',
-  gold: '#d49b00', teal: '#0aa595', purple: '#7a4fe0', lime: '#5c9a0b', coral: '#e8532d',
-  slate: '#7a8399', white: '#ffffff', black: '#000000',
+  bg: '#ffffff', panel: '#f7f7f6', panel2: '#efefed', ink: '#111111', muted: '#6b6b6e',
+  faint: '#d0d0d0', grid: '#ececea', shadow: 'rgba(0,0,0,0.12)',
+  red: '#d1495b', green: '#2e9a68', blue: '#2563c9', orange: '#dd7a1f', pink: '#c2367a',
+  gold: '#a31f34', teal: '#13918f', purple: '#6d4fc2', lime: '#4f9a35', coral: '#e4572e',
+  slate: '#8a8b8c', white: '#ffffff', black: '#000000',
 };
 
 // Live palette object: scenes read C.blue etc. at draw time, so theme switches are instant.

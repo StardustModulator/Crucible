@@ -58,21 +58,20 @@ export const KIND = {
 const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const dayOf = (book, pdf) => book.days.find((d) => pdf >= d.pdf[0] && pdf <= d.pdf[1]);
 const pageLabel = (p) => (p.book ? `p${p.book}` : `pdf ${p.pdf}`);
-const DAY_TINT = ['purple', 'teal', 'orange', 'pink', 'gold', 'blue', 'lime'];
 
 // 0 not in atlas · 1 atoms only · 2 some scenes built · 3 every scene built
 function pageStatus(book, pdf) {
   const p = book.pages.get(pdf);
   if (!p) return 0;
   const ids = [...new Set(p.atoms.map((a) => a.scene).filter(Boolean))];
-  if (!ids.length) return 3;
+  if (!ids.length) return 'b'; // blank / structural page: nothing to build
   const b = ids.filter((id) => book.built.has(id) || BY_ID[id]).length;
   return b === ids.length ? 3 : b ? 2 : 1;
 }
 function dayStats(book, d) {
   const st = progress().stamps;
   let n = 0, atl = 0, ok = 0, stamped = 0;
-  for (let p = d.pdf[0]; p <= d.pdf[1]; p++) { n++; const s = pageStatus(book, p); if (s) atl++; if (s === 3) ok++; if (st[p]) stamped++; }
+  for (let p = d.pdf[0]; p <= d.pdf[1]; p++) { n++; const s = pageStatus(book, p); if (s) atl++; if (s === 3 || s === 'b') ok++; if (st[p]) stamped++; }
   // ⭐ atlas complete · ⭐⭐ every scene built · ⭐⭐⭐ you stamped every page
   const stars = (atl === n) + (ok === n) + (stamped === n);
   return { n, atl, ok, stamped, stars };
@@ -80,26 +79,24 @@ function dayStats(book, d) {
 
 function hud(book) {
   const lines = [...book.pages.keys()].reduce((s, p) => s + book.lines[p - 1], 0);
-  return `<div class="hud">
-    <span title="pages broken down">📄 <b>${book.pages.size}</b>/474</span>
-    <span title="lines covered">〰️ <b>${lines}</b></span>
-    <span title="scenes built">🎬 <b>${book.built.size}</b>/${book.scenes.size}</span>
-    <span title="pages you can explain">💡 <b>${stampCount()}</b></span>
-    <span title="day streak">🔥 <b>${streak()}</b></span></div>`;
+  const stat = (v, of, emoji, label) => `<span><b>${v}${of ? `<small>/${of}</small>` : ''}</b><span class="k"><span class="emoji">${emoji}</span>${label}</span></span>`;
+  return `<div class="hud">${stat(book.pages.size, 474, '📄', 'Pages')}${stat(lines.toLocaleString(), '', '〰️', 'Lines')}${stat(book.built.size, book.scenes.size, '🎬', 'Scenes built')}${stat(stampCount(), '', '💡', 'Explained')}${stat(streak(), '', '🔥', 'Streak')}</div>`;
 }
 
 // ---------------------------------------------------------------- world map
 export async function renderBookHome(el) {
   const book = await loadBook();
   const st = progress().stamps;
+  const stats = book.days.map((d) => dayStats(book, d));
+  const cur = Math.max(0, stats.findIndex((x) => x.stars < 3));
+  const ring = (f) => { const C = 2 * Math.PI * 19; return `<svg viewBox="0 0 44 44"><circle cx="22" cy="22" r="19" fill="none" stroke="var(--faint)" stroke-width="1.5"/><circle cx="22" cy="22" r="19" fill="none" stroke="var(--cardinal)" stroke-width="1.5" stroke-dasharray="${(C * f).toFixed(1)} ${C.toFixed(1)}"/></svg>`; };
   const levels = book.days.map((d, i) => {
-    const s = dayStats(book, d);
-    const stars = [0, 1, 2].map((k) => `<span class="${k < s.stars ? '' : 'off'}">⭐</span>`).join('');
-    return `<a class="level ${s.stars === 3 ? 'done' : ''}" href="#/book/day/${d.day}" style="--tint:${col(DAY_TINT[i])}">
-      <span class="orb">${d.icon}<span class="num">${d.day}</span></span>
-      <span class="stars">${stars}</span>
-      <span class="meter" title="pages fully built"><i style="width:${(100 * s.ok) / s.n}%"></i></span>
-      <span class="lt">${esc(d.theme)}</span><span class="lp">${esc(d.parts)}</span></a>`;
+    const s = stats[i];
+    const marks = [s.atl === s.n, s.ok === s.n, s.stamped === s.n];
+    return `<a class="level ${i === cur ? 'current' : ''}" href="#/book/day/${d.day}">
+      <span class="top"><span class="num">${String(d.day).padStart(2, '0')}</span><span class="ring">${ring(s.ok / s.n)}<span class="glyph">${d.icon}</span></span></span>
+      <span class="lt">${esc(d.theme)}</span><span class="lp">${esc(d.parts)}</span>
+      <span class="marks" title="atlas · scenes · you">${marks.map((m, k) => `<i class="${m ? 'on' : ''} ${k === 2 ? 'you' : ''}"></i>`).join('')}</span></a>`;
   }).join('');
   const partRow = (f) => {
     const tiles = [];
@@ -107,19 +104,19 @@ export async function renderBookHome(el) {
       const pg = book.pages.get(p);
       tiles.push(`<a class="ptile s${pageStatus(book, p)} ${st[p] ? 'stamped' : ''}" href="#/book/p/${p}" title="${pg ? pageLabel(pg) : 'pdf ' + p}">${pg?.book ?? ''}</a>`);
     }
-    return `<div class="part"><h3><span>${esc(f.title)}</span><em>🎬 ${f.scenes?.length ?? 0} · 🧩 ${f.pages.reduce((s, p) => s + p.atoms.length, 0)}</em></h3><div class="ptiles">${tiles.join('')}</div></div>`;
+    return `<div class="part"><h3><span>${esc(f.title)}</span><em>${f.pages.length} pp · ${f.scenes?.length ?? 0} scenes · ${f.pages.reduce((s, p) => s + p.atoms.length, 0)} atoms</em></h3><div class="ptiles">${tiles.join('')}</div></div>`;
   };
   el.innerHTML = `
     <section class="book-hero">
-      <h2><span class="cover">📕</span><span>The Book<small>A Mathematical Introduction to Robotic Manipulation · 7 days · every line</small></span></h2>
+      <div>
+        <div class="eyebrow">The Book · 7 days · every line</div>
+        <h2>A Mathematical Introduction to <em>Robotic Manipulation</em></h2>
+        <p>474 pages, 18,554 lines, broken into Feynman atoms: a precise paraphrase, an everyday analogy and the exact picture that teaches it.</p>
+      </div>
       ${hud(book)}
     </section>
-    <section class="world">
-      <svg class="trail" preserveAspectRatio="none" viewBox="0 0 700 300"><path d="M50 200 C 110 80, 150 80, 150 120 S 200 230, 250 200 S 320 70, 350 120 S 410 230, 450 200 S 520 70, 550 120 S 610 230, 650 200"
-        fill="none" stroke="${col('gold')}" stroke-opacity=".55" stroke-width="5" stroke-dasharray="2 14" stroke-linecap="round"/></svg>
-      <div class="levels">${levels}</div>
-    </section>
-    <div class="tile-key"><span><i class="ptile s0"></i>⬜</span><span><i class="ptile s1"></i>🧩</span><span><i class="ptile s2"></i>🧱</span><span><i class="ptile s3"></i>✅</span><span><i class="ptile s3 stamped"></i>💡</span></div>
+    <section class="week">${levels}</section>
+    <div class="tile-key"><span><i class="ptile s0"></i>Not mapped</span><span><i class="ptile s1"></i>Atoms</span><span><i class="ptile s2"></i>Partly built</span><span><i class="ptile s3"></i>Built</span><span><i class="ptile s3 stamped"></i>Explained by you</span></div>
     <section class="parts">${book.files.map(partRow).join('')}</section>`;
 }
 
@@ -139,9 +136,9 @@ export async function renderBookDay(el, n) {
   }
   el.innerHTML = `
     <section class="day-head">
-      <h2 class="day-title"><span class="badge" style="background:${col(DAY_TINT[n - 1])}">${d.icon}</span><span>${d.day} · ${esc(d.theme)}<br><em>${esc(d.parts)} · ${'⭐'.repeat(s.stars)}${'☆'.repeat(3 - s.stars)} · 💡 ${s.stamped}/${s.n}</em></span></h2>
-      <div class="day-nav">${n > 1 ? `<a class="ui-btn" href="#/book/day/${n - 1}" aria-label="previous day">◀</a>` : ''}<a class="ui-btn" href="#/book" aria-label="world map">🗺️</a>${n < 7 ? `<a class="ui-btn" href="#/book/day/${n + 1}" aria-label="next day">▶</a>` : ''}
-      <a class="ui-btn cta" href="#/book/p/${d.pdf[0]}">▶ 📄</a></div>
+      <h2 class="day-title"><span class="badge">${String(d.day).padStart(2, '0')}</span><span>${esc(d.theme)}<em>${esc(d.parts)} · ${s.n} pages · ${s.ok}/${s.n} built · ${s.stamped}/${s.n} explained</em></span></h2>
+      <div class="day-nav">${n > 1 ? `<a class="ui-btn" href="#/book/day/${n - 1}" aria-label="previous day">←</a>` : ''}<a class="ui-btn" href="#/book" aria-label="the week">Week</a>${n < 7 ? `<a class="ui-btn" href="#/book/day/${n + 1}" aria-label="next day">→</a>` : ''}
+      <a class="ui-btn cta" href="#/book/p/${d.pdf[0]}">Start reading →</a></div>
     </section>
     <div class="chips">${[...sceneIds].map((id) => sceneChip(book, id)).join('')}</div>
     <section class="day-pages">${pages.join('')}</section>`;
@@ -151,7 +148,7 @@ function sceneChip(book, id) {
   const s = book.scenes.get(id) ?? (BY_ID[id] && { title: BY_ID[id].name, icon: BY_ID[id].icon });
   if (!s) return '';
   const ok = book.built.has(id) || BY_ID[id];
-  return `<a class="chip ${ok ? '' : 'todo'}" href="#/s/${id}" style="--tint:${col(ok ? 'lime' : 'faint')}"><span>${s.icon}</span><em>${esc(s.title)}</em></a>`;
+  return `<a class="chip ${ok ? '' : 'todo'}" href="#/s/${id}" style="--tint:${col(ok ? 'ink' : 'faint')}"><span>${s.icon}</span><em>${esc(s.title)}</em></a>`;
 }
 
 // ---------------------------------------------------------------- one page
@@ -160,7 +157,7 @@ export async function renderBookPage(el, pdf) {
   const p = book.pages.get(pdf);
   const d = dayOf(book, pdf);
   const st = progress().stamps;
-  const nav = `<div class="day-nav">${pdf > 1 ? `<a class="ui-btn" href="#/book/p/${pdf - 1}" aria-label="previous page">◀</a>` : ''}<a class="ui-btn" href="#/book/day/${d?.day ?? 1}" aria-label="day">${d?.icon ?? '📕'}</a>${pdf < 474 ? `<a class="ui-btn" href="#/book/p/${pdf + 1}" aria-label="next page">▶</a>` : ''}
+  const nav = `<div class="day-nav">${pdf > 1 ? `<a class="ui-btn" href="#/book/p/${pdf - 1}" aria-label="previous page">←</a>` : ''}<a class="ui-btn" href="#/book/day/${d?.day ?? 1}" aria-label="day">${d?.icon ?? '📕'}</a>${pdf < 474 ? `<a class="ui-btn" href="#/book/p/${pdf + 1}" aria-label="next page">→</a>` : ''}
     <button class="ui-btn stamp-btn ${st[pdf] ? 'on' : ''}" title="I can explain this page" aria-label="I can explain this page" style="--tint:${col('gold')}">💡 ${st[pdf] ? '✔' : ''}</button></div>`;
   const title = p ? (p.book ? `📄 ${p.book}` : `📕 pdf ${pdf}`) : `📄 pdf ${pdf}`;
   const atoms = (p?.atoms ?? []).map((a, i) => {
@@ -168,21 +165,21 @@ export async function renderBookPage(el, pdf) {
     const s = a.scene ? book.scenes.get(a.scene) : null;
     const beatIdx = s ? s.beats.indexOf(a.beat) : -1;
     const ok = a.scene && (book.built.has(a.scene) || BY_ID[a.scene]);
-    const go = a.scene ? `<a class="go ${ok ? '' : 'todo'}" href="#/s/${a.scene}${beatIdx >= 0 ? `?beat=${beatIdx}` : ''}">${ok ? '▶' : '🚧'} ${s?.icon ?? BY_ID[a.scene]?.icon ?? '🎬'} ${esc(a.beat ?? '')}</a>` : '';
+    const go = a.scene ? `<a class="go ${ok ? '' : 'todo'}" href="#/s/${a.scene}${beatIdx >= 0 ? `?beat=${beatIdx}` : ''}"><span class="emoji">${s?.icon ?? BY_ID[a.scene]?.icon ?? '🎬'}</span> ${esc(s?.title ?? BY_ID[a.scene]?.name ?? a.scene)} · ${esc(String(a.beat ?? '').replace(/^\S+\s/, ''))} ${ok ? '→' : '(soon)'}</a>` : '';
     const math = (a.math ?? []).map((m) => BY_ID[m] && `<a class="mini" href="#/s/${m}" title="${esc(BY_ID[m].name)}" style="--tint:${col(ISLANDS[BY_ID[m].island].color)}">${BY_ID[m].icon}</a>`).join('');
     return `<article class="atom" data-i="${i}" style="--c:${col(c)}">
       <header><span class="k">${ic}</span><span class="ln">L${a.lines.join('–')}</span>${a.label ? `<span class="lb">${esc(a.label)}</span>` : ''}<span class="d">${'●'.repeat(a.difficulty ?? 0)}</span>${math}</header>
       ${a.feynman ? `<p class="fey">${esc(a.feynman)}</p>` : ''}
       <p class="idea">${esc(a.idea)}</p>
-      ${a.visual ? `<details><summary>🎨 ⋯</summary><p>${esc(a.visual)}</p></details>` : ''}
+      ${a.visual ? `<details><summary>Visual design</summary><p>${esc(a.visual)}</p></details>` : ''}
       ${go}</article>`;
   }).join('');
   el.innerHTML = `
-    <section class="day-head"><h2 class="day-title"><span>${title} <em>${p ? `§${esc(p.section ?? '–')} · ${p.lines} 〰️` : '🧩'}</em></span></h2>${nav}</section>
+    <section class="day-head"><h2 class="day-title"><span class="badge">${p?.book ?? pdf}</span><span>${p?.book ? 'Page' : 'Front matter'}<em>${p ? `§${esc(p.section ?? '–')} · ${p.lines} lines · ${p.atoms.length} atoms · day ${d?.day ?? '–'}` : 'not mapped yet'}</em></span></h2>${nav}</section>
     ${p?.summary ? `<p class="page-sum">${esc(p.summary)}</p>` : ''}
     <section class="page-view">
       <div class="original">
-        <div class="bar">
+        <div class="bar"><span class="eyebrow">Original page</span>
           <button class="ui-btn" id="pdf-load" title="load your copy of the book" aria-label="load your copy of the book">📥</button>
           <a class="ui-btn" href="${OFFICIAL}" target="_blank" rel="noopener" title="the authors' free official edition" aria-label="official edition">🔗</a>
           <input type="file" accept="application/pdf" id="pdf-file" hidden>

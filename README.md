@@ -21,10 +21,20 @@ npm run serve        # → http://localhost:5173   (zero dependencies, no build 
 | 🎓 **Robot Learning** | 14 | value iteration, Q-learning, bandits, policy gradient, behavior cloning & DAgger, action chunking, movement primitives, Gaussian processes, Gaussian mixtures, diffusion policy, flow matching, world models + MPC, action tokens, sim-to-real |
 | 🧠 **Deep Learning** | 18 | neurons, softmax & cross-entropy, gradient descent, activations, MLPs, backprop, CNNs, overfitting, normalization, vanishing gradients & residuals, RNN/LSTM, attention, autoencoders, VAEs, GANs, diffusion, adversarial examples, LoRA |
 
+### The look
+
+The interface is Swiss and editorial:
+- **Palette:** cardinal red, silver gray, black and white.
+- **Layout:** hairline rules on a strict grid.
+- **Type:** tight Inter Tight headlines and IBM Plex Mono metadata.
+- **Emoji:** every one is a thin **black-and-white line glyph** (Noto Emoji at weight 300).
+
+All fonts are bundled in `vendor/fonts/` (SIL OFL), so the app works offline.
+
 ### How the pictures talk
 
 * **One color = one meaning, everywhere.** Orange is always a joint, pink is always the
-  hand, gold is always the goal, teal is data, blue is the model's belief, purple is
+  hand, cardinal red is always the goal, teal is data, blue is the model's belief, purple is
   uncertainty, coral is error. Red/green/blue are x/y/z. (🎨 in the app shows the key.)
 * **Story beats.** Each scene is 3–5 numbered chapters, from a toy (*"two blobs
   merge into a sharper blob"*) to the deep idea (*"the Kalman gain is a seesaw between

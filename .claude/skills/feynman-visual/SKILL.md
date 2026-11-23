@@ -29,16 +29,17 @@ The Feynman technique, adapted so the "explanation" is a **picture you can poke*
 |---|---|
 | orange | joints, inputs, the knob you turn |
 | pink | hand / end-effector / output |
-| gold | goals, targets, the answer |
+| gold | goals, targets, the answer (drawn in cardinal red) |
 | teal | data, measurements, contact points |
 | blue | model / estimate / the body |
 | purple | uncertainty, noise, constraint forces |
 | lime | truth / correct / allowed |
 | coral | error, forbidden, pushback |
-| slate | obstacles, ground, fixed world |
+| slate | obstacles, ground, fixed world (silver gray) |
 | red · green · blue | x · y · z axes and turning about them |
 
 - **No words on the canvas.** Only emoji, arrows, colors, motion, numbers and single math symbols.
+- **Emoji are thin black-and-white line glyphs.** Their meaning comes from shape. Color meaning comes from the palette, never from the emoji itself.
 - **The grown-up formula** goes in the scene's `eq`. Each token is colored to match its picture.
 
 ## Pattern library (reach for these first)

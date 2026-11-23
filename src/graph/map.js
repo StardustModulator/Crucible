@@ -63,22 +63,27 @@ export function drawMap(stage, L, st) {
   };
   if (onPath) lit = onPath;
   else if (focus) lit = new Set([focus.id, ...ancestry(focus.id), ...dependents(focus.id).map((d) => d.id)]);
-  // island halos
+  // engineering-paper dot grid
+  ctx.save();
+  ctx.fillStyle = C.faint;
+  for (let x = 16; x < L.W; x += 32) for (let y = 16; y < L.H; y += 32) ctx.fillRect(x, y, 1, 1);
+  ctx.restore();
+  // island labels: a colour square + a mono uppercase name
   for (const [k, isl] of Object.entries(ISLANDS)) {
     const I = L.islands[k];
-    const g = ctx.createRadialGradient(I.x, I.y, I.R * 0.2, I.x, I.y, I.R * 1.15);
-    g.addColorStop(0, alpha(isl.color, 0.13)); g.addColorStop(1, alpha(isl.color, 0));
-    ctx.fillStyle = g; ctx.beginPath(); ctx.arc(I.x, I.y, I.R * 1.15, 0, Math.PI * 2); ctx.fill();
     ctx.save();
-    ctx.font = `700 ${Math.round(L.nodeR * 0.95)}px ui-rounded, system-ui, "Apple Color Emoji", sans-serif`;
     ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    ctx.fillStyle = alpha(isl.color, 0.95);
-    const ly = k === 'math' ? I.y : (I.y < L.cy ? I.y - I.R - 4 : I.y + I.R + 6);
+    const ly = k === 'math' ? I.y : Math.max(16, Math.min(L.H - 14, I.y < L.cy ? I.y - I.R - 4 : I.y + I.R + 6));
+    const label = isl.name.toUpperCase();
+    ctx.font = '500 10.5px "IBM Plex Mono", monospace';
+    ctx.letterSpacing = '1.5px';
+    const w = ctx.measureText(label).width;
     if (k === 'math') {
-      ctx.font = `${Math.round(L.nodeR * 1.7)}px system-ui, "Apple Color Emoji", sans-serif`;
-      ctx.fillText(isl.icon, I.x, ly);
+      ctx.fillStyle = col('gold'); ctx.fillRect(I.x - 4, ly - 22, 8, 8);
+      ctx.fillStyle = C.ink; ctx.fillText(label, I.x, ly);
     } else {
-      ctx.fillText(`${isl.icon} ${isl.name}`, I.x, Math.max(14, Math.min(L.H - 12, ly)));
+      ctx.fillStyle = col(isl.color); ctx.fillRect(I.x - w / 2 - 14, ly - 4, 8, 8);
+      ctx.fillStyle = C.ink; ctx.fillText(label, I.x + 4, ly);
     }
     ctx.restore();
   }
@@ -90,8 +95,8 @@ export function drawMap(stage, L, st) {
     const colr = ISLANDS[e.b.island].color;
     ctx.beginPath();
     const q = curve(ctx, e.a, e.b, L.cx, L.cy, e.kind === 'next' ? -0.15 : 0.3);
-    ctx.lineWidth = on ? (onPath ? 5 : 2.4) : 1;
-    ctx.strokeStyle = on ? (onPath ? col('gold') : alpha(colr, 0.95)) : alpha(colr, lit ? 0.04 : 0.13);
+    ctx.lineWidth = on ? (onPath ? 3 : 1.4) : 0.75;
+    ctx.strokeStyle = on ? (onPath ? col('gold') : alpha(colr, 0.9)) : alpha(colr, lit ? 0.04 : 0.16);
     ctx.setLineDash(e.kind === 'next' ? [4, 5] : []);
     ctx.stroke();
     if (on) {
@@ -99,7 +104,7 @@ export function drawMap(stage, L, st) {
       for (let k = 0; k < 3; k++) {
         const t = ((st.t * 0.45 + k / 3) % 1);
         const [x, y] = qpt(e.a, q, e.b, t);
-        ctx.beginPath(); ctx.arc(x, y, 2.6, 0, Math.PI * 2); ctx.fillStyle = col(colr); ctx.fill();
+        ctx.beginPath(); ctx.arc(x, y, 2, 0, Math.PI * 2); ctx.fillStyle = col(onPath ? 'gold' : colr); ctx.fill();
       }
     }
   }
@@ -110,20 +115,22 @@ export function drawMap(stage, L, st) {
     const isl = ISLANDS[n.island];
     const dim = lit && !lit.has(n.id);
     const hov = (focus && focus.id === n.id) || st.a === n.id || st.b === n.id;
-    const r = n.r * (hov ? 1.3 : 1) * (1 + (hov ? 0.04 * Math.sin(st.t * 5) : 0));
+    const r = n.r * (hov ? 1.22 : 1);
     ctx.save();
-    ctx.globalAlpha = dim ? 0.22 : 1;
+    ctx.globalAlpha = dim ? 0.18 : 1;
     ctx.beginPath(); ctx.arc(n.x, n.y, r, 0, Math.PI * 2);
-    ctx.fillStyle = C.panel; ctx.fill();
-    ctx.lineWidth = hov ? 3.5 : 2; ctx.strokeStyle = col(isl.color); ctx.stroke();
-    ctx.font = `${Math.round(r * 1.05)}px system-ui, "Apple Color Emoji", "Segoe UI Emoji", sans-serif`;
+    ctx.fillStyle = hov ? col(isl.color) : C.bg; ctx.fill();
+    ctx.lineWidth = hov ? 1.5 : 1.25; ctx.strokeStyle = col(isl.color); ctx.stroke();
+    // thin monochrome glyph (fill colour IS the glyph colour now)
+    ctx.font = `300 ${Math.round(r * 0.95)}px "Crucible Emoji"`;
     ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillStyle = hov ? C.bg : C.ink;
     ctx.fillText(n.icon, n.x, n.y + 1);
     if (showNames || hov || (lit && lit.has(n.id))) {
-      ctx.font = `600 ${hov ? 14 : 11}px ui-rounded, system-ui, sans-serif`;
-      ctx.lineWidth = 3.5; ctx.strokeStyle = alpha('bg', 0.9);
+      ctx.font = `${hov ? 600 : 500} ${hov ? 13 : 10.5}px "Inter", sans-serif`;
+      ctx.lineWidth = 4; ctx.strokeStyle = C.bg; ctx.lineJoin = 'round';
       ctx.strokeText(n.name, n.x, n.y + r + 10);
-      ctx.fillStyle = hov ? col(isl.color) : C.muted;
+      ctx.fillStyle = hov ? C.ink : C.muted;
       ctx.fillText(n.name, n.x, n.y + r + 10);
     }
     ctx.restore();
